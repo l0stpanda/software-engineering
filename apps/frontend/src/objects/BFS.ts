@@ -2,6 +2,7 @@ import { Pathfinding } from "./Pathfinding.ts";
 import { Node } from "./Node.ts";
 
 export class BFS extends Pathfinding {
+  // Breadth first search pathfinding method
   findPath(src: string, dest: string) {
     const visited: Map<string, number> = new Map<string, number>();
     const pathStorage: Map<string, string> = new Map<string, string>();

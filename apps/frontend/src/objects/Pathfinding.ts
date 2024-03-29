@@ -8,6 +8,7 @@ export class Pathfinding {
     this.graph = graph;
   }
 
+  // Prints out the path found by FindPath
   printPath(path: string[], graph: Graph) {
     console.log("Path to destination:");
     path.forEach(function (value: string) {
@@ -20,6 +21,7 @@ export class Pathfinding {
     });
   }
 
+  // Just a parent function
   findPath(srcID: string, destID: string): string[] | undefined {
     console.log(srcID + destID);
     return undefined;
