@@ -12,7 +12,15 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
-// Balls
+// example table used in the express router example
+model HighScore {
+  id    Int      @id @default(autoincrement())
+  time  DateTime
+  score Int
+}
+
+// We left HighScore for now because of errors that it is causing
+
 // Users have fields that will be added to the database on registration
 model Staff {
   emp_id    String   @id
