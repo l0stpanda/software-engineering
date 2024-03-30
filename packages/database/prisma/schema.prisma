@@ -18,3 +18,58 @@ model HighScore {
   time  DateTime
   score Int
 }
+
+// We left HighScore for now because of errors that it is causing
+
+// Users have fields that will be added to the database on registration
+model Staff {
+  emp_id    String   @id
+  role      String // By default the user will be an employee unless designated otherwise by an admin
+  user_name String
+  email     String   @unique
+  password  String
+  add_date  DateTime @default(now())
+
+  // Foregin Key References
+  assigned_deliverer Flowers[] @relation("deliverer")
+  assigning_sender   Flowers[] @relation("sender")
+}
+
+// Flower requests are saved
+model Flowers {
+  id          Int      @id @default(autoincrement())
+  room        String
+  sent_by     String   @db.VarChar(50)
+  deliverer   String   @db.VarChar(50)
+  requestDate DateTime @default(now())
+  note        String?  @db.VarChar(50)
+  status      String // when initialized the field will be 'Pending'. When the order is ready to be delivered it will be called Ready and will display in a SELECT statement
+
+  // Foreign Key References
+  deliv_user Staff @relation("deliverer", fields: [deliverer], references: [emp_id])
+  sent_user  Staff @relation("sender", fields: [sent_by], references: [emp_id])
+  sent_room  Nodes @relation("flower_room", fields: [room], references: [node_id]) // Maybe need to change reference to short_name/long_name later
+}
+
+// Nodes are all good
+model Nodes {
+  node_id    String @id
+  node_type  String
+  floor      String
+  x_c        String
+  y_c        String
+  building   String
+  short_name String
+  long_name  String
+
+  // Foreign Key Reference
+  flower_delivery_room Flowers[] @relation("flower_room")
+}
+
+// Edges are all set
+model Edges {
+  end_node   String //@db.VarChar(10)
+  start_node String //@db.VarChar(10)
+
+  @@id([end_node, start_node])
+}
