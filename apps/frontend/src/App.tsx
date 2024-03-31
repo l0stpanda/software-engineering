@@ -1,17 +1,37 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-import ExampleRoute from "./routes/ExampleRoute.tsx";
-import { Button } from "@mui/material";
+import HomePage from "./routes/homePage.tsx";
+import RegisterPage from "./routes/registerPage.tsx";
+import MapPage from "./routes/mapPage.tsx";
+import FlowerRequest from "./routes/flowerRequest.tsx";
+import PendingFlowerRequests from "./routes/pendingFlowerRequest.tsx";
+
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      errorElement: <div />,
+      errorElement: <h2>Something went wrong!</h2>,
       element: <Root />,
       children: [
         {
-          path: "",
-          element: <ExampleRoute />,
+          path: "homepage",
+          element: <HomePage />,
+        },
+        {
+          path: "register",
+          element: <RegisterPage />,
+        },
+        {
+          path: "map",
+          element: <MapPage />,
+        },
+        {
+          path: "flowerrequest",
+          element: <FlowerRequest />,
+        },
+        {
+          path: "viewpending",
+          element: <PendingFlowerRequests />,
         },
       ],
     },
@@ -21,9 +41,7 @@ function App() {
   function Root() {
     return (
       <div className="w-full flex flex-col px-20 gap-5">
-        <h1 className="font-header">Welcome to your starter code.</h1>
         <Outlet />
-        <Button variant="contained">Login</Button>
       </div>
     );
   }
