@@ -1,6 +1,7 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import ExampleRoute from "./routes/ExampleRoute.tsx";
+import { Button } from "@mui/material";
 function App() {
   const router = createBrowserRouter([
     {
@@ -20,8 +21,9 @@ function App() {
   function Root() {
     return (
       <div className="w-full flex flex-col px-20 gap-5">
-        <h1>Welcome to your starter code.</h1>
+        <h1 className="font-header">Welcome to your starter code.</h1>
         <Outlet />
+        <Button variant="contained">Login</Button>
       </div>
     );
   }
