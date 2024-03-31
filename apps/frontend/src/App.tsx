@@ -6,6 +6,8 @@ import MapPage from "./routes/mapPage.tsx";
 import FlowerRequest from "./routes/flowerRequest.tsx";
 import PendingFlowerRequests from "./routes/pendingFlowerRequest.tsx";
 
+//import ExampleRoute from "./routes/ExampleRoute.tsx";
+import ImportRouteE from "./routes/importRouteE.tsx";
 function App() {
   const router = createBrowserRouter([
     {
@@ -33,14 +35,20 @@ function App() {
           path: "viewpending",
           element: <PendingFlowerRequests />,
         },
+        {
+          path: "",
+          element: <ImportRouteE />,
+        },
       ],
     },
   ]);
 
   return <RouterProvider router={router} />;
+
   function Root() {
     return (
       <div className="w-full flex flex-col px-20 gap-5">
+        <h1>Welcome to your starter code.</h1>
         <Outlet />
       </div>
     );
