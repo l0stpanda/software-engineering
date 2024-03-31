@@ -1,6 +1,7 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-import ExampleRoute from "./routes/ExampleRoute.tsx";
+//import ExampleRoute from "./routes/ExampleRoute.tsx";
+import ImportRouteE from "./routes/importRouteE.tsx";
 function App() {
   const router = createBrowserRouter([
     {
@@ -10,13 +11,14 @@ function App() {
       children: [
         {
           path: "",
-          element: <ExampleRoute />,
+          element: <ImportRouteE />,
         },
       ],
     },
   ]);
 
   return <RouterProvider router={router} />;
+
   function Root() {
     return (
       <div className="w-full flex flex-col px-20 gap-5">
