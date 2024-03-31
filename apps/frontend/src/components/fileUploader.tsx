@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { edgeType } from "common/src/edgesType.ts";
+import { DeleteAllEdge, PostEdge } from "../objects/DAO_Edges.ts";
 const SingleFileUploader = () => {
   const [file, setFile] = useState<File | null>(null);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,6 +17,7 @@ const SingleFileUploader = () => {
       const formData = new FormData();
       formData.append("file", file);
 
+      //Handles edges
       if (file.name.toString().toLowerCase().includes("edge")) {
         console.log("EDGES UPLOADING");
         try {
@@ -25,9 +27,9 @@ const SingleFileUploader = () => {
             .map((row: string): string[] => {
               return row.split(",");
             });
-          await axios.delete("/api/import", {
-            headers: { "Content-Type": "application/json" },
-          });
+
+          DeleteAllEdge();
+
           for (let i = 1; i < edges_array.length - 1; i++) {
             const curr_data: edgeType = {
               type: "Edges",
@@ -35,9 +37,37 @@ const SingleFileUploader = () => {
               end_node: edges_array[i][1].toString().replace("/r", ""),
             };
 
-            const res = await axios.post("/api/import", curr_data, {
+            PostEdge(curr_data);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      //Handles nodes
+      if (file.name.toString().toLowerCase().includes("node")) {
+        console.log("IMPORTING NODES");
+        try {
+          const nodes: string = await file.text();
+          const nodes_array: string[][] = nodes
+            .split("\n")
+            .map((row: string): string[] => {
+              return row.split(",");
+            });
+          await axios.delete("/api/importN", {
+            headers: { "Content-Type": "application/json" },
+          });
+          for (let i = 1; i < nodes_array.length - 1; i++) {
+            const curr_data: edgeType = {
+              type: "Edges",
+              start_node: nodes_array[i][0].toString(),
+              end_node: nodes_array[i][1].toString(),
+            };
+
+            const res = await axios.post("/api/importN", curr_data, {
               headers: { "Content-Type": "application/json" },
             });
+
             if (res.status == 200) {
               console.log(curr_data.start_node);
               console.log("success");
