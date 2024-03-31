@@ -11,7 +11,7 @@
     "lint": "yarn shared:prettierlint && yarn shared:eslint && yarn shared:tslint",
     "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint",
     "docker:build": "cd $PROJECT_CWD && docker build --target prod-frontend --tag kgkhs001/softeng-teamp-production:frontend --platform linux/amd64 .",
-    "docker:upload": "docker push irwright13/softeng-mqp:frontend"
+    "docker:upload": "docker push kgkhs001/softeng-teamp-production:frontend"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.1.1",
