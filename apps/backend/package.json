@@ -8,7 +8,7 @@
     "lint": "yarn shared:prettierlint && yarn shared:eslint && yarn shared:tslint",
     "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint",
     "docker:build": "cd $PROJECT_CWD && docker build --target prod-backend --tag kgkhs001/softeng-teamp-production:backend --platform linux/amd64 .",
-    "docker:upload": "docker push irwright13/softeng-mqp:backend"
+    "docker:upload": "docker push kgkhs001/softeng-teamp-production:backend"
   },
   "dependencies": {
     "@swc/core": "^1.3.60",
