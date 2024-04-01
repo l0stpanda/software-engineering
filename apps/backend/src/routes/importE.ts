@@ -6,6 +6,7 @@ import { edgeType } from "common/src/edgesType.ts";
 const router: Router = express.Router();
 
 // Put the POST PUT GET DELETE REQUESTS HERE
+//THIS IS FOR THE EDGES
 /*
 formula: router.COMMAND(req, res)...
  */
