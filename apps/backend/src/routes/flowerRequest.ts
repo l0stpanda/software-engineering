@@ -1,25 +1,31 @@
 import express, { Router, Request, Response } from "express";
 //import { Prisma } from "database";
 import PrismaClient from "../bin/database-connection.ts";
-import { flowerRequestType } from "common/src/flowerRequest.ts";
 
 const router: Router = express.Router();
 router.post("/", async function (req: Request, res: Response) {
-  const input: flowerRequestType = req.body;
+  type flowerReqFields = {
+    roomNum: string;
+    senderName: string;
+    sendTo: string;
+    attachedNote: string;
+  };
+
+  const input: flowerReqFields = req.body;
   try {
-    PrismaClient.flowers.create({
+    await PrismaClient.flowers.create({
       data: {
-        room: input.room,
-        sent_by: input.sent_by,
-        deliverer: "",
-        note: input.note,
+        room: input.roomNum,
+        sent_by: input.senderName,
+        sent_to: input.sendTo,
+        note: input.attachedNote,
         status: "Pending",
       },
     });
   } catch (e) {
     console.log(e);
-    res.status(400);
+    res.sendStatus(400);
   }
-  console.log(200);
+  res.sendStatus(200);
 });
 export default router;

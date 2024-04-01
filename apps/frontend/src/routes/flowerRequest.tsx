@@ -14,7 +14,7 @@ function FlowerRequest() {
   type flowerReqFields = {
     roomNum: string;
     senderName: string;
-    deliv: string;
+    sendTo: string;
     attachedNote: string;
   };
 
@@ -22,9 +22,10 @@ function FlowerRequest() {
   const [responses, setResponses] = useState<flowerReqFields>({
     roomNum: "",
     senderName: "",
-    deliv: "",
+    sendTo: "",
     attachedNote: "",
   });
+
   const [open, setOpen] = useState(false);
 
   // Takes in an event object and updates the responses object when a text field is changed
@@ -33,15 +34,14 @@ function FlowerRequest() {
   }
 
   function clear() {
-    setResponses({ roomNum: "", senderName: "", attachedNote: "", deliv: "" });
+    setResponses({ roomNum: "", senderName: "", attachedNote: "", sendTo: "" });
   }
 
   // Clears form, and outputs responses
   async function handleSubmit() {
-    const res = await axios.post("/api/flowerRequest", responses, {
+    await axios.post("/api/flowerRequest", responses, {
       headers: { "Content-Type": "application/json" },
     });
-    console.log(res);
     setOpen(true);
   }
 
@@ -62,11 +62,10 @@ function FlowerRequest() {
           <TextField
             onChange={handleResponseChanges}
             value={responses.roomNum}
-            type="number"
             name="roomNum"
             id="roomNum"
             variant="filled"
-            label="Room Number"
+            label="Room Name"
             required={true}
           />
           <TextField
@@ -80,12 +79,12 @@ function FlowerRequest() {
           />
           <TextField
             onChange={handleResponseChanges}
-            value={responses.deliv}
-            id="deliv"
-            name="deliv"
+            value={responses.sendTo}
+            id="sendTo"
+            name="sendTo"
             variant="filled"
-            label="Deliverer"
-            placeholder="Deliverer"
+            label="sendTo"
+            placeholder="sendTo"
           />
         </div>
         <TextField
