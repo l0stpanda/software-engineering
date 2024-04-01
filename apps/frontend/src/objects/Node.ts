@@ -46,4 +46,8 @@ export class Node {
   getLongName() {
     return this.longName;
   }
+
+  getNodeType() {
+    return this.nodeType;
+  }
 }

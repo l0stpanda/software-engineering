@@ -26,4 +26,31 @@ export class Pathfinding {
     console.log(srcID + destID);
     return undefined;
   }
+
+  getDirections(path: string[]) {
+    const directions: string[] = [];
+    for (let i = 0; i < path.length; i++) {
+      if (i == 0) {
+        const nextNode = this.graph.getNode(path[1]);
+        const futureNode = this.graph.getNode(path[2]);
+        if (nextNode != undefined && futureNode != undefined) {
+          if (nextNode.getNodeType() == "HALL") {
+            directions.push(
+              "Take " +
+                nextNode.getLongName() +
+                " going towards " +
+                futureNode.getLongName(),
+            );
+          } else {
+            directions.push(
+              "Go by " +
+                nextNode.getLongName() +
+                " going towards " +
+                futureNode.getLongName(),
+            );
+          }
+        }
+      }
+    }
+  }
 }

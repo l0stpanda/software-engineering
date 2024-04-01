@@ -44,4 +44,14 @@ router.delete("/", async function (req: Request, res: Response) {
   }
   res.sendStatus(200);
 });
+
+router.get("/", async function (req: Request, res: Response) {
+  try {
+    const list = await PrismaClient.nodes.findMany();
+    res.send(list);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(400);
+  }
+});
 export default router;
