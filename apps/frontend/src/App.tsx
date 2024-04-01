@@ -8,6 +8,7 @@ import PendingFlowerRequests from "./routes/pendingFlowerRequest.tsx";
 
 //import ExampleRoute from "./routes/ExampleRoute.tsx";
 import ImportRouteE from "./routes/importRouteE.tsx";
+import CustomNavBar from "./components/navBar.tsx";
 function App() {
   const router = createBrowserRouter([
     {
@@ -47,8 +48,8 @@ function App() {
 
   function Root() {
     return (
-      <div className="w-full flex flex-col px-20 gap-5">
-        <h1>Welcome to your starter code.</h1>
+      <div className="w-full flex flex-col">
+        <CustomNavBar />
         <Outlet />
       </div>
     );
