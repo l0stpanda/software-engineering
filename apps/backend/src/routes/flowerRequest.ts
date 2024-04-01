@@ -24,8 +24,8 @@ router.post("/", async function (req: Request, res: Response) {
     });
   } catch (e) {
     console.log(e);
-    res.sendStatus(400);
+    return res.sendStatus(400);
   }
-  res.sendStatus(200);
+  return res.sendStatus(200);
 });
 export default router;
