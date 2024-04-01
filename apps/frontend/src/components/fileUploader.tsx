@@ -4,6 +4,8 @@ import { edgeType } from "common/src/edgesType.ts";
 import { DeleteAllEdge, PostEdge } from "../objects/DAO_Edges.ts";
 import { nodeType } from "common/src/nodeType.ts";
 import { DeleteAllNode, PostNode } from "../objects/DAO_Nodes.ts";
+
+//This handles uploads and downloads on the same page
 const SingleFileUploader = () => {
   const [file, setFile] = useState<File | null>(null);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
