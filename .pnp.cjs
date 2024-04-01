@@ -73,7 +73,6 @@ const RAW_RUNTIME_STATE =
           ["husky", "npm:8.0.3"],\
           ["prettier", "npm:2.8.8"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
-          ["prisma", "npm:5.11.0"],\
           ["react", "npm:18.2.0"],\
           ["react-bootstrap", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:2.10.0"],\
           ["react-dom", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:18.2.0"],\
@@ -1380,31 +1379,11 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["@prisma/debug", [\
-      ["npm:5.11.0", {\
-        "packageLocation": "./.yarn/cache/@prisma-debug-npm-5.11.0-37092a3fda-f76e3c2237.zip/node_modules/@prisma/debug/",\
-        "packageDependencies": [\
-          ["@prisma/debug", "npm:5.11.0"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["@prisma/engines", [\
       ["npm:4.15.0", {\
         "packageLocation": "./.yarn/unplugged/@prisma-engines-npm-4.15.0-9024b482d4/node_modules/@prisma/engines/",\
         "packageDependencies": [\
           ["@prisma/engines", "npm:4.15.0"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
-      ["npm:5.11.0", {\
-        "packageLocation": "./.yarn/unplugged/@prisma-engines-npm-5.11.0-c2b411b599/node_modules/@prisma/engines/",\
-        "packageDependencies": [\
-          ["@prisma/engines", "npm:5.11.0"],\
-          ["@prisma/debug", "npm:5.11.0"],\
-          ["@prisma/engines-version", "npm:5.11.0-15.efd2449663b3d73d637ea1fd226bafbcf45b3102"],\
-          ["@prisma/fetch-engine", "npm:5.11.0"],\
-          ["@prisma/get-platform", "npm:5.11.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1414,35 +1393,6 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@prisma-engines-version-npm-4.15.0-28.8fbc245156db7124f997f4cecdd8d1219e360944-45ae46b86e-693ebe6c19.zip/node_modules/@prisma/engines-version/",\
         "packageDependencies": [\
           ["@prisma/engines-version", "npm:4.15.0-28.8fbc245156db7124f997f4cecdd8d1219e360944"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
-      ["npm:5.11.0-15.efd2449663b3d73d637ea1fd226bafbcf45b3102", {\
-        "packageLocation": "./.yarn/cache/@prisma-engines-version-npm-5.11.0-15.efd2449663b3d73d637ea1fd226bafbcf45b3102-656b785c72-676a0fee43.zip/node_modules/@prisma/engines-version/",\
-        "packageDependencies": [\
-          ["@prisma/engines-version", "npm:5.11.0-15.efd2449663b3d73d637ea1fd226bafbcf45b3102"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["@prisma/fetch-engine", [\
-      ["npm:5.11.0", {\
-        "packageLocation": "./.yarn/cache/@prisma-fetch-engine-npm-5.11.0-204695308d-dfa0a544ff.zip/node_modules/@prisma/fetch-engine/",\
-        "packageDependencies": [\
-          ["@prisma/fetch-engine", "npm:5.11.0"],\
-          ["@prisma/debug", "npm:5.11.0"],\
-          ["@prisma/engines-version", "npm:5.11.0-15.efd2449663b3d73d637ea1fd226bafbcf45b3102"],\
-          ["@prisma/get-platform", "npm:5.11.0"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["@prisma/get-platform", [\
-      ["npm:5.11.0", {\
-        "packageLocation": "./.yarn/cache/@prisma-get-platform-npm-5.11.0-0f5384ee18-a762b36564.zip/node_modules/@prisma/get-platform/",\
-        "packageDependencies": [\
-          ["@prisma/get-platform", "npm:5.11.0"],\
-          ["@prisma/debug", "npm:5.11.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -7440,14 +7390,6 @@ const RAW_RUNTIME_STATE =
           ["@prisma/engines", "npm:4.15.0"]\
         ],\
         "linkType": "HARD"\
-      }],\
-      ["npm:5.11.0", {\
-        "packageLocation": "./.yarn/unplugged/prisma-npm-5.11.0-c0bb270e40/node_modules/prisma/",\
-        "packageDependencies": [\
-          ["prisma", "npm:5.11.0"],\
-          ["@prisma/engines", "npm:5.11.0"]\
-        ],\
-        "linkType": "HARD"\
       }]\
     ]],\
     ["proc-log", [\
@@ -8395,7 +8337,6 @@ const RAW_RUNTIME_STATE =
           ["husky", "npm:8.0.3"],\
           ["prettier", "npm:2.8.8"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
-          ["prisma", "npm:5.11.0"],\
           ["react", "npm:18.2.0"],\
           ["react-bootstrap", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:2.10.0"],\
           ["react-dom", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:18.2.0"],\
