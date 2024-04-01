@@ -5,6 +5,7 @@ import logger from "morgan";
 import exampleRouter from "./routes/example.ts";
 import importRouterE from "./routes/importE.ts";
 import importRouterN from "./routes/importN.ts";
+import flowerRequest from "./routes/flowerRequest.ts";
 
 const app: Express = express(); // Setup the backend
 
@@ -26,6 +27,7 @@ app.use(cookieParser()); // Cookie parser
 app.use("/api/high-score", exampleRouter);
 app.use("/api/import", importRouterE);
 app.use("/api/importN", importRouterN);
+app.use("/api/flowerRequest", flowerRequest);
 
 app.use("/healthcheck", (req, res) => {
   res.status(200).send();
