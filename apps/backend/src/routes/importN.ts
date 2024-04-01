@@ -1,22 +1,30 @@
 import express, { Router, Request, Response } from "express";
 //import { Prisma } from "database";
 import PrismaClient from "../bin/database-connection.ts";
-import { edgeType } from "common/src/edgesType.ts";
+
+import { nodeType } from "common/src/nodeType.ts";
 
 const router: Router = express.Router();
 
 // Put the POST PUT GET DELETE REQUESTS HERE
 /*
 formula: router.COMMAND(req, res)...
+//THIS IS FOR THE NODES
  */
 router.post("/", async function (req: Request, res: Response) {
-  const received: edgeType = req.body;
+  const received: nodeType = req.body;
   if (received.type == "Nodes") {
     try {
-      await PrismaClient.edges.create({
+      await PrismaClient.nodes.create({
         data: {
-          end_node: received.end_node,
-          start_node: received.start_node,
+          node_id: received.node_id,
+          node_type: received.node_type,
+          floor: received.floor,
+          x_c: received.x_c,
+          y_c: received.y_c,
+          building: received.building,
+          short_name: received.short_name,
+          long_name: received.long_name,
         },
       });
     } catch (e) {

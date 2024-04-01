@@ -42,7 +42,7 @@ model Flowers {
   sent_by     String   @db.VarChar(50)
   deliverer   String   @db.VarChar(50)
   requestDate DateTime @default(now())
-  note        String?  @db.VarChar(50)
+  note        String?  @db.VarChar(150)
   status      String // when initialized the field will be 'Pending'. When the order is ready to be delivered it will be called Ready and will display in a SELECT statement
 
   // Foreign Key References
