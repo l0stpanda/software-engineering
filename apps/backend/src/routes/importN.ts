@@ -1,4 +1,4 @@
-import express, { Router, Request, Response } from "express";
+import express, { Request, Response, Router } from "express";
 //import { Prisma } from "database";
 import PrismaClient from "../bin/database-connection.ts";
 
@@ -41,17 +41,19 @@ router.delete("/", async function (req: Request, res: Response) {
   } catch (error) {
     console.log(error);
     res.sendStatus(400);
+    return;
   }
   res.sendStatus(200);
+  return;
 });
 
 router.get("/", async function (req: Request, res: Response) {
   try {
-    const list = await PrismaClient.nodes.findMany();
-    res.send(list);
+    return await PrismaClient.nodes.findMany();
   } catch (error) {
     console.log(error);
     res.sendStatus(400);
+    return;
   }
 });
 export default router;

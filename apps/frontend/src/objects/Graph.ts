@@ -30,44 +30,16 @@ export class Graph {
   }
 
   async getAllEdges() {
-    const res = await axios.get("/api/import", {
-      headers: { "Content-Type": "application/json" },
-    });
-    if (res.status == 200) {
-      console.log("success");
-    } else {
-      console.log(res.statusText);
-    }
-    //This is the json crap
-    return res.data;
+    return await axios.get("/api/import").then((response) => response.data);
   }
 
   async getAllNodes() {
-    const res = await axios.get("/api/importN").then((response) => {
-      console.log(response.data);
-      if (response.status == 200) {
-        console.log("success");
-      } else {
-        console.log(response.statusText);
-      }
-      //This is the json crap
-      return response.data;
-    });
-    //{
-    //headers: { "Content-Type": "application/json" },
-    //});
-    if (res.status == 200) {
-      console.log("success");
-    } else {
-      console.log(res.statusText);
-    }
-    //This is the json crap
-    return res.data;
+    return await axios.get("/api/importN").then((response) => response.data);
   }
 
   async loadGraph() {
-    const nodes = await JSON.parse(await this.getAllNodes());
-    const edges = await JSON.parse(await this.getAllEdges());
+    const nodes = await this.getAllNodes();
+    const edges = await this.getAllEdges();
 
     console.log(nodes);
     console.log(edges);

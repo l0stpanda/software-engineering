@@ -40,11 +40,12 @@ router.delete("/", async function (req: Request, res: Response) {
 
 router.get("/", async function (req: Request, res: Response) {
   try {
-    const list = await PrismaClient.edges.findMany();
-    res.send(list);
+    return await PrismaClient.edges.findMany();
   } catch (error) {
     console.log(error);
     res.sendStatus(400);
   }
+  res.sendStatus(200);
+  return;
 });
 export default router;
