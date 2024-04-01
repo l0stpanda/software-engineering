@@ -32,7 +32,6 @@ model Staff {
 
   // Foregin Key References
   assigned_deliverer Flowers[] @relation("deliverer")
-  assigning_sender   Flowers[] @relation("sender")
 }
 
 // Flower requests are saved
@@ -47,7 +46,6 @@ model Flowers {
 
   // Foreign Key References
   deliv_user Staff @relation("deliverer", fields: [deliverer], references: [emp_id])
-  sent_user  Staff @relation("sender", fields: [sent_by], references: [emp_id])
   sent_room  Nodes @relation("flower_room", fields: [room], references: [node_id]) // Maybe need to change reference to short_name/long_name later
 }
 

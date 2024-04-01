@@ -8,11 +8,13 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
+import axios from "axios";
 
 function FlowerRequest() {
   type flowerReqFields = {
     roomNum: string;
     senderName: string;
+    deliv: string;
     attachedNote: string;
   };
 
@@ -20,6 +22,7 @@ function FlowerRequest() {
   const [responses, setResponses] = useState<flowerReqFields>({
     roomNum: "",
     senderName: "",
+    deliv: "",
     attachedNote: "",
   });
   const [open, setOpen] = useState(false);
@@ -30,12 +33,15 @@ function FlowerRequest() {
   }
 
   function clear() {
-    setResponses({ roomNum: "", senderName: "", attachedNote: "" });
+    setResponses({ roomNum: "", senderName: "", attachedNote: "", deliv: "" });
   }
 
   // Clears form, and outputs responses
-  function handleSubmit() {
-    console.log(responses);
+  async function handleSubmit() {
+    const res = await axios.post("/api/flowerRequest", responses, {
+      headers: { "Content-Type": "application/json" },
+    });
+    console.log(res);
     setOpen(true);
   }
 
@@ -46,76 +52,85 @@ function FlowerRequest() {
 
   return (
     // Your page is everything in this div
-      // test commit
-    <div className="bg-repeat bg-[url('./assets/flowerRequestBackground.png')]">
-      <div className="justify-center grid h-screen place-items-center">
-        <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-4">
-          <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
-            Flower Delivery Request
-          </h1>
-          <div className="flex flex-col gap-4 my-4">
-            <TextField
-              onChange={handleResponseChanges}
-              value={responses.roomNum}
-              type="number"
-              name="roomNum"
-              id="roomNum"
-              variant="filled"
-              label="Room Number"
-              required={true}
-            />
-            <TextField
-              onChange={handleResponseChanges}
-              value={responses.senderName}
-              id="senderName"
-              name="senderName"
-              variant="filled"
-              label="Sent By"
-              placeholder="Name"
-            />
-          </div>
+    // test commit
+    //<div className="bg-repeat bg-[url('./assets/flowerRequestBackground.png')]">
+    <div className="justify-center grid h-screen place-items-center">
+      <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-4">
+        <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
+          Flower Delivery Request
+        </h1>
+        <div className="flex flex-col gap-4 my-4">
           <TextField
             onChange={handleResponseChanges}
-            value={responses.attachedNote}
-            id="attachedNote"
-            name="attachedNote"
+            value={responses.roomNum}
+            type="number"
+            name="roomNum"
+            id="roomNum"
             variant="filled"
-            label="Note for Patient"
-            multiline={true}
-            maxRows={5}
-            helperText="Optional"
+            label="Room Number"
+            required={true}
           />
-          <Button
-            className="w-32 self-center"
-            onClick={handleSubmit}
-            type="submit"
-            id="requestSubmit"
-            variant="contained"
-            size="large"
-            sx={{ borderRadius: "30px" }}
-          >
-            SUBMIT
-          </Button>
+          <TextField
+            onChange={handleResponseChanges}
+            value={responses.senderName}
+            id="senderName"
+            name="senderName"
+            variant="filled"
+            label="Sent By"
+            placeholder="Name"
+          />
+          <TextField
+            onChange={handleResponseChanges}
+            value={responses.deliv}
+            id="deliv"
+            name="deliv"
+            variant="filled"
+            label="Deliverer"
+            placeholder="Deliverer"
+          />
         </div>
-        <Dialog open={open} onClose={handleSubmitClose}>
-          <DialogTitle>We received your request!</DialogTitle>
-          <DialogContent>
-            <strong>Here are your responses:</strong>
-            <br />
-            Room Number: {responses.roomNum}
-            <br />
-            Sent By: {responses.senderName}
-            <br />
-            Note for Patient: {responses.attachedNote}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleSubmitClose} autoFocus>
-              Okay
-            </Button>
-          </DialogActions>
-        </Dialog>
+        <TextField
+          onChange={handleResponseChanges}
+          value={responses.attachedNote}
+          id="attachedNote"
+          name="attachedNote"
+          variant="filled"
+          label="Note for Patient"
+          multiline={true}
+          maxRows={5}
+          helperText="Optional"
+        />
+        <Button
+          className="w-32 self-center"
+          onClick={handleSubmit}
+          type="submit"
+          id="requestSubmit"
+          variant="contained"
+          size="large"
+          sx={{ borderRadius: "30px" }}
+        >
+          SUBMIT
+        </Button>
       </div>
+      <Dialog open={open} onClose={handleSubmitClose}>
+        <DialogTitle>We received your request!</DialogTitle>
+        <DialogContent>
+          <strong>Here are your responses:</strong>
+          <br />
+          Room Number: {responses.roomNum}
+          <br />
+          Sent By: {responses.senderName}
+          <br />
+          Note for Patient: {responses.attachedNote}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSubmitClose} autoFocus>
+            Okay
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
+    //</div>
   );
 }
 
