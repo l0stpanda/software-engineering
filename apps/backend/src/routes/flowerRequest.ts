@@ -11,7 +11,7 @@ router.post("/", async function (req: Request, res: Response) {
       data: {
         room: input.room,
         sent_by: input.sent_by,
-        deliverer: input.deliv,
+        deliverer: "",
         note: input.note,
         status: "Pending",
       },

@@ -8,21 +8,26 @@ export default function FlowerRequest() {
     room: "",
     sent_by: "",
     note: "",
-    deliv: "",
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     await PostReq(formData);
-    setFormData({ ...formData, room: "", note: "", sent_by: "", deliv: "" });
+    setFormData({ ...formData, room: "", note: "", sent_by: "" });
   }
 
   return (
+    <div></div>
+    // This commented out section is here for your reference when creating a form. Note how the name attribute of each
+    // input field matches the name of the data in the formData type
+    /*
     <form onSubmit={handleSubmit}>
       <label>
         Sent By:
@@ -53,17 +58,8 @@ export default function FlowerRequest() {
           onChange={handleInputChange}
         />
       </label>
-      <br />
-      <label>
-        Note
-        <input
-          type="text"
-          name="deliv"
-          value={formData.note}
-          onChange={handleInputChange}
-        />
-      </label>
       <button type="submit">Submit</button>
     </form>
+    */
   );
 }
