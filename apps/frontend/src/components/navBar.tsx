@@ -16,7 +16,7 @@ function CustomNavBar() {
   }
 
   return (
-    <AppBar className="static" sx={{ bgcolor: "#FBFEFF" }}>
+    <AppBar sx={{ bgcolor: "#FBFEFF" }}>
       <div className="w-full flex justify-between">
         <Toolbar disableGutters={true}>
           <div className="h-12 flex px-2 py-2">
