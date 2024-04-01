@@ -7,7 +7,8 @@ import FlowerRequest from "./routes/flowerRequest.tsx";
 import PendingFlowerRequests from "./routes/pendingFlowerRequest.tsx";
 
 //import ExampleRoute from "./routes/ExampleRoute.tsx";
-import ImportRouteE from "./routes/importRouteE.tsx";
+//import ImportRouteE from "./routes/importRouteE.tsx";
+import ReadRouteE from "./routes/readRouteE.tsx";
 function App() {
   const router = createBrowserRouter([
     {
@@ -36,8 +37,8 @@ function App() {
           element: <PendingFlowerRequests />,
         },
         {
-          path: "imp",
-          element: <ImportRouteE />,
+          path: "",
+          element: <ReadRouteE />,
         },
       ],
     },
