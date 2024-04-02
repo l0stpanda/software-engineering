@@ -2,13 +2,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Graph } from "../objects/Graph.ts";
 import { BFS } from "../objects/BFS.ts";
+import { MapNode } from "../objects/MapNode.ts";
 //import mapImg from "../assets/LL1Map.png";
 
 interface FloorNodesProps {
   imageSrc: string;
-  nodes: string[][];
-  edges: string[][];
   graph: Graph;
+  inputLoc: string[];
 }
 
 export interface FloorNodeInfo {
@@ -25,6 +25,14 @@ function FloorNode(props: FloorNodesProps) {
   const divRef = useRef(null);
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
   const [clicked, setClicked] = useState<string[]>([]);
+  const bfs = new BFS(props.graph);
+
+  const nodes: MapNode[] = Object.values(props.graph)[0];
+
+  const startId = props.graph.idFromName(props.inputLoc[0]);
+
+  const endId = props.graph.idFromName(props.inputLoc[1]);
+  console.log(startId, endId);
 
   useEffect(() => {
     if (divRef.current) {
@@ -60,13 +68,15 @@ function FloorNode(props: FloorNodesProps) {
   }, []);
 
   const scaledNodes: { [key: string]: FloorNodeInfo } = {};
-  props.nodes.forEach((node) => {
-    scaledNodes[node[0]] = {
-      key: node[0],
-      x: parseInt(node[1]) * (divDimensions.width / imgDimensions.width),
-      y: parseInt(node[2]) * (divDimensions.height / imgDimensions.height),
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
+    const id = node.getNodeID();
+    scaledNodes[id] = {
+      key: id,
+      x: node.getX() * (divDimensions.width / imgDimensions.width),
+      y: node.getY() * (divDimensions.height / imgDimensions.height),
     };
-  });
+  }
 
   const handleNodeClick = (nodeid: string) => () => {
     if (clicked.length < 2 && !clicked.includes(nodeid)) {
@@ -79,10 +89,9 @@ function FloorNode(props: FloorNodesProps) {
   };
 
   const renderLines = () => {
-    if (clicked.length == 2) {
-      console.log(clicked);
-      const bfs = new BFS(props.graph);
-      const path = bfs.findPath(clicked[0], clicked[1]);
+    if (props.inputLoc.length == 2 && startId && endId) {
+      console.log(startId, endId);
+      const path = bfs.findPath(startId, endId);
       const lines = [];
       if (!path) {
         console.log("No path found");

@@ -53,8 +53,7 @@ function Map() {
   }
 
   function handleFormSubmit() {
-    // Call navigation function with form responses
-    return;
+    return [navigatingNodes.start, navigatingNodes.end];
   }
 
   return (
@@ -80,7 +79,7 @@ function Map() {
           <TransformWrapper>
             <Controls />
             <TransformComponent>
-              <FloorMap />
+              <FloorMap inputLocations={handleFormSubmit()} />
             </TransformComponent>
           </TransformWrapper>
         </div>
