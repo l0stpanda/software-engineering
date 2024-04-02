@@ -23,14 +23,12 @@ model HighScore {
 
 // Users have fields that will be added to the database on registration
 model Staff {
-  emp_id    String   @id
+  emp_id    Int      @id @default(autoincrement())
   role      String // By default the user will be an employee unless designated otherwise by an admin
   user_name String
-  email     String   @unique
+  // email     String   @unique
   password  String
   add_date  DateTime @default(now())
-
-  // Foregin Key References
 }
 
 // Flower requests are saved

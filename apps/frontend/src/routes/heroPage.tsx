@@ -1,9 +1,16 @@
-import React from "react";
 import "./heroPage.css";
-import { Button } from "@mui/material";
 import mapImg from "../assets/LL1Map.png";
-
-export default function heroPage() {
+import React from "react";
+import {
+  Button,
+  //    Dialog,
+  //    DialogActions,
+  //    DialogContent,
+  //    DialogTitle,
+  // TextField,
+} from "@mui/material";
+//import { useState } from "react";
+function HeroPage() {
   return (
     <div className="wholePage">
       <div className="header">
@@ -30,8 +37,29 @@ export default function heroPage() {
           <Button variant="contained" sx={{ borderRadius: "30px" }}>
             Login
           </Button>
+
+          {/*<Dialog open={open} onClose={handleSubmitClose}>*/}
+          {/*    <DialogTitle>We received your request!</DialogTitle>*/}
+          {/*    <DialogContent>*/}
+          {/*        <strong>Here are your responses:</strong>*/}
+          {/*        <br />*/}
+          {/*        Room Number: {responses.roomNum}*/}
+          {/*        <br />*/}
+          {/*        Sent By: {responses.senderName}*/}
+          {/*        <br />*/}
+          {/*        Send To: {responses.sendTo}*/}
+          {/*        <br />*/}
+          {/*        Note for Patient: {responses.attachedNote}*/}
+          {/*    </DialogContent>*/}
+          {/*    <DialogActions>*/}
+          {/*        <Button onClick={handleSubmitClose} autoFocus>*/}
+          {/*            Okay*/}
+          {/*        </Button>*/}
+          {/*    </DialogActions>*/}
+          {/*</Dialog>*/}
         </div>
       </div>
     </div>
   );
 }
+export default HeroPage;
