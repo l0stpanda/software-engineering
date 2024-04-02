@@ -44,7 +44,7 @@ model Flowers {
   status      String // when initialized the field will be 'Pending'. When the order is ready to be delivered it will be called Ready and will display in a SELECT statement
 
   // Foreign Key References
-  sent_room Nodes @relation("flower_room", fields: [room], references: [node_id]) // Maybe need to change reference to short_name/long_name later
+  sent_room Nodes @relation("flower_room", fields: [room], references: [node_id], onDelete: Cascade) // Maybe need to change reference to short_name/long_name later
 }
 
 // Nodes are all good

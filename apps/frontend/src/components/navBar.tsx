@@ -55,6 +55,9 @@ function CustomNavBar() {
             <MenuItem href="viewpending" component="a">
               Pending
             </MenuItem>
+            <MenuItem href="imp" component="a">
+              Import/Export
+            </MenuItem>
           </Menu>
           <Button variant="contained" sx={{ margin: "0 0 0 1rem" }}>
             Logout
