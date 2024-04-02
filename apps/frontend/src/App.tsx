@@ -25,7 +25,7 @@ function App() {
           element: <RegisterPage />,
         },
         {
-          path: "map",
+          path: "",
           element: <MapPage />,
         },
         {

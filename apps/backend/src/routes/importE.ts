@@ -34,6 +34,7 @@ router.delete("/", async function (req: Request, res: Response) {
   } catch (error) {
     console.log(error);
     res.sendStatus(400);
+    return;
   }
   res.sendStatus(200);
 });
