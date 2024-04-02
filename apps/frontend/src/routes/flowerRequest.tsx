@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
+import BackgroundPattern from "../components/backgroundPattern.tsx";
 
 function FlowerRequest() {
   type flowerReqFields = {
@@ -62,6 +63,7 @@ function FlowerRequest() {
     // Your page is everything in this div
     //<div className="bg-repeat bg-[url('./assets/flowerRequestBackground.png')]">
     <div className="justify-center grid h-screen place-items-center">
+      <BackgroundPattern />
       <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-4">
         <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
           Flower Delivery Request
