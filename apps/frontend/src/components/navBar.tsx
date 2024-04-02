@@ -34,12 +34,16 @@ function CustomNavBar() {
           <Button component="a" href="map">
             Map
           </Button>
+          <Button component="a" href="imp">
+            Import/Export
+          </Button>
           <Button
             onClick={handleRequestsOpen}
             //endIcon={<KeyboardArrowDownIcon />}
           >
             Service Requests
           </Button>
+
           <Menu
             open={open}
             onClose={handleRequestsClosed}
@@ -54,9 +58,6 @@ function CustomNavBar() {
             </MenuItem>
             <MenuItem href="viewpending" component="a">
               Pending
-            </MenuItem>
-            <MenuItem href="imp" component="a">
-              Import/Export
             </MenuItem>
           </Menu>
           <Button variant="contained" sx={{ margin: "0 0 0 1rem" }}>
