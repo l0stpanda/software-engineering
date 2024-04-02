@@ -3,9 +3,13 @@ import express, { Express, NextFunction, Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import exampleRouter from "./routes/example.ts";
+import importRouterE from "./routes/importE.ts";
+import importRouterN from "./routes/importN.ts";
+import flowerRequest from "./routes/flowerRequest.ts";
+import loginRequest from "./routes/login.ts";
 
 const app: Express = express(); // Setup the backend
-
+console.log("please");
 // Setup generic middlewear
 app.use(
   logger("dev", {
@@ -22,6 +26,10 @@ app.use(cookieParser()); // Cookie parser
 // Setup routers. ALL ROUTERS MUST use /api as a start point, or they
 // won't be reached by the default proxy and prod setup
 app.use("/api/high-score", exampleRouter);
+app.use("/api/import", importRouterE);
+app.use("/api/importN", importRouterN);
+app.use("/api/flowerRequest", flowerRequest);
+app.use("/api/login", loginRequest);
 app.use("/healthcheck", (req, res) => {
   res.status(200).send();
 });

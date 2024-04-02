@@ -13,26 +13,27 @@ function Map() {
   const Controls = () => {
     const { zoomIn, zoomOut } = useControls();
     return (
-      <div className="absolute pt-10 px-3 z-10 flex gap-2">
+      <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2">
         <Button
           onClick={() => zoomIn()}
           type="button"
           id="zoomInBut"
           variant="contained"
           className="zoomInBut"
-          size="small"
-          sx={{ borderRadius: "30px" }}
+          size="medium"
+          sx={{ borderRadius: "30px", fontSize: "22px", font: "header" }}
         >
           +
         </Button>
+
         <Button
           onClick={() => zoomOut()}
           type="button"
           id="zoomOutBut"
           variant="contained"
           className="zoomOutBut"
-          size="small"
-          sx={{ borderRadius: "30px" }}
+          size="medium"
+          sx={{ borderRadius: "30px", fontSize: "22px", font: "header" }}
         >
           -
         </Button>
@@ -45,6 +46,7 @@ function Map() {
     end: "",
   });
 
+  // Carter's function code bc idk how to do it
   function handleFormChanges(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
     setNavigatingNodes({ ...navigatingNodes, [name]: value });
@@ -60,6 +62,7 @@ function Map() {
       {/*Location and Destination things*/}
       <div
         className="my-8
+                   mx-auto
                    flex
                    flex-row-reverse
                    min-h-screen
@@ -69,7 +72,8 @@ function Map() {
         <div
           className="w-2/3
         h-2/3
-        flex
+        flex-grow
+        ml-1
         border-primary
         border-2"
         >
@@ -91,6 +95,7 @@ function Map() {
             className="mr-8
                     ml-5
                     py-5
+                    px-0
                     flex
                     flex-col
                     items-center
@@ -115,7 +120,6 @@ function Map() {
                     background: "background",
                   },
                 }}
-                margin="normal"
               />
               <TextField
                 id="outlined-basic"
@@ -142,6 +146,28 @@ function Map() {
                 Submit
               </Button>
             </div>
+          </div>
+          {/*second non-functional box for rn*/}
+          <div
+            className="mr-8
+                        ml-5
+                        mt-2
+                        h-2/5
+                        px-0
+                        bg-secondary
+                        rounded-xl"
+          >
+            <p
+              className="pr-1.5
+              pl-1.5
+              pt-1.5
+              pb-1.5
+              text-primary
+              font-header"
+            >
+              This is just a place holder for right now. Written directions are
+              not functional yet.
+            </p>
           </div>
         </div>
       </div>

@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.wholePage {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+}
+
+.sHead {
+  margin: 0;
+  color: white;
+  font-family: "Nunito", sans-serif;
+  font-size: 2rem;
+  float: left;
+  padding-left: 6rem;
+  padding-top: 11rem;
+}
+
+.bHead {
+  margin: 0;
+  color: white;
+  font-family: "Nunito", sans-serif;
+  font-size: 3.5rem;
+  float: left;
+  padding-left: 6rem;
+  line-height: 90%;
+}
+
+.header {
+  background-image: url("../assets/backImg.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  position: relative;
+  float: left;
+  width: 70vw;
+  height: 100.7%;
+}
+
+.heroSecondCol {
+  display: flex;
+  width: 30vw;
+  flex-direction: column;
+}
+
+.touchToStart {
+  height: 40vh;
+  padding: 1rem;
+  background-color: rgba(0, 40, 102, 1);
+  display: flex;
+  flex-direction: row;
+}
+
+.touchStartText {
+  color: white;
+  font-family: "Nunito", sans-serif;
+  text-align: center;
+  text-wrap: normal;
+  font-size: 3rem;
+  align-self: center;
+  display: flex;
+}
+
+.mapPreviewBox {
+  background-color: lightgrey;
+  height: 30vh;
+}
+
+.loginButtonBox {
+  padding-top: 6rem;
+  display: flex;
+  justify-content: space-around;
+}
+
+.mapPreview {
+  object-fit: contain;
+}

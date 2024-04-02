@@ -2,7 +2,7 @@ import FloorNode from "./FloorNode.tsx";
 import lowerLevel1 from "../assets/00_thelowerlevel1.png";
 //import {useEffect, useState} from "react";
 import { Graph } from "../objects/Graph.ts";
-import { Node } from "../objects/Node.ts";
+import { MapNode } from "../objects/MapNode.ts";
 
 export interface InputNode {
   nodeID: string;
@@ -538,7 +538,7 @@ function FloorMap() {
   //create graph based
 
   const graphMap = () => {
-    const graph: Graph = new Graph(new Map<string, Node>());
+    const graph: Graph = new Graph(new Map<string, MapNode>());
 
     // Parses out each node and adds it to the graph
     nodes.forEach(function (inputNode) {
@@ -554,7 +554,7 @@ function FloorMap() {
 
       //shortName = shortName.replace("", "")
       graph.addNode(
-        new Node(
+        new MapNode(
           nodeID,
           xcoord,
           ycoord,
