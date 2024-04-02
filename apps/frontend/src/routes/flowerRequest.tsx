@@ -50,6 +50,11 @@ function FlowerRequest() {
     await axios.post("/api/flowerRequest", responses, {
       headers: { "Content-Type": "application/json" },
     });
+
+    const ret = await axios
+      .get("/api/flowerRequest")
+      .then((response) => response.data);
+    document.writeln(JSON.stringify(ret));
     setOpen(true);
   }
 
