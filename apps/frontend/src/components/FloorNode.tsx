@@ -1,12 +1,12 @@
-import { Edge, InputNode } from "./FloorMap.tsx";
+//import { Edge, InputNode } from "./FloorMap.tsx";
 import { useEffect, useRef, useState } from "react";
 import { Graph } from "../objects/Graph.ts";
 import { BFS } from "../objects/BFS.ts";
 
 interface FloorNodesProps {
   imageSrc: string;
-  nodes: InputNode[];
-  edges: Edge[];
+  nodes: string[][];
+  edges: string[][];
   graph: Graph;
 }
 
@@ -60,10 +60,10 @@ function FloorNode(props: FloorNodesProps) {
 
   const scaledNodes: { [key: string]: FloorNodeInfo } = {};
   props.nodes.forEach((node) => {
-    scaledNodes[node.nodeID] = {
-      key: node.nodeID,
-      x: node.xcoord * (divDimensions.width / imgDimensions.width),
-      y: node.ycoord * (divDimensions.height / imgDimensions.height),
+    scaledNodes[node[0]] = {
+      key: node[0],
+      x: parseInt(node[1]) * (divDimensions.width / imgDimensions.width),
+      y: parseInt(node[2]) * (divDimensions.height / imgDimensions.height),
     };
   });
 
@@ -73,6 +73,7 @@ function FloorNode(props: FloorNodesProps) {
       console.log(clicked);
     }
     if (clicked.length == 2) {
+      console.log(clicked);
       setClicked([nodeid]);
     }
   };
