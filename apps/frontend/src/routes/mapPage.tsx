@@ -1,11 +1,12 @@
 import React from "react";
-import mapImg from "../assets/LL1Map.png";
+//import mapImg from "../assets/LL1Map.png";
 import { Button, TextField } from "@mui/material";
 import {
   TransformWrapper,
   TransformComponent,
   useControls,
 } from "react-zoom-pan-pinch";
+import FloorMap from "../components/FloorMap";
 
 function Map() {
   const Controls = () => {
@@ -54,7 +55,7 @@ function Map() {
           <TransformWrapper>
             <Controls />
             <TransformComponent>
-              <img src={mapImg} className="object-contain h-full" alt="Map" />
+              <FloorMap />
             </TransformComponent>
           </TransformWrapper>
         </div>

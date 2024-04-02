@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Graph } from "../objects/Graph.ts";
 import { BFS } from "../objects/BFS.ts";
+//import mapImg from "../assets/LL1Map.png";
 
 interface FloorNodesProps {
   imageSrc: string;
@@ -73,17 +74,18 @@ function FloorNode(props: FloorNodesProps) {
       console.log(clicked);
     }
     if (clicked.length == 2) {
-      console.log(clicked);
       setClicked([nodeid]);
     }
   };
 
   const renderLines = () => {
     if (clicked.length == 2) {
+      console.log(clicked);
       const bfs = new BFS(props.graph);
       const path = bfs.findPath(clicked[0], clicked[1]);
       const lines = [];
       if (!path) {
+        console.log("No path found");
         return [];
       }
       for (let i = 0; i < path.length - 1; i++) {
@@ -99,11 +101,12 @@ function FloorNode(props: FloorNodesProps) {
               y1={startPoint.y}
               x2={endPoint.x}
               y2={endPoint.y}
-              style={{ stroke: "blue", strokeWidth: 2 }}
+              style={{ stroke: "green", strokeWidth: 2 }}
             />,
           );
         }
       }
+      console.log(lines);
       return lines;
     }
     return [];
@@ -111,12 +114,7 @@ function FloorNode(props: FloorNodesProps) {
 
   return (
     <div ref={divRef} style={{ position: "relative" }}>
-      <img
-        src={props.imageSrc}
-        alt="Floor map"
-        className="ll1"
-        style={{ maxWidth: "100%" }}
-      />
+      <img src={props.imageSrc} className="object-contain h-full" alt="Map" />
       <svg
         style={{
           position: "absolute",
