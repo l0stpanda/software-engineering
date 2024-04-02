@@ -1,6 +1,6 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-import HomePage from "./routes/homePage.tsx";
+import HeroPage from "./routes/heroPage.tsx";
 import RegisterPage from "./routes/registerPage.tsx";
 import MapPage from "./routes/mapPage.tsx";
 import FlowerRequest from "./routes/flowerRequest.tsx";
@@ -17,8 +17,8 @@ function App() {
       element: <Root />,
       children: [
         {
-          path: "homepage",
-          element: <HomePage />,
+          path: "hero",
+          element: <HeroPage />,
         },
         {
           path: "register",
