@@ -7,6 +7,7 @@ import importRouterE from "./routes/importE.ts";
 import importRouterN from "./routes/importN.ts";
 import readRouterE from "./routes/readE.ts";
 import readRouterN from "./routes/readN.ts";
+//import downloadCSV from "./routes/downloadFile.ts";
 
 const app: Express = express(); // Setup the backend
 
@@ -30,6 +31,7 @@ app.use("/api/import", importRouterE);
 app.use("/api/importN", importRouterN);
 app.use("/api/readE", readRouterE);
 app.use("/api/readN", readRouterN);
+//app.use("/api/downloadCSV", downloadCSV);
 
 app.use("/healthcheck", (req, res) => {
   res.status(200).send();

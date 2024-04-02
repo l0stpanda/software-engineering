@@ -1548,6 +1548,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/json-stringify-safe@npm:^5":
+  version: 5.0.3
+  resolution: "@types/json-stringify-safe@npm:5.0.3"
+  checksum: 66826a59b53ce5a5becc9c05cd0bdadb7e2032e02803a9dd13137de134a0882a6c67ae334371ccff07a20b1d2b2c23fa3a81b5e23f40b27cfcf553c7cce06e35
+  languageName: node
+  linkType: hard
+
 "@types/keyv@npm:^3.1.4":
   version: 3.1.4
   resolution: "@types/keyv@npm:3.1.4"
@@ -4888,6 +4895,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"json-stringify-safe@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "json-stringify-safe@npm:5.0.1"
+  checksum: 59169a081e4eeb6f9559ae1f938f656191c000e0512aa6df9f3c8b2437a4ab1823819c6b9fd1818a4e39593ccfd72e9a051fdd3e2d1e340ed913679e888ded8c
+  languageName: node
+  linkType: hard
+
 "jsonc-parser@npm:^3.2.0":
   version: 3.2.0
   resolution: "jsonc-parser@npm:3.2.0"
@@ -6930,6 +6944,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "softeng-starter-code@workspace:."
   dependencies:
+    "@types/json-stringify-safe": "npm:^5"
     "@types/react": "npm:^18.0.37"
     "@types/react-dom": "npm:^18.0.11"
     "@vitest/ui": "npm:^0.33.0"
@@ -6940,6 +6955,7 @@ __metadata:
     eslint-config-custom: "workspace:*"
     happy-dom: "npm:^10.6.3"
     husky: "npm:^8.0.0"
+    json-stringify-safe: "npm:^5.0.1"
     prettier: "npm:2.8.8"
     prettier-config-custom: "workspace:*"
     react: "npm:^18.2.0"
