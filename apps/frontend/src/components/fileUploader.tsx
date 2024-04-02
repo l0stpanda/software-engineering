@@ -86,9 +86,19 @@ const SingleFileUploader = () => {
 
   return (
     <>
-      <input id="type" type="text" />
-      <input id="file" type="file" accept=".csv" onChange={handleFileChange} />
-      {file && <button onClick={handleUpload}>Upload a file</button>}
+      <input id="type" type="text" style={{ marginTop: "5%" }} />
+      <input
+        id="file"
+        type="file"
+        accept=".csv"
+        style={{ marginTop: "5%" }}
+        onChange={handleFileChange}
+      />
+      {file && (
+        <button onClick={handleUpload} style={{ marginTop: "5%" }}>
+          Upload a file
+        </button>
+      )}
     </>
   );
 };
