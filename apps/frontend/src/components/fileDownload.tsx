@@ -1,24 +1,6 @@
 import React from "react";
 import axios from "axios";
 
-export interface edgeType {
-  type: string;
-  start_node: string;
-  end_node: string;
-}
-
-export interface nodeType {
-  type: string;
-  node_id: string;
-  node_type: string;
-  floor: string;
-  x_c: string;
-  y_c: string;
-  building: string;
-  short_name: string;
-  long_name: string;
-}
-
 const Download = () => {
   const handleDownload = async (apiPath: string, fileName: string) => {
     try {
