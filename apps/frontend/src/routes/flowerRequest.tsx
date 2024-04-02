@@ -98,29 +98,28 @@ function FlowerRequest() {
             placeholder="Name"
             required={true}
           />
+          <TextField
+            onChange={handleResponseChanges}
+            value={responses.attachedNote}
+            id="attachedNote"
+            name="attachedNote"
+            variant="filled"
+            label="Note for Patient"
+            multiline={true}
+            maxRows={5}
+          />
+          <Button
+            className="w-32 self-center pt-10"
+            onClick={handleSubmit}
+            type="submit"
+            id="requestSubmit"
+            variant="contained"
+            size="large"
+            sx={{ borderRadius: "30px" }}
+          >
+            SUBMIT
+          </Button>
         </div>
-        <TextField
-          onChange={handleResponseChanges}
-          value={responses.attachedNote}
-          id="attachedNote"
-          name="attachedNote"
-          variant="filled"
-          label="Note for Patient"
-          multiline={true}
-          maxRows={5}
-          helperText="Optional"
-        />
-        <Button
-          className="w-32 self-center"
-          onClick={handleSubmit}
-          type="submit"
-          id="requestSubmit"
-          variant="contained"
-          size="large"
-          sx={{ borderRadius: "30px" }}
-        >
-          SUBMIT
-        </Button>
       </div>
       <Dialog open={open} onClose={handleSubmitClose}>
         <DialogTitle>We received your request!</DialogTitle>

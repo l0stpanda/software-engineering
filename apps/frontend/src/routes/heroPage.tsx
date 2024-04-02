@@ -45,11 +45,14 @@ function HeroPage() {
           <img src={mapImg} className="mapPreview" alt="Map Preview" />
         </div>
         <div className="loginButtonBox">
-          <p style={{ color: "white" }}>Staff Member?</p>
+          <p className="self-center" style={{ color: "white" }}>
+            Staff Member?
+          </p>
           <Button
             variant="contained"
             sx={{ borderRadius: "30px" }}
             onClick={setLoginOpen}
+            className="self-center"
           >
             Login
           </Button>
