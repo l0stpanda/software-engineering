@@ -1,5 +1,5 @@
 import { Graph } from "./Graph.ts";
-import { Node } from "./Node.ts";
+import { MapNode } from "./MapNode.ts";
 
 export class Pathfinding {
   protected graph: Graph;
@@ -13,7 +13,7 @@ export class Pathfinding {
     console.log("Path to destination:");
     path.forEach(function (value: string) {
       const node = graph.getNode(value);
-      if (node instanceof Node) {
+      if (node instanceof MapNode) {
         console.log(node.getLongName());
       } else {
         console.log("NodeID does not exist, path is invalid");

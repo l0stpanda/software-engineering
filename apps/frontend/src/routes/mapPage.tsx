@@ -1,16 +1,17 @@
 import React from "react";
-//import { Graph } from "../objects/Graph.ts";
-//import { Node } from "../objects/Node.ts";
+import { Graph } from "../objects/Graph.ts";
+import { MapNode } from "../objects/MapNode.ts";
 
 export default function mapPage() {
-  //function test () {
-  //let graph: Graph = new Graph(new Map<string, Node>());
-  //graph.loadGraph();
-  //}
+  function test() {
+    const graph: Graph = new Graph(new Map<string, MapNode>());
+    console.log(graph);
+  }
 
   return (
     <div className="w-100">
-      <h1>This is an example page.</h1>
+      <h1 onClick={test}>This is an example page.</h1>
+      <button onClick={test}>Click me</button>
     </div>
   );
 }

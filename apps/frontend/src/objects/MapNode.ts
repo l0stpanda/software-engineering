@@ -1,4 +1,4 @@
-export class Node {
+export class MapNode {
   private nodeID: string;
   private xcoord: number;
   private ycoord: number;
@@ -7,7 +7,7 @@ export class Node {
   private nodeType: string;
   private longName: string;
   private shortName: string;
-  private nodeList: Node[];
+  private nodeList: MapNode[];
 
   constructor(
     nodeID: string,
@@ -31,7 +31,7 @@ export class Node {
   }
 
   // Add given node to adjacency list
-  addAdjacency(node: Node) {
+  addAdjacency(node: MapNode) {
     this.nodeList.push(node);
   }
 
