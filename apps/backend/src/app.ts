@@ -5,11 +5,14 @@ import logger from "morgan";
 import exampleRouter from "./routes/example.ts";
 import importRouterE from "./routes/importE.ts";
 import importRouterN from "./routes/importN.ts";
+import readRouterE from "./routes/readE.ts";
+import readRouterN from "./routes/readN.ts";
+//import downloadCSV from "./routes/downloadFile.ts";
 import flowerRequest from "./routes/flowerRequest.ts";
 import loginRequest from "./routes/login.ts";
 
 const app: Express = express(); // Setup the backend
-console.log("please");
+
 // Setup generic middlewear
 app.use(
   logger("dev", {
@@ -28,6 +31,9 @@ app.use(cookieParser()); // Cookie parser
 app.use("/api/high-score", exampleRouter);
 app.use("/api/import", importRouterE);
 app.use("/api/importN", importRouterN);
+app.use("/api/readE", readRouterE);
+app.use("/api/readN", readRouterN);
+
 app.use("/api/flowerRequest", flowerRequest);
 app.use("/api/login", loginRequest);
 app.use("/healthcheck", (req, res) => {
