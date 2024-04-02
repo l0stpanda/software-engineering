@@ -1,23 +1,23 @@
 import { Pathfinding } from "./Pathfinding.ts";
-import { Node } from "./Node.ts";
+import { MapNode } from "./MapNode.ts";
 
 export class BFS extends Pathfinding {
   // Breadth first search pathfinding method
   findPath(src: string, dest: string) {
     const visited: Map<string, number> = new Map<string, number>();
     const pathStorage: Map<string, string> = new Map<string, string>();
-    const queue: Array<Node> = [];
+    const queue: Array<MapNode> = [];
     const path: Array<string> = [];
 
-    const srcNode: Node | undefined = this.graph.getMap().get(src);
-    const destNode: Node | undefined = this.graph.getMap().get(dest);
-    if (srcNode instanceof Node && destNode instanceof Node) {
+    const srcNode: MapNode | undefined = this.graph.getMap().get(src);
+    const destNode: MapNode | undefined = this.graph.getMap().get(dest);
+    if (srcNode instanceof MapNode && destNode instanceof MapNode) {
       queue.push(srcNode);
 
       while (queue.length != 0) {
-        const currNode: Node | undefined = queue.pop();
+        const currNode: MapNode | undefined = queue.pop();
 
-        if (currNode instanceof Node) {
+        if (currNode instanceof MapNode) {
           if (currNode == destNode) {
             // Get the shortest path
             let currID = currNode.getNodeID();
