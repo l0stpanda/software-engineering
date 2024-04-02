@@ -39,6 +39,14 @@ function FlowerRequest() {
 
   // Clears form, and outputs responses
   async function handleSubmit() {
+    if (
+      responses.sendTo == "" ||
+      responses.senderName == "" ||
+      responses.roomNum == ""
+    ) {
+      alert("Room Number, Send To, and Sent From must all be filled out");
+      return;
+    }
     await axios.post("/api/flowerRequest", responses, {
       headers: { "Content-Type": "application/json" },
     });
@@ -76,6 +84,7 @@ function FlowerRequest() {
             variant="filled"
             label="Sent By"
             placeholder="Name"
+            required={true}
           />
           <TextField
             onChange={handleResponseChanges}
@@ -83,8 +92,9 @@ function FlowerRequest() {
             id="sendTo"
             name="sendTo"
             variant="filled"
-            label="sendTo"
-            placeholder="sendTo"
+            label="Send To"
+            placeholder="Name"
+            required={true}
           />
         </div>
         <TextField
@@ -118,6 +128,8 @@ function FlowerRequest() {
           Room Number: {responses.roomNum}
           <br />
           Sent By: {responses.senderName}
+          <br />
+          Send To: {responses.sendTo}
           <br />
           Note for Patient: {responses.attachedNote}
         </DialogContent>
