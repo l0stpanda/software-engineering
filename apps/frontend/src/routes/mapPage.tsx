@@ -40,13 +40,14 @@ function Map() {
 
   return (
     <div>
-      {" "}
       {/*Location and Destination Box*/}
       <div
-        className="my-10 flex flex-row-reverse
-                        min-h-screen
-                        max-w-screen-2xl
-                        justify-center"
+        className="my-8
+                   flex
+                   flex-row-reverse
+                   min-h-screen
+                   max-w-screen-2xl
+                   justify-start"
       >
         {/*Map Image*/}
         <div className="w-2/3">
@@ -67,29 +68,43 @@ function Map() {
           <div
             className="mr-8
                     ml-5
-                    flex flex-col
+                    py-5
+                    flex
+                    flex-col
                     items-center
                     bg-background
+                    rounded-xl
                     border-primary
-                    border-2
-                    rounded-xl"
+                    border-2"
           >
-            <h2 className="text-primary font-header">
-              Where would you like to go?
-            </h2>
-
-            <TextField //sx={{input: {color: "primary"}}}
-              id="standard-basic"
-              label="Location"
-              variant="standard"
-              color="success"
-            ></TextField>
-            <TextField //sx={{input: {color: "primary"}}}
-              id="standard-basic"
-              label="Destination"
-              variant="standard"
-              color="success"
-            ></TextField>
+            <div className="">
+              <h2 className="text-primary font-header pb-4">
+                Where would you like to go?
+              </h2>
+              <TextField
+                id="outlined-basic"
+                variant="outlined"
+                label="Location"
+                sx={{
+                  input: {
+                    color: "primary",
+                    background: "background",
+                  },
+                }}
+              />
+              <br />
+              <TextField
+                id="outlined-basic"
+                variant="outlined"
+                label="Destination"
+                sx={{
+                  input: {
+                    color: "primary",
+                    background: "background",
+                  },
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
