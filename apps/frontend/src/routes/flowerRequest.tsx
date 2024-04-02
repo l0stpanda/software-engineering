@@ -54,7 +54,7 @@ function FlowerRequest() {
     const ret = await axios
       .get("/api/flowerRequest")
       .then((response) => response.data);
-    document.writeln(JSON.stringify(ret));
+    console.log(ret);
     setOpen(true);
   }
 
