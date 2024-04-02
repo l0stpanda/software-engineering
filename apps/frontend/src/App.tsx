@@ -7,8 +7,9 @@ import FlowerRequest from "./routes/flowerRequest.tsx";
 import PendingFlowerRequests from "./routes/pendingFlowerRequest.tsx";
 
 //import ExampleRoute from "./routes/ExampleRoute.tsx";
-//import ImportRouteE from "./routes/importRouteE.tsx";
-import ReadRouteE from "./routes/readRouteE.tsx";
+// import ImportRouteE from "./routes/importRouteE.tsx";
+//import ReadRoute from "./routes/readRoute.tsx";
+import Download from "./routes/DownloadCSV.tsx";
 function App() {
   const router = createBrowserRouter([
     {
@@ -36,9 +37,13 @@ function App() {
           path: "viewpending",
           element: <PendingFlowerRequests />,
         },
+        // {
+        //       path: "",
+        //       element: <ImportRouteE />,
+        //   },
         {
           path: "",
-          element: <ReadRouteE />,
+          element: <Download />,
         },
       ],
     },
