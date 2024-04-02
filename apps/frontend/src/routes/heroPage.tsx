@@ -1,16 +1,28 @@
 import "./heroPage.css";
 import mapImg from "../assets/LL1Map.png";
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
+  Dialog,
   //    Dialog,
   //    DialogActions,
   //    DialogContent,
   //    DialogTitle,
   // TextField,
 } from "@mui/material";
+import LoginDialog from "../components/loginDialog.tsx";
 //import { useState } from "react";
 function HeroPage() {
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  function setLoginOpen() {
+    setDialogOpen(true);
+  }
+
+  function setLoginClose() {
+    setDialogOpen(false);
+  }
+
   return (
     <div className="wholePage">
       <div className="header">
@@ -34,7 +46,11 @@ function HeroPage() {
         </div>
         <div className="loginButtonBox">
           <p style={{ color: "white" }}>Staff Member?</p>
-          <Button variant="contained" sx={{ borderRadius: "30px" }}>
+          <Button
+            variant="contained"
+            sx={{ borderRadius: "30px" }}
+            onClick={setLoginOpen}
+          >
             Login
           </Button>
 
@@ -59,6 +75,9 @@ function HeroPage() {
           {/*</Dialog>*/}
         </div>
       </div>
+      <Dialog open={dialogOpen} onClose={setLoginClose}>
+        <LoginDialog />
+      </Dialog>
     </div>
   );
 }

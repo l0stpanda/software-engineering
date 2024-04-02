@@ -44,11 +44,11 @@ router.post("/check", async function (req: Request, res: Response) {
       },
     });
     if (check.length == 0) {
+      res.send("No Go");
       res.sendStatus(400);
-      return "No Go";
     } else if (check.length == 1) {
-      res.sendStatus(400);
-      return "Yes Authorized";
+      res.send("Yes Authorized");
+      res.sendStatus(200);
     }
   } catch (e) {
     console.log(e);
