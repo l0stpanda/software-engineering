@@ -68,8 +68,6 @@ export class Graph {
 
       await this.addEdge(src_node, dest_node);
     }
-
-    console.log(this.getNode(edges[0].start_node));
   }
 
   getMap() {
