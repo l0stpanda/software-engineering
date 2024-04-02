@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+html,
+body,
+w-full flex flex-col {
+  width: 100%;
+  height: 100%;
+}
+.wholePage {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  background-image: url("../assets/backImg.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+.sHead {
+  margin: 0;
+  color: white;
+  font-family: "Nunito", sans-serif;
+  font-size: 2rem;
+  float: left;
+  padding-left: 6rem;
+  padding-top: 11rem;
+}
+
+.bHead {
+  margin: 0;
+  color: white;
+  font-family: "Nunito", sans-serif;
+  font-size: 3.5rem;
+  float: left;
+  padding-left: 6rem;
+  line-height: 100%;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  float: left;
+  width: 70%;
+  height: 100%;
+}
+
+.heroSecondCol {
+  display: flex;
+  width: 30%;
+  flex-direction: column;
+}
+
+.touchToStart {
+  height: 40%;
+  padding: 15%;
+  background-color: rgba(0, 40, 102, 1);
+  display: flex;
+  flex-direction: row;
+}
+
+.touchStartText {
+  color: white;
+  font-family: "Nunito", sans-serif;
+  text-align: center;
+  text-wrap: normal;
+  font-size: 3rem;
+  align-self: center;
+  display: flex;
+}
+
+.mapPreviewBox {
+  background-color: lightgrey;
+  height: 50%;
+}
+
+.loginButtonBox {
+  display: flex;
+  justify-content: space-around;
+  height: 10%;
+  background-color: rgba(0, 40, 102, 1);
+}
+
+.loginButtonBox,
+p {
+  padding-top: 4%;
+}
+
+.mapPreview {
+  object-fit: contain;
+}

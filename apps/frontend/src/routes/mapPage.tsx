@@ -111,6 +111,7 @@ function Map() {
                 id="outlined-basic"
                 variant="outlined"
                 label="Location"
+                name="start"
                 value={navigatingNodes.start}
                 onChange={handleFormChanges}
                 sx={{
@@ -125,6 +126,7 @@ function Map() {
                 variant="outlined"
                 label="Destination"
                 value={navigatingNodes.end}
+                name="end"
                 onChange={handleFormChanges}
                 sx={{
                   input: {

@@ -23,14 +23,12 @@ model HighScore {
 
 // Users have fields that will be added to the database on registration
 model Staff {
-  emp_id    String   @id
+  emp_id    Int      @id @default(autoincrement())
   role      String // By default the user will be an employee unless designated otherwise by an admin
   user_name String
-  email     String   @unique
+  // email     String   @unique
   password  String
   add_date  DateTime @default(now())
-
-  // Foregin Key References
 }
 
 // Flower requests are saved
@@ -44,7 +42,7 @@ model Flowers {
   status      String // when initialized the field will be 'Pending'. When the order is ready to be delivered it will be called Ready and will display in a SELECT statement
 
   // Foreign Key References
-  sent_room Nodes @relation("flower_room", fields: [room], references: [node_id]) // Maybe need to change reference to short_name/long_name later
+  sent_room Nodes @relation("flower_room", fields: [room], references: [node_id], onDelete: Cascade) // Maybe need to change reference to short_name/long_name later
 }
 
 // Nodes are all good

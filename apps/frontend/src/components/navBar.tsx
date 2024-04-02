@@ -28,7 +28,7 @@ function CustomNavBar() {
           </div>
         </Toolbar>
         <div className="flex align-middle py-3 px-2 gap-2">
-          <Button component="a" href="homepage">
+          <Button component="a" href="">
             Home
           </Button>
           <Button component="a" href="map">
@@ -54,6 +54,9 @@ function CustomNavBar() {
             </MenuItem>
             <MenuItem href="viewpending" component="a">
               Pending
+            </MenuItem>
+            <MenuItem href="imp" component="a">
+              Import/Export
             </MenuItem>
           </Menu>
           <Button variant="contained" sx={{ margin: "0 0 0 1rem" }}>
