@@ -45,6 +45,7 @@ function Map() {
     start: "",
     end: "",
   });
+  const [submitValues, setSubmitValues] = useState(["", ""]);
 
   // Carter's function code bc idk how to do it
   function handleFormChanges(event: React.ChangeEvent<HTMLInputElement>) {
@@ -53,7 +54,7 @@ function Map() {
   }
 
   function handleFormSubmit() {
-    return [navigatingNodes.start, navigatingNodes.end];
+    setSubmitValues([navigatingNodes.start, navigatingNodes.end]);
   }
 
   return (
@@ -79,7 +80,7 @@ function Map() {
           <TransformWrapper>
             <Controls />
             <TransformComponent>
-              <FloorMap inputLocations={handleFormSubmit()} />
+              <FloorMap inputLocations={[submitValues[0], submitValues[1]]} />
             </TransformComponent>
           </TransformWrapper>
         </div>

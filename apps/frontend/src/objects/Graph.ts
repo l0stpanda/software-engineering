@@ -64,8 +64,7 @@ export class Graph {
 
     for (let i = 0; i < edges.length; i++) {
       const src_node = edges[i].start_node;
-      const dest_node = edges[i].end_node;
-
+      const dest_node = edges[i].end_node.split("\r")[0];
       await this.addEdge(src_node, dest_node);
     }
   }

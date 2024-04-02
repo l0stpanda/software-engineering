@@ -32,7 +32,8 @@ function FloorNode(props: FloorNodesProps) {
   const startId = props.graph.idFromName(props.inputLoc[0]);
 
   const endId = props.graph.idFromName(props.inputLoc[1]);
-  console.log(startId, endId);
+  // console.log(startId == "CCONF001L1");
+  // console.log(endId == "CRETL001L1");
 
   useEffect(() => {
     if (divRef.current) {
@@ -67,17 +68,18 @@ function FloorNode(props: FloorNodesProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  console.log(nodes);
   const scaledNodes: { [key: string]: FloorNodeInfo } = {};
-  for (let i = 0; i < nodes.length; i++) {
-    const node = nodes[i];
-    const id = node.getNodeID();
+  nodes.forEach((node) => {
+    const id: string = node.getNodeID();
     scaledNodes[id] = {
-      key: id,
+      key: node.getNodeID(),
       x: node.getX() * (divDimensions.width / imgDimensions.width),
       y: node.getY() * (divDimensions.height / imgDimensions.height),
     };
-  }
+  });
 
+  console.log(scaledNodes);
   const handleNodeClick = (nodeid: string) => () => {
     if (clicked.length < 2 && !clicked.includes(nodeid)) {
       setClicked((prevClicked) => [...prevClicked, nodeid]);
@@ -89,9 +91,15 @@ function FloorNode(props: FloorNodesProps) {
   };
 
   const renderLines = () => {
-    if (props.inputLoc.length == 2 && startId && endId) {
+    let input: string[] = [];
+    if (clicked.length == 2) {
+      input = [clicked[0], clicked[1]];
+    } else if (props.inputLoc.length == 2 && startId && endId) {
+      input = [props.inputLoc[0], props.inputLoc[1]];
+    }
+    if (input.length == 2) {
       console.log(startId, endId);
-      const path = bfs.findPath(startId, endId);
+      const path = bfs.findPath(input[0], input[1]);
       const lines = [];
       if (!path) {
         console.log("No path found");
