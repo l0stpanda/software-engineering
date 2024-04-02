@@ -20,7 +20,7 @@ function App() {
       element: <Root />,
       children: [
         {
-          path: "hero",
+          path: "",
           element: <HeroPage />,
         },
         {
