@@ -1,92 +1,84 @@
 import React from "react";
-//import {GetReq} from "../objects/DAO_FlowerReq.ts";
-
+// import {GetReq} from "../objects/DAO_FlowerReq.ts";
+import axios from "axios";
 export default function PendingFlowerRequest() {
+  async function handleShow() {
+    const returnVal = await axios
+      .get("/api/flowerRequest")
+      .then((response) => response.data);
+    console.log(returnVal);
+  }
+
+  function show() {
+    console.log(handleShow());
+  }
+
+  show();
   return (
-    <div className="h-screen flex items-center justify-center">
-      <div>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-        />
-        <table className="table-fixed,border-separate border border-slate-500, rounded-2xl">
-          <thead>
-            <tr>
-              <th className="border border-slate-500">
-                Flower Delivery Request
-              </th>
-              <th className="border">Status</th>
-              <th className="border">Date Entered</th>
-              <th className="border">Time Entered</th>
-              <th className="border">Destination</th>
-              <th className="border">Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="flex justify-center">Mr. Jones Request</td>
-              <td>Pending</td>
-              <td>03/03/03</td>
-              <td>10:45 AM</td>
-              <td>Room 304</td>
-              <td>
-                <button>
-                  <i className="fa">&#xf014;</i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>Betty Crocker Request</td>
-              <td>Pending</td>
-              <td>03/03/03</td>
-              <td>10:45 AM</td>
-              <td>Room 304</td>
-              <td>
-                <button>
-                  <i className="fa">&#xf014;</i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>Bartholomeow Request</td>
-              <td>Pending</td>
-              <td>03/03/03</td>
-              <td>10:45 AM</td>
-              <td>Room 304</td>
-              <td>
-                <button>
-                  <i className="fa">&#xf014;</i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>Bartholomeow Request</td>
-              <td>Pending</td>
-              <td>03/03/03</td>
-              <td>10:45 AM</td>
-              <td>Room 304</td>
-              <td>
-                <button>
-                  <i className="fa">&#xf014;</i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>Bartholomeow Request</td>
-              <td>Pending</td>
-              <td>03/03/03</td>
-              <td>10:45 AM</td>
-              <td>Room 304</td>
-              <td>
-                <button>
-                  <i className="fa">&#xf014;</i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div className="relative overflow-x-auto shadow-md sm:rounded-lg flex items-center justify-center">
+      {/*<body className={"bg-blue"}*/}
+      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <tr>
+            <th scope="col" className="px-6 py-3">
+              Flower Delivery Request
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Status
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Date Entered
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Time Entered
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Destination
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Delete
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td className="px-6 py-3">Betty Crocker Request</td>
+            <td className="px-6 py-3">Pending</td>
+            <td className="px-6 py-3">03/03/03</td>
+            <td className="px-6 py-3">10:45 AM</td>
+            <td className="px-6 py-3">Room 304</td>
+            <td>
+              <button>
+                <i className="fa px-9 py-3">&#xf014;</i>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td className="px-6 py-3">Betty Crocker Request</td>
+            <td className="px-6 py-3">Pending</td>
+            <td className="px-6 py-3">03/03/03</td>
+            <td className="px-6 py-3">10:45 AM</td>
+            <td className="px-6 py-3">Room 304</td>
+            <td>
+              <button>
+                <i className="fa px-9 py-3">&#xf014;</i>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td className="px-6 py-3">Betty Crocker Request</td>
+            <td className="px-6 py-3">Pending</td>
+            <td className="px-6 py-3">03/03/03</td>
+            <td className="px-6 py-3">10:45 AM</td>
+            <td className="px-6 py-3">Room 304</td>
+            <td>
+              <button>
+                <i className="fa px-9 py-3">&#xf014;</i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 }
