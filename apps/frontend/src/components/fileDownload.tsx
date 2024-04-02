@@ -9,7 +9,7 @@ const Download = () => {
 
       // CSV header
       const headers = Object.keys(dataList[0]);
-      const csvHeader = headers.join(",") + "\r\n";
+      //const csvHeader = headers.join(",") + "\r\n";
 
       // CSV rows
       const csvRows = dataList
@@ -26,9 +26,8 @@ const Download = () => {
         })
         .join("\r\n");
 
-      const csvContent = csvHeader + csvRows;
       // Create a Blob for the CSV content
-      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const blob = new Blob([csvRows], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
 
       // Create a temporary link to trigger the download
@@ -46,10 +45,26 @@ const Download = () => {
 
   return (
     <>
-      <button onClick={() => handleDownload("/api/readN", "Nodes.csv")}>
+      <button
+        style={{
+          backgroundColor: "gray",
+          borderStyle: "solid",
+          borderWidth: "4px",
+        }}
+        onClick={() => handleDownload("/api/readN", "Nodes.csv")}
+      >
         Download Node CSV
       </button>
-      <button onClick={() => handleDownload("/api/readE", "Edges.csv")}>
+      <br />
+      <button
+        style={{
+          backgroundColor: "white",
+          borderStyle: "solid",
+          borderWidth: "4px",
+          marginTop: "3%",
+        }}
+        onClick={() => handleDownload("/api/readE", "Edges.csv")}
+      >
         Download Edge CSV
       </button>
     </>

@@ -12,3 +12,9 @@ export async function PostReq(formData: flowerRequestType) {
     console.log(res.statusText);
   }
 }
+
+export async function GetReq() {
+  return await axios
+    .get("/api/flowerRequest")
+    .then((response) => response.data);
+}
