@@ -28,7 +28,7 @@ function CustomNavBar() {
           </div>
         </Toolbar>
         <div className="flex align-middle py-3 px-2 gap-2">
-          <Button component="a" href="hero">
+          <Button component="a" href="">
             Home
           </Button>
           <Button component="a" href="map">

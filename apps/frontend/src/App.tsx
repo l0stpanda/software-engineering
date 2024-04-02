@@ -17,7 +17,7 @@ function App() {
       element: <Root />,
       children: [
         {
-          path: "hero",
+          path: "",
           element: <HeroPage />,
         },
         {
@@ -25,7 +25,7 @@ function App() {
           element: <RegisterPage />,
         },
         {
-          path: "",
+          path: "map",
           element: <MapPage />,
         },
         {
