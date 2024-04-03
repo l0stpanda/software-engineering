@@ -48,14 +48,18 @@ function FlowerRequest() {
       alert("Room Number, Send To, and Sent From must all be filled out");
       return;
     }
-    await axios.post("/api/flowerRequest", responses, {
-      headers: { "Content-Type": "application/json" },
-    });
 
-    const ret = await axios
-      .get("/api/flowerRequest")
-      .then((response) => response.data);
-    console.log(ret);
+    try {
+      await axios.post("/api/flowerRequest", responses, {
+        headers: { "Content-Type": "application/json" },
+      });
+    } catch (error) {
+      alert(
+        "Error storing in the database, make sure nodes/edges are uploaded",
+      );
+      console.error(error);
+      return;
+    }
     setOpen(true);
   }
 

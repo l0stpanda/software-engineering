@@ -4,7 +4,7 @@ import HeroPage from "./routes/heroPage.tsx";
 import RegisterPage from "./routes/registerPage.tsx";
 import MapPage from "./routes/mapPage.tsx";
 import FlowerRequest from "./routes/flowerRequest.tsx";
-import PendingFlowerRequests from "./routes/pendingFlowerRequest.tsx";
+import PendingFlowerRequests from "./routes/displayFlowerRequests.tsx";
 
 //import ExampleRoute from "./routes/ExampleRoute.tsx";
 // import ImportRouteE from "./routes/importRouteE.tsx";
@@ -13,6 +13,8 @@ import PendingFlowerRequests from "./routes/pendingFlowerRequest.tsx";
 import ImportRouteE from "./routes/importRouteE.tsx";
 import CustomNavBar from "./components/navBar.tsx";
 import ExportRouteE from "./routes/exportRouteE.tsx";
+import ReadRouteE from "./routes/readRouteE.tsx";
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -45,8 +47,13 @@ function App() {
           element: <ImportRouteE />,
         },
         {
+
           path: "exp",
           element: <ExportRouteE />,
+        },
+        {
+          path: "displayTables",
+          element: <ReadRouteE />,
         },
       ],
     },

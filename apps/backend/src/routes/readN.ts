@@ -9,12 +9,13 @@ const router: Router = express.Router();
 formula: router.COMMAND(req, res)...
  */
 
-// API endpoints: Read the nodes table in the database and return data
+
+// API endpoints: Read the edges table in the database and return data
 router.get("/", async (req, res) => {
   try {
-    // Use the Prisma client to query the 'nodes' table in the database
+    // Use the Prisma client to query the 'edges' table in the database
     const nodes = await PrismaClient.nodes.findMany(); //
-    res.status(200).json(nodes);
+    res.status(200).send(nodes);
   } catch (error) {
     res
       .status(400)

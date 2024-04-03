@@ -1,5 +1,5 @@
-import React from "react";
-import mapImg from "../assets/LL1Map.png";
+import React, { useEffect, useRef } from "react";
+//import mapImg from "../assets/LL1Map.png";
 import { Button, TextField } from "@mui/material";
 import {
   TransformWrapper,
@@ -8,8 +8,16 @@ import {
 } from "react-zoom-pan-pinch";
 import { useState } from "react";
 import BackgroundPattern from "../components/backgroundPattern.tsx";
+import { Graph } from "../objects/Graph.ts";
+//import {MapNode} from "../objects/MapNode.ts";
+import lowerLevel1 from "../assets/00_thelowerlevel1.png";
+import FloorNode from "../components/FloorNode.tsx";
 
 function Map() {
+  const divRef = useRef<HTMLDivElement>(null);
+  const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
+  const [graph, setGraph] = useState(new Graph());
+
   const Controls = () => {
     const { zoomIn, zoomOut } = useControls();
     return (
@@ -45,6 +53,7 @@ function Map() {
     start: "",
     end: "",
   });
+  const [submitValues, setSubmitValues] = useState(["", ""]);
 
   // Carter's function code bc idk how to do it
   function handleFormChanges(event: React.ChangeEvent<HTMLInputElement>) {
@@ -53,9 +62,26 @@ function Map() {
   }
 
   function handleFormSubmit() {
-    // Call navigation function with form responses
-    return;
+    const cleanStart = navigatingNodes.start.replace("\r", "");
+    const cleanEnd = navigatingNodes.end.replace("\r", "");
+    console.log(cleanStart, cleanEnd);
+    setSubmitValues([cleanStart, cleanEnd]);
   }
+
+  useEffect(() => {
+    if (divRef.current) {
+      const { clientWidth, clientHeight } = divRef.current;
+      setDivDimensions({ width: clientWidth, height: clientHeight });
+    }
+  }, [divRef]);
+
+  useEffect(() => {
+    const tempGraph = new Graph();
+    tempGraph.loadGraph().then((r) => {
+      console.log(r);
+      setGraph(tempGraph);
+    });
+  }, []);
 
   return (
     <div>
@@ -71,6 +97,7 @@ function Map() {
       >
         {/*Map Image Box*/}
         <div
+          ref={divRef}
           className="w-2/3
         h-2/3
         flex-grow
@@ -81,7 +108,12 @@ function Map() {
           <TransformWrapper>
             <Controls />
             <TransformComponent>
-              <img src={mapImg} className="object-contain h-full" alt="Map" />
+              <FloorNode
+                imageSrc={lowerLevel1}
+                graph={graph}
+                inputLoc={[submitValues[0], submitValues[1]]}
+                divDim={divDimensions}
+              />
             </TransformComponent>
           </TransformWrapper>
         </div>

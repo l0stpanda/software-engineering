@@ -13,6 +13,9 @@ const SingleFileUploader = () => {
       setFile(e.target.files[0]);
     }
   };
+
+  //Function to do uploads for edges and nodes
+
   const handleUpload = async () => {
     if (file) {
       console.log("Uploading file...");
@@ -31,18 +34,21 @@ const SingleFileUploader = () => {
               return row.split(",");
             });
 
+          //Clears the edges to make way for the new upload
           await DeleteAllEdge();
 
+          //Fills in the edges from the new uploaded file
           for (let i = 1; i < edges_array.length - 1; i++) {
             const curr_data: edgeType = {
               type: "Edges",
               start_node: edges_array[i][0].toString(),
               end_node: edges_array[i][1].toString().replace("/r", ""),
             };
-
+            //Makes the backend database accessible to the frontend
             await PostEdge(curr_data);
           }
         } catch (error) {
+          //Throws error if Edges aren't loaded in correctly
           alert("Error loading Edges CSV");
           console.error(error);
           return;
@@ -50,7 +56,7 @@ const SingleFileUploader = () => {
         alert("Edges CSV loaded successfully");
       }
 
-      //Handles nodes
+      //Same functionality as above, but now for nodes
       else if (file.name.toString().toLowerCase().includes("node")) {
         console.log("IMPORTING NODES");
         try {
@@ -92,6 +98,7 @@ const SingleFileUploader = () => {
   };
 
   return (
+    //User interface for clicking a button to upload an edges/nodes.csv file
     <div className="justify-center grid h-screen place-items-center">
       <BackgroundPattern />
       {/*Box*/}
