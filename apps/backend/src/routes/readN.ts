@@ -9,7 +9,6 @@ const router: Router = express.Router();
 formula: router.COMMAND(req, res)...
  */
 
-
 // API endpoints: Read the edges table in the database and return data
 router.get("/", async (req, res) => {
   try {

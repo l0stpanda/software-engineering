@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { ReadEdge } from "../objects/Read_Edges.ts";
 import { ReadNode } from "../objects/Read_Nodes.ts";
@@ -21,7 +20,6 @@ const SingleDisplay = () => {
       console.error("Error fetching edges:", error);
     }
   };
-
 
   const displayNodes = async () => {
     console.log("Displaying nodes...");
