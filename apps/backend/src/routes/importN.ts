@@ -11,6 +11,7 @@ const router: Router = express.Router();
 formula: router.COMMAND(req, res)...
 //THIS IS FOR THE NODES
  */
+//POST nodes from the frontend to the database
 router.post("/", async function (req: Request, res: Response) {
   const received: nodeType = req.body;
   if (received.type == "Nodes") {
@@ -28,32 +29,40 @@ router.post("/", async function (req: Request, res: Response) {
         },
       });
     } catch (e) {
+      //Console log error if the data can't be stored
       console.log(e);
       res.sendStatus(400);
     }
   }
+  //Console log "Ok" if the database successfully collects the data
   res.sendStatus(200);
 });
 
+//DELETE nodes from the database
 router.delete("/", async function (req: Request, res: Response) {
   try {
     await PrismaClient.nodes.deleteMany();
   } catch (error) {
     console.log(error);
+    //Console log error if the data can't be stored
     res.sendStatus(400);
     return;
   }
+  //Console log "Ok" if the database successfully collects the data
   res.sendStatus(200);
   return;
 });
 
+//GET nodes from the database to the frontend as a JSON type
 router.get("/", async function (req: Request, res: Response) {
   try {
     res.send(await PrismaClient.nodes.findMany());
   } catch (error) {
     console.log(error);
+    //Console log error if the data can't be stored
     res.sendStatus(400);
   }
+  //Console log "Ok" if the database successfully collects the data
   res.sendStatus(200);
   return;
 });
