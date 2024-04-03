@@ -43,7 +43,7 @@ function App() {
           element: <ImportRouteE />,
         },
         {
-          path: "",
+          path: "displayTables",
           element: <ReadRouteE />,
         },
       ],
