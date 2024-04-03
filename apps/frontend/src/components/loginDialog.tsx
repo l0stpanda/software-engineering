@@ -1,4 +1,4 @@
-import { Button, Dialog, TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
 
@@ -20,7 +20,7 @@ function LoginDialog() {
   }
 
   async function handleSubmit() {
-    await axios.delete("/api/login");
+    await axios.delete("/api/login/delete");
     //Make the admin user
     const make: loginRes = {
       username: "admin",
@@ -34,7 +34,7 @@ function LoginDialog() {
     const checkThis: loginRes = {
       username: loginResponse.username,
       password: loginResponse.password,
-      role: "Employee",
+      role: "admin",
     };
     const auth: string = await axios
       .post("/api/login/check", checkThis, {
@@ -46,7 +46,8 @@ function LoginDialog() {
       setLoginResponse({ username: "", password: "", role: "" });
       return;
     } else if (auth == "Yes Authorized") {
-      alert("Authorization SUCCEEDED");
+      alert("Authorized Successful Login");
+      window.location.href = "/map";
       setLoginResponse({ username: "", password: "", role: "" });
       return;
     }
@@ -55,7 +56,7 @@ function LoginDialog() {
   return (
     // Dialog has hidden classname so that it is not in the way right now
     //<dialog open={true} className="w-full h-full flex bg-text bg-opacity-60">
-    <Dialog open={true}>
+    <div>
       <div className="m-auto flex flex-col bg-background rounded-xl px-6 min-w-96 h-fit justify-center py-4">
         <h1 className="my-3 font-header text-primary font-bold text-3xl text-center">
           Staff Login
@@ -91,7 +92,7 @@ function LoginDialog() {
           </Button>
         </div>
       </div>
-    </Dialog>
+    </div>
     //</dialog>
   );
 }

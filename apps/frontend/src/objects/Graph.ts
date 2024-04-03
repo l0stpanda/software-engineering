@@ -6,10 +6,9 @@ export class Graph {
   private adjMap: Map<string, MapNode>; // Map<nodeID, Node object>
   private nameMap: Map<string, string>;
 
-  constructor(adjMap: Map<string, MapNode>) {
-    this.adjMap = adjMap;
+  constructor() {
+    this.adjMap = new Map<string, MapNode>();
     this.nameMap = new Map<string, string>();
-    this.loadGraph();
   }
 
   // Add a node to the graph
@@ -64,8 +63,7 @@ export class Graph {
 
     for (let i = 0; i < edges.length; i++) {
       const src_node = edges[i].start_node;
-      const dest_node = edges[i].end_node;
-
+      const dest_node = edges[i].end_node.split("\r")[0];
       await this.addEdge(src_node, dest_node);
     }
   }
