@@ -50,4 +50,12 @@ export class MapNode {
   getNodeType() {
     return this.nodeType;
   }
+
+  getX() {
+    return this.xcoord;
+  }
+
+  getY() {
+    return this.ycoord;
+  }
 }
