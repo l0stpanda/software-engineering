@@ -6,8 +6,8 @@ export class Graph {
   private adjMap: Map<string, MapNode>; // Map<nodeID, Node object>
   private nameMap: Map<string, string>;
 
-  constructor(adjMap: Map<string, MapNode>) {
-    this.adjMap = adjMap;
+  constructor() {
+    this.adjMap = new Map<string, MapNode>();
     this.nameMap = new Map<string, string>();
     this.loadGraph();
   }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 //import mapImg from "../assets/LL1Map.png";
 import { Button, TextField } from "@mui/material";
 import {
@@ -6,10 +6,18 @@ import {
   TransformComponent,
   useControls,
 } from "react-zoom-pan-pinch";
-import FloorMap from "../components/FloorMap";
+//import FloorMap from "../components/FloorMap";
 import { useState } from "react";
+import { Graph } from "../objects/Graph.ts";
+//import {MapNode} from "../objects/MapNode.ts";
+import lowerLevel1 from "../assets/00_thelowerlevel1.png";
+import FloorNode from "../components/FloorNode.tsx";
 
 function Map() {
+  const divRef = useRef<HTMLDivElement>(null);
+  const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
+  const [graph, setGraph] = useState(new Graph());
+
   const Controls = () => {
     const { zoomIn, zoomOut } = useControls();
     return (
@@ -54,8 +62,25 @@ function Map() {
   }
 
   function handleFormSubmit() {
-    setSubmitValues([navigatingNodes.start, navigatingNodes.end]);
+    const cleanStart = navigatingNodes.start.replace(/[^a-zA-Z0-9-]/g, "");
+    const cleanEnd = navigatingNodes.end.replace(/[^a-zA-Z0-9-]/g, "");
+    setSubmitValues([cleanStart, cleanEnd]);
   }
+
+  useEffect(() => {
+    if (divRef.current) {
+      const { clientWidth, clientHeight } = divRef.current;
+      setDivDimensions({ width: clientWidth, height: clientHeight });
+    }
+  }, [divRef]);
+
+  useEffect(() => {
+    const tempGraph = new Graph();
+    tempGraph.loadGraph().then((r) => {
+      console.log(r);
+      setGraph(tempGraph);
+    });
+  }, []);
 
   return (
     <div>
@@ -70,6 +95,7 @@ function Map() {
       >
         {/*Map Image Box*/}
         <div
+          ref={divRef}
           className="w-2/3
         h-2/3
         flex-grow
@@ -80,7 +106,12 @@ function Map() {
           <TransformWrapper>
             <Controls />
             <TransformComponent>
-              <FloorMap inputLocations={[submitValues[0], submitValues[1]]} />
+              <FloorNode
+                imageSrc={lowerLevel1}
+                graph={graph}
+                inputLoc={[submitValues[0], submitValues[1]]}
+                divDim={divDimensions}
+              />
             </TransformComponent>
           </TransformWrapper>
         </div>

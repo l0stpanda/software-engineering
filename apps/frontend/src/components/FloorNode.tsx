@@ -3,12 +3,14 @@ import { useEffect, useRef, useState } from "react";
 import { Graph } from "../objects/Graph.ts";
 import { BFS } from "../objects/BFS.ts";
 import { MapNode } from "../objects/MapNode.ts";
+
 //import mapImg from "../assets/LL1Map.png";
 
 interface FloorNodesProps {
   imageSrc: string;
   graph: Graph;
   inputLoc: string[];
+  divDim: { width: number; height: number };
 }
 
 export interface FloorNodeInfo {
@@ -23,17 +25,14 @@ function FloorNode(props: FloorNodesProps) {
     height: number;
   }>({ width: 0, height: 0 });
   const divRef = useRef(null);
-  const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
+  const [divDimensions, setDivDimensions] = useState({
+    width: props.divDim.width,
+    height: props.divDim.height,
+  });
   const [clicked, setClicked] = useState<string[]>([]);
   const bfs = new BFS(props.graph);
 
   const nodes: MapNode[] = Object.values(props.graph)[0];
-
-  const startId = props.graph.idFromName(props.inputLoc[0]);
-
-  const endId = props.graph.idFromName(props.inputLoc[1]);
-  // console.log(startId == "CCONF001L1");
-  // console.log(endId == "CRETL001L1");
 
   useEffect(() => {
     if (divRef.current) {
@@ -68,18 +67,6 @@ function FloorNode(props: FloorNodesProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  console.log(nodes);
-  const scaledNodes: { [key: string]: FloorNodeInfo } = {};
-  nodes.forEach((node) => {
-    const id: string = node.getNodeID();
-    scaledNodes[id] = {
-      key: node.getNodeID(),
-      x: node.getX() * (divDimensions.width / imgDimensions.width),
-      y: node.getY() * (divDimensions.height / imgDimensions.height),
-    };
-  });
-
-  console.log(scaledNodes);
   const handleNodeClick = (nodeid: string) => () => {
     if (clicked.length < 2 && !clicked.includes(nodeid)) {
       setClicked((prevClicked) => [...prevClicked, nodeid]);
@@ -91,15 +78,25 @@ function FloorNode(props: FloorNodesProps) {
   };
 
   const renderLines = () => {
+    const startId = props.graph.idFromName(props.inputLoc[0]);
+    const endId = props.graph.idFromName(props.inputLoc[1]);
     let input: string[] = [];
     if (clicked.length == 2) {
       input = [clicked[0], clicked[1]];
-    } else if (props.inputLoc.length == 2 && startId && endId) {
+    } else if (
+      props.inputLoc.length == 2 &&
+      startId != undefined &&
+      endId != undefined
+    ) {
+      console.log(props.inputLoc[0], props.inputLoc[1]);
       input = [props.inputLoc[0], props.inputLoc[1]];
+    } else {
+      console.log("Invalid input.");
     }
     if (input.length == 2) {
       console.log(startId, endId);
       const path = bfs.findPath(input[0], input[1]);
+      console.log(path);
       const lines = [];
       if (!path) {
         console.log("No path found");
@@ -128,6 +125,17 @@ function FloorNode(props: FloorNodesProps) {
     }
     return [];
   };
+
+  const scaledNodes: { [key: string]: FloorNodeInfo } = {};
+  nodes.forEach((node) => {
+    const id: string = node.getNodeID();
+    scaledNodes[id] = {
+      key: node.getNodeID(),
+      x: node.getX() * (divDimensions.width / imgDimensions.width),
+      y: node.getY() * (divDimensions.height / imgDimensions.height),
+    };
+  });
+  console.log(scaledNodes);
 
   return (
     <div ref={divRef} style={{ position: "relative" }}>
