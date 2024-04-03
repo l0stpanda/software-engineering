@@ -9,6 +9,8 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
+//import {DeleteAllEdge, PostEdge} from "../objects/DAO_Edges.ts";
+//import {edgeType} from "common/src/edgesType.ts";
 
 function FlowerRequest() {
   type flowerReqFields = {
@@ -47,9 +49,17 @@ function FlowerRequest() {
       alert("Room Number, Send To, and Sent From must all be filled out");
       return;
     }
-    await axios.post("/api/flowerRequest", responses, {
-      headers: { "Content-Type": "application/json" },
-    });
+    try {
+      await axios.post("/api/flowerRequest", responses, {
+        headers: { "Content-Type": "application/json" },
+      });
+    } catch (error) {
+      alert(
+        "Error storing in the database, make sure nodes/edges are uploaded",
+      );
+      console.error(error);
+      return;
+    }
     setOpen(true);
   }
 
