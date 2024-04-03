@@ -48,6 +48,7 @@ function FlowerRequest() {
       alert("Room Number, Send To, and Sent From must all be filled out");
       return;
     }
+
     try {
       await axios.post("/api/flowerRequest", responses, {
         headers: { "Content-Type": "application/json" },

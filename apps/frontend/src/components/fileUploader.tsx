@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-//import axios from "axios";
 import { edgeType } from "common/src/edgesType.ts";
 import { DeleteAllEdge, PostEdge } from "../objects/DAO_Edges.ts";
 import { nodeType } from "common/src/nodeType.ts";
 import { DeleteAllNode, PostNode } from "../objects/DAO_Nodes.ts";
 import { Button } from "@mui/material";
+import BackgroundPattern from "./backgroundPattern.tsx";
 
-//This handles uploads and downloads on the same page
 const SingleFileUploader = () => {
   const [file, setFile] = useState<File | null>(null);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,6 +15,7 @@ const SingleFileUploader = () => {
   };
 
   //Function to do uploads for edges and nodes
+
   const handleUpload = async () => {
     if (file) {
       console.log("Uploading file...");
@@ -100,26 +100,57 @@ const SingleFileUploader = () => {
   return (
     //User interface for clicking a button to upload an edges/nodes.csv file
     <div className="justify-center grid h-screen place-items-center">
-      <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-4">
-        <h1 style={{ textAlign: "center", marginBottom: "5%" }}>
-          Enter your File
+      <BackgroundPattern />
+      {/*Box*/}
+      <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-5 gap-4">
+        <h1 className="font-header text-primary font-bold text-3xl text-center">
+          Enter Your File
         </h1>
-        <h1 style={{ textAlign: "center", marginBottom: "5%" }}>
+        <h1 className=" font-body text-primary text-2xl text-center pb-4">
           Enter a csv file with "edges" or "nodes" the title
         </h1>
+        {/*Ugly input box for CSV upload*/}
+        <input
+          style={{ display: "none" }}
+          id="contained-button-file"
+          type="file"
+          onChange={handleFileChange}
+          accept=".csv"
+        />
+        {/*Pretty input box for CSV upload*/}
+        <label className="self-center" htmlFor="contained-button-file">
+          <Button
+            variant="contained"
+            color="primary"
+            component="span"
+            sx={{ borderRadius: "30px" }}
+            className="w-32"
+          >
+            Upload File
+          </Button>
+        </label>
+        {/*/!*Download Node CSV button*!/*/}
+        {/*<Button variant="contained" color="primary" component="span" sx={{ borderRadius: "30px" }}*/}
+        {/*        className="w-32"*/}
+        {/*        onClick={() => handleDownload("/api/readN", "Nodes.csv")}>*/}
+        {/*    Download Node CSV*/}
+        {/*</Button>*/}
+        {/*/!*Download Edge CSV button*!/*/}
+        {/*<Button variant="contained" color="primary" component="span" sx={{ borderRadius: "30px" }}*/}
+        {/*        className="w-32"*/}
+        {/*        onClick={() => handleDownload("/api/readE", "Edges.csv")}>*/}
+        {/*        Download Edge CSV*/}
+        {/*</Button>*/}
+        {/*View Table button*/}
         <Button
+          type="button"
           className="w-32 self-center"
-          variant="contained"
-          size="large"
           sx={{ borderRadius: "30px" }}
+          variant="contained"
+          component="a"
+          href="displayTables"
         >
-          <input
-            id="file"
-            type="file"
-            accept=".csv"
-            style={{ backgroundColor: "#002866" }}
-            onChange={handleFileChange}
-          />
+          View Tables
         </Button>
         {file && (
           <button onClick={handleUpload} style={{ marginTop: "5%" }}>

@@ -7,10 +7,14 @@ import FlowerRequest from "./routes/flowerRequest.tsx";
 import PendingFlowerRequests from "./routes/displayFlowerRequests.tsx";
 
 //import ExampleRoute from "./routes/ExampleRoute.tsx";
+// import ImportRouteE from "./routes/importRouteE.tsx";
+//import ReadRoute from "./routes/readRoute.tsx";
+//import Download from "./routes/DownloadCSV.tsx";
 import ImportRouteE from "./routes/importRouteE.tsx";
 import CustomNavBar from "./components/navBar.tsx";
-//import ImportRouteE from "./routes/importRouteE.tsx";
+import ExportRouteE from "./routes/exportRouteE.tsx";
 import ReadRouteE from "./routes/readRouteE.tsx";
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -41,6 +45,11 @@ function App() {
         {
           path: "imp",
           element: <ImportRouteE />,
+        },
+        {
+
+          path: "exp",
+          element: <ExportRouteE />,
         },
         {
           path: "displayTables",

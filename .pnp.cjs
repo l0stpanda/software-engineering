@@ -61,6 +61,7 @@ const RAW_RUNTIME_STATE =
       [null, {\
         "packageLocation": "./",\
         "packageDependencies": [\
+          ["@types/json-stringify-safe", "npm:5.0.3"],\
           ["@material-ui/core", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:4.12.4"],\
           ["@types/react", "npm:18.2.48"],\
           ["@types/react-dom", "npm:18.2.18"],\
@@ -72,6 +73,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
           ["happy-dom", "npm:10.11.2"],\
           ["husky", "npm:8.0.3"],\
+          ["json-stringify-safe", "npm:5.0.1"],\
           ["prettier", "npm:2.8.8"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
           ["react", "npm:18.2.0"],\
@@ -2237,6 +2239,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@types-json-schema-npm-7.0.15-fd16381786-1a3c3e0623.zip/node_modules/@types/json-schema/",\
         "packageDependencies": [\
           ["@types/json-schema", "npm:7.0.15"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/json-stringify-safe", [\
+      ["npm:5.0.3", {\
+        "packageLocation": "./.yarn/cache/@types-json-stringify-safe-npm-5.0.3-b7a05d1cb5-66826a59b5.zip/node_modules/@types/json-stringify-safe/",\
+        "packageDependencies": [\
+          ["@types/json-stringify-safe", "npm:5.0.3"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -6158,6 +6169,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["json-stringify-safe", [\
+      ["npm:5.0.1", {\
+        "packageLocation": "./.yarn/cache/json-stringify-safe-npm-5.0.1-064ddd6ab4-59169a081e.zip/node_modules/json-stringify-safe/",\
+        "packageDependencies": [\
+          ["json-stringify-safe", "npm:5.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["jsonc-parser", [\
       ["npm:3.2.0", {\
         "packageLocation": "./.yarn/cache/jsonc-parser-npm-3.2.0-1896ece3b7-bd68b902e5.zip/node_modules/jsonc-parser/",\
@@ -8645,7 +8665,11 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./",\
         "packageDependencies": [\
           ["softeng-starter-code", "workspace:."],\
+
+          ["@types/json-stringify-safe", "npm:5.0.3"],\
+
           ["@material-ui/core", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:4.12.4"],\
+
           ["@types/react", "npm:18.2.48"],\
           ["@types/react-dom", "npm:18.2.18"],\
           ["@vitest/ui", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.33.0"],\
@@ -8656,6 +8680,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
           ["happy-dom", "npm:10.11.2"],\
           ["husky", "npm:8.0.3"],\
+          ["json-stringify-safe", "npm:5.0.1"],\
           ["prettier", "npm:2.8.8"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
           ["react", "npm:18.2.0"],\
