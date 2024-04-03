@@ -33,6 +33,24 @@ function FloorNode(props: FloorNodesProps) {
   const bfs = new BFS(props.graph);
 
   const nodes: MapNode[] = Object.values(props.graph)[0];
+  const [ids, setIds] = useState<{
+    startId: string | undefined;
+    endId: string | undefined;
+  }>({
+    startId: props.graph.idFromName(props.inputLoc[0]),
+    endId: props.graph.idFromName(props.inputLoc[1]),
+  });
+  // let ids: { startId: string | undefined, endId: string | undefined } = {
+  //     startId: props.graph.idFromName(props.inputLoc[0]),
+  //     endId: props.graph.idFromName(props.inputLoc[1])
+  // };
+
+  useEffect(() => {
+    setIds({
+      startId: props.graph.idFromName(props.inputLoc[0]),
+      endId: props.graph.idFromName(props.inputLoc[1]),
+    });
+  }, [props.graph, props.inputLoc]);
 
   useEffect(() => {
     if (divRef.current) {
@@ -74,27 +92,30 @@ function FloorNode(props: FloorNodesProps) {
     }
     if (clicked.length == 2) {
       setClicked([nodeid]);
+      console.log(clicked);
     }
+    setIds({ startId: undefined, endId: undefined });
   };
 
   const renderLines = () => {
-    const startId = props.graph.idFromName(props.inputLoc[0]);
-    const endId = props.graph.idFromName(props.inputLoc[1]);
+    // const startId = props.graph.idFromName(props.inputLoc[0]);
+    // const endId = props.graph.idFromName(props.inputLoc[1]);
+    console.log(ids);
     let input: string[] = [];
-    if (clicked.length == 2) {
-      input = [clicked[0], clicked[1]];
-    } else if (
+    if (
       props.inputLoc.length == 2 &&
-      startId != undefined &&
-      endId != undefined
+      ids.startId != undefined &&
+      ids.endId != undefined
     ) {
       console.log(props.inputLoc[0], props.inputLoc[1]);
-      input = [props.inputLoc[0], props.inputLoc[1]];
+      input = [ids.startId, ids.endId];
+    } else if (clicked.length == 2) {
+      input = [clicked[0], clicked[1]];
     } else {
       console.log("Invalid input.");
     }
     if (input.length == 2) {
-      console.log(startId, endId);
+      console.log(ids.startId, ids.endId);
       const path = bfs.findPath(input[0], input[1]);
       console.log(path);
       const lines = [];
@@ -158,8 +179,8 @@ function FloorNode(props: FloorNodesProps) {
             position: "absolute",
             left: node.x + "px",
             top: node.y + "px",
-            width: "6px",
-            height: "6px",
+            width: "4px",
+            height: "4px",
             backgroundColor: "red",
             borderRadius: "50%",
             transform: "translate(-50%, -50%)",

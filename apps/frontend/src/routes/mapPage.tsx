@@ -62,8 +62,9 @@ function Map() {
   }
 
   function handleFormSubmit() {
-    const cleanStart = navigatingNodes.start.replace(/[^a-zA-Z0-9-]/g, "");
-    const cleanEnd = navigatingNodes.end.replace(/[^a-zA-Z0-9-]/g, "");
+    const cleanStart = navigatingNodes.start.replace("\r", "");
+    const cleanEnd = navigatingNodes.end.replace("\r", "");
+    console.log(cleanStart, cleanEnd);
     setSubmitValues([cleanStart, cleanEnd]);
   }
 
