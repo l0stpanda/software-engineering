@@ -35,7 +35,10 @@ function CustomNavBar() {
             Map
           </Button>
           <Button component="a" href="imp">
-            Import/Export
+            Import
+          </Button>
+          <Button component="a" href="exp">
+            Export
           </Button>
           <Button
             onClick={handleRequestsOpen}

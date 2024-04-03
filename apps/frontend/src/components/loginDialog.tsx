@@ -46,6 +46,7 @@ function LoginDialog() {
       setLoginResponse({ username: "", password: "", role: "" });
       return;
     } else if (auth == "Yes Authorized") {
+      alert("Authorized Successful Login");
       window.location.href = "/map";
       setLoginResponse({ username: "", password: "", role: "" });
       return;

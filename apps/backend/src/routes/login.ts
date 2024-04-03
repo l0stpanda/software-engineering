@@ -54,8 +54,9 @@ router.post("/check", async function (req: Request, res: Response) {
       res.sendStatus(400);
     } else if (check.length == 1) {
       //If one element is found in the array then information was found in the database. Will make it more secure later
+      res.send("Yes Authorized");
       res.sendStatus(200);
-      return "Yes Authorized";
+      return;
     }
   } catch (e) {
     //Console log error if an error is found when running .findMany
