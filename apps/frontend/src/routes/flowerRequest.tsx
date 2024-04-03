@@ -9,9 +9,8 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
-//import {DeleteAllEdge, PostEdge} from "../objects/DAO_Edges.ts";
-//import {edgeType} from "common/src/edgesType.ts";
 
+// FlowerRequest component for handling flower delivery requests
 function FlowerRequest() {
   type flowerReqFields = {
     roomNum: string;
