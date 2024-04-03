@@ -9,6 +9,8 @@ import PendingFlowerRequests from "./routes/displayFlowerRequests.tsx";
 //import ExampleRoute from "./routes/ExampleRoute.tsx";
 import ImportRouteE from "./routes/importRouteE.tsx";
 import CustomNavBar from "./components/navBar.tsx";
+//import ImportRouteE from "./routes/importRouteE.tsx";
+import ReadRouteE from "./routes/readRouteE.tsx";
 function App() {
   const router = createBrowserRouter([
     {
@@ -39,6 +41,10 @@ function App() {
         {
           path: "imp",
           element: <ImportRouteE />,
+        },
+        {
+          path: "displayTables",
+          element: <ReadRouteE />,
         },
       ],
     },

@@ -7,9 +7,11 @@ import importRouterE from "./routes/importE.ts";
 import importRouterN from "./routes/importN.ts";
 import flowerRequest from "./routes/flowerRequest.ts";
 import loginRequest from "./routes/login.ts";
+import readRouterE from "./routes/readE.ts";
+import readRouterN from "./routes/readN.ts";
 
 const app: Express = express(); // Setup the backend
-console.log("please");
+
 // Setup generic middlewear
 app.use(
   logger("dev", {
@@ -30,6 +32,9 @@ app.use("/api/import", importRouterE);
 app.use("/api/importN", importRouterN);
 app.use("/api/flowerRequest", flowerRequest);
 app.use("/api/login", loginRequest);
+app.use("/api/readE", readRouterE);
+app.use("/api/readN", readRouterN);
+
 app.use("/healthcheck", (req, res) => {
   res.status(200).send();
 });
