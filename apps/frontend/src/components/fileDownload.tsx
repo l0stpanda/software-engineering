@@ -1,5 +1,7 @@
 import React from "react";
 import axios from "axios";
+import BackgroundPattern from "./backgroundPattern.tsx";
+import { Button } from "@mui/material";
 
 const Download = () => {
   const handleDownload = async (apiPath: string, fileName: string) => {
@@ -44,30 +46,51 @@ const Download = () => {
   };
 
   return (
-    <>
-      <button
-        style={{
-          backgroundColor: "gray",
-          borderStyle: "solid",
-          borderWidth: "4px",
-        }}
-        onClick={() => handleDownload("/api/readN", "Nodes.csv")}
-      >
-        Download Node CSV
-      </button>
-      <br />
-      <button
-        style={{
-          backgroundColor: "white",
-          borderStyle: "solid",
-          borderWidth: "4px",
-          marginTop: "3%",
-        }}
-        onClick={() => handleDownload("/api/readE", "Edges.csv")}
-      >
-        Download Edge CSV
-      </button>
-    </>
+    <div className="justify-center grid h-screen place-items-center">
+      <BackgroundPattern />
+      {/*Box*/}
+      <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-5 gap-4">
+        <h1 className="font-header text-primary font-bold text-3xl text-center">
+          Download Files
+        </h1>
+        <h1 className=" font-body text-primary text-2xl text-center pb-4">
+          Download node or edge file
+        </h1>
+        {/*Download Node CSV button*/}
+        <Button
+          variant="contained"
+          color="primary"
+          component="span"
+          sx={{ borderRadius: "30px" }}
+          className="w-32 self-center"
+          onClick={() => handleDownload("/api/readN", "Nodes.csv")}
+        >
+          Download Node CSV
+        </Button>
+        {/*Download Edge CSV button*/}
+        <Button
+          variant="contained"
+          color="primary"
+          component="span"
+          sx={{ borderRadius: "30px" }}
+          className="w-32 self-center"
+          onClick={() => handleDownload("/api/readE", "Edges.csv")}
+        >
+          Download Edge CSV
+        </Button>
+        {/*View Table button*/}
+        <Button
+          type="button"
+          className="w-32 self-center"
+          sx={{ borderRadius: "30px" }}
+          variant="contained"
+          component="a"
+          href="displayTables"
+        >
+          View Tables
+        </Button>
+      </div>
+    </div>
   );
 };
 

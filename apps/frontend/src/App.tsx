@@ -12,6 +12,7 @@ import PendingFlowerRequests from "./routes/pendingFlowerRequest.tsx";
 //import Download from "./routes/DownloadCSV.tsx";
 import ImportRouteE from "./routes/importRouteE.tsx";
 import CustomNavBar from "./components/navBar.tsx";
+import ExportRouteE from "./routes/exportRouteE.tsx";
 function App() {
   const router = createBrowserRouter([
     {
@@ -42,6 +43,10 @@ function App() {
         {
           path: "imp",
           element: <ImportRouteE />,
+        },
+        {
+          path: "exp",
+          element: <ExportRouteE />,
         },
       ],
     },
