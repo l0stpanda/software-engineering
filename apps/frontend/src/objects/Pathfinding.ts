@@ -1,5 +1,5 @@
 import { Graph } from "./Graph.ts";
-import { Node } from "./Node.ts";
+import { MapNode } from "./MapNode.ts";
 
 export class Pathfinding {
   protected graph: Graph;
@@ -13,7 +13,7 @@ export class Pathfinding {
     console.log("Path to destination:");
     path.forEach(function (value: string) {
       const node = graph.getNode(value);
-      if (node instanceof Node) {
+      if (node instanceof MapNode) {
         console.log(node.getLongName());
       } else {
         console.log("NodeID does not exist, path is invalid");
@@ -25,5 +25,32 @@ export class Pathfinding {
   findPath(srcID: string, destID: string): string[] | undefined {
     console.log(srcID + destID);
     return undefined;
+  }
+
+  getDirections(path: string[]) {
+    const directions: string[] = [];
+    for (let i = 0; i < path.length; i++) {
+      if (i == 0) {
+        const nextNode = this.graph.getNode(path[1]);
+        const futureNode = this.graph.getNode(path[2]);
+        if (nextNode != undefined && futureNode != undefined) {
+          if (nextNode.getNodeType() == "HALL") {
+            directions.push(
+              "Take " +
+                nextNode.getLongName() +
+                " going towards " +
+                futureNode.getLongName(),
+            );
+          } else {
+            directions.push(
+              "Go by " +
+                nextNode.getLongName() +
+                " going towards " +
+                futureNode.getLongName(),
+            );
+          }
+        }
+      }
+    }
   }
 }
