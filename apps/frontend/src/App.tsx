@@ -1,12 +1,14 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-import HomePage from "./routes/homePage.tsx";
+import HeroPage from "./routes/heroPage.tsx";
 import RegisterPage from "./routes/registerPage.tsx";
 import MapPage from "./routes/mapPage.tsx";
 import FlowerRequest from "./routes/flowerRequest.tsx";
 import PendingFlowerRequests from "./routes/pendingFlowerRequest.tsx";
 
 //import ExampleRoute from "./routes/ExampleRoute.tsx";
+import ImportRouteE from "./routes/importRouteE.tsx";
+import CustomNavBar from "./components/navBar.tsx";
 //import ImportRouteE from "./routes/importRouteE.tsx";
 import ReadRouteE from "./routes/readRouteE.tsx";
 function App() {
@@ -17,8 +19,8 @@ function App() {
       element: <Root />,
       children: [
         {
-          path: "homepage",
-          element: <HomePage />,
+          path: "",
+          element: <HeroPage />,
         },
         {
           path: "register",
@@ -37,6 +39,10 @@ function App() {
           element: <PendingFlowerRequests />,
         },
         {
+          path: "imp",
+          element: <ImportRouteE />,
+        },
+        {
           path: "",
           element: <ReadRouteE />,
         },
@@ -48,8 +54,8 @@ function App() {
 
   function Root() {
     return (
-      <div className="w-full flex flex-col px-20 gap-5">
-        <h1>Welcome to your starter code.</h1>
+      <div className="w-full flex flex-col">
+        <CustomNavBar />
         <Outlet />
       </div>
     );
