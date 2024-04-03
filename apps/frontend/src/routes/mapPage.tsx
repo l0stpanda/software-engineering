@@ -6,8 +6,8 @@ import {
   TransformComponent,
   useControls,
 } from "react-zoom-pan-pinch";
-//import FloorMap from "../components/FloorMap";
 import { useState } from "react";
+import BackgroundPattern from "../components/backgroundPattern.tsx";
 import { Graph } from "../objects/Graph.ts";
 //import {MapNode} from "../objects/MapNode.ts";
 import lowerLevel1 from "../assets/00_thelowerlevel1.png";
@@ -85,6 +85,7 @@ function Map() {
 
   return (
     <div>
+      <BackgroundPattern />
       {/*Location and Destination things*/}
       <div
         className="my-8

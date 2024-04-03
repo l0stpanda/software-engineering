@@ -1,9 +1,27 @@
-import React from "react";
 import "./heroPage.css";
-import { Button } from "@mui/material";
 import mapImg from "../assets/LL1Map.png";
+import React, { useState } from "react";
+import {
+  Dialog,
+  //    Dialog,
+  //    DialogActions,
+  //    DialogContent,
+  //    DialogTitle,
+  // TextField,
+} from "@mui/material";
+import LoginDialog from "../components/loginDialog.tsx";
+//import { useState } from "react";
+function HeroPage() {
+  const [dialogOpen, setDialogOpen] = useState(false);
 
-export default function heroPage() {
+  function setLoginOpen() {
+    setDialogOpen(true);
+  }
+
+  function setLoginClose() {
+    setDialogOpen(false);
+  }
+
   return (
     <div className="wholePage">
       <div className="header">
@@ -16,20 +34,23 @@ export default function heroPage() {
       </div>
       <div className="heroSecondCol">
         <button className="touchToStart">
-          <h1 className="touchStartText">
-            <strong>Touch here to view the map</strong>
-          </h1>
+          <a href="map">
+            <h1 className="touchStartText">
+              <strong>Touch here to view the map</strong>
+            </h1>
+          </a>
         </button>
         <div className="mapPreviewBox">
           <img src={mapImg} className="mapPreview" alt="Map Preview" />
         </div>
-        <div className="loginButtonBox">
-          <p>Staff Member?</p>
-          <Button variant="contained" sx={{ borderRadius: "30px" }}>
-            Login
-          </Button>
-        </div>
+        <button className="loginButtonBox" onClick={setLoginOpen}>
+          <h1>Staff Member? Login Here</h1>
+        </button>
       </div>
+      <Dialog open={dialogOpen} onClose={setLoginClose}>
+        <LoginDialog />
+      </Dialog>
     </div>
   );
 }
+export default HeroPage;

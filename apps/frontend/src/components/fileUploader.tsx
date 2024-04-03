@@ -4,6 +4,7 @@ import { edgeType } from "common/src/edgesType.ts";
 import { DeleteAllEdge, PostEdge } from "../objects/DAO_Edges.ts";
 import { nodeType } from "common/src/nodeType.ts";
 import { DeleteAllNode, PostNode } from "../objects/DAO_Nodes.ts";
+import { Button } from "@mui/material";
 
 //This handles uploads and downloads on the same page
 const SingleFileUploader = () => {
@@ -44,8 +45,11 @@ const SingleFileUploader = () => {
             await PostEdge(curr_data);
           }
         } catch (error) {
+          alert("Error loading Edges CSV");
           console.error(error);
+          return;
         }
+        alert("Edges CSV loaded successfully");
       }
 
       //Handles nodes
@@ -58,7 +62,9 @@ const SingleFileUploader = () => {
             .map((row: string): string[] => {
               return row.split(",");
             });
+
           await DeleteAllNode();
+
           for (let i = 1; i < nodes_array.length - 1; i++) {
             const curr_data: nodeType = {
               type: "Nodes",
@@ -74,8 +80,11 @@ const SingleFileUploader = () => {
             await PostNode(curr_data);
           }
         } catch (error) {
+          alert("Error Loading Nodes into Database");
           console.error(error);
+          return;
         }
+        alert("Nodes CSV Loaded");
       } else {
         alert(
           "The imported file has to have 'node' or 'edge' in its title in order for us to know which database you want to upload to.",
@@ -85,21 +94,35 @@ const SingleFileUploader = () => {
   };
 
   return (
-    <>
-      <input id="type" type="text" style={{ marginTop: "5%" }} />
-      <input
-        id="file"
-        type="file"
-        accept=".csv"
-        style={{ marginTop: "5%" }}
-        onChange={handleFileChange}
-      />
-      {file && (
-        <button onClick={handleUpload} style={{ marginTop: "5%" }}>
-          Upload a file
-        </button>
-      )}
-    </>
+    <div className="justify-center grid h-screen place-items-center">
+      <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-4">
+        <h1 style={{ textAlign: "center", marginBottom: "5%" }}>
+          Enter your File
+        </h1>
+        <h1 style={{ textAlign: "center", marginBottom: "5%" }}>
+          Enter a csv file with "edges" or "nodes" the title
+        </h1>
+        <Button
+          className="w-32 self-center"
+          variant="contained"
+          size="large"
+          sx={{ borderRadius: "30px" }}
+        >
+          <input
+            id="file"
+            type="file"
+            accept=".csv"
+            style={{ backgroundColor: "#002866" }}
+            onChange={handleFileChange}
+          />
+        </Button>
+        {file && (
+          <button onClick={handleUpload} style={{ marginTop: "5%" }}>
+            Upload a file
+          </button>
+        )}
+      </div>
+    </div>
   );
 };
 
