@@ -70,15 +70,10 @@ html,
 }
 
 .loginButtonBox {
-  display: flex;
-  justify-content: space-around;
-  height: 10%;
   background-color: rgba(0, 40, 102, 1);
-}
-
-.loginButtonBox,
-p {
-  padding-top: 4%;
+  color: white;
+  flex-grow: 1;
+  font-family: "PTSans", sans-serif;
 }
 
 .mapPreview {
