@@ -50,11 +50,11 @@ router.post("/check", async function (req: Request, res: Response) {
     });
     //Throw error if no element is found in the array
     if (check.length == 0) {
+      res.send("No Go");
       res.sendStatus(400);
-      return "No Go";
     } else if (check.length == 1) {
       //If one element is found in the array then information was found in the database. Will make it more secure later
-      res.sendStatus(400);
+      res.sendStatus(200);
       return "Yes Authorized";
     }
   } catch (e) {

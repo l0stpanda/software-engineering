@@ -7,6 +7,7 @@ import {
   useControls,
 } from "react-zoom-pan-pinch";
 import { useState } from "react";
+import BackgroundPattern from "../components/backgroundPattern.tsx";
 
 function Map() {
   const Controls = () => {
@@ -58,6 +59,7 @@ function Map() {
 
   return (
     <div>
+      <BackgroundPattern />
       {/*Location and Destination things*/}
       <div
         className="my-8

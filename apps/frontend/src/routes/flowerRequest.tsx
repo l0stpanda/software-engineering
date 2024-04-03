@@ -9,8 +9,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
-//import {DeleteAllEdge, PostEdge} from "../objects/DAO_Edges.ts";
-//import {edgeType} from "common/src/edgesType.ts";
+import BackgroundPattern from "../components/backgroundPattern.tsx";
 
 function FlowerRequest() {
   type flowerReqFields = {
@@ -72,6 +71,7 @@ function FlowerRequest() {
     // Your page is everything in this div
     //<div className="bg-repeat bg-[url('./assets/flowerRequestBackground.png')]">
     <div className="justify-center grid h-screen place-items-center">
+      <BackgroundPattern />
       <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-4">
         <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
           Flower Delivery Request
@@ -106,29 +106,28 @@ function FlowerRequest() {
             placeholder="Name"
             required={true}
           />
+          <TextField
+            onChange={handleResponseChanges}
+            value={responses.attachedNote}
+            id="attachedNote"
+            name="attachedNote"
+            variant="filled"
+            label="Note for Patient"
+            multiline={true}
+            maxRows={5}
+          />
+          <Button
+            className="w-32 self-center pt-10"
+            onClick={handleSubmit}
+            type="submit"
+            id="requestSubmit"
+            variant="contained"
+            size="large"
+            sx={{ borderRadius: "30px" }}
+          >
+            SUBMIT
+          </Button>
         </div>
-        <TextField
-          onChange={handleResponseChanges}
-          value={responses.attachedNote}
-          id="attachedNote"
-          name="attachedNote"
-          variant="filled"
-          label="Note for Patient"
-          multiline={true}
-          maxRows={5}
-          helperText="Optional"
-        />
-        <Button
-          className="w-32 self-center"
-          onClick={handleSubmit}
-          type="submit"
-          id="requestSubmit"
-          variant="contained"
-          size="large"
-          sx={{ borderRadius: "30px" }}
-        >
-          SUBMIT
-        </Button>
       </div>
       <Dialog open={open} onClose={handleSubmitClose}>
         <DialogTitle>We received your request!</DialogTitle>
