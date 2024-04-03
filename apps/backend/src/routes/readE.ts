@@ -15,10 +15,10 @@ router.get("/", async (req, res) => {
   try {
     // Use the Prisma client to query the 'edges' table in the database
     const edges = await PrismaClient.edges.findMany(); //
-    res.status(200).json(edges);
+    res.status(200).send(edges);
   } catch (error) {
     res
-      .status(500)
+      .status(400)
       .json({ error: "An error occurred while fetching the data." });
   }
 });
