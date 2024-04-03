@@ -9,7 +9,6 @@ export class Graph {
   constructor() {
     this.adjMap = new Map<string, MapNode>();
     this.nameMap = new Map<string, string>();
-    this.loadGraph();
   }
 
   // Add a node to the graph
