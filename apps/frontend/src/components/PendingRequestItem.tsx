@@ -1,3 +1,5 @@
+import trashIcon from "../assets/trashicon.png";
+
 type FlowerReqData = {
   id: number;
   room: string;
@@ -19,16 +21,23 @@ function PendingRequestItem(props: FlowerReqData) {
   }
 
   return (
-    <tr key={props.id}>
-      <td className="px-6 py-3">{props.id}</td>
-      <td className="px-6 py-3">{props.status}</td>
-      <td className="px-6 py-3">{formatDate(props.requestDate)}</td>
-      <td className="px-6 py-3">{formatTime(props.requestDate)}</td>
-      <td className="px-6 py-3">{props.room}</td>
-      <td className="px-6 py-3">
+    <tr className="bg-background border-b-2 border-secondary" key={props.id}>
+      <td className="p-3 text-sm">{props.id}</td>
+      <td className="p-3 text-sm">
+        <span className="p-1.5 text-xs font-medium uppercase tracking-wider bg-secondary rounded-lg">
+          {props.status}
+        </span>
+      </td>
+      <td className="p-3 text-sm">{formatDate(props.requestDate)}</td>
+      <td className="p-3 text-sm">{formatTime(props.requestDate)}</td>
+      <td className="p-3 text-sm">{props.room}</td>
+      <td className="p-3 text-sm">
         <button>
-          {/*This will have a delete button eventually*/}
-          <i className="px-9 py-3"></i>
+          <img
+            src={trashIcon}
+            alt="Trash icon"
+            className="px-7 flex justify-center transform h-6 hover:scale-125"
+          />
         </button>
       </td>
     </tr>

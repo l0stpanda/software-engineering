@@ -34,26 +34,29 @@ export default function PendingFlowerRequest() {
   }, []);
 
   return (
-    <div className="relative overflow-x-auto shadow-md sm:rounded-lg flex items-center justify-center">
-      <table className="w-50% text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <div className="mx-8 p5 h-screen bg-secondary-100">
+      <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
+        Pending Flower Deliveries
+      </h1>
+      <table className="w-full">
+        <thead className="bg-secondary border-b-2 border-b-primary">
           <tr>
-            <th scope="col" className="px-6 py-3">
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Flower Delivery Request
             </th>
-            <th scope="col" className="px-6 py-3">
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Status
             </th>
-            <th scope="col" className="px-6 py-3">
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Date Entered
             </th>
-            <th scope="col" className="px-6 py-3">
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Time Entered
             </th>
-            <th scope="col" className="px-6 py-3">
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Destination
             </th>
-            <th scope="col" className="px-6 py-3">
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Delete
             </th>
             {/* Dynamically generate column headers */}
