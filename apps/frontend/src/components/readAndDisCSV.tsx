@@ -25,7 +25,7 @@ const SingleDisplay = () => {
   const displayNodes = async () => {
     console.log("Displaying nodes...");
     try {
-      const data = await ReadNode(); // Call ReadEdge and wait for the data
+      const data = await ReadNode(); // Call ReadNode and wait for the data
       setNode(data); // Update state with the received data
     } catch (error) {
       console.error("Error fetching edges:", error);
