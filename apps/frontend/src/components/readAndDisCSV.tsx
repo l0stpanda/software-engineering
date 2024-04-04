@@ -7,6 +7,7 @@ import { Edges, Nodes } from "database";
 const SingleDisplay = () => {
   const [edges, setEdges] = useState<Edges[]>([]); // Initialize state to hold the edges data
   const [nodes, setNode] = useState<Nodes[]>([]); // Initialize state to hold the edges data
+
   useEffect(() => {
     displayEdges().then();
     displayNodes().then();
@@ -32,48 +33,68 @@ const SingleDisplay = () => {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
-      <table style={{ width: "100%" }}>
-        <thead>
-          <tr style={{ borderWidth: "2px", borderColor: "black" }}>
-            <th>Start Node</th>
-            <th>End Node</th>
+    <div className="flex flex-col px-6 bg-background">
+      <table className="w-full">
+        <thead className="bg-secondary border-b-2 border-b-primary">
+          <tr>
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              Start Node
+            </th>
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              End Node
+            </th>
           </tr>
         </thead>
         <tbody>
           {edges.map((field) => (
-            <tr style={{ borderWidth: "2px", borderColor: "black" }}>
-              <td style={{ textAlign: "center" }}>{field.start_node}</td>
-              <td style={{ textAlign: "center" }}>{field.end_node}</td>
+            <tr className="bg-background border-b-2 border-secondary">
+              <td className="p-3 text-sm">{field.start_node}</td>
+              <td className="p-3 text-sm">{field.end_node}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <table>
-        <thead>
+      <table className="w-full">
+        <thead className="bg-secondary border-b-2 border-b-primary">
           <tr style={{ borderWidth: "2px", borderColor: "black" }}>
-            <th>ID</th>
-            <th>Type</th>
-            <th>Floor</th>
-            <th>X_COORD</th>
-            <th>Y_COORD</th>
-            <th>Building</th>
-            <th>Short Name</th>
-            <th>Long Name</th>
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              ID
+            </th>
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              Type
+            </th>
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              Floor
+            </th>
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              X_COORD
+            </th>
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              Y_COORD
+            </th>
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              Building
+            </th>
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              Short Name
+            </th>
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              Long Name
+            </th>
           </tr>
         </thead>
         <tbody>
           {nodes.map((field) => (
-            <tr style={{ borderWidth: "2px", borderColor: "black" }}>
-              <td style={{ textAlign: "center" }}>{field.node_id}</td>
-              <td style={{ textAlign: "center" }}>{field.node_type}</td>
-              <td style={{ textAlign: "center" }}>{field.floor}</td>
-              <td style={{ textAlign: "center" }}>{field.x_c}</td>
-              <td style={{ textAlign: "center" }}>{field.y_c}</td>
-              <td style={{ textAlign: "center" }}>{field.building}</td>
-              <td style={{ textAlign: "center" }}>{field.short_name}</td>
-              <td style={{ textAlign: "center" }}>{field.long_name}</td>
+            <tr className="bg-background border-b-2 border-secondary">
+              <td className="p-3 text-sm">{field.node_id}</td>
+              <td className="p-3 text-sm">{field.node_type}</td>
+              <td className="p-3 text-sm">{field.floor}</td>
+              <td className="p-3 text-sm">{field.x_c}</td>
+              <td className="p-3 text-sm">{field.y_c}</td>
+              <td className="p-3 text-sm">{field.building}</td>
+              <td className="p-3 text-sm">{field.short_name}</td>
+              <td className="p-3 text-sm">{field.long_name}</td>
             </tr>
           ))}
         </tbody>

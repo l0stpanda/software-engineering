@@ -1,9 +1,17 @@
 -- CreateTable
+CREATE TABLE "HighScore" (
+    "id" SERIAL NOT NULL,
+    "time" TIMESTAMP(3) NOT NULL,
+    "score" INTEGER NOT NULL,
+
+    CONSTRAINT "HighScore_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Staff" (
-    "emp_id" TEXT NOT NULL,
+    "emp_id" SERIAL NOT NULL,
     "role" TEXT NOT NULL,
     "user_name" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "add_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -15,9 +23,9 @@ CREATE TABLE "Flowers" (
     "id" SERIAL NOT NULL,
     "room" TEXT NOT NULL,
     "sent_by" VARCHAR(50) NOT NULL,
-    "deliverer" VARCHAR(50) NOT NULL,
+    "sent_to" VARCHAR(50) NOT NULL,
     "requestDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "note" VARCHAR(50),
+    "note" VARCHAR(150),
     "status" TEXT NOT NULL,
 
     CONSTRAINT "Flowers_pkey" PRIMARY KEY ("id")
@@ -45,14 +53,5 @@ CREATE TABLE "Edges" (
     CONSTRAINT "Edges_pkey" PRIMARY KEY ("end_node","start_node")
 );
 
--- CreateIndex
-CREATE UNIQUE INDEX "Staff_email_key" ON "Staff"("email");
-
 -- AddForeignKey
-ALTER TABLE "Flowers" ADD CONSTRAINT "Flowers_deliverer_fkey" FOREIGN KEY ("deliverer") REFERENCES "Staff"("emp_id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Flowers" ADD CONSTRAINT "Flowers_sent_by_fkey" FOREIGN KEY ("sent_by") REFERENCES "Staff"("emp_id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Flowers" ADD CONSTRAINT "Flowers_room_fkey" FOREIGN KEY ("room") REFERENCES "Nodes"("node_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Flowers" ADD CONSTRAINT "Flowers_room_fkey" FOREIGN KEY ("room") REFERENCES "Nodes"("node_id") ON DELETE CASCADE ON UPDATE CASCADE;

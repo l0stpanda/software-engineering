@@ -44,7 +44,7 @@ services:
       - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
 
       # Auto-certificate generation parameters
-      - "--certificatesresolvers.letsencrypt.acme.email=mrgosselin@wpi.edu"
+      - "--certificatesresolvers.letsencrypt.acme.email=kgarg@wpi.edu"
       - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
 
       # Used during resolution

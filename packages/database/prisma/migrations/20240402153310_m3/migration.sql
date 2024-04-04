@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "Flowers" ALTER COLUMN "note" SET DATA TYPE VARCHAR(150);

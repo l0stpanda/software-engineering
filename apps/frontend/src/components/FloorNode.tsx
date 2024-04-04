@@ -88,6 +88,7 @@ function FloorNode(props: FloorNodesProps) {
   const handleNodeClick = (nodeid: string) => () => {
     if (clicked.length < 2 && !clicked.includes(nodeid)) {
       setClicked((prevClicked) => [...prevClicked, nodeid]);
+      //set the start node to green
       console.log(clicked);
     }
     if (clicked.length == 2) {
