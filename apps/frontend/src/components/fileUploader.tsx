@@ -15,7 +15,6 @@ const SingleFileUploader = () => {
   };
 
   //Function to do uploads for edges and nodes
-
   const handleUpload = async () => {
     if (file) {
       console.log("Uploading file...");
