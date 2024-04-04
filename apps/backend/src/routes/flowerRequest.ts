@@ -32,13 +32,13 @@ router.post("/", async function (req: Request, res: Response) {
 //Used to give all of the information in the flowers table
 router.get("/", async function (req: Request, res: Response) {
   try {
+    res.sendStatus(200);
     res.send(await PrismaClient.flowers.findMany());
   } catch (e) {
     console.log(e);
     res.sendStatus(400);
     return;
   }
-  res.sendStatus(200);
 });
 
 export default router;
