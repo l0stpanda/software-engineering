@@ -11,17 +11,21 @@ import {
 } from "@mui/material";
 import LoginDialog from "../components/loginDialog.tsx";
 //import { useState } from "react";
+//HeroPage component definition
 function HeroPage() {
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  //Function to open the login dialog box
   function setLoginOpen() {
     setDialogOpen(true);
   }
 
+  //Function to close the login dialog box
   function setLoginClose() {
     setDialogOpen(false);
   }
 
+  //Layout for the Hero page
   return (
     <div className="wholePage">
       <div className="header">

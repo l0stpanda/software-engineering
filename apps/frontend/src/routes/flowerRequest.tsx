@@ -11,7 +11,9 @@ import { useState } from "react";
 import axios from "axios";
 import BackgroundPattern from "../components/backgroundPattern.tsx";
 
+// Defining the FlowerRequest component
 function FlowerRequest() {
+  // Defining the type for form fields
   type flowerReqFields = {
     roomNum: string;
     senderName: string;
@@ -34,11 +36,12 @@ function FlowerRequest() {
     setResponses({ ...responses, [e.target.name]: e.target.value });
   }
 
+  //Function to clear the form
   function clear() {
     setResponses({ roomNum: "", senderName: "", attachedNote: "", sendTo: "" });
   }
 
-  // Clears form, and outputs responses
+  // Make sure form is clear, and outputs responses
   async function handleSubmit() {
     if (
       responses.sendTo == "" ||
@@ -63,12 +66,14 @@ function FlowerRequest() {
     setOpen(true);
   }
 
+  //Function to handle form submission gets closed after the form is submitted
   function handleSubmitClose() {
     setOpen(false);
     clear();
   }
 
   return (
+    // Rendering the FlowerRequest component
     // Your page is everything in this div
     //<div className="bg-repeat bg-[url('./assets/flowerRequestBackground.png')]">
     <div className="justify-center grid h-screen place-items-center">
