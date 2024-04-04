@@ -13,13 +13,11 @@ import { Graph } from "../objects/Graph.ts";
 import lowerLevel1 from "../assets/00_thelowerlevel1.png";
 import FloorNode from "../components/FloorNode.tsx";
 
-//Map component definition
 function Map() {
   const divRef = useRef<HTMLDivElement>(null);
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
   const [graph, setGraph] = useState(new Graph());
 
-  //Controls component for zooming in/out for the map on webpage
   const Controls = () => {
     const { zoomIn, zoomOut } = useControls();
     return (
@@ -57,10 +55,10 @@ function Map() {
   });
   const [submitValues, setSubmitValues] = useState(["", ""]);
 
-  // `Updates form responses when input changes
+  // Carter's function code bc idk how to do it
   function handleFormChanges(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
-    setNavigatingNodes({ ...navigatingNodes, [name]: value }); // Change value of key in the state that matches the name of the element
+    setNavigatingNodes({ ...navigatingNodes, [name]: value });
   }
 
   function handleFormSubmit() {
@@ -70,7 +68,6 @@ function Map() {
     setSubmitValues([cleanStart, cleanEnd]);
   }
 
-  //Resizes the nodes when the page is resized
   useEffect(() => {
     if (divRef.current) {
       const { clientWidth, clientHeight } = divRef.current;
@@ -78,7 +75,6 @@ function Map() {
     }
   }, [divRef]);
 
-  //Loads the nodes and edges from the database to the graph
   useEffect(() => {
     const tempGraph = new Graph();
     tempGraph.loadGraph().then((r) => {
@@ -90,7 +86,7 @@ function Map() {
   return (
     <div>
       <BackgroundPattern />
-      {/*Location and Destination*/}
+      {/*Location and Destination things*/}
       <div
         className="my-8
                    mx-auto
@@ -122,7 +118,7 @@ function Map() {
           </TransformWrapper>
         </div>
 
-        {/*Background for location and destination text fields*/}
+        {/*boxes.*/}
         <div
           className="flex flex-col
                 w-1/4
@@ -144,8 +140,7 @@ function Map() {
             <div className="flex flex-col justify-center">
               <h2 className="text-primary font-header pb-4">
                 Where would you like to go?
-              </h2>{" "}
-              {/*Location and Destination Text Boxes*/}
+              </h2>
               <TextField
                 id="outlined-basic"
                 variant="outlined"
@@ -187,7 +182,7 @@ function Map() {
               </Button>
             </div>
           </div>
-          {/*Non-functional box for written directions/legend*/}
+          {/*second non-functional box for rn*/}
           <div
             className="mr-8
                         ml-5

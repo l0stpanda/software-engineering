@@ -2,7 +2,6 @@
 import axios from "axios";
 import { nodeType } from "common/src/nodeType.ts";
 
-//Function to post node from the frontend to the backend from the imported csv file
 export async function PostNode(curr_data: nodeType) {
   const res = await axios.post("/api/importN", curr_data, {
     headers: { "Content-Type": "application/json" },
@@ -16,7 +15,6 @@ export async function PostNode(curr_data: nodeType) {
   }
 }
 
-//Function to delete the nodes
 export async function DeleteAllNode() {
   await axios.delete("/api/importN", {
     headers: { "Content-Type": "application/json" },

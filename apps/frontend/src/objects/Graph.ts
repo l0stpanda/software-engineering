@@ -30,22 +30,18 @@ export class Graph {
     }
   }
 
-  //Fetch all edges from the database
   async getAllEdges() {
     return await axios.get("/api/import").then((response) => response.data);
   }
 
-  //Fetch all nodes from the database
   async getAllNodes() {
     return await axios.get("/api/importN").then((response) => response.data);
   }
 
-  //Load the graph by fetching nodes and edges data from the database
   async loadGraph(): Promise<void> {
     const nodes: Nodes[] = await this.getAllNodes();
     const edges: Edges[] = await this.getAllEdges();
 
-    //Add nodes to the graph
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
       const x_coordinate = parseInt(node.x_c);
@@ -65,7 +61,6 @@ export class Graph {
       }
     }
 
-    //Add edges to the graph
     for (let i = 0; i < edges.length; i++) {
       const src_node = edges[i].start_node;
       const dest_node = edges[i].end_node.split("\r")[0];
@@ -73,17 +68,14 @@ export class Graph {
     }
   }
 
-  //Get the adjMap that contains all nodes
   getMap() {
     return this.adjMap;
   }
 
-  //Retrieve a node by its ID
   getNode(nodeID: string) {
     return this.adjMap.get(nodeID);
   }
 
-  //Retrieve a node by its name
   nodeFromName(name: string) {
     const id = this.idFromName(name);
 
@@ -94,7 +86,6 @@ export class Graph {
     return undefined;
   }
 
-  //Retrieve a node ID by its name
   idFromName(name: string) {
     return this.nameMap.get(name);
   }

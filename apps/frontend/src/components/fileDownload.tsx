@@ -54,7 +54,7 @@ const Download = () => {
           Download Files
         </h1>
         <h1 className=" font-body text-primary text-2xl text-center pb-4">
-          Download node or edge files
+          Download node or edge file
         </h1>
         {/*Download Node CSV button*/}
         <Button
@@ -62,7 +62,7 @@ const Download = () => {
           color="primary"
           component="span"
           sx={{ borderRadius: "30px" }}
-          className="w-50 self-center"
+          className="w-32 self-center"
           onClick={() => handleDownload("/api/readN", "Nodes.csv")}
         >
           Download Node CSV
@@ -73,7 +73,7 @@ const Download = () => {
           color="primary"
           component="span"
           sx={{ borderRadius: "30px" }}
-          className="w-50 self-center"
+          className="w-32 self-center"
           onClick={() => handleDownload("/api/readE", "Edges.csv")}
         >
           Download Edge CSV

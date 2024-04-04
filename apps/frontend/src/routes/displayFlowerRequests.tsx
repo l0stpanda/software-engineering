@@ -12,7 +12,7 @@ type FlowerReqData = {
   note: string;
   status: string;
 };
-//Pending flower request function
+
 export default function PendingFlowerRequest() {
   const [records, setRecords] = useState<FlowerReqData[]>([]);
 

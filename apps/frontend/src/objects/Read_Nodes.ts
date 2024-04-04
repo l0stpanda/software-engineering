@@ -1,7 +1,6 @@
 /*This is the functions that the front end should use repeatedly*/
 import axios from "axios";
 
-//Function used to collect the nodes from the database to the frontend
 export async function ReadNode() {
   const res = await axios.get("/api/readN");
 
