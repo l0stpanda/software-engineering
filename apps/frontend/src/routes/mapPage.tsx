@@ -92,7 +92,6 @@ function Map() {
                    mx-auto
                    flex
                    flex-row-reverse
-                   min-h-screen
                    max-w-screen-2xl"
       >
         {/*Map Image Box*/}
