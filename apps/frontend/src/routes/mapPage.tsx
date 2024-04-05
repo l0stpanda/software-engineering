@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-//import mapImg from "../assets/LL1Map.png";
 import { Button, TextField } from "@mui/material";
 import {
   TransformWrapper,
@@ -9,8 +8,7 @@ import {
 import { useState } from "react";
 import BackgroundPattern from "../components/backgroundPattern.tsx";
 import { Graph } from "../objects/Graph.ts";
-//import {MapNode} from "../objects/MapNode.ts";
-import lowerLevel1 from "../assets/00_thelowerlevel1.png";
+import lowerLevel1 from "../assets/LL1Map.png";
 import FloorNode from "../components/FloorNode.tsx";
 
 function Map() {
@@ -18,6 +16,7 @@ function Map() {
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
   const [graph, setGraph] = useState(new Graph());
 
+  // Zoom in/out buttons for map viewing
   const Controls = () => {
     const { zoomIn, zoomOut } = useControls();
     return (
@@ -61,6 +60,7 @@ function Map() {
     setNavigatingNodes({ ...navigatingNodes, [name]: value });
   }
 
+  // Handles changes to the start/end destination boxes
   function handleFormSubmit() {
     const cleanStart = navigatingNodes.start.replace("\r", "");
     const cleanEnd = navigatingNodes.end.replace("\r", "");

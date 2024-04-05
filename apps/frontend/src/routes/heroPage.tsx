@@ -1,23 +1,19 @@
 import "./heroPage.css";
 import mapImg from "../assets/LL1Map.png";
 import React, { useState } from "react";
-import {
-  Dialog,
-  //    Dialog,
-  //    DialogActions,
-  //    DialogContent,
-  //    DialogTitle,
-  // TextField,
-} from "@mui/material";
+import { Dialog } from "@mui/material";
 import LoginDialog from "../components/loginDialog.tsx";
-//import { useState } from "react";
+
 function HeroPage() {
+  // Use state for whether login dialog is visible or not
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  // Open login dialog
   function setLoginOpen() {
     setDialogOpen(true);
   }
 
+  // Close login dialog
   function setLoginClose() {
     setDialogOpen(false);
   }

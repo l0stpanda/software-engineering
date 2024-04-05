@@ -10,23 +10,21 @@ import {
 import { useState } from "react";
 import axios from "axios";
 import BackgroundPattern from "../components/backgroundPattern.tsx";
+import { flowerReqFields } from "common/src/flowerRequest.ts";
 
 function FlowerRequest() {
-  type flowerReqFields = {
-    roomNum: string;
-    senderName: string;
-    sendTo: string;
-    attachedNote: string;
-  };
-
-  // State for form responses
-  const [responses, setResponses] = useState<flowerReqFields>({
+  const initialFormResponses: flowerReqFields = {
     roomNum: "",
     senderName: "",
     sendTo: "",
     attachedNote: "",
-  });
+  };
 
+  // State for form responses
+  const [responses, setResponses] =
+    useState<flowerReqFields>(initialFormResponses);
+
+  // State for whether form confirmation dialog is open or closed
   const [open, setOpen] = useState(false);
 
   // Takes in an event object and updates the responses object when a text field is changed
@@ -34,12 +32,14 @@ function FlowerRequest() {
     setResponses({ ...responses, [e.target.name]: e.target.value });
   }
 
+  // Sets state back to initial state
   function clear() {
-    setResponses({ roomNum: "", senderName: "", attachedNote: "", sendTo: "" });
+    setResponses(initialFormResponses);
   }
 
   // Clears form, and outputs responses
   async function handleSubmit() {
+    // Catch required fields not being filled out
     if (
       responses.sendTo == "" ||
       responses.senderName == "" ||
@@ -50,6 +50,7 @@ function FlowerRequest() {
     }
 
     try {
+      // Make post request to backend with form response data
       await axios.post("/api/flowerRequest", responses, {
         headers: { "Content-Type": "application/json" },
       });
@@ -60,17 +61,17 @@ function FlowerRequest() {
       console.error(error);
       return;
     }
+    // Open form confirmation dialog
     setOpen(true);
   }
 
+  // Handle closing the form confirmation dialog
   function handleSubmitClose() {
     setOpen(false);
     clear();
   }
 
   return (
-    // Your page is everything in this div
-    //<div className="bg-repeat bg-[url('./assets/flowerRequestBackground.png')]">
     <div className="justify-center grid h-screen place-items-center">
       <BackgroundPattern />
       <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-4">
