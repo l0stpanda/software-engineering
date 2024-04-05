@@ -36,7 +36,9 @@ export class BFS extends Pathfinding {
           visited.set(currNode.getNodeID(), 1);
 
           // Add unvisited nodes to the queue
-          currNode.getNodeList().forEach(function (childNode) {
+          currNode.getEdgeList().forEach(function (edge) {
+            const childNode = edge.getOther(currNode);
+
             if (visited.get(childNode.getNodeID()) == undefined) {
               queue.splice(0, 0, childNode); // queue pops from end of list
               if (currNode != undefined) {
