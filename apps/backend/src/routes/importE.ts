@@ -25,6 +25,7 @@ router.post("/", async function (req: Request, res: Response) {
       //Console log error if the data can't be stored
       console.log(e);
       res.sendStatus(400);
+      return;
     }
   }
   //Console log "Ok" if the database successfully collects the data
@@ -53,6 +54,7 @@ router.get("/", async function (req: Request, res: Response) {
     //Console log error if the data can't be stored
     console.log(error);
     res.sendStatus(400);
+    return;
   }
   //Console log "Ok" if the database successfully collects the data
   res.sendStatus(200);

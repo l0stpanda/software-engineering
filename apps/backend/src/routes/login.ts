@@ -52,6 +52,7 @@ router.post("/check", async function (req: Request, res: Response) {
     if (check.length == 0) {
       res.send("No Go");
       res.sendStatus(400);
+      return;
     } else if (check.length == 1) {
       //If one element is found in the array then information was found in the database. Will make it more secure later
       res.send("Yes Authorized");
