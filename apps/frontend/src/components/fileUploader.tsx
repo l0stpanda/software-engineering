@@ -131,19 +131,6 @@ const SingleFileUploader = () => {
             Upload File
           </Button>
         </label>
-        {/*/!*Download Node CSV button*!/*/}
-        {/*<Button variant="contained" color="primary" component="span" sx={{ borderRadius: "30px" }}*/}
-        {/*        className="w-32"*/}
-        {/*        onClick={() => handleDownload("/api/readN", "Nodes.csv")}>*/}
-        {/*    Download Node CSV*/}
-        {/*</Button>*/}
-        {/*/!*Download Edge CSV button*!/*/}
-        {/*<Button variant="contained" color="primary" component="span" sx={{ borderRadius: "30px" }}*/}
-        {/*        className="w-32"*/}
-        {/*        onClick={() => handleDownload("/api/readE", "Edges.csv")}>*/}
-        {/*        Download Edge CSV*/}
-        {/*</Button>*/}
-        {/*View Table button*/}
         <Button
           type="button"
           className="w-32 self-center"

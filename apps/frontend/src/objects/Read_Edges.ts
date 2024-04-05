@@ -2,7 +2,7 @@
 import axios from "axios";
 
 export async function ReadEdge() {
-  const res = await axios.get("/api/readE", {
+  const res = await axios.get("/api/read/edges", {
     headers: { "Content-Type": "application/json" },
   });
 
