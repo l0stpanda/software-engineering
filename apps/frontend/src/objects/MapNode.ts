@@ -58,4 +58,8 @@ export class MapNode {
   getY() {
     return this.ycoord;
   }
+
+  getFloor() {
+    return this.floor;
+  }
 }
