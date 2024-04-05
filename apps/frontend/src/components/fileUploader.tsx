@@ -28,6 +28,7 @@ const SingleFileUploader = () => {
         console.log("EDGES UPLOADING");
         try {
           const edges: string = await file.text();
+          setFile(null);
           const edges_array: string[][] = edges
             .split("\n")
             .map((row: string): string[] => {
@@ -61,6 +62,7 @@ const SingleFileUploader = () => {
         console.log("IMPORTING NODES");
         try {
           const nodes: string = await file.text();
+          setFile(null);
           const nodes_array: string[][] = nodes
             .split("\n")
             .map((row: string): string[] => {
@@ -107,7 +109,7 @@ const SingleFileUploader = () => {
           Enter Your File
         </h1>
         <h1 className=" font-body text-primary text-2xl text-center pb-4">
-          Enter a csv file with "edges" or "nodes" the title
+          Enter a csv file with "edges" or "nodes" in the title
         </h1>
         {/*Ugly input box for CSV upload*/}
         <input
