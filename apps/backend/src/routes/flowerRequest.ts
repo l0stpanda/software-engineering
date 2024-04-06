@@ -1,16 +1,10 @@
 import express, { Router, Request, Response } from "express";
 //import { Prisma } from "database";
 import PrismaClient from "../bin/database-connection.ts";
+import { flowerReqFields } from "common/src/flowerRequest.ts";
 
 const router: Router = express.Router();
 router.post("/", async function (req: Request, res: Response) {
-  type flowerReqFields = {
-    roomNum: string;
-    senderName: string;
-    sendTo: string;
-    attachedNote: string;
-  };
-
   const input: flowerReqFields = req.body;
   try {
     await PrismaClient.flowers.create({

@@ -3,8 +3,7 @@ import SingleFileUploader from "../components/readAndDisCSV.tsx";
 
 export default function ImportRouteE() {
   return (
-    <div className="imp bg-background">
-      <h1>Display file</h1>
+    <div className="bg-background">
       <SingleFileUploader></SingleFileUploader>
     </div>
   );

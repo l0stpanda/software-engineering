@@ -5,15 +5,14 @@ import RegisterPage from "./routes/registerPage.tsx";
 import MapPage from "./routes/mapPage.tsx";
 import FlowerRequest from "./routes/flowerRequest.tsx";
 import PendingFlowerRequests from "./routes/displayFlowerRequests.tsx";
-
-//import ExampleRoute from "./routes/ExampleRoute.tsx";
-// import ImportRouteE from "./routes/importRouteE.tsx";
-//import ReadRoute from "./routes/readRoute.tsx";
-//import Download from "./routes/DownloadCSV.tsx";
 import ImportRouteE from "./routes/importRouteE.tsx";
 import CustomNavBar from "./components/navBar.tsx";
 import ExportRouteE from "./routes/exportRouteE.tsx";
 import ReadRouteE from "./routes/readRouteE.tsx";
+import LostItemRequest from "./routes/lostItemRequest.tsx";
+import RoomSchedulingRequest from "./routes/roomSchedulingRequest.tsx";
+import MedicineDeliveryRequest from "./routes/medicineDeliveryRequest.tsx";
+import MedicalDeviceRequest from "./routes/medicalDeviceRequest.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -53,6 +52,22 @@ function App() {
         {
           path: "displayTables",
           element: <ReadRouteE />,
+        },
+        {
+          path: "lostItemRequest",
+          element: <LostItemRequest />,
+        },
+        {
+          path: "roomRequest",
+          element: <RoomSchedulingRequest />,
+        },
+        {
+          path: "medicineRequest",
+          element: <MedicineDeliveryRequest />,
+        },
+        {
+          path: "medicalDeviceRequest",
+          element: <MedicalDeviceRequest />,
         },
       ],
     },
