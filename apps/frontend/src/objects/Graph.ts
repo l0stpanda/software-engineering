@@ -31,11 +31,15 @@ export class Graph {
   }
 
   async getAllEdges() {
-    return await axios.get("/api/import").then((response) => response.data);
+    return await axios
+      .get("/api/import/edgesGet")
+      .then((response) => response.data);
   }
 
   async getAllNodes() {
-    return await axios.get("/api/importN").then((response) => response.data);
+    return await axios
+      .get("/api/import/nodesGet")
+      .then((response) => response.data);
   }
 
   async loadGraph(): Promise<void> {

@@ -10,7 +10,7 @@ formula: router.COMMAND(req, res)...
  */
 
 // API endpoints: Read the edges table in the database and return data
-router.get("/", async (req, res) => {
+router.get("/edges", async (req, res) => {
   try {
     // Use the Prisma client to query the 'edges' table in the database
     const edges = await PrismaClient.edges.findMany(); //
@@ -19,6 +19,19 @@ router.get("/", async (req, res) => {
     res
       .status(400)
       .json({ error: "An error occurred while fetching the data." });
+  }
+});
+
+router.get("/nodes", async (req, res) => {
+  try {
+    // Use the Prisma client to query the 'edges' table in the database
+    const nodes = await PrismaClient.nodes.findMany(); //
+    res.status(200).send(nodes);
+  } catch (error) {
+    res
+      .status(400)
+      .json({ error: "An error occurred while fetching the data." });
+    return;
   }
 });
 export default router;

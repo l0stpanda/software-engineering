@@ -3,7 +3,7 @@ import SingleDownloader from "../components/fileDownload.tsx";
 
 export default function ExportRouteE() {
   return (
-    <div className="exp">
+    <div>
       <SingleDownloader></SingleDownloader>
     </div>
   );
