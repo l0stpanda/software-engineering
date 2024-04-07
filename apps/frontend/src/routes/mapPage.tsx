@@ -8,7 +8,12 @@ import {
 import { useState } from "react";
 import BackgroundPattern from "../components/backgroundPattern.tsx";
 import { Graph } from "../objects/Graph.ts";
-import lowerLevel1 from "../assets/LL1Map.png";
+import lowerLevel1 from "../assets/00_thelowerlevel1.png";
+import lowerLevel2 from "../assets/00_thelowerlevel2.png";
+import floor1 from "../assets/01_thefirstfloor.png";
+import floor2 from "../assets/02_thesecondfloor.png";
+import floor3 from "../assets/03_thethirdfloor.png";
+
 import FloorNode from "../components/FloorNode.tsx";
 
 function Map() {
@@ -17,6 +22,7 @@ function Map() {
   const [graph, setGraph] = useState(new Graph());
 
   // Zoom in/out buttons for map viewing
+  const [imgState, setImgState] = useState<string>(lowerLevel1);
   const Controls = () => {
     const { zoomIn, zoomOut } = useControls();
     return (
@@ -68,6 +74,11 @@ function Map() {
     setSubmitValues([cleanStart, cleanEnd]);
   }
 
+  const changeFloor = (floor: string) => {
+    console.log(floor);
+    setImgState(floor);
+  };
+
   useEffect(() => {
     if (divRef.current) {
       const { clientWidth, clientHeight } = divRef.current;
@@ -77,8 +88,7 @@ function Map() {
 
   useEffect(() => {
     const tempGraph = new Graph();
-    tempGraph.loadGraph().then((r) => {
-      console.log(r);
+    tempGraph.loadGraph().then(() => {
       setGraph(tempGraph);
     });
   }, []);
@@ -86,6 +96,70 @@ function Map() {
   return (
     <div>
       <BackgroundPattern />
+      {/*Buttons for displaying floor images*/}
+      <div>
+        <Button
+          type="button"
+          variant="contained"
+          className="submitButton"
+          size="medium"
+          onClick={() => {
+            changeFloor(lowerLevel2);
+          }}
+          sx={{ borderRadius: "30px" }}
+        >
+          L2
+        </Button>
+        <Button
+          type="button"
+          variant="contained"
+          className="submitButton"
+          size="medium"
+          onClick={() => {
+            changeFloor(lowerLevel1);
+          }}
+          sx={{ borderRadius: "30px" }}
+        >
+          L1
+        </Button>
+        <Button
+          type="button"
+          variant="contained"
+          className="submitButton"
+          size="medium"
+          onClick={() => {
+            changeFloor(floor1);
+          }}
+          sx={{ borderRadius: "30px" }}
+        >
+          1
+        </Button>
+        <Button
+          type="button"
+          variant="contained"
+          className="submitButton"
+          size="medium"
+          onClick={() => {
+            changeFloor(floor2);
+          }}
+          sx={{ borderRadius: "30px" }}
+        >
+          2
+        </Button>
+        <Button
+          type="button"
+          variant="contained"
+          className="submitButton"
+          size="medium"
+          onClick={() => {
+            changeFloor(floor3);
+          }}
+          sx={{ borderRadius: "30px" }}
+        >
+          3
+        </Button>
+      </div>
+
       {/*Location and Destination things*/}
       <div
         className="my-8
@@ -108,7 +182,7 @@ function Map() {
             <Controls />
             <TransformComponent>
               <FloorNode
-                imageSrc={lowerLevel1}
+                imageSrc={imgState}
                 graph={graph}
                 inputLoc={[submitValues[0], submitValues[1]]}
                 divDim={divDimensions}

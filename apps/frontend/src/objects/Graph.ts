@@ -47,6 +47,7 @@ export class Graph {
   async loadGraph(): Promise<void> {
     const nodes: Nodes[] = await this.getAllNodes();
     const edges: Edges[] = await this.getAllEdges();
+    console.log(edges);
 
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
@@ -61,7 +62,7 @@ export class Graph {
           node.building,
           node.node_type,
           node.long_name,
-          node.short_name,
+          node.short_name.replace("\r", ""),
         );
         await this.addNode(new_node);
       }
@@ -69,7 +70,7 @@ export class Graph {
 
     for (let i = 0; i < edges.length; i++) {
       const src_node = edges[i].start_node;
-      const dest_node = edges[i].end_node.split("\r")[0];
+      const dest_node = edges[i].end_node.replace("\r", "");
       await this.addEdge(src_node, dest_node);
     }
   }
@@ -80,6 +81,17 @@ export class Graph {
 
   getNode(nodeID: string) {
     return this.adjMap.get(nodeID);
+  }
+
+  getNodesByFloor(floor: string) {
+    // get all nodes where node.floor == floor
+    const nodes: MapNode[] = [];
+    Object.values(this.adjMap).forEach((node: MapNode) => {
+      if (node.getFloor() == floor) {
+        nodes.push(node);
+      }
+    });
+    return nodes;
   }
 
   nodeFromName(name: string) {
