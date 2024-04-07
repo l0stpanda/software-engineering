@@ -4,7 +4,7 @@ import { Graph } from "../objects/Graph.ts";
 import { BFS } from "../objects/BFS.ts";
 import { MapNode } from "../objects/MapNode.ts";
 
-//import mapImg from "../assets/LL1Map.png";
+//import mapImg from "../assets/00_thelowerlevel1.png";
 
 interface FloorNodesProps {
   imageSrc: string;
