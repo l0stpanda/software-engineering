@@ -1,3 +1,5 @@
+import { MapEdge } from "./MapEdge.ts";
+
 export class MapNode {
   private nodeID: string;
   private xcoord: number;
@@ -7,7 +9,7 @@ export class MapNode {
   private nodeType: string;
   private longName: string;
   private shortName: string;
-  private nodeList: MapNode[];
+  private edgeList: MapEdge[];
 
   constructor(
     nodeID: string,
@@ -27,20 +29,20 @@ export class MapNode {
     this.nodeType = nodeType;
     this.longName = longName;
     this.shortName = shortName;
-    this.nodeList = [];
+    this.edgeList = [];
   }
 
   // Add given node to adjacency list
-  addAdjacency(node: MapNode) {
-    this.nodeList.push(node);
+  addAdjacency(edge: MapEdge) {
+    this.edgeList.push(edge);
   }
 
   getNodeID() {
     return this.nodeID;
   }
 
-  getNodeList() {
-    return this.nodeList;
+  getEdgeList() {
+    return this.edgeList;
   }
 
   getLongName() {

@@ -1,6 +1,7 @@
 import { MapNode } from "./MapNode.ts";
 import { Nodes, Edges } from "database";
 import axios from "axios";
+import { MapEdge } from "./MapEdge.ts";
 
 export class Graph {
   private adjMap: Map<string, MapNode>; // Map<nodeID, Node object>
@@ -23,19 +24,24 @@ export class Graph {
     const destNode = this.adjMap.get(destID);
 
     if (srcNode instanceof MapNode && destNode instanceof MapNode) {
-      srcNode.addAdjacency(destNode);
-      destNode.addAdjacency(srcNode);
+      const edge = new MapEdge(srcNode, destNode);
+      srcNode.addAdjacency(edge);
+      destNode.addAdjacency(edge);
     } else {
       console.log("Edge is incomplete or a node does not exist");
     }
   }
 
   async getAllEdges() {
-    return await axios.get("/api/import").then((response) => response.data);
+    return await axios
+      .get("/api/import/edgesGet")
+      .then((response) => response.data);
   }
 
   async getAllNodes() {
-    return await axios.get("/api/importN").then((response) => response.data);
+    return await axios
+      .get("/api/import/nodesGet")
+      .then((response) => response.data);
   }
 
   async loadGraph(): Promise<void> {

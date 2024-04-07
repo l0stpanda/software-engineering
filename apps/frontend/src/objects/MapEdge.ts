@@ -31,6 +31,17 @@ export class MapEdge {
     return Math.sqrt(x ** 2 + y ** 2 + z ** 2);
   }
 
+  // Gets the node adjacent to the given node
+  getOther(node: MapNode) {
+    switch (node == this.node1) {
+      case true:
+        return this.node2;
+
+      case false:
+        return this.node1;
+    }
+  }
+
   getWeight() {
     return this.weight;
   }

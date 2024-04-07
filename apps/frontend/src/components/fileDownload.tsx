@@ -62,8 +62,8 @@ const Download = () => {
           color="primary"
           component="span"
           sx={{ borderRadius: "30px" }}
-          className="w-32 self-center"
-          onClick={() => handleDownload("/api/readN", "Nodes.csv")}
+          className="w-32 self-center text-center"
+          onClick={() => handleDownload("/api/read/nodes", "Nodes.csv")}
         >
           Download Node CSV
         </Button>
@@ -73,8 +73,8 @@ const Download = () => {
           color="primary"
           component="span"
           sx={{ borderRadius: "30px" }}
-          className="w-32 self-center"
-          onClick={() => handleDownload("/api/readE", "Edges.csv")}
+          className="w-32 self-center text-center"
+          onClick={() => handleDownload("/api/read/edges", "Edges.csv")}
         >
           Download Edge CSV
         </Button>

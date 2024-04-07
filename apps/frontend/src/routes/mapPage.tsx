@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-//import mapImg from "../assets/LL1Map.png";
 import { Button, TextField } from "@mui/material";
 import {
   TransformWrapper,
@@ -16,13 +15,13 @@ import floor2 from "../assets/02_thesecondfloor.png";
 import floor3 from "../assets/03_thethirdfloor.png";
 
 import FloorNode from "../components/FloorNode.tsx";
-// import {MapNode} from "../objects/MapNode.ts";
-// import MUIButton from "../components/MUIButton.tsx";
 
 function Map() {
   const divRef = useRef<HTMLDivElement>(null);
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
   const [graph, setGraph] = useState(new Graph());
+
+  // Zoom in/out buttons for map viewing
   const [imgState, setImgState] = useState<string>(lowerLevel1);
   const Controls = () => {
     const { zoomIn, zoomOut } = useControls();
@@ -67,6 +66,7 @@ function Map() {
     setNavigatingNodes({ ...navigatingNodes, [name]: value });
   }
 
+  // Handles changes to the start/end destination boxes
   function handleFormSubmit() {
     const cleanStart = navigatingNodes.start.replace("\r", "");
     const cleanEnd = navigatingNodes.end.replace("\r", "");
@@ -166,7 +166,6 @@ function Map() {
                    mx-auto
                    flex
                    flex-row-reverse
-                   min-h-screen
                    max-w-screen-2xl"
       >
         {/*Map Image Box*/}

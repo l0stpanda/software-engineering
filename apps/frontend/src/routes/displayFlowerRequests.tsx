@@ -14,6 +14,7 @@ type FlowerReqData = {
 };
 
 export default function PendingFlowerRequest() {
+  // Use state for records being displayed
   const [records, setRecords] = useState<FlowerReqData[]>([]);
 
   // Get records from database, and update useState

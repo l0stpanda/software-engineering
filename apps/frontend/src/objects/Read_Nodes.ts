@@ -2,7 +2,7 @@
 import axios from "axios";
 
 export async function ReadNode() {
-  const res = await axios.get("/api/readN");
+  const res = await axios.get("/api/read/nodes");
 
   if (res.status == 200) {
     console.log("success");
