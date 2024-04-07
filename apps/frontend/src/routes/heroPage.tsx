@@ -2,14 +2,22 @@ import mapImg from "../assets/LL1Map.png";
 import React, { useState } from "react";
 import { Dialog } from "@mui/material";
 import LoginDialog from "../components/loginDialog.tsx";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function HeroPage() {
+  // Import login from Auth0
+  const { loginWithRedirect } = useAuth0();
+
   // Use state for whether login dialog is visible or not
   const [dialogOpen, setDialogOpen] = useState(false);
 
   // Open login dialog
-  function setLoginOpen() {
-    setDialogOpen(true);
+  async function setLoginOpen() {
+    await loginWithRedirect({
+      appState: {
+        returnTo: location.pathname,
+      },
+    });
   }
 
   // Close login dialog

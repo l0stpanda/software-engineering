@@ -1,5 +1,10 @@
 import React from "react";
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Outlet,
+  useNavigate,
+} from "react-router-dom";
 import HeroPage from "./routes/heroPage.tsx";
 import RegisterPage from "./routes/registerPage.tsx";
 import MapPage from "./routes/mapPage.tsx";
@@ -13,8 +18,15 @@ import LostItemRequest from "./routes/lostItemRequest.tsx";
 import RoomSchedulingRequest from "./routes/roomSchedulingRequest.tsx";
 import MedicineDeliveryRequest from "./routes/medicineDeliveryRequest.tsx";
 import MedicalDeviceRequest from "./routes/medicalDeviceRequest.tsx";
+import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 
 function App() {
+  const { isAuthenticated, isLoading, user } = useAuth0();
+
+  console.log(isAuthenticated);
+  console.log(isLoading);
+  console.log(user);
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -76,11 +88,23 @@ function App() {
   return <RouterProvider router={router} />;
 
   function Root() {
+    const navigate = useNavigate();
+
     return (
-      <div className="w-full flex flex-col">
-        <CustomNavBar />
-        <Outlet />
-      </div>
+      <Auth0Provider
+        useRefreshTokens
+        cacheLocation="localstorage"
+        domain="dev-xiwtn1gzwzvxk2ab.us.auth0.com"
+        clientId="hpsZAjzYnHxL5mb7stld400psWkr1WJq"
+        onRedirectCallback={(appState) => {
+          navigate(appState?.returnTo || window.location.pathname);
+        }}
+      >
+        <div className="w-full flex flex-col">
+          <CustomNavBar />
+          <Outlet />
+        </div>
+      </Auth0Provider>
     );
   }
 }
