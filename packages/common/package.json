@@ -15,5 +15,9 @@
   "scripts": {
     "lint": "yarn shared:prettierlint && yarn shared:eslint && yarn shared:tslint",
     "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint"
+  },
+  "dependencies": {
+    "@mui/x-date-pickers": "^7.1.1",
+    "dayjs": "^1.11.10"
   }
 }
