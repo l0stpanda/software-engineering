@@ -1,9 +1,14 @@
 import React from "react";
+import { withAuthenticationRequired } from "@auth0/auth0-react";
+import SpinningLoader from "../components/spinningLoader.tsx";
 
-export default function LoadingPage() {
-  return (
-    <div className="flex w-screen h-screen justify-center">
-      <div className="bg-primary h-4 w-4 animate-spin my-auto"></div>
-    </div>
-  );
+export default function LoadingPage(props: { component: React.ComponentType }) {
+  const Component = withAuthenticationRequired(props.component, {
+    onRedirecting: () => (
+      // Loading Screen
+      <SpinningLoader />
+    ),
+  });
+
+  return <Component />;
 }

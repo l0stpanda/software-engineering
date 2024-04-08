@@ -6,7 +6,6 @@ import {
   useNavigate,
 } from "react-router-dom";
 import HeroPage from "./routes/heroPage.tsx";
-import RegisterPage from "./routes/registerPage.tsx";
 import MapPage from "./routes/mapPage.tsx";
 import FlowerRequest from "./routes/flowerRequest.tsx";
 import PendingFlowerRequests from "./routes/displayFlowerRequests.tsx";
@@ -20,6 +19,7 @@ import MedicineDeliveryRequest from "./routes/MedicineDelivery.tsx";
 import MedicalDeviceRequest from "./routes/medicalDeviceRequest.tsx";
 import { Auth0Provider } from "@auth0/auth0-react";
 import LoadingPage from "./routes/LoadingCallback.tsx";
+import SpinningLoader from "./components/spinningLoader.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -33,52 +33,48 @@ function App() {
           element: <HeroPage />,
         },
         {
-          path: "register",
-          element: <RegisterPage />,
-        },
-        {
           path: "map",
           element: <MapPage />,
         },
         {
           path: "flowerrequest",
-          element: <FlowerRequest />,
+          element: <LoadingPage component={FlowerRequest} />,
         },
         {
           path: "viewpending",
-          element: <PendingFlowerRequests />,
+          element: <LoadingPage component={PendingFlowerRequests} />,
         },
         {
           path: "imp",
-          element: <ImportRouteE />,
+          element: <LoadingPage component={ImportRouteE} />,
         },
         {
           path: "exp",
-          element: <ExportRouteE />,
+          element: <LoadingPage component={ExportRouteE} />,
         },
         {
           path: "displayTables",
-          element: <ReadRouteE />,
+          element: <LoadingPage component={ReadRouteE} />,
         },
         {
           path: "lostItemRequest",
-          element: <LostItemRequest />,
+          element: <LoadingPage component={LostItemRequest} />,
         },
         {
           path: "roomRequest",
-          element: <RoomSchedulingRequest />,
+          element: <LoadingPage component={RoomSchedulingRequest} />,
         },
         {
           path: "medicineRequest",
-          element: <MedicineDeliveryRequest />,
+          element: <LoadingPage component={MedicineDeliveryRequest} />,
         },
         {
           path: "medicalDeviceRequest",
-          element: <MedicalDeviceRequest />,
+          element: <LoadingPage component={MedicalDeviceRequest} />,
         },
         {
           path: "callback",
-          element: <LoadingPage />,
+          element: <LoadingPage component={SpinningLoader} />,
         },
       ],
     },
