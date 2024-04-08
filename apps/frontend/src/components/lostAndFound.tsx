@@ -99,7 +99,9 @@ function LostFound() {
             name="date"
             variant="filled"
             placeholder=""
+            label="Request Date"
             type="date"
+            InputLabelProps={{ shrink: true }}
             required={true}
           />
 
