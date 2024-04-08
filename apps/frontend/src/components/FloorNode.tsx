@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Graph } from "../objects/Graph.ts";
 import { BFS } from "../objects/BFS.ts";
 import { MapNode } from "../objects/MapNode.ts";
+//import {AStar} from "../objects/AStar.ts";
 
 //import mapImg from "../assets/LL1Map.png";
 
@@ -31,6 +32,7 @@ function FloorNode(props: FloorNodesProps) {
   });
   const [clicked, setClicked] = useState<string[]>([]);
   const bfs = new BFS(props.graph);
+  //const astar = new AStar(props.graph);
 
   const nodes: MapNode[] = Object.values(props.graph)[0];
   const [ids, setIds] = useState<{

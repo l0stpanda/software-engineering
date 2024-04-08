@@ -62,7 +62,7 @@ export class AStar extends Pathfinding {
               if (fScore1 == undefined) fScore1 = Number.POSITIVE_INFINITY;
               if (fScore2 == undefined) fScore2 = Number.POSITIVE_INFINITY;
 
-              return fScore1 - fScore2;
+              return fScore2 - fScore1;
             });
           }
         }
