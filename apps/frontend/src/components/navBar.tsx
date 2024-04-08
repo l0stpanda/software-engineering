@@ -1,9 +1,41 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { AppBar, Button, Menu, MenuItem, Toolbar } from "@mui/material";
 import BWLogo from "/BWLogo.png";
+import { useAuth0 } from "@auth0/auth0-react";
 //import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 function CustomNavBar() {
+  const {
+    isAuthenticated,
+    isLoading,
+    getAccessTokenSilently,
+    loginWithRedirect,
+    user,
+  } = useAuth0();
+
+  useEffect(() => {
+    const getAuthToken = async () => {
+      try {
+        await getAccessTokenSilently();
+      } catch (error) {
+        await loginWithRedirect({
+          appState: {
+            returnTo: "map",
+          },
+        });
+      }
+    };
+
+    if (!isLoading && isAuthenticated) {
+      getAuthToken();
+    }
+  }, [getAccessTokenSilently, isAuthenticated, isLoading, loginWithRedirect]);
+
+  const { logout } = useAuth0();
+  async function handleLogout() {
+    await logout();
+  }
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -27,46 +59,54 @@ function CustomNavBar() {
             />
           </div>
         </Toolbar>
-        <div className="flex align-middle py-3 px-2 gap-2">
-          <Button component="a" href="">
-            Home
-          </Button>
-          <Button component="a" href="map">
-            Map
-          </Button>
-          <Button component="a" href="imp">
-            Import
-          </Button>
-          <Button component="a" href="exp">
-            Export
-          </Button>
-          <Button
-            onClick={handleRequestsOpen}
-            //endIcon={<KeyboardArrowDownIcon />}
-          >
-            Service Requests
-          </Button>
+        {user ? (
+          <div className="flex align-middle py-3 px-2 gap-2">
+            <Button component="a" href="">
+              Home
+            </Button>
+            <Button component="a" href="map">
+              Map
+            </Button>
+            <Button component="a" href="imp">
+              Import
+            </Button>
+            <Button component="a" href="exp">
+              Export
+            </Button>
+            <Button
+              onClick={handleRequestsOpen}
+              //endIcon={<KeyboardArrowDownIcon />}
+            >
+              Service Requests
+            </Button>
 
-          <Menu
-            open={open}
-            onClose={handleRequestsClosed}
-            anchorEl={anchorEl}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "left",
-            }}
-          >
-            <MenuItem href="flowerrequest" component="a">
-              Flower Request
-            </MenuItem>
-            <MenuItem href="viewpending" component="a">
-              Pending
-            </MenuItem>
-          </Menu>
-          <Button variant="contained" sx={{ margin: "0 0 0 1rem" }}>
-            Logout
-          </Button>
-        </div>
+            <Menu
+              open={open}
+              onClose={handleRequestsClosed}
+              anchorEl={anchorEl}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+            >
+              <MenuItem href="flowerrequest" component="a">
+                Flower Request
+              </MenuItem>
+              <MenuItem href="viewpending" component="a">
+                Pending
+              </MenuItem>
+            </Menu>
+            <Button
+              variant="contained"
+              sx={{ margin: "0 0 0 1rem" }}
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </AppBar>
   );

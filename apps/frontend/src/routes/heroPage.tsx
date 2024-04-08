@@ -15,7 +15,7 @@ function HeroPage() {
   async function setLoginOpen() {
     await loginWithRedirect({
       appState: {
-        returnTo: location.pathname,
+        returnTo: "map",
       },
     });
   }

@@ -18,15 +18,10 @@ import LostItemRequest from "./routes/lostItemRequest.tsx";
 import RoomSchedulingRequest from "./routes/roomSchedulingRequest.tsx";
 import MedicineDeliveryRequest from "./routes/medicineDeliveryRequest.tsx";
 import MedicalDeviceRequest from "./routes/medicalDeviceRequest.tsx";
-import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
+import { Auth0Provider } from "@auth0/auth0-react";
+import LoadingPage from "./routes/LoadingCallback.tsx";
 
 function App() {
-  const { isAuthenticated, isLoading, user } = useAuth0();
-
-  console.log(isAuthenticated);
-  console.log(isLoading);
-  console.log(user);
-
   const router = createBrowserRouter([
     {
       path: "/",
@@ -81,6 +76,10 @@ function App() {
           path: "medicalDeviceRequest",
           element: <MedicalDeviceRequest />,
         },
+        {
+          path: "callback",
+          element: <LoadingPage />,
+        },
       ],
     },
   ]);
@@ -96,6 +95,9 @@ function App() {
         cacheLocation="localstorage"
         domain="dev-xiwtn1gzwzvxk2ab.us.auth0.com"
         clientId="hpsZAjzYnHxL5mb7stld400psWkr1WJq"
+        authorizationParams={{
+          redirectUri: "http://localhost:3000/callback",
+        }}
         onRedirectCallback={(appState) => {
           navigate(appState?.returnTo || window.location.pathname);
         }}
