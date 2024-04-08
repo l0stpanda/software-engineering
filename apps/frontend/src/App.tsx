@@ -11,7 +11,7 @@ import ExportRouteE from "./routes/exportRouteE.tsx";
 import ReadRouteE from "./routes/readRouteE.tsx";
 import LostItemRequest from "./routes/lostItemRequest.tsx";
 import RoomSchedulingRequest from "./routes/roomSchedulingRequest.tsx";
-import MedicineDeliveryRequest from "./routes/medicineDeliveryRequest.tsx";
+import MedicineDeliveryRequest from "./routes/MedicineDeliveryRequest.tsx";
 import MedicalDeviceRequest from "./routes/medicalDeviceRequest.tsx";
 
 function App() {
