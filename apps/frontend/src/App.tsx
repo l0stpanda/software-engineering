@@ -16,7 +16,7 @@ import ExportRouteE from "./routes/exportRouteE.tsx";
 import ReadRouteE from "./routes/readRouteE.tsx";
 import LostItemRequest from "./routes/lostItemRequest.tsx";
 import RoomSchedulingRequest from "./routes/roomSchedulingRequest.tsx";
-import MedicineDeliveryRequest from "./routes/medicineDeliveryRequest.tsx";
+import MedicineDeliveryRequest from "./routes/MedicineDelivery.tsx";
 import MedicalDeviceRequest from "./routes/medicalDeviceRequest.tsx";
 import { Auth0Provider } from "@auth0/auth0-react";
 import LoadingPage from "./routes/LoadingCallback.tsx";

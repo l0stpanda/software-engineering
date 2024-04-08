@@ -17,6 +17,7 @@ export interface FloorNodeInfo {
   key: string;
   x: number;
   y: number;
+  floor: string;
 }
 
 function FloorNode(props: FloorNodesProps) {
@@ -31,7 +32,7 @@ function FloorNode(props: FloorNodesProps) {
   });
   const [clicked, setClicked] = useState<string[]>([]);
   const bfs = new BFS(props.graph);
-
+  const floor: string = getFloorByImage(props.imageSrc);
   const nodes: MapNode[] = Object.values(props.graph)[0];
   const [ids, setIds] = useState<{
     startId: string | undefined;
@@ -40,10 +41,6 @@ function FloorNode(props: FloorNodesProps) {
     startId: props.graph.idFromName(props.inputLoc[0]),
     endId: props.graph.idFromName(props.inputLoc[1]),
   });
-  // let ids: { startId: string | undefined, endId: string | undefined } = {
-  //     startId: props.graph.idFromName(props.inputLoc[0]),
-  //     endId: props.graph.idFromName(props.inputLoc[1])
-  // };
 
   useEffect(() => {
     setIds({
@@ -89,32 +86,34 @@ function FloorNode(props: FloorNodesProps) {
     if (clicked.length < 2 && !clicked.includes(nodeid)) {
       setClicked((prevClicked) => [...prevClicked, nodeid]);
       //set the start node to green
-      console.log(clicked);
     }
     if (clicked.length == 2) {
       setClicked([nodeid]);
-      console.log(clicked);
     }
     setIds({ startId: undefined, endId: undefined });
   };
 
-  const renderLines = () => {
-    // const startId = props.graph.idFromName(props.inputLoc[0]);
-    // const endId = props.graph.idFromName(props.inputLoc[1]);
-    console.log(ids);
+  const calculateInput = (): string[] => {
     let input: string[] = [];
+
     if (
-      props.inputLoc.length == 2 &&
-      ids.startId != undefined &&
-      ids.endId != undefined
+      props.inputLoc.length === 2 &&
+      ids.startId !== undefined &&
+      ids.endId !== undefined
     ) {
-      console.log(props.inputLoc[0], props.inputLoc[1]);
       input = [ids.startId, ids.endId];
-    } else if (clicked.length == 2) {
+    } else if (clicked.length === 2) {
       input = [clicked[0], clicked[1]];
     } else {
-      console.log("Invalid input.");
+      console.log("Invalid IDs.");
     }
+
+    return input;
+  };
+
+  const renderLines = () => {
+    const input = calculateInput();
+
     if (input.length == 2) {
       console.log(ids.startId, ids.endId);
       const path = bfs.findPath(input[0], input[1]);
@@ -129,7 +128,12 @@ function FloorNode(props: FloorNodesProps) {
         const endNode = path[i + 1];
         const startPoint = scaledNodes[startNode];
         const endPoint = scaledNodes[endNode];
-        if (startPoint && endPoint) {
+        if (
+          startPoint &&
+          endPoint &&
+          startPoint.floor == floor &&
+          endPoint.floor == floor
+        ) {
           lines.push(
             <line
               key={i}
@@ -138,6 +142,7 @@ function FloorNode(props: FloorNodesProps) {
               x2={endPoint.x}
               y2={endPoint.y}
               style={{ stroke: "green", strokeWidth: 2 }}
+              className="animate-pulse"
             />,
           );
         }
@@ -155,9 +160,53 @@ function FloorNode(props: FloorNodesProps) {
       key: node.getNodeID(),
       x: node.getX() * (divDimensions.width / imgDimensions.width),
       y: node.getY() * (divDimensions.height / imgDimensions.height),
+      floor: node.getFloor(),
     };
   });
-  console.log(scaledNodes);
+
+  const renderNodes = () => {
+    return Object.values(scaledNodes)
+      .filter((node) => node.floor == floor)
+      .map((node, id) => {
+        let nodeColor: string;
+        let animation: string = "border border-slate-300 hover:border-red-400";
+        const input = calculateInput();
+
+        //console.log(node.key, ids.startId, ids.endId);
+        //if start node
+        if (node.key == input[0]) {
+          nodeColor = "#39FF14";
+          animation = animation.concat(" animate-bounce -m-[2.8px]");
+        }
+        //if end node
+        else if (node.key == input[1]) {
+          nodeColor = "red";
+          animation = animation.concat(" animate-bounce -m-[2.8px]");
+        }
+        //neither
+        else {
+          nodeColor = "#009BA8";
+        }
+        return (
+          <div
+            key={id}
+            style={{
+              position: "absolute",
+              left: node.x + "px",
+              top: node.y + "px",
+              width: "6px",
+              height: "6px",
+              backgroundColor: nodeColor,
+              borderRadius: "50%",
+              transform: "translate(-50%, -50%)",
+              cursor: "pointer",
+            }}
+            className={animation}
+            onClick={handleNodeClick(node.key)}
+          ></div>
+        );
+      });
+  };
 
   return (
     <div ref={divRef} style={{ position: "relative" }}>
@@ -173,25 +222,31 @@ function FloorNode(props: FloorNodesProps) {
       >
         {renderLines()}
       </svg>
-      {Object.values(scaledNodes).map((node, id) => (
-        <div
-          key={id}
-          style={{
-            position: "absolute",
-            left: node.x + "px",
-            top: node.y + "px",
-            width: "4px",
-            height: "4px",
-            backgroundColor: "red",
-            borderRadius: "50%",
-            transform: "translate(-50%, -50%)",
-            cursor: "pointer",
-          }}
-          onClick={handleNodeClick(node.key)}
-        ></div>
-      ))}
+      {renderNodes()}
     </div>
   );
+}
+
+function getFloorByImage(imgName: string): string {
+  const parts = imgName.split("/");
+  const lastpart = parts[parts.length - 1];
+  const splits = lastpart.split("_");
+  const numbers = splits[0][1];
+  const onlyName = splits[1].slice(0, -4);
+  //console.log(onlyName);
+  //console.log(numbers);
+  if (numbers == "0") {
+    if (
+      onlyName.includes("thegroundfloor") ||
+      onlyName.includes("thelowerlevel1")
+    ) {
+      return "L1";
+    } else {
+      return "L2";
+    }
+  } else {
+    return numbers as unknown as string;
+  }
 }
 
 export default FloorNode;
