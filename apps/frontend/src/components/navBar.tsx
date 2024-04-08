@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { AppBar, Button, Menu, MenuItem, Toolbar } from "@mui/material";
 import BWLogo from "/BWLogo.png";
 import { useAuth0 } from "@auth0/auth0-react";
-//import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 function CustomNavBar() {
   const {
@@ -67,19 +67,19 @@ function CustomNavBar() {
             <Button component="a" href="map">
               Map
             </Button>
-            <Button component="a" href="imp">
-              Import
-            </Button>
             <Button component="a" href="exp">
               Export
             </Button>
+
             <Button
               onClick={handleRequestsOpen}
-              //endIcon={<KeyboardArrowDownIcon />}
+              startIcon={<ArrowDropDownIcon />}
             >
               Service Requests
             </Button>
-
+            <Button component="a" href="imp">
+              Admin
+            </Button>
             <Menu
               open={open}
               onClose={handleRequestsClosed}

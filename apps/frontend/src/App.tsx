@@ -96,7 +96,7 @@ function App() {
         domain="dev-xiwtn1gzwzvxk2ab.us.auth0.com"
         clientId="hpsZAjzYnHxL5mb7stld400psWkr1WJq"
         authorizationParams={{
-          redirectUri: "http://localhost:3000/callback",
+          redirect_uri: "http://localhost:3000/callback",
         }}
         onRedirectCallback={(appState) => {
           navigate(appState?.returnTo || window.location.pathname);
