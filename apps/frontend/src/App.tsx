@@ -17,6 +17,7 @@ import LostItemRequest from "./routes/lostItemRequest.tsx";
 import RoomSchedulingRequest from "./routes/roomSchedulingRequest.tsx";
 import MedicineDeliveryRequest from "./routes/MedicineDelivery.tsx";
 import MedicalDeviceRequest from "./routes/medicalDeviceRequest.tsx";
+import EditMap from "./routes/editMapPage.tsx";
 import { Auth0Provider } from "@auth0/auth0-react";
 import LoadingPage from "./routes/LoadingCallback.tsx";
 import SpinningLoader from "./components/spinningLoader.tsx";
@@ -75,6 +76,10 @@ function App() {
         {
           path: "callback",
           element: <LoadingPage component={SpinningLoader} />,
+        },
+        {
+          path: "editMap",
+          element: <EditMap />,
         },
       ],
     },
