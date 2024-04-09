@@ -13,6 +13,7 @@ import LostItemRequest from "./routes/lostItemRequest.tsx";
 import RoomSchedulingRequest from "./routes/roomSchedulingRequest.tsx";
 import MedicineDeliveryRequest from "./routes/MedicineDelivery.tsx";
 import MedicalDeviceRequest from "./routes/medicalDeviceRequest.tsx";
+import EditMap from "./routes/editMapPage.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -68,6 +69,10 @@ function App() {
         {
           path: "medicalDeviceRequest",
           element: <MedicalDeviceRequest />,
+        },
+        {
+          path: "editMap",
+          element: <EditMap />,
         },
       ],
     },
