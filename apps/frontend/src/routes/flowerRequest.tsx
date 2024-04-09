@@ -17,7 +17,6 @@ import LocationDropdown from "../components/locationDropdown.tsx";
 //import {SelectChangeEvent} from "@mui/material/Select";
 import { useAuth0 } from "@auth0/auth0-react";
 
-
 function FlowerRequest() {
   const { getAccessTokenSilently } = useAuth0();
 
