@@ -7,9 +7,17 @@ const router: Router = express.Router();
 router.post("/", async function (req: Request, res: Response) {
   const input: flowerReqFields = req.body;
   try {
+    const roomStuff = await PrismaClient.nodes.findMany({
+      where: {
+        long_name: input.roomNum,
+      },
+    });
+
+    console.log(roomStuff);
+
     await PrismaClient.flowers.create({
       data: {
-        room: input.roomNum,
+        room: roomStuff.toString(),
         sent_by: input.senderName,
         sent_to: input.sendTo,
         note: input.attachedNote,

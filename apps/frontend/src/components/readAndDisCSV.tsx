@@ -38,6 +38,9 @@ const SingleDisplay = () => {
         <thead className="bg-secondary border-b-2 border-b-primary">
           <tr>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              Node ID
+            </th>
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Start Node
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
@@ -48,6 +51,7 @@ const SingleDisplay = () => {
         <tbody>
           {edges.map((field) => (
             <tr className="bg-background border-b-2 border-secondary">
+              <td className="p-3 text-sm">{field.id}</td>
               <td className="p-3 text-sm">{field.start_node}</td>
               <td className="p-3 text-sm">{field.end_node}</td>
             </tr>

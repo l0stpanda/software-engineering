@@ -14,6 +14,7 @@ router.post("/edgesPost", async function (req: Request, res: Response) {
     try {
       await PrismaClient.edges.create({
         data: {
+          id: received.id,
           end_node: received.end_node,
           start_node: received.start_node,
         },
@@ -114,4 +115,30 @@ router.get("/nodesGet", async function (req: Request, res: Response) {
   return;
 });
 
+//Will give the list of long names
+router.get("/nodeLongNames", async function (req: Request, res: Response) {
+  try {
+    const response = await PrismaClient.nodes.findMany({
+      where: {
+        NOT: {
+          node_type: "HALL",
+        },
+      },
+      select: {
+        long_name: true,
+      },
+    });
+
+    const stuff = JSON.stringify(response).replaceAll("long_name", "label");
+    console.log(stuff);
+    const json_data = eval(stuff);
+    console.log(json_data);
+    res.send(json_data);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(400);
+    return;
+  }
+  res.sendStatus(200);
+});
 export default router;

@@ -62,8 +62,7 @@ model Nodes {
 
 // Edges are all set
 model Edges {
+  id         String @id
   end_node   String //@db.VarChar(10)
   start_node String //@db.VarChar(10)
-
-  @@id([end_node, start_node])
 }
