@@ -20,9 +20,9 @@ function Map() {
   const divRef = useRef<HTMLDivElement>(null);
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
   const [graph, setGraph] = useState(new Graph());
+  const [imgState, setImgState] = useState<string>(lowerLevel1);
 
   // Zoom in/out buttons for map viewing
-  const [imgState, setImgState] = useState<string>(lowerLevel1);
   const Controls = () => {
     const { zoomIn, zoomOut } = useControls();
     return (
@@ -74,11 +74,13 @@ function Map() {
     setSubmitValues([cleanStart, cleanEnd]);
   }
 
+  // Changes the map image
   const changeFloor = (floor: string) => {
     console.log(floor);
     setImgState(floor);
   };
 
+  // Updates div dimensions for scaling of nodes
   useEffect(() => {
     if (divRef.current) {
       const { clientWidth, clientHeight } = divRef.current;
@@ -86,6 +88,7 @@ function Map() {
     }
   }, [divRef]);
 
+  // Updates the graph when it has been received from the database
   useEffect(() => {
     const tempGraph = new Graph();
     tempGraph.loadGraph().then(() => {
