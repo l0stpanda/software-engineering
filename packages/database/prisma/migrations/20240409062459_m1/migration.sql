@@ -8,20 +8,10 @@ CREATE TABLE "HighScore" (
 );
 
 -- CreateTable
-CREATE TABLE "Staff" (
-    "emp_id" SERIAL NOT NULL,
-    "role" TEXT NOT NULL,
-    "user_name" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-    "add_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "Staff_pkey" PRIMARY KEY ("emp_id")
-);
-
--- CreateTable
 CREATE TABLE "Flowers" (
     "id" SERIAL NOT NULL,
     "room" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
     "sent_by" VARCHAR(50) NOT NULL,
     "sent_to" VARCHAR(50) NOT NULL,
     "requestDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -47,10 +37,11 @@ CREATE TABLE "Nodes" (
 
 -- CreateTable
 CREATE TABLE "Edges" (
+    "id" TEXT NOT NULL,
     "end_node" TEXT NOT NULL,
     "start_node" TEXT NOT NULL,
 
-    CONSTRAINT "Edges_pkey" PRIMARY KEY ("end_node","start_node")
+    CONSTRAINT "Edges_pkey" PRIMARY KEY ("id")
 );
 
 -- AddForeignKey

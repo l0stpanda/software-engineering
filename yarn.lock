@@ -28,7 +28,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth0/auth0-react@npm:^2.1.1":
+"@auth0/auth0-react@npm:^2.2.4":
   version: 2.2.4
   resolution: "@auth0/auth0-react@npm:2.2.4"
   dependencies:
@@ -945,6 +945,22 @@ __metadata:
   version: 5.15.14
   resolution: "@mui/core-downloads-tracker@npm:5.15.14"
   checksum: 0a1c63d906af594d0a7fb63d1d574482b3916351ea8908e8621c8bfa16ac38cf4edb5a334f0e28084f583ac928b587cab6e031f992195e0a590186faba13b9a5
+  languageName: node
+  linkType: hard
+
+"@mui/icons-material@npm:^5.15.15":
+  version: 5.15.15
+  resolution: "@mui/icons-material@npm:5.15.15"
+  dependencies:
+    "@babel/runtime": "npm:^7.23.9"
+  peerDependencies:
+    "@mui/material": ^5.0.0
+    "@types/react": ^17.0.0 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: e8810d7ffbba914baf21509e5d664f5f23bdba5d2a7ec7c485a3c7ddbbcb417e555c31feff2a3fa9c7d7fa0d22d4380f32488559ab3b170d891641dbc2161b22
   languageName: node
   linkType: hard
 
@@ -2697,10 +2713,10 @@ __metadata:
     eslint: "npm:latest"
     eslint-config-custom: "workspace:*"
     express: "npm:5.0.0-beta.1"
-    express-oauth2-jwt-bearer: "npm:^1.5.0"
+    express-oauth2-jwt-bearer: "npm:^1.6.0"
     http-errors: "npm:~1.6.3"
     http-terminator: "npm:^3.2.0"
-    jose: "npm:^4.14.4"
+    jose: "npm:^5.2.4"
     morgan: "npm:~1.9.1"
     nodemon: "npm:latest"
     pg: "npm:^8.11.0"
@@ -4124,7 +4140,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express-oauth2-jwt-bearer@npm:^1.5.0":
+"express-oauth2-jwt-bearer@npm:^1.6.0":
   version: 1.6.0
   resolution: "express-oauth2-jwt-bearer@npm:1.6.0"
   dependencies:
@@ -4384,9 +4400,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "frontend@workspace:apps/frontend"
   dependencies:
-    "@auth0/auth0-react": "npm:^2.1.1"
+    "@auth0/auth0-react": "npm:^2.2.4"
     "@emotion/react": "npm:^11.11.4"
     "@emotion/styled": "npm:^11.11.5"
+    "@mui/icons-material": "npm:^5.15.15"
     "@mui/material": "npm:^5.15.14"
     "@mui/x-date-pickers": "npm:^7.1.1"
     "@popperjs/core": "npm:^2.11.8"
@@ -5079,10 +5096,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:^4.13.1, jose@npm:^4.14.4":
+"jose@npm:^4.13.1":
   version: 4.15.4
   resolution: "jose@npm:4.15.4"
   checksum: 20fa941597150dffc7af3f41d994500cc3e71cd650b755243dbd80d91cf26c1053f95b78af588f05cfc4371e492a67c5c7a48f689b8605145a8fe28b484d725b
+  languageName: node
+  linkType: hard
+
+"jose@npm:^5.2.4":
+  version: 5.2.4
+  resolution: "jose@npm:5.2.4"
+  checksum: 0b09df51d70dad34d301f444dfe44681a157c5e166df88e4a05892ddd7181e42e883c83ed7fae8a41960237343dd4c72282c4aeb10ec94801782be47e3f62170
   languageName: node
   linkType: hard
 
