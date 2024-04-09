@@ -61,7 +61,7 @@ function PendingRequestItem(props: FlowerReqData) {
         >
           <MenuItem value={"unassigned"}>Unassigned</MenuItem>
           <MenuItem value={"assigned"}>Assigned</MenuItem>
-          <MenuItem value={"Pending"}>InProgress</MenuItem>
+          <MenuItem value={"inprogress"}>In Progress</MenuItem>
           <MenuItem value={"closed"}>Closed</MenuItem>
         </Select>
       </td>
@@ -69,7 +69,7 @@ function PendingRequestItem(props: FlowerReqData) {
       <td className="p-3 text-sm">{formatTime(props.requestDate)}</td>
       <td className="p-3 text-sm">{props.room}</td>
       <td className="p-3 text-sm">
-        <button id={"deleteButton"}>
+        <button>
           <img
             onClick={() => deleteData(props.id)}
             src={trashIcon}

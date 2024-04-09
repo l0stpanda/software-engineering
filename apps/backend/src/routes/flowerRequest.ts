@@ -21,7 +21,7 @@ router.post("/", async function (req: Request, res: Response) {
         sent_by: input.senderName,
         sent_to: input.sendTo,
         note: input.attachedNote,
-        status: "Pending",
+        status: "unassigned",
       },
     });
   } catch (e) {
