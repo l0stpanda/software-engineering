@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { AppBar, Button, Menu, MenuItem, Toolbar } from "@mui/material";
 import BWLogo from "/BWLogo.png";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -94,18 +94,18 @@ function CustomNavBar() {
               <MenuItem href="viewpending" component="a">
                 Pending
               </MenuItem>
-            <MenuItem href="medicinerequest" component="a">
-              Medicine Delivery
-          </MenuItem>
-          <MenuItem href="medicaldevicerequest" component="a">
-              Room Scheduling
-          </MenuItem>
-          <MenuItem href="medicaldevicerequest" component="a">
-              Medical Device Delivery
-          </MenuItem>
-          <MenuItem href="lostitemrequest" component="a">
-              Lost Item
-          </MenuItem>
+              <MenuItem href="medicinerequest" component="a">
+                Medicine Delivery
+              </MenuItem>
+              <MenuItem href="roomrequest" component="a">
+                Room Scheduling
+              </MenuItem>
+              <MenuItem href="medicaldevicerequest" component="a">
+                Medical Device Delivery
+              </MenuItem>
+              <MenuItem href="lostitemrequest" component="a">
+                Lost Item
+              </MenuItem>
           </Menu>
             <Button
               variant="contained"
