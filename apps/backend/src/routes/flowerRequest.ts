@@ -64,9 +64,9 @@ router.delete("/:id", async function (req: Request, res: Response) {
 });
 
 //update the status
-router.put("/", async function (req: Request, res: Response) {
-  const id = parseInt(req.params.id);
-  const status = req.params.status;
+router.post("/update", async function (req: Request, res: Response) {
+  const id = parseInt(req.body.id);
+  const status = req.body.status;
 
   console.log("id is: " + id + "\n" + "status is : " + status);
   try {

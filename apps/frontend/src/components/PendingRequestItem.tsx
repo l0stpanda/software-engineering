@@ -19,8 +19,9 @@ function PendingRequestItem(props: FlowerReqData) {
 
   async function handleStatusDropdown(e: SelectChangeEvent) {
     setStatus(e.target.value);
-    await axios.put("/api/flowerRequest", {
-      params: { id: props.id, status: status },
+    await axios.post("/api/flowerRequest/update", {
+      id: props.id,
+      status: e.target.value,
     });
     return;
   }
