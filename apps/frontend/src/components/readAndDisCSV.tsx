@@ -15,8 +15,9 @@ import { Tab, Tabs } from "@mui/material";
 //This handles uploads and downloads on the same page
 const SingleDisplay = () => {
   const [edges, setEdges] = useState<Edges[]>([]); // Initialize state to hold the edges data
-  const [nodes, setNode] = useState<Nodes[]>([]); // Initialize state to hold the edges data
+  const [nodes, setNode] = useState<Nodes[]>([]); // Initialize state to hold the nodes data
   const [tableDisplayed, setTableDisplaying] = useState<number>(0);
+
 
   useEffect(() => {
     displayEdges().then();

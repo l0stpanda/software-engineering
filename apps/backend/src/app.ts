@@ -7,6 +7,7 @@ import importRouter from "./routes/import.ts";
 import flowerRequest from "./routes/flowerRequest.ts";
 import loginRequest from "./routes/login.ts";
 import readRouter from "./routes/read.ts";
+import roomScheduler from "./routes/roomSchedulingRequest.ts";
 import { auth } from "express-oauth2-jwt-bearer";
 // import readRouterE from "./routes/readE.ts";
 // import readRouterN from "./routes/readN.ts";
@@ -29,6 +30,7 @@ app.use(cookieParser()); // Cookie parser
 // Setup routers. ALL ROUTERS MUST use /api as a start point, or they
 // won't be reached by the default proxy and prod setup
 app.use("/api/high-score", exampleRouter);
+app.use("/api/roomSchedulingRequest", roomScheduler);
 
 app.use("/healthcheck", (req, res) => {
   res.status(200).send();
