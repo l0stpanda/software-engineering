@@ -187,8 +187,8 @@ function Map() {
             label="Algorithm"
             onChange={changeAlgorithm}
           >
-            <MenuItem value={"BFS"}>BFS</MenuItem>
-            <MenuItem value={"A-Star"}>A-Star</MenuItem>
+            <MenuItem value="BFS">BFS</MenuItem>
+            <MenuItem value="AStar">A-Star</MenuItem>
           </Select>
         </FormControl>
       </div>
