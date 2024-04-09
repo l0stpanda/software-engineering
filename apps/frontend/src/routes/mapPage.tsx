@@ -1,5 +1,10 @@
 import React, { useEffect, useRef } from "react";
-import { Button, TextField } from "@mui/material";
+import {
+  Button,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material";
 import {
   TransformWrapper,
   TransformComponent,
@@ -96,102 +101,79 @@ function Map() {
     });
   }, []);
 
+  function FloorMapButtons() {
+    return (
+      <div className="w-2/3 mx-auto mt-3">
+        <ToggleButtonGroup
+          value={imgState}
+          exclusive
+          onChange={(
+            _event: React.MouseEvent<HTMLElement>,
+            newFloor: string,
+          ) => {
+            changeFloor(newFloor);
+          }}
+          size="large"
+          color="secondary"
+          fullWidth
+        >
+          <ToggleButton value={lowerLevel2}>
+            <strong>L2</strong>
+          </ToggleButton>
+          <ToggleButton value={lowerLevel1}>
+            <strong>L1</strong>
+          </ToggleButton>
+          <ToggleButton value={floor1}>
+            <strong>1</strong>
+          </ToggleButton>
+          <ToggleButton value={floor2}>
+            <strong>2</strong>
+          </ToggleButton>
+          <ToggleButton value={floor3}>
+            <strong>3</strong>
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </div>
+    );
+  }
+
   return (
     <div>
       <BackgroundPattern />
-      {/*Buttons for displaying floor images*/}
-      <div>
-        <Button
-          type="button"
-          variant="contained"
-          className="submitButton"
-          size="medium"
-          onClick={() => {
-            changeFloor(lowerLevel2);
-          }}
-          sx={{ borderRadius: "30px" }}
-        >
-          L2
-        </Button>
-        <Button
-          type="button"
-          variant="contained"
-          className="submitButton"
-          size="medium"
-          onClick={() => {
-            changeFloor(lowerLevel1);
-          }}
-          sx={{ borderRadius: "30px" }}
-        >
-          L1
-        </Button>
-        <Button
-          type="button"
-          variant="contained"
-          className="submitButton"
-          size="medium"
-          onClick={() => {
-            changeFloor(floor1);
-          }}
-          sx={{ borderRadius: "30px" }}
-        >
-          1
-        </Button>
-        <Button
-          type="button"
-          variant="contained"
-          className="submitButton"
-          size="medium"
-          onClick={() => {
-            changeFloor(floor2);
-          }}
-          sx={{ borderRadius: "30px" }}
-        >
-          2
-        </Button>
-        <Button
-          type="button"
-          variant="contained"
-          className="submitButton"
-          size="medium"
-          onClick={() => {
-            changeFloor(floor3);
-          }}
-          sx={{ borderRadius: "30px" }}
-        >
-          3
-        </Button>
-      </div>
 
       {/*Location and Destination things*/}
       <div
         className="my-8
-                   mx-auto
+                   justify-center
                    flex
                    flex-row-reverse
                    max-w-screen-2xl"
       >
-        {/*Map Image Box*/}
-        <div
-          ref={divRef}
-          className="w-2/3
+        <div className="flex flex-col w-2/3">
+          {/*Map Image Box*/}
+          <div
+            ref={divRef}
+            className="
         h-2/3
         flex-grow
         ml-1
         border-primary
         border-2"
-        >
-          <TransformWrapper>
-            <Controls />
-            <TransformComponent>
-              <FloorNode
-                imageSrc={imgState}
-                graph={graph}
-                inputLoc={[submitValues[0], submitValues[1]]}
-                divDim={divDimensions}
-              />
-            </TransformComponent>
-          </TransformWrapper>
+          >
+            <TransformWrapper>
+              <Controls />
+              <TransformComponent>
+                <FloorNode
+                  imageSrc={imgState}
+                  graph={graph}
+                  inputLoc={[submitValues[0], submitValues[1]]}
+                  divDim={divDimensions}
+                />
+              </TransformComponent>
+            </TransformWrapper>
+          </div>
+          {/*Buttons for displaying floor images*/}
+          <FloorMapButtons />
         </div>
 
         {/*boxes.*/}
