@@ -1,5 +1,12 @@
 import React, { useEffect, useRef } from "react";
-import { Button, TextField } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import {
   TransformWrapper,
   TransformComponent,
@@ -15,12 +22,15 @@ import floor2 from "../assets/02_thesecondfloor.png";
 import floor3 from "../assets/03_thethirdfloor.png";
 
 import FloorNode from "../components/FloorNode.tsx";
+import { SelectChangeEvent } from "@mui/material/Select";
 
 function Map() {
+  console.log("MAPPPPPPP-============================================");
   const divRef = useRef<HTMLDivElement>(null);
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
   const [graph, setGraph] = useState(new Graph());
-  const [imgState, setImgState] = useState<string>(lowerLevel1);
+  const [imgState, setImgState] = useState<string>(floor1);
+  const [algorithm, setAlgorithm] = useState<string>("BFS");
 
   // Zoom in/out buttons for map viewing
   const Controls = () => {
@@ -96,6 +106,10 @@ function Map() {
     });
   }, []);
 
+  const changeAlgorithm = (event: SelectChangeEvent) => {
+    setAlgorithm(event.target.value as string);
+  };
+
   return (
     <div>
       <BackgroundPattern />
@@ -163,6 +177,21 @@ function Map() {
         </Button>
       </div>
 
+      <div>
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Age</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={algorithm}
+            label="Algorithm"
+            onChange={changeAlgorithm}
+          >
+            <MenuItem value={"BFS"}>BFS</MenuItem>
+            <MenuItem value={"A-Star"}>A-Star</MenuItem>
+          </Select>
+        </FormControl>
+      </div>
       {/*Location and Destination things*/}
       <div
         className="my-8
@@ -189,6 +218,7 @@ function Map() {
                 graph={graph}
                 inputLoc={[submitValues[0], submitValues[1]]}
                 divDim={divDimensions}
+                algorithm={algorithm}
               />
             </TransformComponent>
           </TransformWrapper>

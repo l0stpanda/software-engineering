@@ -11,6 +11,7 @@ interface FloorNodesProps {
   graph: Graph;
   inputLoc: string[];
   divDim: { width: number; height: number };
+  algorithm: string;
 }
 
 export interface FloorNodeInfo {
@@ -21,6 +22,7 @@ export interface FloorNodeInfo {
 }
 
 function FloorNode(props: FloorNodesProps) {
+  console.log("FLOORNODE-=================================================");
   const [imgDimensions, setImgDimensions] = useState<{
     width: number;
     height: number;
