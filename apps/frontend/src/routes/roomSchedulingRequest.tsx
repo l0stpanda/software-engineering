@@ -20,6 +20,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { roomSchedulerFields } from "common/src/roomScheduler.ts";
 import AllyBackground from "../components/allyBackground.tsx";
+import LocationDropdown from "../components/locationDropdown.tsx";
 
 export default function RoomSchedulingRequest() {
   type roomReqFields = {
@@ -101,6 +102,10 @@ export default function RoomSchedulingRequest() {
     clear();
   }
 
+  function updateRoom(val: string) {
+    setResponses({ ...responses, roomNum: val });
+  }
+
   return (
     <div className="justify-center grid h-screen place-items-center">
       <AllyBackground />
@@ -164,15 +169,21 @@ export default function RoomSchedulingRequest() {
               <MenuItem value="120 Minutes">120 Minutes</MenuItem>
             </Select>
           </FormControl>
-          <TextField
-            label="Room Number"
-            type="number"
-            name="roomNum"
-            variant="filled"
-            value={responses.roomNum}
-            onChange={handleResponseChanges}
-            required
+
+          <LocationDropdown
+            room={responses.roomNum}
+            update={updateRoom}
+            label={"Room"}
           />
+          {/*<TextField*/}
+          {/*  label="Room Number"*/}
+          {/*  type="number"*/}
+          {/*  name="roomNum"*/}
+          {/*  variant="filled"*/}
+          {/*  value={responses.roomNum}*/}
+          {/*  onChange={handleResponseChanges}*/}
+          {/*  required*/}
+          {/*/>*/}
 
           <FormControl>
             <InputLabel id="reqStatus-label">Request Status *</InputLabel>

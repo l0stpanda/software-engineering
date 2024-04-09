@@ -5,6 +5,7 @@ import axios, { AxiosResponse } from "axios";
 type locationProps = {
   room: string;
   update: (a: string) => void;
+  label: string;
 };
 
 export default function LocationDropdown(prop: locationProps) {
@@ -50,7 +51,9 @@ export default function LocationDropdown(prop: locationProps) {
           value={prop.room}
           options={rooms}
           onChange={handleDropdown}
-          renderInput={(params) => <TextField {...params} label="Room" />}
+          renderInput={(params) => (
+            <TextField {...params} variant="filled" label={prop.label} />
+          )}
         >
           {/*{rooms.map((one: { long_name: string | number | readonly string[] | undefined; }) => <MenuItem value={one.long_name}>one.long_name</MenuItem>)}*/}
         </Autocomplete>

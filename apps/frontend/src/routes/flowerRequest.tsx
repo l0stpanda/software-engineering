@@ -97,7 +97,11 @@ function FlowerRequest() {
         </h1>
         <div className="flex flex-col gap-4 my-4">
           {/*This handles the dropdown stuff*/}
-          <LocationDropdown room={responses.roomNum} update={updateRoom} />
+          <LocationDropdown
+            room={responses.roomNum}
+            update={updateRoom}
+            label={"Room"}
+          />
           {/*This handles the dropdown stuff*/}
           <TextField
             onChange={handleResponseChanges}
