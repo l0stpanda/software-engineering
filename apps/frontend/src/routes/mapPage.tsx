@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import {
   Button,
-  TextField,
+  //TextField,
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
@@ -21,6 +21,7 @@ import floor3 from "../assets/03_thethirdfloor.png";
 
 import FloorNode from "../components/FloorNode.tsx";
 import { ArrowBack } from "@mui/icons-material";
+import LocationDropdown from "../components/locationDropdown.tsx";
 
 function Map() {
   const divRef = useRef<HTMLDivElement>(null);
@@ -67,10 +68,10 @@ function Map() {
   const [submitValues, setSubmitValues] = useState(["", ""]);
 
   // Carter's function code bc idk how to do it
-  function handleFormChanges(event: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value } = event.target;
-    setNavigatingNodes({ ...navigatingNodes, [name]: value });
-  }
+  // function handleFormChanges(event: React.ChangeEvent<HTMLInputElement>) {
+  //   const { name, value } = event.target;
+  //   setNavigatingNodes({ ...navigatingNodes, [name]: value });
+  // }
 
   // Handles changes to the start/end destination boxes
   function handleFormSubmit() {
@@ -101,6 +102,17 @@ function Map() {
       setGraph(tempGraph);
     });
   }, []);
+
+  //Needs to be here for navigation dropdown
+  function updateStart(val: string) {
+    // setResponses({ ...responses, roomNum: val });
+    setNavigatingNodes({ ...navigatingNodes, start: val });
+  }
+
+  function updateEnd(val: string) {
+    // setResponses({ ...responses, roomNum: val });
+    setNavigatingNodes({ ...navigatingNodes, end: val });
+  }
 
   function FloorMapButtons() {
     return (
@@ -204,35 +216,20 @@ function Map() {
               <h2 className="text-primary font-header pb-4">
                 Where would you like to go?
               </h2>
-              <TextField
-                id="outlined-basic"
-                variant="outlined"
-                label="Location"
-                name="start"
-                value={navigatingNodes.start}
-                onChange={handleFormChanges}
-                sx={{
-                  input: {
-                    color: "primary",
-                    background: "background",
-                  },
-                }}
+
+              <LocationDropdown
+                room={navigatingNodes.start}
+                update={updateStart}
+                label={"Start"}
               />
-              <TextField
-                id="outlined-basic"
-                variant="outlined"
-                label="Destination"
-                value={navigatingNodes.end}
-                name="end"
-                onChange={handleFormChanges}
-                sx={{
-                  input: {
-                    color: "primary",
-                    background: "background",
-                  },
-                }}
-                margin="normal"
+              <br />
+              <LocationDropdown
+                room={navigatingNodes.end}
+                update={updateEnd}
+                label={"End"}
               />
+              <br />
+
               <Button
                 type="button"
                 variant="contained"
