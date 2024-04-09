@@ -67,6 +67,7 @@ export default function PendingFlowerRequest() {
           {/* Map through the records and create a row for each record */}
           {records.map((record) => (
             <PendingRequestItem
+              key={record.id}
               id={record.id}
               status={record.status}
               requestDate={record.requestDate}

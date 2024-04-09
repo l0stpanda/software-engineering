@@ -22,14 +22,14 @@ model HighScore {
 // We left HighScore for now because of errors that it is causing
 
 // Users have fields that will be added to the database on registration
-model Staff {
-  emp_id    Int      @id @default(autoincrement())
-  role      String // By default the user will be an employee unless designated otherwise by an admin
-  user_name String
-  // email     String   @unique
-  password  String
-  add_date  DateTime @default(now())
-}
+// model Staff {
+//   emp_id    Int      @id @default(autoincrement())
+//   role      String // By default the user will be an employee unless designated otherwise by an admin
+//   user_name String
+//   // email     String   @unique
+//   password  String
+//   add_date  DateTime @default(now())
+// }
 
 // Flower requests are saved
 model Flowers {
@@ -62,8 +62,7 @@ model Nodes {
 
 // Edges are all set
 model Edges {
+  id         String @id
   end_node   String //@db.VarChar(10)
   start_node String //@db.VarChar(10)
-
-  @@id([end_node, start_node])
 }
