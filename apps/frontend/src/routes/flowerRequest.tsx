@@ -11,8 +11,11 @@ import { useState } from "react";
 import axios from "axios";
 import BackgroundPattern from "../components/backgroundPattern.tsx";
 import { flowerReqFields } from "common/src/flowerRequest.ts";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function FlowerRequest() {
+  const { getAccessTokenSilently } = useAuth0();
+
   const initialFormResponses: flowerReqFields = {
     roomNum: "",
     senderName: "",
@@ -50,9 +53,12 @@ function FlowerRequest() {
     }
 
     try {
+      const token = await getAccessTokenSilently();
+      console.log(token);
       // Make post request to backend with form response data
       await axios.post("/api/flowerRequest", responses, {
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
