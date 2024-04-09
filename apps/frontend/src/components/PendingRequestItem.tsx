@@ -3,7 +3,7 @@ import axios from "axios";
 //import {flowerReqFields} from "common/src/flowerRequest.ts";
 type FlowerReqData = {
   id: number;
-  room: string;
+  name: string;
   requestDate: string;
   status: string;
 };
@@ -21,11 +21,6 @@ function PendingRequestItem(props: FlowerReqData) {
     return dateToFormat.toLocaleTimeString();
   }
 
-  // async function idToName(id : string){
-  //     const name = await axios.get(`/import/idToName/${id}`);
-  //     console.log(name.data);
-  //     return name.data;
-  // }
   //takes in the id of the request to be deleted and deletes in the database
   async function deleteData(idVal: number) {
     console.log(idVal);
@@ -51,7 +46,7 @@ function PendingRequestItem(props: FlowerReqData) {
       </td>
       <td className="p-3 text-sm">{formatDate(props.requestDate)}</td>
       <td className="p-3 text-sm">{formatTime(props.requestDate)}</td>
-      <td className="p-3 text-sm">{props.room}</td>
+      <td className="p-3 text-sm">{props.name}</td>
       <td className="p-3 text-sm">
         <button id={"deleteButton"}>
           <img

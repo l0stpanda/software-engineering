@@ -143,21 +143,18 @@ router.get("/nodeLongNames", async function (req: Request, res: Response) {
   //res.sendStatus(200);
 });
 
-router.get("/idToName/:id", async function (req: Request, res: Response) {
-  const id = req.params.id;
-  try {
-    console.log("id is " + id);
-    const row = PrismaClient.nodes.findMany({
-      where: {
-        node_id: id,
-      },
-      select: {
-        short_name: true,
-      },
-    });
-    res.send(row);
-  } catch (e) {
-    res.sendStatus(400);
-  }
-});
+// router.get("/idToName/:id", async function (req: Request, res: Response) {
+//   const id = req.params.id;
+//   console.log("id is: " + id);
+//   try {
+//     const row = await PrismaClient.nodes.findMany({
+//       where: {
+//         node_id: id,
+//       },
+//     });
+//     res.send(row[0].short_name);
+//   } catch (e) {
+//     res.sendStatus(400);
+//   }
+// });
 export default router;
