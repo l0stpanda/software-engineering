@@ -9,15 +9,17 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  // Table,
-  // TableBody,
-  // TableCell,
-  // TableHead,
-  // TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { roomSchedulerFields } from "common/src/roomScheduler.ts";
+import AllyBackground from "../components/allyBackground.tsx";
 
 export default function RoomSchedulingRequest() {
   type roomReqFields = {
@@ -39,6 +41,7 @@ export default function RoomSchedulingRequest() {
   });
 
   const [open, setOpen] = useState(false);
+  const [sched, setSched] = useState<roomSchedulerFields[]>([]); // Initialize state to hold the edges data
 
   function handleResponseChanges(
     e:
@@ -78,12 +81,19 @@ export default function RoomSchedulingRequest() {
     await axios.post("/api/roomSchedulingRequest", responses, {
       headers: { "Content-Type": "application/json" },
     });
+    setOpen(true);
+  }
 
+  useEffect(() => {
+    getValues().then();
+  }, []);
+
+  async function getValues() {
     const confirmation = await axios
-      .get("api/roomSchedulingRequest")
+      .get("/api/roomSchedulingRequest")
       .then((response) => response.data);
     console.log(confirmation);
-    setOpen(true);
+    setSched(confirmation);
   }
 
   function handleSubmitClose() {
@@ -93,6 +103,7 @@ export default function RoomSchedulingRequest() {
 
   return (
     <div className="justify-center grid h-screen place-items-center">
+      <AllyBackground />
       <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-4">
         <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
           Room Scheduling Request
@@ -108,7 +119,7 @@ export default function RoomSchedulingRequest() {
             required
           />
           <FormControl>
-            <InputLabel id="startTime-label">Start Time</InputLabel>
+            <InputLabel id="startTime-label">Start Time *</InputLabel>
             <Select
               labelId="startTime-label"
               label="Start Time"
@@ -133,20 +144,26 @@ export default function RoomSchedulingRequest() {
             </Select>
           </FormControl>
 
-          <Select
-            label="Length of Reservation"
-            name="lengthRes"
-            variant="filled"
-            value={responses.lengthRes}
-            onChange={handleResponseChanges}
-            required
-          >
-            <MenuItem value="">Not Selected</MenuItem>
-            <MenuItem value="30 Minutes">30 Minutes</MenuItem>
-            <MenuItem value="60 Minutes">60 Minutes</MenuItem>
-            <MenuItem value="90 Minutes">90 Minutes</MenuItem>
-            <MenuItem value="120 Minutes">120 Minutes</MenuItem>
-          </Select>
+          <FormControl>
+            <InputLabel id="lengthRes-label">
+              Length of Reservation *
+            </InputLabel>
+            <Select
+              labelId="lengthRes-label"
+              label="Length of Reservation"
+              name="lengthRes"
+              variant="filled"
+              value={responses.lengthRes}
+              onChange={handleResponseChanges}
+              required
+            >
+              <MenuItem value="">Not Selected</MenuItem>
+              <MenuItem value="30 Minutes">30 Minutes</MenuItem>
+              <MenuItem value="60 Minutes">60 Minutes</MenuItem>
+              <MenuItem value="90 Minutes">90 Minutes</MenuItem>
+              <MenuItem value="120 Minutes">120 Minutes</MenuItem>
+            </Select>
+          </FormControl>
           <TextField
             label="Room Number"
             type="number"
@@ -156,35 +173,50 @@ export default function RoomSchedulingRequest() {
             onChange={handleResponseChanges}
             required
           />
-          <Select
-            label="Request Status"
-            name="reqStatus"
-            variant="filled"
-            value={responses.reqStatus}
-            onChange={handleResponseChanges}
-            required
+
+          <FormControl>
+            <InputLabel id="reqStatus-label">Request Status *</InputLabel>
+            <Select
+              labelId="reqStatus-label"
+              label="Request Status"
+              name="reqStatus"
+              variant="filled"
+              value={responses.reqStatus}
+              onChange={handleResponseChanges}
+              required
+            >
+              <MenuItem value="">Not Selected</MenuItem>
+              <MenuItem value="Unassigned">Unassigned</MenuItem>
+              <MenuItem value="Assigned">Assigned</MenuItem>
+              <MenuItem value="In Progress">In Progress</MenuItem>
+              <MenuItem value="Closed">Closed</MenuItem>
+            </Select>
+          </FormControl>
+
+          <FormControl>
+            <InputLabel id="priority-label">Priority *</InputLabel>
+            <Select
+              labelId="priority-label"
+              label="Priority"
+              name="priority"
+              variant="filled"
+              value={responses.priority}
+              onChange={handleResponseChanges}
+              required
+            >
+              <MenuItem value="">Not Selected</MenuItem>
+              <MenuItem value="Low">Low</MenuItem>
+              <MenuItem value="Medium">Medium</MenuItem>
+              <MenuItem value="High">High</MenuItem>
+              <MenuItem value="Emergency">Emergency</MenuItem>
+            </Select>
+          </FormControl>
+          <Button
+            type="submit"
+            variant="contained"
+            className="w-32 self-center pt-10"
+            sx={{ borderRadius: "30px" }}
           >
-            <MenuItem value="">Not Selected</MenuItem>
-            <MenuItem value="Unassigned">Unassigned</MenuItem>
-            <MenuItem value="Assigned">Assigned</MenuItem>
-            <MenuItem value="In Progress">In Progress</MenuItem>
-            <MenuItem value="Closed">Closed</MenuItem>
-          </Select>
-          <Select
-            label="Priority"
-            name="priority"
-            variant="filled"
-            value={responses.priority}
-            onChange={handleResponseChanges}
-            required
-          >
-            <MenuItem value="">Not Selected</MenuItem>
-            <MenuItem value="Low">Low</MenuItem>
-            <MenuItem value="Medium">Medium</MenuItem>
-            <MenuItem value="High">High</MenuItem>
-            <MenuItem value="Emergency">Emergency</MenuItem>
-          </Select>
-          <Button type="submit" variant="contained">
             Submit
           </Button>
         </form>
@@ -222,32 +254,44 @@ export default function RoomSchedulingRequest() {
       </div>
 
       {/* Table of submitted requests */}
-      {/*<div>*/}
-      {/*    <Table>*/}
-      {/*        <TableHead>*/}
-      {/*            <TableRow>*/}
-      {/*                <TableCell>Employee Name</TableCell>*/}
-      {/*                <TableCell>Start Time</TableCell>*/}
-      {/*                <TableCell>Length of Reservation</TableCell>*/}
-      {/*                <TableCell>Room Number</TableCell>*/}
-      {/*                <TableCell>Request Status</TableCell>*/}
-      {/*                <TableCell>Priority</TableCell>*/}
-      {/*            </TableRow>*/}
-      {/*        </TableHead>*/}
-      {/*        <TableBody>*/}
-      {/*            {submittedData.map(({employName, lengthRes, priority, reqStatus, roomNum, startTime}, index) => (*/}
-      {/*                <TableRow key={index}>*/}
-      {/*                    <TableCell>{employName}</TableCell>*/}
-      {/*                    <TableCell>{startTime}</TableCell>*/}
-      {/*                    <TableCell>{lengthRes}</TableCell>*/}
-      {/*                    <TableCell>{roomNum}</TableCell>*/}
-      {/*                    <TableCell>{reqStatus}</TableCell>*/}
-      {/*                    <TableCell>{priority}</TableCell>*/}
-      {/*                </TableRow>*/}
-      {/*            ))}*/}
-      {/*        </TableBody>*/}
-      {/*    </Table>*/}
-      {/*</div>*/}
+      <div>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Employee Name</TableCell>
+              <TableCell>Start Time</TableCell>
+              <TableCell>Length of Reservation</TableCell>
+              <TableCell>Room Number</TableCell>
+              <TableCell>Request Status</TableCell>
+              <TableCell>Priority</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {sched.map(
+              (
+                {
+                  employName,
+                  lengthRes,
+                  priority,
+                  reqStatus,
+                  roomNum,
+                  startTime,
+                },
+                index,
+              ) => (
+                <TableRow key={index}>
+                  <TableCell>{employName}</TableCell>
+                  <TableCell>{startTime}</TableCell>
+                  <TableCell>{lengthRes}</TableCell>
+                  <TableCell>{roomNum}</TableCell>
+                  <TableCell>{reqStatus}</TableCell>
+                  <TableCell>{priority}</TableCell>
+                </TableRow>
+              ),
+            )}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

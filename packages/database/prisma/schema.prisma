@@ -40,7 +40,7 @@ model RoomScheduler {
   reqStatus  String
   priority   String
 
-  sent_room Nodes @relation("send_room", fields: [roomNum], references: [node_id], onDelete: Cascade) // Maybe need to change reference to short_name/long_name later
+  // sent_room Nodes @relation("send_room", fields: [roomNum], references: [node_id], onDelete: Cascade) // Maybe need to change reference to short_name/long_name later
 }
 
 // Flower requests are saved
@@ -69,8 +69,7 @@ model Nodes {
   long_name  String
 
   // Foreign Key Reference
-  flower_delivery_room Flowers[]       @relation("flower_room")
-  room_scheduling      RoomScheduler[] @relation("send_room")
+  flower_delivery_room Flowers[] @relation("flower_room")
 }
 
 // Edges are all set

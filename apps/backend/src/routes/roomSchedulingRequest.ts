@@ -19,7 +19,8 @@ router.post("/", async function (req: Request, res: Response) {
     });
   } catch (e) {
     console.log(e);
-    return res.sendStatus(400);
+    res.sendStatus(400);
+    return;
   }
   return res.sendStatus(200);
 });
@@ -35,23 +36,23 @@ router.get("/", async function (req: Request, res: Response) {
   res.sendStatus(200);
 });
 
-router.delete("/:id", async function (req: Request, res: Response) {
-  console.log(req.params.id);
-  const id: number = parseInt(req.params.id);
-  console.log(id);
-  try {
-    console.log();
-    await PrismaClient.roomScheduler.delete({
-      where: {
-        id: id,
-      },
-    });
-  } catch (e) {
-    console.log(e);
-    res.sendStatus(400);
-    return;
-  }
-  res.sendStatus(200);
-});
+// router.delete("/:id", async function (req: Request, res: Response) {
+//   console.log(req.params.id);
+//   const id: number = parseInt(req.params.id);
+//   console.log(id);
+//   try {
+//     console.log();
+//     await PrismaClient.roomScheduler.delete({
+//       where: {
+//         id: id,
+//       },
+//     });
+//   } catch (e) {
+//     console.log(e);
+//     res.sendStatus(400);
+//     return;
+//   }
+//   res.sendStatus(200);
+// });
 
 export default router;

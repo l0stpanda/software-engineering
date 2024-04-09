@@ -6,7 +6,7 @@ import { Edges, Nodes } from "database";
 //This handles uploads and downloads on the same page
 const SingleDisplay = () => {
   const [edges, setEdges] = useState<Edges[]>([]); // Initialize state to hold the edges data
-  const [nodes, setNode] = useState<Nodes[]>([]); // Initialize state to hold the edges data
+  const [nodes, setNode] = useState<Nodes[]>([]); // Initialize state to hold the nodes data
 
   useEffect(() => {
     displayEdges().then();
