@@ -1,4 +1,6 @@
 import trashIcon from "../assets/trashicon.png";
+import {Select, MenuItem, SelectChangeEvent} from "@mui/material";
+import React, {useState} from "react";
 
 type FlowerReqData = {
   id: number;
@@ -14,6 +16,11 @@ function PendingRequestItem(props: FlowerReqData) {
     return dateToFormat.toLocaleDateString();
   }
 
+  const [status, setStatus] = useState<string>(props.status);
+  function handleStatusDropdown(e :SelectChangeEvent){
+      setStatus(e.target.value);
+  }
+
   // Formats date string to time format
   function formatTime(requestDate: string) {
     const dateToFormat: Date = new Date(requestDate);
@@ -24,9 +31,12 @@ function PendingRequestItem(props: FlowerReqData) {
     <tr className="bg-background border-b-2 border-secondary" key={props.id}>
       <td className="p-3 text-sm">{props.id}</td>
       <td className="p-3 text-sm">
-        <span className="p-1.5 text-xs font-medium uppercase tracking-wider bg-secondary rounded-lg">
-          {props.status}
-        </span>
+            <Select name="status" required={true} label="Status" onChange={handleStatusDropdown} value={status} defaultValue={props.status}>
+                <MenuItem value={"unassigned"}>Unassigned</MenuItem>
+                <MenuItem value={"assigned"}>Assigned</MenuItem>
+                <MenuItem value={"Pending"}>InProgress</MenuItem>
+                <MenuItem value={"closed"}>Closed</MenuItem>
+            </Select>
       </td>
       <td className="p-3 text-sm">{formatDate(props.requestDate)}</td>
       <td className="p-3 text-sm">{formatTime(props.requestDate)}</td>
