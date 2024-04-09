@@ -7,9 +7,18 @@ const router: Router = express.Router();
 router.post("/", async function (req: Request, res: Response) {
   const input: flowerReqFields = req.body;
   try {
+    const roomStuff = await PrismaClient.nodes.findMany({
+      where: {
+        long_name: input.roomNum,
+      },
+    });
+
+    console.log(roomStuff);
+    //The roomStuff[0] is assuming that we are only ever going to reference unique long names
     await PrismaClient.flowers.create({
       data: {
-        room: input.roomNum,
+        room: roomStuff[0].node_id,
+        name: input.roomNum,
         sent_by: input.senderName,
         sent_to: input.sendTo,
         note: input.attachedNote,
@@ -27,6 +36,25 @@ router.post("/", async function (req: Request, res: Response) {
 router.get("/", async function (req: Request, res: Response) {
   try {
     res.send(await PrismaClient.flowers.findMany());
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(400);
+    return;
+  }
+  res.sendStatus(200);
+});
+
+router.delete("/:id", async function (req: Request, res: Response) {
+  console.log(req.params.id);
+  const id: number = parseInt(req.params.id);
+  console.log(id);
+  try {
+    console.log();
+    await PrismaClient.flowers.delete({
+      where: {
+        id: id,
+      },
+    });
   } catch (e) {
     console.log(e);
     res.sendStatus(400);
