@@ -1,17 +1,22 @@
-import React from "react";
 import {
+  //Autocomplete,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  //FormControl,
+  //InputLabel,
   TextField,
 } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
 import BackgroundPattern from "../components/backgroundPattern.tsx";
 import { flowerReqFields } from "common/src/flowerRequest.ts";
+import LocationDropdown from "../components/locationDropdown.tsx";
+//import {SelectChangeEvent} from "@mui/material/Select";
 import { useAuth0 } from "@auth0/auth0-react";
+
 
 function FlowerRequest() {
   const { getAccessTokenSilently } = useAuth0();
@@ -43,6 +48,7 @@ function FlowerRequest() {
   // Clears form, and outputs responses
   async function handleSubmit() {
     // Catch required fields not being filled out
+    console.log(responses);
     if (
       responses.sendTo == "" ||
       responses.senderName == "" ||
@@ -79,6 +85,10 @@ function FlowerRequest() {
     clear();
   }
 
+  function updateRoom(val: string) {
+    setResponses({ ...responses, roomNum: val });
+  }
+
   return (
     <div className="justify-center grid h-screen place-items-center">
       <BackgroundPattern />
@@ -87,15 +97,9 @@ function FlowerRequest() {
           Flower Delivery Request
         </h1>
         <div className="flex flex-col gap-4 my-4">
-          <TextField
-            onChange={handleResponseChanges}
-            value={responses.roomNum}
-            name="roomNum"
-            id="roomNum"
-            variant="filled"
-            label="Room Name"
-            required={true}
-          />
+          {/*This handles the dropdown stuff*/}
+          <LocationDropdown room={responses.roomNum} update={updateRoom} />
+          {/*This handles the dropdown stuff*/}
           <TextField
             onChange={handleResponseChanges}
             value={responses.senderName}

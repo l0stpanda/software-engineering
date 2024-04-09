@@ -21,6 +21,11 @@ function PendingRequestItem(props: FlowerReqData) {
     return dateToFormat.toLocaleTimeString();
   }
 
+  // async function idToName(id : string){
+  //     const name = await axios.get(`/import/idToName/${id}`);
+  //     console.log(name.data);
+  //     return name.data;
+  // }
   //takes in the id of the request to be deleted and deletes in the database
   async function deleteData(idVal: number) {
     console.log(idVal);

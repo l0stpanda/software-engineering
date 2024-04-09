@@ -63,25 +63,29 @@ const SingleDisplay = () => {
       <div hidden={tableDisplayed !== 0} id={`tab-${0}`}>
         {tableDisplayed === 0 && (
           <table className="w-full">
-            <thead className="bg-secondary border-b-2 border-b-primary">
-              <tr>
-                <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                  Start Node
-                </th>
-                <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                  End Node
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {edges.map((field) => (
-                <tr className="bg-background border-b-2 border-secondary">
-                  <td className="p-3 text-sm">{field.start_node}</td>
-                  <td className="p-3 text-sm">{field.end_node}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <thead className="bg-secondary border-b-2 border-b-primary">
+          <tr>
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              Node ID
+            </th>
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              Start Node
+            </th>
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              End Node
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {edges.map((field) => (
+            <tr className="bg-background border-b-2 border-secondary">
+              <td className="p-3 text-sm">{field.id}</td>
+              <td className="p-3 text-sm">{field.start_node}</td>
+              <td className="p-3 text-sm">{field.end_node}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
         )}
       </div>
 
