@@ -177,9 +177,9 @@ function Map() {
         </Button>
       </div>
 
-      <div>
+      <div className="inline-flex justify-end items-center my-5">
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Age</InputLabel>
+          <InputLabel id="demo-simple-select-label">Path Algorithm</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
