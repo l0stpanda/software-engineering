@@ -1,7 +1,11 @@
 import React from "react";
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Outlet,
+  useNavigate,
+} from "react-router-dom";
 import HeroPage from "./routes/heroPage.tsx";
-import RegisterPage from "./routes/registerPage.tsx";
 import MapPage from "./routes/mapPage.tsx";
 import FlowerRequest from "./routes/flowerRequest.tsx";
 import PendingFlowerRequests from "./routes/displayFlowerRequests.tsx";
@@ -14,6 +18,9 @@ import RoomSchedulingRequest from "./routes/roomSchedulingRequest.tsx";
 import MedicineDeliveryRequest from "./routes/MedicineDelivery.tsx";
 import MedicalDeviceRequest from "./routes/medicalDeviceRequest.tsx";
 import EditMap from "./routes/editMapPage.tsx";
+import { Auth0Provider } from "@auth0/auth0-react";
+import LoadingPage from "./routes/LoadingCallback.tsx";
+import SpinningLoader from "./components/spinningLoader.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -27,48 +34,48 @@ function App() {
           element: <HeroPage />,
         },
         {
-          path: "register",
-          element: <RegisterPage />,
-        },
-        {
           path: "map",
           element: <MapPage />,
         },
         {
           path: "flowerrequest",
-          element: <FlowerRequest />,
+          element: <LoadingPage component={FlowerRequest} />,
         },
         {
           path: "viewpending",
-          element: <PendingFlowerRequests />,
+          element: <LoadingPage component={PendingFlowerRequests} />,
         },
         {
           path: "imp",
-          element: <ImportRouteE />,
+          element: <LoadingPage component={ImportRouteE} />,
         },
         {
           path: "exp",
-          element: <ExportRouteE />,
+          element: <LoadingPage component={ExportRouteE} />,
         },
         {
           path: "displayTables",
-          element: <ReadRouteE />,
+          element: <LoadingPage component={ReadRouteE} />,
         },
         {
           path: "lostItemRequest",
-          element: <LostItemRequest />,
+          element: <LoadingPage component={LostItemRequest} />,
         },
         {
           path: "roomRequest",
-          element: <RoomSchedulingRequest />,
+          element: <LoadingPage component={RoomSchedulingRequest} />,
         },
         {
           path: "medicineRequest",
-          element: <MedicineDeliveryRequest />,
+          element: <LoadingPage component={MedicineDeliveryRequest} />,
         },
         {
           path: "medicalDeviceRequest",
-          element: <MedicalDeviceRequest />,
+          element: <LoadingPage component={MedicalDeviceRequest} />,
+        },
+        {
+          path: "callback",
+          element: <LoadingPage component={SpinningLoader} />,
         },
         {
           path: "editMap",
@@ -81,11 +88,26 @@ function App() {
   return <RouterProvider router={router} />;
 
   function Root() {
+    const navigate = useNavigate();
+
     return (
-      <div className="w-full flex flex-col">
-        <CustomNavBar />
-        <Outlet />
-      </div>
+      <Auth0Provider
+        useRefreshTokens
+        cacheLocation="localstorage"
+        domain="dev-xiwtn1gzwzvxk2ab.us.auth0.com"
+        clientId="hpsZAjzYnHxL5mb7stld400psWkr1WJq"
+        authorizationParams={{
+          redirect_uri: "http://localhost:3000/callback",
+        }}
+        onRedirectCallback={(appState) => {
+          navigate(appState?.returnTo || window.location.pathname);
+        }}
+      >
+        <div className="w-full flex flex-col">
+          <CustomNavBar />
+          <Outlet />
+        </div>
+      </Auth0Provider>
     );
   }
 }
