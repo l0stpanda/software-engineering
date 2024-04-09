@@ -18,7 +18,6 @@ const SingleDisplay = () => {
   const [nodes, setNode] = useState<Nodes[]>([]); // Initialize state to hold the nodes data
   const [tableDisplayed, setTableDisplaying] = useState<number>(0);
 
-
   useEffect(() => {
     displayEdges().then();
     displayNodes().then();
