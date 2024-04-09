@@ -1,9 +1,9 @@
 //import { Edge, InputNode } from "./FloorMap.tsx";
 import { useEffect, useRef, useState } from "react";
 import { Graph } from "../objects/Graph.ts";
-import { BFS } from "../objects/BFS.ts";
+//import { BFS } from "../objects/BFS.ts";
 import { MapNode } from "../objects/MapNode.ts";
-//import {AStar} from "../objects/AStar.ts";
+import { AStar } from "../objects/AStar.ts";
 
 //import mapImg from "../assets/LL1Map.png";
 
@@ -32,7 +32,7 @@ function FloorNode(props: FloorNodesProps) {
     height: props.divDim.height,
   });
   const [clicked, setClicked] = useState<string[]>([]);
-  const bfs = new BFS(props.graph);
+  const bfs = new AStar(props.graph);
   const floor: string = getFloorByImage(props.imageSrc);
   const nodes: MapNode[] = Object.values(props.graph)[0];
   const [ids, setIds] = useState<{
