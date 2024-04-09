@@ -18,6 +18,7 @@ router.post("/", async function (req: Request, res: Response) {
     await PrismaClient.flowers.create({
       data: {
         room: roomStuff[0].node_id,
+        name: input.roomNum,
         sent_by: input.senderName,
         sent_to: input.sendTo,
         note: input.attachedNote,
@@ -35,12 +36,12 @@ router.post("/", async function (req: Request, res: Response) {
 router.get("/", async function (req: Request, res: Response) {
   try {
     res.send(await PrismaClient.flowers.findMany());
+    return;
   } catch (e) {
     console.log(e);
     res.sendStatus(400);
     return;
   }
-  res.sendStatus(200);
 });
 
 router.delete("/:id", async function (req: Request, res: Response) {

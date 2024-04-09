@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import axios from "axios";
 type FlowerReqData = {
   id: number;
-  room: string;
+  name: string;
   requestDate: string;
   status: string;
 };
@@ -66,7 +66,7 @@ function PendingRequestItem(props: FlowerReqData) {
       </td>
       <td className="p-3 text-sm">{formatDate(props.requestDate)}</td>
       <td className="p-3 text-sm">{formatTime(props.requestDate)}</td>
-      <td className="p-3 text-sm">{props.room}</td>
+      <td className="p-3 text-sm">{props.name}</td>
       <td className="p-3 text-sm">
         <button>
           <img
