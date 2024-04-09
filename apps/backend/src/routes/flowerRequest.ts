@@ -14,10 +14,10 @@ router.post("/", async function (req: Request, res: Response) {
     });
 
     console.log(roomStuff);
-
+    //The roomStuff[0] is assuming that we are only ever going to reference unique long names
     await PrismaClient.flowers.create({
       data: {
-        room: roomStuff.toString(),
+        room: roomStuff[0].node_id,
         sent_by: input.senderName,
         sent_to: input.sendTo,
         note: input.attachedNote,

@@ -129,16 +129,35 @@ router.get("/nodeLongNames", async function (req: Request, res: Response) {
       },
     });
 
-    const stuff = JSON.stringify(response).replaceAll("long_name", "label");
-    console.log(stuff);
-    const json_data = eval(stuff);
-    console.log(json_data);
-    res.send(json_data);
+    res.send(response);
+    //const stuff = JSON.stringify(response).replaceAll("long_name", "label");
+    //console.log(stuff);
+    //const json_data = eval(stuff);
+    //console.log(json_data);
+    //res.send(json_data);
   } catch (e) {
     console.log(e);
     res.sendStatus(400);
     return;
   }
-  res.sendStatus(200);
+  //res.sendStatus(200);
+});
+
+router.get("/idToName/:id", async function (req: Request, res: Response) {
+  const id = req.params.id;
+  try {
+    console.log("id is " + id);
+    const row = PrismaClient.nodes.findMany({
+      where: {
+        node_id: id,
+      },
+      select: {
+        short_name: true,
+      },
+    });
+    res.send(row);
+  } catch (e) {
+    res.sendStatus(400);
+  }
 });
 export default router;

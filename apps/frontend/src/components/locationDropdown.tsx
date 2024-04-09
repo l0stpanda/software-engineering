@@ -1,7 +1,7 @@
 import { Autocomplete, FormControl, TextField } from "@mui/material";
 import { SyntheticEvent, useEffect, useState } from "react";
 
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 type locationProps = {
   room: string;
   update: (a: string) => void;
@@ -15,8 +15,18 @@ export default function LocationDropdown(prop: locationProps) {
   }, []);
 
   async function handleDropDown() {
-    const res = await axios.get("api/import/nodeLongNames");
-    setRoom(res.data);
+    const res: AxiosResponse<{ long_name: string }[]> = await axios.get<
+      { long_name: string }[]
+    >("api/import/nodeLongNames");
+    const arr: string[] = [];
+    // console.log(res.data.length);
+    for (let i = 0; res.data.length > i; i++) {
+      console.log("here");
+      arr.push(res.data[i].long_name);
+    }
+
+    console.log("THIS IS THE ARRAY: " + arr);
+    setRoom(arr);
   }
 
   //Seperate for the dropdown changes
@@ -26,6 +36,7 @@ export default function LocationDropdown(prop: locationProps) {
   ) {
     if (value) {
       //value = value.replace("{label: '", "");
+      console.log(value);
       prop.update(value);
     }
   }

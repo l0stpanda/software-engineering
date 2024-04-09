@@ -77,14 +77,9 @@ function FlowerRequest() {
   }
 
   function updateRoom(val: string) {
-    const test: { label: string } = JSON.parse(val);
-    console.log(test.label);
-    const value = eval(val);
-    console.log(value);
-    responses.roomNum = val;
-
-    setResponses(responses);
+    setResponses({ ...responses, roomNum: val });
   }
+
   return (
     <div className="justify-center grid h-screen place-items-center">
       <BackgroundPattern />
