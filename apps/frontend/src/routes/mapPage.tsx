@@ -8,7 +8,7 @@ import {
 import { useState } from "react";
 import BackgroundPattern from "../components/backgroundPattern.tsx";
 import { Graph } from "../objects/Graph.ts";
-import lowerLevel1 from "../assets/00_thelowerlevel1.png";
+import lowerLevel1 from "../assets/LL1Map.png";
 import lowerLevel2 from "../assets/00_thelowerlevel2.png";
 import floor1 from "../assets/01_thefirstfloor.png";
 import floor2 from "../assets/02_thesecondfloor.png";
