@@ -15,6 +15,7 @@ import floor2 from "../assets/02_thesecondfloor.png";
 import floor3 from "../assets/03_thethirdfloor.png";
 
 import FloorNode from "../components/FloorNode.tsx";
+import { ArrowBack } from "@mui/icons-material";
 
 function Map() {
   const divRef = useRef<HTMLDivElement>(null);
@@ -197,9 +198,13 @@ function Map() {
         {/*boxes.*/}
         <div
           className="flex flex-col
-                w-1/4
-                mt-10"
+                w-1/4"
         >
+          <a href="">
+            <Button sx={{ margin: "0 0 1rem 1rem" }} startIcon={<ArrowBack />}>
+              Home
+            </Button>
+          </a>
           <div
             className="mr-8
                     ml-5

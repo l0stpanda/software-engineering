@@ -7,6 +7,7 @@ import importRouter from "./routes/import.ts";
 import flowerRequest from "./routes/flowerRequest.ts";
 import loginRequest from "./routes/login.ts";
 import readRouter from "./routes/read.ts";
+import { auth } from "express-oauth2-jwt-bearer";
 // import readRouterE from "./routes/readE.ts";
 // import readRouterN from "./routes/readN.ts";
 
@@ -28,15 +29,24 @@ app.use(cookieParser()); // Cookie parser
 // Setup routers. ALL ROUTERS MUST use /api as a start point, or they
 // won't be reached by the default proxy and prod setup
 app.use("/api/high-score", exampleRouter);
-app.use("/api/import", importRouter);
-
-app.use("/api/flowerRequest", flowerRequest);
-app.use("/api/login", loginRequest);
-app.use("/api/read", readRouter);
 
 app.use("/healthcheck", (req, res) => {
   res.status(200).send();
 });
+
+app.use("/api/read", readRouter);
+app.use("/api/import", importRouter);
+app.use("/api/flowerRequest", flowerRequest);
+app.use("/api/login", loginRequest);
+
+// Enable auth0 enforcement
+app.use(
+  auth({
+    audience: "/api",
+    issuerBaseURL: "dev-xiwtn1gzwzvxk2ab.us.auth0.com",
+    tokenSigningAlg: "RS256",
+  }),
+);
 
 /**
  * Catch all 404 errors, and forward them to the error handler
