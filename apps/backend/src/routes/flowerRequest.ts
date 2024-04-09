@@ -62,4 +62,27 @@ router.delete("/:id", async function (req: Request, res: Response) {
   res.sendStatus(200);
 });
 
+//update the status
+router.put("/", async function (req: Request, res: Response) {
+  const id = parseInt(req.params.id);
+  const status = req.params.status;
+
+  console.log("id is: " + id + "\n" + "status is : " + status);
+  try {
+    await PrismaClient.flowers.update({
+      where: {
+        id: id,
+      },
+      data: {
+        status: status,
+      },
+    });
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(400);
+    return;
+  }
+  res.sendStatus(200);
+});
+
 export default router;
