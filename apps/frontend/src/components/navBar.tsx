@@ -67,18 +67,17 @@ function CustomNavBar() {
             <Button component="a" href="map">
               Map
             </Button>
+            <Button component="a" href="imp">
+              Import
+            </Button>
             <Button component="a" href="exp">
               Export
             </Button>
-
             <Button
               onClick={handleRequestsOpen}
               startIcon={<ArrowDropDownIcon />}
             >
               Service Requests
-            </Button>
-            <Button component="a" href="imp">
-              Admin
             </Button>
             <Menu
               open={open}

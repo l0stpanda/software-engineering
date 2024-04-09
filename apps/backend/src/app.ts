@@ -36,7 +36,7 @@ app.use("/healthcheck", (req, res) => {
 
 app.use("/api/read", readRouter);
 app.use("/api/import", importRouter);
-
+app.use("/api/flowerRequest", flowerRequest);
 app.use("/api/login", loginRequest);
 
 // Enable auth0 enforcement
@@ -47,8 +47,6 @@ app.use(
     tokenSigningAlg: "RS256",
   }),
 );
-
-app.use("/api/flowerRequest", flowerRequest);
 
 /**
  * Catch all 404 errors, and forward them to the error handler
