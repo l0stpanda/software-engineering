@@ -21,6 +21,7 @@ model HighScore {
 
 // We left HighScore for now because of errors that it is causing
 
+// We have this but don't really need it because we are using auth0 and that handles a lot of stuff
 // Users have fields that will be added to the database on registration
 // model Staff {
 //   emp_id    Int      @id @default(autoincrement())
@@ -35,6 +36,7 @@ model HighScore {
 model Flowers {
   id          Int      @id @default(autoincrement())
   room        String
+  name        String
   sent_by     String   @db.VarChar(50)
   sent_to     String   @db.VarChar(50)
   requestDate DateTime @default(now())

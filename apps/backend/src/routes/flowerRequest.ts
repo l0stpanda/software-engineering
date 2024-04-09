@@ -18,6 +18,7 @@ router.post("/", async function (req: Request, res: Response) {
     await PrismaClient.flowers.create({
       data: {
         room: roomStuff[0].node_id,
+        name: input.roomNum,
         sent_by: input.senderName,
         sent_to: input.sendTo,
         note: input.attachedNote,
