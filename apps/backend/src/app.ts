@@ -7,6 +7,7 @@ import importRouter from "./routes/import.ts";
 import flowerRequest from "./routes/flowerRequest.ts";
 import loginRequest from "./routes/login.ts";
 import readRouter from "./routes/read.ts";
+import roomScheduler from "./routes/roomSchedulingRequest.ts";
 // import readRouterE from "./routes/readE.ts";
 // import readRouterN from "./routes/readN.ts";
 
@@ -33,6 +34,7 @@ app.use("/api/import", importRouter);
 app.use("/api/flowerRequest", flowerRequest);
 app.use("/api/login", loginRequest);
 app.use("/api/read", readRouter);
+app.use("/api/roomSchedulingRequest", roomScheduler);
 
 app.use("/healthcheck", (req, res) => {
   res.status(200).send();
