@@ -1,4 +1,4 @@
-import mapImg from "../assets/LL1Map.png";
+import mapImg from "../assets/00_thelowerlevel1.png";
 import React, { useState } from "react";
 import { Dialog } from "@mui/material";
 import LoginDialog from "../components/loginDialog.tsx";
