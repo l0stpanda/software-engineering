@@ -51,7 +51,9 @@ export default function LocationDropdown(prop: locationProps) {
           value={prop.room}
           options={rooms}
           onChange={handleDropdown}
-          renderInput={(params) => <TextField {...params} label={prop.label} />}
+          renderInput={(params) => (
+            <TextField {...params} variant="filled" label={prop.label} />
+          )}
         >
           {/*{rooms.map((one: { long_name: string | number | readonly string[] | undefined; }) => <MenuItem value={one.long_name}>one.long_name</MenuItem>)}*/}
         </Autocomplete>
