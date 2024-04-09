@@ -4,6 +4,8 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
+  InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -90,31 +92,34 @@ export default function RoomSchedulingRequest() {
   }
 
   return (
-    <div>
-      {/* Header for Page */}
-      <div>
-        <h1>Schedule A Room:</h1>
-      </div>
-
-      {/* Request Form */}
-      <div>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <TextField
-              label="Employee Name"
-              type="text"
-              name="employName"
-              value={responses.employName}
-              onChange={handleResponseChanges}
-            />
-          </div>
-          <div>
+    <div className="justify-center grid h-screen place-items-center">
+      <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-4">
+        <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
+          Room Scheduling Request
+        </h1>
+        <form className="flex flex-col gap-4 my-4" onSubmit={handleSubmit}>
+          <TextField
+            label="Employee Name"
+            type="text"
+            name="employName"
+            variant="filled"
+            value={responses.employName}
+            onChange={handleResponseChanges}
+            required
+          />
+          <FormControl>
+            <InputLabel id="startTime-label">Start Time</InputLabel>
             <Select
-              label="Starting Time"
+              labelId="startTime-label"
+              label="Start Time"
               name="startTime"
+              id="startTime"
+              variant="filled"
               value={responses.startTime}
               onChange={handleResponseChanges}
+              required
             >
+              Start Time
               <MenuItem value="">Not Selected</MenuItem>
               <MenuItem value="9:00AM">9:00AM</MenuItem>
               <MenuItem value="10:00AM">10:00AM</MenuItem>
@@ -126,63 +131,62 @@ export default function RoomSchedulingRequest() {
               <MenuItem value="4:00PM">4:00PM</MenuItem>
               <MenuItem value="5:00PM">5:00PM</MenuItem>
             </Select>
-          </div>
-          <div>
-            <Select
-              label="Length of Reservation"
-              name="lengthRes"
-              value={responses.lengthRes}
-              onChange={handleResponseChanges}
-            >
-              <MenuItem value="">Not Selected</MenuItem>
-              <MenuItem value="30 Minutes">30 Minutes</MenuItem>
-              <MenuItem value="60 Minutes">60 Minutes</MenuItem>
-              <MenuItem value="90 Minutes">90 Minutes</MenuItem>
-              <MenuItem value="120 Minutes">120 Minutes</MenuItem>
-            </Select>
-          </div>
-          <div>
-            <TextField
-              label="Room Number"
-              type="number"
-              name="roomNum"
-              value={responses.roomNum}
-              onChange={handleResponseChanges}
-            />
-          </div>
-          <div>
-            <Select
-              label="Request Status"
-              name="reqStatus"
-              value={responses.reqStatus}
-              onChange={handleResponseChanges}
-            >
-              <MenuItem value="">Not Selected</MenuItem>
-              <MenuItem value="Unassigned">Unassigned</MenuItem>
-              <MenuItem value="Assigned">Assigned</MenuItem>
-              <MenuItem value="In Progress">In Progress</MenuItem>
-              <MenuItem value="Closed">Closed</MenuItem>
-            </Select>
-          </div>
-          <div>
-            <Select
-              label="Priority"
-              name="priority"
-              value={responses.priority}
-              onChange={handleResponseChanges}
-            >
-              <MenuItem value="">Not Selected</MenuItem>
-              <MenuItem value="Low">Low</MenuItem>
-              <MenuItem value="Medium">Medium</MenuItem>
-              <MenuItem value="High">High</MenuItem>
-              <MenuItem value="Emergency">Emergency</MenuItem>
-            </Select>
-          </div>
-          <div>
-            <Button type="submit" variant="contained">
-              Submit
-            </Button>
-          </div>
+          </FormControl>
+
+          <Select
+            label="Length of Reservation"
+            name="lengthRes"
+            variant="filled"
+            value={responses.lengthRes}
+            onChange={handleResponseChanges}
+            required
+          >
+            <MenuItem value="">Not Selected</MenuItem>
+            <MenuItem value="30 Minutes">30 Minutes</MenuItem>
+            <MenuItem value="60 Minutes">60 Minutes</MenuItem>
+            <MenuItem value="90 Minutes">90 Minutes</MenuItem>
+            <MenuItem value="120 Minutes">120 Minutes</MenuItem>
+          </Select>
+          <TextField
+            label="Room Number"
+            type="number"
+            name="roomNum"
+            variant="filled"
+            value={responses.roomNum}
+            onChange={handleResponseChanges}
+            required
+          />
+          <Select
+            label="Request Status"
+            name="reqStatus"
+            variant="filled"
+            value={responses.reqStatus}
+            onChange={handleResponseChanges}
+            required
+          >
+            <MenuItem value="">Not Selected</MenuItem>
+            <MenuItem value="Unassigned">Unassigned</MenuItem>
+            <MenuItem value="Assigned">Assigned</MenuItem>
+            <MenuItem value="In Progress">In Progress</MenuItem>
+            <MenuItem value="Closed">Closed</MenuItem>
+          </Select>
+          <Select
+            label="Priority"
+            name="priority"
+            variant="filled"
+            value={responses.priority}
+            onChange={handleResponseChanges}
+            required
+          >
+            <MenuItem value="">Not Selected</MenuItem>
+            <MenuItem value="Low">Low</MenuItem>
+            <MenuItem value="Medium">Medium</MenuItem>
+            <MenuItem value="High">High</MenuItem>
+            <MenuItem value="Emergency">Emergency</MenuItem>
+          </Select>
+          <Button type="submit" variant="contained">
+            Submit
+          </Button>
         </form>
       </div>
 
@@ -191,17 +195,17 @@ export default function RoomSchedulingRequest() {
         <DialogContent>
           <strong>Here are your responses:</strong>
           <br />
-          Room Name: {responses.employName}
+          Employee Name: {responses.employName}
           <br />
-          Staff Member Name: {responses.startTime}
+          Start Time: {responses.startTime}
           <br />
-          Patient Name: {responses.lengthRes}
+          Length: {responses.lengthRes}
           <br />
-          Medicine Name: {responses.roomNum}
+          Room Number: {responses.roomNum}
           <br />
-          Dosage: {responses.reqStatus}
+          Status: {responses.reqStatus}
           <br />
-          Date of Delivery: {responses.priority}
+          Priority: {responses.priority}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleSubmitClose} autoFocus>
