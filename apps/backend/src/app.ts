@@ -36,19 +36,20 @@ app.use("/healthcheck", (req, res) => {
   res.status(200).send();
 });
 
-app.use("/api/read", readRouter);
 app.use("/api/import", importRouter);
-app.use("/api/flowerRequest", flowerRequest);
 app.use("/api/login", loginRequest);
+app.use("/api/read", readRouter);
 
 // Enable auth0 enforcement
 app.use(
   auth({
     audience: "/api",
-    issuerBaseURL: "dev-xiwtn1gzwzvxk2ab.us.auth0.com",
+    issuerBaseURL: "https://dev-xiwtn1gzwzvxk2ab.us.auth0.com",
     tokenSigningAlg: "RS256",
   }),
 );
+
+app.use("/api/flowerRequest", flowerRequest);
 
 /**
  * Catch all 404 errors, and forward them to the error handler
