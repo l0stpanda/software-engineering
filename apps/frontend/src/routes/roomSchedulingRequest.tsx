@@ -222,14 +222,25 @@ export default function RoomSchedulingRequest() {
               <MenuItem value="Emergency">Emergency</MenuItem>
             </Select>
           </FormControl>
-          <Button
-            type="submit"
-            variant="contained"
-            className="w-32 self-center pt-10"
-            sx={{ borderRadius: "30px" }}
-          >
-            Submit
-          </Button>
+          <div className="flex justify-center">
+            <Button
+              type="submit"
+              variant="contained"
+              className="w-32 self-center pt-10"
+              sx={{ borderRadius: "30px", marginRight: "10px" }}
+            >
+              SUBMIT
+            </Button>
+
+            <Button
+              onClick={clear}
+              variant="contained"
+              className="w-32 self-center pt-10"
+              sx={{ borderRadius: "30px" }}
+            >
+              CLEAR
+            </Button>
+          </div>
         </form>
       </div>
 

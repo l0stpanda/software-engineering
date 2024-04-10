@@ -242,11 +242,13 @@ function MedicineDeliveryRequest() {
               </FormControl>
             </form>
           </div>
-          <MedicineRequestButtons
-            delivery={delivery}
-            clear={clear}
-            submit={submit}
-          />
+          <div className="flex justify-center">
+            <MedicineRequestButtons
+              delivery={delivery}
+              clear={clear}
+              submit={submit}
+            />
+          </div>
         </div>
       </div>
 
