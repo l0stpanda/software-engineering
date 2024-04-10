@@ -1,11 +1,25 @@
 import { Graph } from "./Graph.ts";
 import { MapNode } from "./MapNode.ts";
 
+export interface IPathfinding {
+  findPath(src: string, dst: string): string[] | undefined;
+}
+
 export class Pathfinding {
+  private _pathAlgo: IPathfinding | undefined;
   protected graph: Graph;
 
   constructor(graph: Graph) {
     this.graph = graph;
+  }
+
+  get pathAlgo(): IPathfinding | undefined {
+    return this._pathAlgo;
+  }
+
+  setPathAlgo(newAlgo: IPathfinding): string {
+    this._pathAlgo = newAlgo;
+    return "";
   }
 
   // Prints out the path found by FindPath
@@ -23,8 +37,7 @@ export class Pathfinding {
 
   // Just a parent function
   findPath(srcID: string, destID: string): string[] | undefined {
-    console.log(srcID + destID);
-    return undefined;
+    return this._pathAlgo?.findPath(srcID, destID);
   }
 
   getDirections(path: string[]) {
