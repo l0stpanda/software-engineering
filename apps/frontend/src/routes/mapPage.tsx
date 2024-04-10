@@ -275,13 +275,13 @@ function Map() {
           </div>
           {/*second non-functional box for rn*/}
           <br />
-          <div className="flex flex-col justify-center px-28">
-            <a href="editMap">
+          <div className="flex flex-col">
+            <a href="editMap" className="self-center">
               <Button
                 type="button"
                 variant="contained"
                 startIcon={<ModeIcon />}
-                className="editMapBut"
+                className="editMapBut w-32"
                 size="medium"
                 sx={{ borderRadius: "30px", fontSize: "15px", font: "header" }}
               >

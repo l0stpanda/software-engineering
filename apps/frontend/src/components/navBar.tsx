@@ -88,11 +88,11 @@ function CustomNavBar() {
                 horizontal: "left",
               }}
             >
-              <MenuItem href="flowerrequest" component="a">
-                Flower Request
-              </MenuItem>
               <MenuItem href="viewpending" component="a">
                 Pending
+              </MenuItem>
+              <MenuItem href="flowerrequest" component="a">
+                Flower Request
               </MenuItem>
               <MenuItem href="medicinerequest" component="a">
                 Medicine Delivery

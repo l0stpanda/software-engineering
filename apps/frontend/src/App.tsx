@@ -51,7 +51,7 @@ function App() {
         },
         {
           path: "exp",
-          element: <ExportRouteE />,
+          element: <LoadingPage component={ExportRouteE} />,
         },
         {
           path: "displayTables",
