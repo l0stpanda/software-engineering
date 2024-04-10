@@ -1,7 +1,6 @@
 import { MapNode } from "./MapNode.ts";
 import { Nodes, Edges } from "database";
 import axios from "axios";
-import { MapEdge } from "./MapEdge.ts";
 
 export class Graph {
   private adjMap: Map<string, MapNode>; // Map<nodeID, Node object>
@@ -24,9 +23,8 @@ export class Graph {
     const destNode = this.adjMap.get(destID);
 
     if (srcNode instanceof MapNode && destNode instanceof MapNode) {
-      const edge = new MapEdge(srcNode, destNode);
-      srcNode.addAdjacency(edge);
-      destNode.addAdjacency(edge);
+      srcNode.addAdjacency(destNode);
+      destNode.addAdjacency(srcNode);
     } else {
       console.log("Edge is incomplete or a node does not exist");
     }
@@ -47,7 +45,6 @@ export class Graph {
   async loadGraph(): Promise<void> {
     const nodes: Nodes[] = await this.getAllNodes();
     const edges: Edges[] = await this.getAllEdges();
-    console.log(edges);
 
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
@@ -62,7 +59,7 @@ export class Graph {
           node.building,
           node.node_type,
           node.long_name,
-          node.short_name.replace("\r", ""),
+          node.short_name,
         );
         await this.addNode(new_node);
       }
@@ -70,7 +67,7 @@ export class Graph {
 
     for (let i = 0; i < edges.length; i++) {
       const src_node = edges[i].start_node;
-      const dest_node = edges[i].end_node.replace("\r", "");
+      const dest_node = edges[i].end_node.split("\r")[0];
       await this.addEdge(src_node, dest_node);
     }
   }
@@ -81,17 +78,6 @@ export class Graph {
 
   getNode(nodeID: string) {
     return this.adjMap.get(nodeID);
-  }
-
-  getNodesByFloor(floor: string) {
-    // get all nodes where node.floor == floor
-    const nodes: MapNode[] = [];
-    Object.values(this.adjMap).forEach((node: MapNode) => {
-      if (node.getFloor() == floor) {
-        nodes.push(node);
-      }
-    });
-    return nodes;
   }
 
   nodeFromName(name: string) {

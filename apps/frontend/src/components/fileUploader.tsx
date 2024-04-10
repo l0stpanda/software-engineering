@@ -42,9 +42,8 @@ const SingleFileUploader = () => {
           for (let i = 1; i < edges_array.length - 1; i++) {
             const curr_data: edgeType = {
               type: "Edges",
-              id: edges_array[i][0].toString(),
-              start_node: edges_array[i][1].toString(),
-              end_node: edges_array[i][2].toString().replace("/r", ""),
+              start_node: edges_array[i][0].toString(),
+              end_node: edges_array[i][1].toString().replace("/r", ""),
             };
             //Makes the backend database accessible to the frontend
             await PostEdge(curr_data);

@@ -1,10 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import {
-  Button,
-  //TextField,
-  ToggleButton,
-  ToggleButtonGroup,
-} from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import {
   TransformWrapper,
   TransformComponent,
@@ -13,21 +8,13 @@ import {
 import { useState } from "react";
 import BackgroundPattern from "../components/backgroundPattern.tsx";
 import { Graph } from "../objects/Graph.ts";
-import lowerLevel1 from "../assets/00_thelowerlevel1.png";
-import lowerLevel2 from "../assets/00_thelowerlevel2.png";
-import floor1 from "../assets/01_thefirstfloor.png";
-import floor2 from "../assets/02_thesecondfloor.png";
-import floor3 from "../assets/03_thethirdfloor.png";
-
+import lowerLevel1 from "../assets/LL1Map.png";
 import FloorNode from "../components/FloorNode.tsx";
-import { ArrowBack } from "@mui/icons-material";
-import LocationDropdown from "../components/locationDropdown.tsx";
 
 function Map() {
   const divRef = useRef<HTMLDivElement>(null);
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
   const [graph, setGraph] = useState(new Graph());
-  const [imgState, setImgState] = useState<string>(lowerLevel1);
 
   // Zoom in/out buttons for map viewing
   const Controls = () => {
@@ -68,10 +55,10 @@ function Map() {
   const [submitValues, setSubmitValues] = useState(["", ""]);
 
   // Carter's function code bc idk how to do it
-  // function handleFormChanges(event: React.ChangeEvent<HTMLInputElement>) {
-  //   const { name, value } = event.target;
-  //   setNavigatingNodes({ ...navigatingNodes, [name]: value });
-  // }
+  function handleFormChanges(event: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = event.target;
+    setNavigatingNodes({ ...navigatingNodes, [name]: value });
+  }
 
   // Handles changes to the start/end destination boxes
   function handleFormSubmit() {
@@ -81,13 +68,6 @@ function Map() {
     setSubmitValues([cleanStart, cleanEnd]);
   }
 
-  // Changes the map image
-  const changeFloor = (floor: string) => {
-    console.log(floor);
-    setImgState(floor);
-  };
-
-  // Updates div dimensions for scaling of nodes
   useEffect(() => {
     if (divRef.current) {
       const { clientWidth, clientHeight } = divRef.current;
@@ -95,110 +75,54 @@ function Map() {
     }
   }, [divRef]);
 
-  // Updates the graph when it has been received from the database
   useEffect(() => {
     const tempGraph = new Graph();
-    tempGraph.loadGraph().then(() => {
+    tempGraph.loadGraph().then((r) => {
+      console.log(r);
       setGraph(tempGraph);
     });
   }, []);
 
-  //Needs to be here for navigation dropdown
-  function updateStart(val: string) {
-    // setResponses({ ...responses, roomNum: val });
-    setNavigatingNodes({ ...navigatingNodes, start: val });
-  }
-
-  function updateEnd(val: string) {
-    // setResponses({ ...responses, roomNum: val });
-    setNavigatingNodes({ ...navigatingNodes, end: val });
-  }
-
-  function FloorMapButtons() {
-    return (
-      <div className="w-2/3 mx-auto mt-3">
-        <ToggleButtonGroup
-          value={imgState}
-          exclusive
-          onChange={(
-            _event: React.MouseEvent<HTMLElement>,
-            newFloor: string,
-          ) => {
-            changeFloor(newFloor);
-          }}
-          size="large"
-          color="secondary"
-          fullWidth
-        >
-          <ToggleButton value={lowerLevel2}>
-            <strong>L2</strong>
-          </ToggleButton>
-          <ToggleButton value={lowerLevel1}>
-            <strong>L1</strong>
-          </ToggleButton>
-          <ToggleButton value={floor1}>
-            <strong>1</strong>
-          </ToggleButton>
-          <ToggleButton value={floor2}>
-            <strong>2</strong>
-          </ToggleButton>
-          <ToggleButton value={floor3}>
-            <strong>3</strong>
-          </ToggleButton>
-        </ToggleButtonGroup>
-      </div>
-    );
-  }
-
   return (
     <div>
       <BackgroundPattern />
-
       {/*Location and Destination things*/}
       <div
         className="my-8
-                   justify-center
+                   mx-auto
                    flex
                    flex-row-reverse
                    max-w-screen-2xl"
       >
-        <div className="flex flex-col w-2/3">
-          {/*Map Image Box*/}
-          <div
-            ref={divRef}
-            className="
+        {/*Map Image Box*/}
+        <div
+          ref={divRef}
+          className="w-2/3
         h-2/3
         flex-grow
         ml-1
         border-primary
         border-2"
-          >
-            <TransformWrapper>
-              <Controls />
-              <TransformComponent>
-                <FloorNode
-                  imageSrc={imgState}
-                  graph={graph}
-                  inputLoc={[submitValues[0], submitValues[1]]}
-                  divDim={divDimensions}
-                />
-              </TransformComponent>
-            </TransformWrapper>
-          </div>
-          {/*Buttons for displaying floor images*/}
-          <FloorMapButtons />
+        >
+          <TransformWrapper>
+            <Controls />
+            <TransformComponent>
+              <FloorNode
+                imageSrc={lowerLevel1}
+                graph={graph}
+                inputLoc={[submitValues[0], submitValues[1]]}
+                divDim={divDimensions}
+              />
+            </TransformComponent>
+          </TransformWrapper>
         </div>
 
         {/*boxes.*/}
         <div
           className="flex flex-col
-                w-1/4"
+                w-1/4
+                mt-10"
         >
-          <a href="">
-            <Button sx={{ margin: "0 0 1rem 1rem" }} startIcon={<ArrowBack />}>
-              Home
-            </Button>
-          </a>
           <div
             className="mr-8
                     ml-5
@@ -216,20 +140,35 @@ function Map() {
               <h2 className="text-primary font-header pb-4">
                 Where would you like to go?
               </h2>
-
-              <LocationDropdown
-                room={navigatingNodes.start}
-                update={updateStart}
-                label={"Start"}
+              <TextField
+                id="outlined-basic"
+                variant="outlined"
+                label="Location"
+                name="start"
+                value={navigatingNodes.start}
+                onChange={handleFormChanges}
+                sx={{
+                  input: {
+                    color: "primary",
+                    background: "background",
+                  },
+                }}
               />
-              <br />
-              <LocationDropdown
-                room={navigatingNodes.end}
-                update={updateEnd}
-                label={"End"}
+              <TextField
+                id="outlined-basic"
+                variant="outlined"
+                label="Destination"
+                value={navigatingNodes.end}
+                name="end"
+                onChange={handleFormChanges}
+                sx={{
+                  input: {
+                    color: "primary",
+                    background: "background",
+                  },
+                }}
+                margin="normal"
               />
-              <br />
-
               <Button
                 type="button"
                 variant="contained"
