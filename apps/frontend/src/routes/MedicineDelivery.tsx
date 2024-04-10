@@ -6,15 +6,12 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
 } from "@mui/material";
 import BackgroundPattern from "../components/allyBackground.tsx";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useState } from "react";
 import axios from "axios";
+import LocationDropdown from "../components/locationDropdown.tsx";
 
 function MedicineRequest() {
   type MedicineReqFields = {
@@ -39,7 +36,7 @@ function MedicineRequest() {
   const [open, setOpen] = useState(false);
 
   // Room Number 1-20
-  const roomOptions = Array.from({ length: 20 }, (_, i) => `${i + 1}`);
+  //const roomOptions = Array.from({ length: 20 }, (_, i) => `${i + 1}`);
 
   // Takes in an event object and updates the responses object when a field is changed
   // Updated to handle different event types
@@ -95,6 +92,10 @@ function MedicineRequest() {
     clear();
   }
 
+  function updateName(val: string) {
+    setResponses({ ...responses, roomName: val });
+  }
+
   // Your page is everything in this div
   return (
     <div className="justify-center grid h-screen place-items-center">
@@ -104,23 +105,28 @@ function MedicineRequest() {
           Medicine Delivery Request
         </h1>
         <form className="flex flex-col gap-4 my-4" onSubmit={handleSubmit}>
-          <FormControl variant="filled" fullWidth>
-            <InputLabel id="roomName-label">Room Name</InputLabel>
-            <Select
-              labelId="roomName-label"
-              id="roomName"
-              value={responses.roomName}
-              onChange={handleResponseChanges}
-              name="roomName"
-              required
-            >
-              {roomOptions.map((room) => (
-                <MenuItem key={room} value={room}>
-                  Room {room}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <LocationDropdown
+            room={responses.roomName}
+            update={updateName}
+            label={"Room Name"}
+          />
+          {/*<FormControl variant="filled" fullWidth>*/}
+          {/*  <InputLabel id="roomName-label">Room Name</InputLabel>*/}
+          {/*  <Select*/}
+          {/*    labelId="roomName-label"*/}
+          {/*    id="roomName"*/}
+          {/*    value={responses.roomName}*/}
+          {/*    onChange={handleResponseChanges}*/}
+          {/*    name="roomName"*/}
+          {/*    required*/}
+          {/*  >*/}
+          {/*    {roomOptions.map((room) => (*/}
+          {/*      <MenuItem key={room} value={room}>*/}
+          {/*        Room {room}*/}
+          {/*      </MenuItem>*/}
+          {/*    ))}*/}
+          {/*  </Select>*/}
+          {/*</FormControl>*/}
           <TextField
             onChange={handleResponseChanges}
             value={responses.staffMemberName}
