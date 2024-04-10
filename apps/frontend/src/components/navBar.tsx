@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { AppBar, Button, Menu, MenuItem, Toolbar } from "@mui/material";
 import BWLogo from "/BWLogo.png";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -106,7 +106,7 @@ function CustomNavBar() {
               <MenuItem href="lostitemrequest" component="a">
                 Lost Item
               </MenuItem>
-          </Menu>
+            </Menu>
             <Button
               variant="contained"
               sx={{ margin: "0 0 0 1rem" }}
