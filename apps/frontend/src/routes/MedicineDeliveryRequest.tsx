@@ -11,6 +11,7 @@ import { MedicineDelivery } from "../common/MedicineDelivery.ts";
 import MedicineRequestButtons from "../components/MedicineRequestButtons.tsx";
 import { ChangeEvent, useState } from "react";
 import BackgroundPattern from "../components/allyBackground.tsx";
+import LocationDropdown from "../components/locationDropdown.tsx";
 
 function MedicineDeliveryRequest() {
   const [delivery, setDelivery] = useState<MedicineDelivery>({
@@ -48,8 +49,8 @@ function MedicineDeliveryRequest() {
     setDelivery({ ...delivery, [name]: value });
   }
 
-  function handleLocationInput(e: ChangeEvent<HTMLInputElement>) {
-    setDelivery({ ...delivery, location: e.target.value });
+  function handleLocationInput(val: string) {
+    setDelivery({ ...delivery, location: val });
   }
 
   function handleMedicineInput(e: ChangeEvent<HTMLInputElement>) {
@@ -132,13 +133,14 @@ function MedicineDeliveryRequest() {
                 variant="filled"
                 label="Employee Name"
                 placeholder="Name"
+                required
                 /*InputProps={{
                                   classes: {
                                     root: "transform hover:scale-105 transition-transform duration-300",
                                   },
                                 }}*/
               />
-              <FormControl variant="filled" fullWidth>
+              <FormControl variant="filled" fullWidth required>
                 <InputLabel id="priority-label">Priority</InputLabel>
                 <Select
                   labelId="priority-label"
@@ -166,19 +168,24 @@ function MedicineDeliveryRequest() {
                   <MenuItem value="Emergency">Emergency</MenuItem>
                 </Select>
               </FormControl>
-              <TextField
-                onChange={handleLocationInput}
-                value={delivery.location}
-                name="location"
-                id="location"
-                variant="filled"
-                label="Location Name"
-                placeholder="Location"
-                /*InputProps={{
-                                  classes: {
-                                    root: "transform hover:scale-105 transition-transform duration-300",
-                                  },
-                                }}*/
+              {/*<TextField*/}
+              {/*    onChange={handleLocationInput}*/}
+              {/*    value={delivery.location}*/}
+              {/*    name="location"*/}
+              {/*    id="location"*/}
+              {/*    variant="filled"*/}
+              {/*    label="Location Name"*/}
+              {/*    placeholder="Location"*/}
+              {/*    /*InputProps={{*/}
+              {/*      classes: {*/}
+              {/*        root: "transform hover:scale-105 transition-transform duration-300",*/}
+              {/*      },*/}
+              {/*    }}*/}
+              {/*/>*/}
+              <LocationDropdown
+                room={delivery.location}
+                update={handleLocationInput}
+                label={"Room"}
               />
               <TextField
                 onChange={handleMedicineInput}
@@ -188,13 +195,14 @@ function MedicineDeliveryRequest() {
                 variant="filled"
                 label="Medicine Name"
                 placeholder="Medicine Name"
+                required
                 /*InputProps={{
                                   classes: {
                                     root: "transform hover:scale-105 transition-transform duration-300",
                                   },
                                 }}*/
               />
-              <FormControl variant="filled" fullWidth>
+              <FormControl variant="filled" fullWidth required>
                 <InputLabel id="quantity-label">Quantity</InputLabel>
                 <Select
                   labelId="quantity-label"
@@ -223,7 +231,7 @@ function MedicineDeliveryRequest() {
                   ))}
                 </Select>
               </FormControl>
-              <FormControl variant="filled" fullWidth>
+              <FormControl variant="filled" fullWidth required>
                 <InputLabel id="status-label">Status</InputLabel>
                 <Select
                   labelId="status-label"
