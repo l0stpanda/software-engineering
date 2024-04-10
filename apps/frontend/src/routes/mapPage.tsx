@@ -1,9 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import {
-  Button,
-  //TextField,
   ToggleButton,
   ToggleButtonGroup,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
 } from "@mui/material";
 import {
   TransformWrapper,
@@ -20,6 +24,7 @@ import floor2 from "../assets/02_thesecondfloor.png";
 import floor3 from "../assets/03_thethirdfloor.png";
 
 import FloorNode from "../components/FloorNode.tsx";
+import { SelectChangeEvent } from "@mui/material/Select";
 import { ArrowBack } from "@mui/icons-material";
 import LocationDropdown from "../components/locationDropdown.tsx";
 
@@ -27,7 +32,8 @@ function Map() {
   const divRef = useRef<HTMLDivElement>(null);
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
   const [graph, setGraph] = useState(new Graph());
-  const [imgState, setImgState] = useState<string>(lowerLevel1);
+  const [imgState, setImgState] = useState<string>(floor1);
+  const [algorithm, setAlgorithm] = useState<string>("BFS");
 
   // Zoom in/out buttons for map viewing
   const Controls = () => {
@@ -103,6 +109,11 @@ function Map() {
     });
   }, []);
 
+
+  const changeAlgorithm = (event: SelectChangeEvent) => {
+    setAlgorithm(event.target.value as string);
+  };
+
   //Needs to be here for navigation dropdown
   function updateStart(val: string) {
     // setResponses({ ...responses, roomNum: val });
@@ -154,6 +165,22 @@ function Map() {
     <div>
       <BackgroundPattern />
 
+      <div className="inline-flex justify-end items-center my-5">
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Path Algorithm</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={algorithm}
+            label="Algorithm"
+            onChange={changeAlgorithm}
+          >
+            <MenuItem value="BFS">BFS</MenuItem>
+            <MenuItem value="AStar">A-Star</MenuItem>
+          </Select>
+        </FormControl>
+      </div>
+
       {/*Location and Destination things*/}
       <div
         className="my-8
@@ -181,6 +208,7 @@ function Map() {
                   graph={graph}
                   inputLoc={[submitValues[0], submitValues[1]]}
                   divDim={divDimensions}
+                  algorithm={algorithm}
                 />
               </TransformComponent>
             </TransformWrapper>
@@ -188,7 +216,6 @@ function Map() {
           {/*Buttons for displaying floor images*/}
           <FloorMapButtons />
         </div>
-
         {/*boxes.*/}
         <div
           className="flex flex-col

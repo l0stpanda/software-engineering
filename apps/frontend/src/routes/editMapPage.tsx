@@ -143,6 +143,7 @@ function EditMap() {
                   graph={graph}
                   inputLoc={["", ""]}
                   divDim={divDimensions}
+                  algorithm="BFS"
                 />
               </TransformComponent>
             </TransformWrapper>

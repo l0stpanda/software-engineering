@@ -4,6 +4,8 @@ import { Graph } from "../objects/Graph.ts";
 //import { BFS } from "../objects/BFS.ts";
 import { MapNode } from "../objects/MapNode.ts";
 import { AStar } from "../objects/AStar.ts";
+import { Pathfinding } from "../objects/Pathfinding.ts";
+import { BFS } from "../objects/BFS.ts";
 
 //import mapImg from "../assets/00_thelowerlevel1.png";
 
@@ -12,6 +14,7 @@ interface FloorNodesProps {
   graph: Graph;
   inputLoc: string[];
   divDim: { width: number; height: number };
+  algorithm: string;
 }
 
 export interface FloorNodeInfo {
@@ -22,6 +25,7 @@ export interface FloorNodeInfo {
 }
 
 function FloorNode(props: FloorNodesProps) {
+  console.log("FLOORNODE-=================================================");
   const [imgDimensions, setImgDimensions] = useState<{
     width: number;
     height: number;
@@ -32,7 +36,7 @@ function FloorNode(props: FloorNodesProps) {
     height: props.divDim.height,
   });
   const [clicked, setClicked] = useState<string[]>([]);
-  const bfs = new AStar(props.graph);
+  const algo: Pathfinding = new Pathfinding(props.graph);
   const floor: string = getFloorByImage(props.imageSrc);
   const nodes: MapNode[] = Object.values(props.graph)[0];
   const [ids, setIds] = useState<{
@@ -86,7 +90,6 @@ function FloorNode(props: FloorNodesProps) {
   const handleNodeClick = (nodeid: string) => () => {
     if (clicked.length < 2 && !clicked.includes(nodeid)) {
       setClicked((prevClicked) => [...prevClicked, nodeid]);
-      //set the start node to green
     }
     if (clicked.length == 2) {
       setClicked([nodeid]);
@@ -114,11 +117,17 @@ function FloorNode(props: FloorNodesProps) {
 
   const renderLines = () => {
     const input = calculateInput();
+    console.log(input);
 
     if (input.length == 2) {
-      console.log(ids.startId, ids.endId);
-      const path = bfs.findPath(input[0], input[1]);
-      console.log(path);
+      //console.log(ids.startId, ids.endId);
+      if (props.algorithm == "BFS") {
+        algo.setPathAlgo(new BFS(props.graph));
+      } else if (props.algorithm == "AStar") {
+        algo.setPathAlgo(new AStar(props.graph));
+      }
+      const path = algo.findPath(input[0], input[1]);
+      //console.log(path);
       const lines = [];
       if (!path) {
         console.log("No path found");
