@@ -15,7 +15,7 @@ import floor1 from "../assets/01_thefirstfloor.png";
 import floor2 from "../assets/02_thesecondfloor.png";
 import floor3 from "../assets/03_thethirdfloor.png";
 
-import FloorNode from "../components/FloorNode.tsx";
+import EditMapViewGraph from "../components/EditMapViewGraph.tsx";
 
 function EditMap() {
   const divRef = useRef<HTMLDivElement>(null);
@@ -139,10 +139,9 @@ function EditMap() {
             <TransformWrapper>
               <Controls />
               <TransformComponent>
-                <FloorNode
+                <EditMapViewGraph
                   imageSrc={imgState}
                   graph={graph}
-                  inputLoc={["", ""]}
                   divDim={divDimensions}
                 />
               </TransformComponent>

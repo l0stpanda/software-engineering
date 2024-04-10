@@ -142,7 +142,7 @@ function FloorNode(props: FloorNodesProps) {
               y1={startPoint.y}
               x2={endPoint.x}
               y2={endPoint.y}
-              style={{ stroke: "green", strokeWidth: 2 }}
+              style={{ stroke: "blue", strokeWidth: 2 }}
               className="animate-pulse"
             />,
           );

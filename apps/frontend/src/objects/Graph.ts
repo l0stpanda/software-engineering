@@ -86,4 +86,17 @@ export class Graph {
   idFromName(name: string) {
     return this.nameMap.get(name);
   }
+
+  getNodesByFloor(floor: string): MapNode[] {
+    const nodes = this.adjMap.values();
+    const result: MapNode[] = [];
+
+    for (const node of nodes) {
+      if (node.getFloor() == floor) {
+        result.push(node);
+      }
+    }
+
+    return result;
+  }
 }
