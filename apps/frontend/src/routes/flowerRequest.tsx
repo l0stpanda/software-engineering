@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
-import BackgroundPattern from "../components/backgroundPattern.tsx";
+import BackgroundPattern from "../components/allyBackground.tsx";
 import { flowerReqFields } from "common/src/flowerRequest.ts";
 import LocationDropdown from "../components/locationDropdown.tsx";
 //import {SelectChangeEvent} from "@mui/material/Select";

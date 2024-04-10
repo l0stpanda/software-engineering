@@ -8,7 +8,7 @@ import {
   TextField,
 } from "@mui/material";
 
-import BackgroundPattern from "../components/backgroundPattern.tsx";
+import BackgroundPattern from "../components/allyBackground.tsx";
 import { lostAndFound } from "common/src/lostAndFoundType.ts";
 import LocationDropdown from "./locationDropdown.tsx";
 
