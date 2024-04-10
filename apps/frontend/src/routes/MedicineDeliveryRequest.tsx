@@ -98,7 +98,7 @@ function MedicineDeliveryRequest() {
   return (
     <div className="justify-center grid h-screen place-items-center">
       <BackgroundPattern />
-      <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-4">
+      <div className="m-auto mt-6 flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-4">
         <h1
           className="text-2xl font-bold mb-4 text-center transform hover:-translate-y-2 transition-transform duration-300"
           style={{
@@ -132,11 +132,11 @@ function MedicineDeliveryRequest() {
                 variant="filled"
                 label="Employee Name"
                 placeholder="Name"
-                InputProps={{
+                /*InputProps={{
                   classes: {
                     root: "transform hover:scale-105 transition-transform duration-300",
                   },
-                }}
+                }}*/
               />
               <FormControl variant="filled" fullWidth>
                 <InputLabel id="priority-label">Priority</InputLabel>
@@ -147,7 +147,7 @@ function MedicineDeliveryRequest() {
                   onChange={handlePriorityInput}
                   name="priority"
                   required
-                  inputProps={{
+                  /*inputProps={{
                     classes: {
                       root: "transform hover:scale-105 transition-transform duration-300",
                     },
@@ -158,7 +158,7 @@ function MedicineDeliveryRequest() {
                         transform: "translateZ(0)",
                       },
                     },
-                  }}
+                  }}*/
                 >
                   <MenuItem value="Low">Low</MenuItem>
                   <MenuItem value="Medium">Medium</MenuItem>
@@ -174,11 +174,11 @@ function MedicineDeliveryRequest() {
                 variant="filled"
                 label="Location Name"
                 placeholder="Location"
-                InputProps={{
+                /*InputProps={{
                   classes: {
                     root: "transform hover:scale-105 transition-transform duration-300",
                   },
-                }}
+                }}*/
               />
               <TextField
                 onChange={handleMedicineInput}
@@ -188,11 +188,11 @@ function MedicineDeliveryRequest() {
                 variant="filled"
                 label="Medicine Name"
                 placeholder="Medicine Name"
-                InputProps={{
+                /*InputProps={{
                   classes: {
                     root: "transform hover:scale-105 transition-transform duration-300",
                   },
-                }}
+                }}*/
               />
               <FormControl variant="filled" fullWidth>
                 <InputLabel id="quantity-label">Quantity</InputLabel>
@@ -203,7 +203,7 @@ function MedicineDeliveryRequest() {
                   onChange={handleQuantityInput}
                   name="quantity"
                   required
-                  inputProps={{
+                  /*inputProps={{
                     classes: {
                       root: "transform hover:scale-105 transition-transform duration-300",
                     },
@@ -214,7 +214,7 @@ function MedicineDeliveryRequest() {
                         transform: "translateZ(0)",
                       },
                     },
-                  }}
+                  }}*/
                 >
                   {[...Array(15).keys()].map((num) => (
                     <MenuItem key={num + 1} value={num + 1}>
@@ -232,7 +232,7 @@ function MedicineDeliveryRequest() {
                   onChange={handleStatusInput}
                   name="status"
                   required
-                  inputProps={{
+                  /*inputProps={{
                     classes: {
                       root: "transform hover:scale-105 transition-transform duration-300",
                     },
@@ -243,7 +243,7 @@ function MedicineDeliveryRequest() {
                         transform: "translateZ(0)",
                       },
                     },
-                  }}
+                  }}*/
                 >
                   <MenuItem value="Unassigned">Unassigned</MenuItem>
                   <MenuItem value="Assigned">Assigned</MenuItem>

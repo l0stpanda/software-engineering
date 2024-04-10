@@ -35,11 +35,12 @@ function RequestButtons(props: requestButtonProps) {
   return (
     <div className="requestButtonsDiv flex justify-end space-x-4 mt-4">
       <Button
+        className="w-32"
         type="submit"
         variant="contained"
         size="large"
         sx={{
-          borderRadius: "15px",
+          borderRadius: "30px",
           margin: "5px",
           transition: "transform 0.3s ease-in-out",
           "&:hover": {
@@ -51,11 +52,12 @@ function RequestButtons(props: requestButtonProps) {
         SUBMIT
       </Button>
       <Button
+        className="w-32"
         type="submit"
         variant="contained"
         size="large"
         sx={{
-          borderRadius: "15px",
+          borderRadius: "30px",
           margin: "5px",
           transition: "transform 0.3s ease-in-out",
           "&:hover": {
