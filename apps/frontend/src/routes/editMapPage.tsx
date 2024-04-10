@@ -1,10 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import {
-  Button,
-  //TextField,
-  ToggleButton,
-  ToggleButtonGroup,
-} from "@mui/material";
+import { Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import {
   TransformWrapper,
   TransformComponent,
@@ -20,10 +15,8 @@ import floor2 from "../assets/02_thesecondfloor.png";
 import floor3 from "../assets/03_thethirdfloor.png";
 
 import FloorNode from "../components/FloorNode.tsx";
-import { ArrowBack } from "@mui/icons-material";
-import LocationDropdown from "../components/locationDropdown.tsx";
 
-function Map() {
+function EditMap() {
   const divRef = useRef<HTMLDivElement>(null);
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
   const [graph, setGraph] = useState(new Graph());
@@ -61,26 +54,6 @@ function Map() {
     );
   };
 
-  const [navigatingNodes, setNavigatingNodes] = useState({
-    start: "",
-    end: "",
-  });
-  const [submitValues, setSubmitValues] = useState(["", ""]);
-
-  // Carter's function code bc idk how to do it
-  // function handleFormChanges(event: React.ChangeEvent<HTMLInputElement>) {
-  //   const { name, value } = event.target;
-  //   setNavigatingNodes({ ...navigatingNodes, [name]: value });
-  // }
-
-  // Handles changes to the start/end destination boxes
-  function handleFormSubmit() {
-    const cleanStart = navigatingNodes.start.replace("\r", "");
-    const cleanEnd = navigatingNodes.end.replace("\r", "");
-    console.log(cleanStart, cleanEnd);
-    setSubmitValues([cleanStart, cleanEnd]);
-  }
-
   // Changes the map image
   const changeFloor = (floor: string) => {
     console.log(floor);
@@ -102,17 +75,6 @@ function Map() {
       setGraph(tempGraph);
     });
   }, []);
-
-  //Needs to be here for navigation dropdown
-  function updateStart(val: string) {
-    // setResponses({ ...responses, roomNum: val });
-    setNavigatingNodes({ ...navigatingNodes, start: val });
-  }
-
-  function updateEnd(val: string) {
-    // setResponses({ ...responses, roomNum: val });
-    setNavigatingNodes({ ...navigatingNodes, end: val });
-  }
 
   function FloorMapButtons() {
     return (
@@ -179,7 +141,7 @@ function Map() {
                 <FloorNode
                   imageSrc={imgState}
                   graph={graph}
-                  inputLoc={[submitValues[0], submitValues[1]]}
+                  inputLoc={["", ""]}
                   divDim={divDimensions}
                 />
               </TransformComponent>
@@ -192,13 +154,9 @@ function Map() {
         {/*boxes.*/}
         <div
           className="flex flex-col
-                w-1/4"
+                w-1/4
+                mt-10"
         >
-          <a href="">
-            <Button sx={{ margin: "0 0 1rem 1rem" }} startIcon={<ArrowBack />}>
-              Home
-            </Button>
-          </a>
           <div
             className="mr-8
                     ml-5
@@ -212,46 +170,7 @@ function Map() {
                     border-primary
                     border-2"
           >
-            <div className="flex flex-col justify-center">
-              <h2 className="text-primary font-header pb-4">
-                Where would you like to go?
-              </h2>
-
-              <LocationDropdown
-                room={navigatingNodes.start}
-                update={updateStart}
-                label={"Start"}
-              />
-              <br />
-              <LocationDropdown
-                room={navigatingNodes.end}
-                update={updateEnd}
-                label={"End"}
-              />
-              <br />
-
-              <Button
-                type="button"
-                variant="contained"
-                className="submitButton"
-                size="medium"
-                onClick={handleFormSubmit}
-                sx={{ borderRadius: "30px" }}
-              >
-                Submit
-              </Button>
-            </div>
-          </div>
-          {/*second non-functional box for rn*/}
-          <div
-            className="mr-8
-                        ml-5
-                        mt-2
-                        h-2/5
-                        px-0
-                        bg-secondary
-                        rounded-xl"
-          >
+            {/*non-functional box for rn*/}
             <p
               className="pr-1.5
               pl-1.5
@@ -260,8 +179,8 @@ function Map() {
               text-primary
               font-header"
             >
-              This is just a place holder for right now. Written directions are
-              not functional yet.
+              This is just a place holder for right now. Editing tools will go
+              here
             </p>
           </div>
         </div>
@@ -270,4 +189,4 @@ function Map() {
   );
 }
 
-export default Map;
+export default EditMap;
