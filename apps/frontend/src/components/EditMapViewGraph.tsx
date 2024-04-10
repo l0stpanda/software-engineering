@@ -2,29 +2,19 @@
 import { useEffect, useRef, useState } from "react";
 import { Graph } from "../objects/Graph.ts";
 //import { BFS } from "../objects/BFS.ts";
-import { MapNode } from "../objects/MapNode.ts";
-import { AStar } from "../objects/AStar.ts";
-import { Pathfinding } from "../objects/Pathfinding.ts";
-import { BFS } from "../objects/BFS.ts";
+// import { MapNode } from "../objects/MapNode.ts";
+import { FloorNodeInfo } from "./FloorNode.tsx";
+import { MapEdge } from "../objects/MapEdge.ts";
 
 //import mapImg from "../assets/00_thelowerlevel1.png";
 
-interface FloorNodesProps {
+interface EditMapViewGraphProps {
   imageSrc: string;
   graph: Graph;
-  inputLoc: string[];
   divDim: { width: number; height: number };
-  algorithm: string;
 }
 
-export interface FloorNodeInfo {
-  key: string;
-  x: number;
-  y: number;
-  floor: string;
-}
-
-function FloorNode(props: FloorNodesProps) {
+function EditMapViewGraph(props: EditMapViewGraphProps) {
   const [imgDimensions, setImgDimensions] = useState<{
     width: number;
     height: number;
@@ -35,23 +25,8 @@ function FloorNode(props: FloorNodesProps) {
     height: props.divDim.height,
   });
   const [clicked, setClicked] = useState<string[]>([]);
-  const algo: Pathfinding = new Pathfinding(props.graph);
   const floor: string = getFloorByImage(props.imageSrc);
-  const nodes: MapNode[] = Object.values(props.graph)[0];
-  const [ids, setIds] = useState<{
-    startId: string | undefined;
-    endId: string | undefined;
-  }>({
-    startId: props.graph.idFromName(props.inputLoc[0]),
-    endId: props.graph.idFromName(props.inputLoc[1]),
-  });
-
-  useEffect(() => {
-    setIds({
-      startId: props.graph.idFromName(props.inputLoc[0]),
-      endId: props.graph.idFromName(props.inputLoc[1]),
-    });
-  }, [props.graph, props.inputLoc]);
+  const nodes = props.graph.getMap();
 
   useEffect(() => {
     if (divRef.current) {
@@ -89,23 +64,16 @@ function FloorNode(props: FloorNodesProps) {
   const handleNodeClick = (nodeid: string) => () => {
     if (clicked.length < 2 && !clicked.includes(nodeid)) {
       setClicked((prevClicked) => [...prevClicked, nodeid]);
+      //set the start node to green
     }
     if (clicked.length == 2) {
       setClicked([nodeid]);
     }
-    setIds({ startId: undefined, endId: undefined });
   };
 
   const calculateInput = (): string[] => {
     let input: string[] = [];
-
-    if (
-      props.inputLoc.length === 2 &&
-      ids.startId !== undefined &&
-      ids.endId !== undefined
-    ) {
-      input = [ids.startId, ids.endId];
-    } else if (clicked.length === 2) {
+    if (clicked.length === 2) {
       input = [clicked[0], clicked[1]];
     } else {
       console.log("Invalid IDs.");
@@ -115,51 +83,45 @@ function FloorNode(props: FloorNodesProps) {
   };
 
   const renderLines = () => {
-    const input = calculateInput();
-    console.log(input);
+    const nodeList = props.graph.getNodesByFloor(floor);
+    const edgeList: MapEdge[] = [];
+    const lines = [];
 
-    if (input.length == 2) {
-      //console.log(ids.startId, ids.endId);
-      if (props.algorithm == "BFS") {
-        algo.setPathAlgo(new BFS(props.graph));
-      } else if (props.algorithm == "AStar") {
-        algo.setPathAlgo(new AStar(props.graph));
-      }
-      const path = algo.findPath(input[0], input[1]);
-      //console.log(path);
-      const lines = [];
-      if (!path) {
-        console.log("No path found");
-        return [];
-      }
-      for (let i = 0; i < path.length - 1; i++) {
-        const startNode = path[i];
-        const endNode = path[i + 1];
-        const startPoint = scaledNodes[startNode];
-        const endPoint = scaledNodes[endNode];
-        if (
-          startPoint &&
-          endPoint &&
-          startPoint.floor == floor &&
-          endPoint.floor == floor
-        ) {
-          lines.push(
-            <line
-              key={i}
-              x1={startPoint.x}
-              y1={startPoint.y}
-              x2={endPoint.x}
-              y2={endPoint.y}
-              style={{ stroke: "blue", strokeWidth: 2 }}
-              className="animate-pulse"
-            />,
-          );
+    for (const node of nodeList) {
+      const edges = node.getEdgeList();
+      edges.forEach((edge) => {
+        if (!edgeList.includes(edge)) {
+          edgeList.push(edge);
         }
-      }
-      console.log(lines);
-      return lines;
+      });
     }
-    return [];
+
+    for (let i = 0; i < edgeList.length - 1; i++) {
+      const startNode = edgeList[i].getNodes()[0].getNodeID();
+      const endNode = edgeList[i].getNodes()[1].getNodeID();
+      const startPoint = scaledNodes[startNode];
+      const endPoint = scaledNodes[endNode];
+      if (
+        startPoint &&
+        endPoint &&
+        startPoint.floor == floor &&
+        endPoint.floor == floor
+      ) {
+        lines.push(
+          <line
+            key={i}
+            x1={startPoint.x}
+            y1={startPoint.y}
+            x2={endPoint.x}
+            y2={endPoint.y}
+            style={{ stroke: "blue", strokeWidth: 2 }}
+            className="animate-pulse"
+          />,
+        );
+      }
+    }
+    console.log(lines);
+    return lines;
   };
 
   const scaledNodes: { [key: string]: FloorNodeInfo } = {};
@@ -262,4 +224,4 @@ function getFloorByImage(imgName: string): string {
   }
 }
 
-export default FloorNode;
+export default EditMapViewGraph;

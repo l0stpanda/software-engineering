@@ -32,7 +32,7 @@ function Map() {
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
   const [graph, setGraph] = useState(new Graph());
   const [imgState, setImgState] = useState<string>(floor1);
-  const [algorithm, setAlgorithm] = useState<string>("BFS");
+  const [algorithm, setAlgorithm] = useState<string>("AStar");
 
   // Zoom in/out buttons for map viewing
   const Controls = () => {

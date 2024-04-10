@@ -83,28 +83,20 @@ export class Graph {
     return this.adjMap.get(nodeID);
   }
 
-  getNodesByFloor(floor: string) {
-    // get all nodes where node.floor == floor
-    const nodes: MapNode[] = [];
-    Object.values(this.adjMap).forEach((node: MapNode) => {
-      if (node.getFloor() == floor) {
-        nodes.push(node);
-      }
-    });
-    return nodes;
-  }
-
-  nodeFromName(name: string) {
-    const id = this.idFromName(name);
-
-    if (id != undefined) {
-      return this.adjMap.get(id);
-    }
-
-    return undefined;
-  }
-
   idFromName(name: string) {
     return this.nameMap.get(name);
+  }
+
+  getNodesByFloor(floor: string): MapNode[] {
+    const nodes = this.adjMap.values();
+    const result: MapNode[] = [];
+
+    for (const node of nodes) {
+      if (node.getFloor() == floor) {
+        result.push(node);
+      }
+    }
+
+    return result;
   }
 }
