@@ -41,16 +41,21 @@ const SingleFileUploader = () => {
           await DeleteAllEdge();
 
           //Fills in the edges from the new uploaded file
+          const arr: edgeType[] = [];
           for (let i = 1; i < edges_array.length - 1; i++) {
-            const curr_data: edgeType = {
-              type: "Edges",
+            const curr_data: {
+              end_node: string;
+              start_node: string;
+              id: string;
+            } = {
               id: edges_array[i][0].toString(),
               start_node: edges_array[i][1].toString(),
               end_node: edges_array[i][2].toString().replace("/r", ""),
             };
-            //Makes the backend database accessible to the frontend
-            await PostEdge(curr_data);
+            arr.push(curr_data);
           }
+          console.log(arr);
+          PostEdge(arr);
         } catch (error) {
           //Throws error if Edges aren't loaded in correctly
           alert("Error loading Edges CSV");
@@ -74,10 +79,9 @@ const SingleFileUploader = () => {
             });
 
           await DeleteAllNode();
-
+          const arr: nodeType[] = [];
           for (let i = 1; i < nodes_array.length - 1; i++) {
             const curr_data: nodeType = {
-              type: "Nodes",
               node_id: nodes_array[i][0].toString(),
               x_c: nodes_array[i][1].toString(),
               y_c: nodes_array[i][2].toString(),
@@ -87,8 +91,9 @@ const SingleFileUploader = () => {
               long_name: nodes_array[i][6].toString(),
               short_name: nodes_array[i][7].toString(),
             };
-            await PostNode(curr_data);
+            arr.push(curr_data);
           }
+          await PostNode(arr);
         } catch (error) {
           alert("Error Loading Nodes into Database");
           console.error(error);
@@ -149,7 +154,7 @@ const SingleFileUploader = () => {
         </Button>
         {file && (
           <button onClick={handleUpload} style={{ marginTop: "5%" }}>
-            Upload a file
+            Upload {file.name.toString()}
           </button>
         )}
       </div>

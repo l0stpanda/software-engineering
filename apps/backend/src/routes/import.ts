@@ -9,22 +9,14 @@ const router: Router = express.Router();
 
 //POST edges from the frontend to the database
 router.post("/edgesPost", async function (req: Request, res: Response) {
-  const received: edgeType = req.body;
-  if (received.type == "Edges") {
-    try {
-      await PrismaClient.edges.create({
-        data: {
-          id: received.id,
-          end_node: received.end_node,
-          start_node: received.start_node,
-        },
-      });
-    } catch (e) {
-      //Console log error if the data can't be stored
-      console.log(e);
-      res.sendStatus(400);
-      return;
-    }
+  const received: edgeType[] = req.body;
+  try {
+    await PrismaClient.edges.createMany({ data: received });
+  } catch (e) {
+    //Console log error if the data can't be stored
+    console.log(e);
+    res.sendStatus(400);
+    return;
   }
   //Console log "Ok" if the database successfully collects the data
   res.sendStatus(200);
@@ -61,26 +53,14 @@ router.get("/edgesGet", async function (req: Request, res: Response) {
 
 //NODES STUFF
 router.post("/nodesPost", async function (req: Request, res: Response) {
-  const received: nodeType = req.body;
-  if (received.type == "Nodes") {
-    try {
-      await PrismaClient.nodes.create({
-        data: {
-          node_id: received.node_id,
-          node_type: received.node_type,
-          floor: received.floor,
-          x_c: received.x_c,
-          y_c: received.y_c,
-          building: received.building,
-          short_name: received.short_name,
-          long_name: received.long_name,
-        },
-      });
-    } catch (e) {
-      //Console log error if the data can't be stored
-      console.log(e);
-      res.sendStatus(400);
-    }
+  const received: nodeType[] = req.body;
+  try {
+    await PrismaClient.nodes.createMany({ data: received });
+  } catch (e) {
+    //Console log error if the data can't be stored
+    console.log(e);
+    res.sendStatus(400);
+    return;
   }
   //Console log "Ok" if the database successfully collects the data
   res.sendStatus(200);
@@ -148,18 +128,4 @@ router.get("/nodeLongNames", async function (req: Request, res: Response) {
   //res.sendStatus(200);
 });
 
-// router.get("/idToName/:id", async function (req: Request, res: Response) {
-//   const id = req.params.id;
-//   console.log("id is: " + id);
-//   try {
-//     const row = await PrismaClient.nodes.findMany({
-//       where: {
-//         node_id: id,
-//       },
-//     });
-//     res.send(row[0].short_name);
-//   } catch (e) {
-//     res.sendStatus(400);
-//   }
-// });
 export default router;
