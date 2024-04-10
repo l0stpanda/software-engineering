@@ -15,7 +15,7 @@ import ExportRouteE from "./routes/exportRouteE.tsx";
 import ReadRouteE from "./routes/readRouteE.tsx";
 import LostItemRequest from "./routes/lostItemRequest.tsx";
 import RoomSchedulingRequest from "./routes/roomSchedulingRequest.tsx";
-import MedicineDeliveryRequest from "./routes/MedicineDelivery.tsx";
+import MedicineDeliveryRequest from "./routes/MedicineDeliveryRequest.tsx";
 import MedicalDeviceRequest from "./routes/medicalDeviceRequest.tsx";
 import EditMap from "./routes/editMapPage.tsx";
 import { Auth0Provider } from "@auth0/auth0-react";
@@ -51,7 +51,7 @@ function App() {
         },
         {
           path: "exp",
-          element: <LoadingPage component={ExportRouteE} />,
+          element: <ExportRouteE />,
         },
         {
           path: "displayTables",
@@ -79,7 +79,7 @@ function App() {
         },
         {
           path: "editMap",
-          element: <EditMap />,
+          element: <LoadingPage component={EditMap} />,
         },
       ],
     },
@@ -96,11 +96,13 @@ function App() {
         cacheLocation="localstorage"
         domain="dev-xiwtn1gzwzvxk2ab.us.auth0.com"
         clientId="hpsZAjzYnHxL5mb7stld400psWkr1WJq"
-        authorizationParams={{
-          redirect_uri: "http://localhost:3000/callback",
-        }}
         onRedirectCallback={(appState) => {
           navigate(appState?.returnTo || window.location.pathname);
+        }}
+        authorizationParams={{
+          redirect_uri: window.location.origin + "/callback",
+          audience: "/api",
+          scope: "openid profile email offline_access",
         }}
       >
         <div className="w-full flex flex-col">

@@ -13,7 +13,7 @@ import { Tab, Tabs } from "@mui/material";
 }*/
 
 //This handles uploads and downloads on the same page
-const SingleDisplay = () => {
+function SingleDisplay() {
   const [edges, setEdges] = useState<Edges[]>([]); // Initialize state to hold the edges data
   const [nodes, setNode] = useState<Nodes[]>([]); // Initialize state to hold the nodes data
   const [tableDisplayed, setTableDisplaying] = useState<number>(0);
@@ -22,7 +22,7 @@ const SingleDisplay = () => {
     displayEdges().then();
     displayNodes().then();
   }, []);
-  const displayEdges = async () => {
+  async function displayEdges() {
     console.log("Displaying edges...");
     try {
       const data = await ReadEdge(); // Call ReadEdge and wait for the data
@@ -30,17 +30,17 @@ const SingleDisplay = () => {
     } catch (error) {
       console.error("Error fetching edges:", error);
     }
-  };
+  }
 
-  const displayNodes = async () => {
+  async function displayNodes() {
     console.log("Displaying nodes...");
     try {
       const data = await ReadNode(); // Call ReadEdge and wait for the data
       setNode(data); // Update state with the received data
     } catch (error) {
-      console.error("Error fetching edges:", error);
+      console.error("Error fetching nodes:", error);
     }
-  };
+  }
 
   // Change tabs by switching between 0 and 1
   function handleTabChange() {
@@ -139,6 +139,6 @@ const SingleDisplay = () => {
       </div>
     </div>
   );
-};
+}
 
 export default SingleDisplay;

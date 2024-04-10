@@ -94,6 +94,18 @@ function CustomNavBar() {
               <MenuItem href="viewpending" component="a">
                 Pending
               </MenuItem>
+              <MenuItem href="medicinerequest" component="a">
+                Medicine Delivery
+              </MenuItem>
+              <MenuItem href="roomrequest" component="a">
+                Room Scheduling
+              </MenuItem>
+              <MenuItem href="medicaldevicerequest" component="a">
+                Medical Device Delivery
+              </MenuItem>
+              <MenuItem href="lostitemrequest" component="a">
+                Lost Item
+              </MenuItem>
             </Menu>
             <Button
               variant="contained"

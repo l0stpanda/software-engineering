@@ -143,6 +143,7 @@ function EditMap() {
                   imageSrc={imgState}
                   graph={graph}
                   divDim={divDimensions}
+                  algorithm="BFS"
                 />
               </TransformComponent>
             </TransformWrapper>

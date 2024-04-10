@@ -1,9 +1,12 @@
 import React, { useEffect, useRef } from "react";
 import {
-  Button,
-  TextField,
   ToggleButton,
   ToggleButtonGroup,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
 } from "@mui/material";
 import {
   TransformWrapper,
@@ -20,13 +23,16 @@ import floor2 from "../assets/02_thesecondfloor.png";
 import floor3 from "../assets/03_thethirdfloor.png";
 
 import FloorNode from "../components/FloorNode.tsx";
+import { SelectChangeEvent } from "@mui/material/Select";
 import { ArrowBack } from "@mui/icons-material";
+import LocationDropdown from "../components/locationDropdown.tsx";
 
 function Map() {
   const divRef = useRef<HTMLDivElement>(null);
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
   const [graph, setGraph] = useState(new Graph());
-  const [imgState, setImgState] = useState<string>(lowerLevel1);
+  const [imgState, setImgState] = useState<string>(floor1);
+  const [algorithm, setAlgorithm] = useState<string>("BFS");
 
   // Zoom in/out buttons for map viewing
   const Controls = () => {
@@ -67,10 +73,10 @@ function Map() {
   const [submitValues, setSubmitValues] = useState(["", ""]);
 
   // Carter's function code bc idk how to do it
-  function handleFormChanges(event: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value } = event.target;
-    setNavigatingNodes({ ...navigatingNodes, [name]: value });
-  }
+  // function handleFormChanges(event: React.ChangeEvent<HTMLInputElement>) {
+  //   const { name, value } = event.target;
+  //   setNavigatingNodes({ ...navigatingNodes, [name]: value });
+  // }
 
   // Handles changes to the start/end destination boxes
   function handleFormSubmit() {
@@ -102,36 +108,54 @@ function Map() {
     });
   }, []);
 
+  const changeAlgorithm = (event: SelectChangeEvent) => {
+    setAlgorithm(event.target.value as string);
+  };
+
+  //Needs to be here for navigation dropdown
+  function updateStart(val: string) {
+    // setResponses({ ...responses, roomNum: val });
+    setNavigatingNodes({ ...navigatingNodes, start: val });
+  }
+
+  function updateEnd(val: string) {
+    // setResponses({ ...responses, roomNum: val });
+    setNavigatingNodes({ ...navigatingNodes, end: val });
+  }
+
   function FloorMapButtons() {
     return (
-      <div className="w-2/3 mx-auto mt-3">
+      <div className="h-2/3 my-auto ml-3">
         <ToggleButtonGroup
+          orientation="vertical"
           value={imgState}
           exclusive
           onChange={(
             _event: React.MouseEvent<HTMLElement>,
             newFloor: string,
           ) => {
-            changeFloor(newFloor);
+            if (newFloor != null) {
+              changeFloor(newFloor);
+            }
           }}
           size="large"
           color="secondary"
           fullWidth
         >
-          <ToggleButton value={lowerLevel2}>
-            <strong>L2</strong>
-          </ToggleButton>
-          <ToggleButton value={lowerLevel1}>
-            <strong>L1</strong>
-          </ToggleButton>
-          <ToggleButton value={floor1}>
-            <strong>1</strong>
+          <ToggleButton value={floor3}>
+            <strong>3</strong>
           </ToggleButton>
           <ToggleButton value={floor2}>
             <strong>2</strong>
           </ToggleButton>
-          <ToggleButton value={floor3}>
-            <strong>3</strong>
+          <ToggleButton value={floor1}>
+            <strong>1</strong>
+          </ToggleButton>
+          <ToggleButton value={lowerLevel1}>
+            <strong>L1</strong>
+          </ToggleButton>
+          <ToggleButton value={lowerLevel2}>
+            <strong>L2</strong>
           </ToggleButton>
         </ToggleButtonGroup>
       </div>
@@ -142,6 +166,22 @@ function Map() {
     <div>
       <BackgroundPattern />
 
+      <div className="inline-flex justify-end items-center my-5">
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Path Algorithm</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={algorithm}
+            label="Algorithm"
+            onChange={changeAlgorithm}
+          >
+            <MenuItem value="BFS">BFS</MenuItem>
+            <MenuItem value="AStar">A-Star</MenuItem>
+          </Select>
+        </FormControl>
+      </div>
+
       {/*Location and Destination things*/}
       <div
         className="my-8
@@ -150,12 +190,12 @@ function Map() {
                    flex-row-reverse
                    max-w-screen-2xl"
       >
-        <div className="flex flex-col w-2/3">
+        <div className="flex flex-row w-2/3">
           {/*Map Image Box*/}
           <div
             ref={divRef}
             className="
-        h-2/3
+        h-full
         flex-grow
         ml-1
         border-primary
@@ -169,6 +209,7 @@ function Map() {
                   graph={graph}
                   inputLoc={[submitValues[0], submitValues[1]]}
                   divDim={divDimensions}
+                  algorithm={algorithm}
                 />
               </TransformComponent>
             </TransformWrapper>
@@ -176,7 +217,6 @@ function Map() {
           {/*Buttons for displaying floor images*/}
           <FloorMapButtons />
         </div>
-
         {/*boxes.*/}
         <div
           className="flex flex-col
@@ -204,35 +244,20 @@ function Map() {
               <h2 className="text-primary font-header pb-4">
                 Where would you like to go?
               </h2>
-              <TextField
-                id="outlined-basic"
-                variant="outlined"
-                label="Location"
-                name="start"
-                value={navigatingNodes.start}
-                onChange={handleFormChanges}
-                sx={{
-                  input: {
-                    color: "primary",
-                    background: "background",
-                  },
-                }}
+
+              <LocationDropdown
+                room={navigatingNodes.start}
+                update={updateStart}
+                label={"Start"}
               />
-              <TextField
-                id="outlined-basic"
-                variant="outlined"
-                label="Destination"
-                value={navigatingNodes.end}
-                name="end"
-                onChange={handleFormChanges}
-                sx={{
-                  input: {
-                    color: "primary",
-                    background: "background",
-                  },
-                }}
-                margin="normal"
+              <br />
+              <LocationDropdown
+                room={navigatingNodes.end}
+                update={updateEnd}
+                label={"End"}
               />
+              <br />
+
               <Button
                 type="button"
                 variant="contained"
@@ -250,7 +275,7 @@ function Map() {
             className="mr-8
                         ml-5
                         mt-2
-                        h-2/5
+                        h-1/5
                         px-0
                         bg-secondary
                         rounded-xl"
@@ -262,10 +287,7 @@ function Map() {
               pb-1.5
               text-primary
               font-header"
-            >
-              This is just a place holder for right now. Written directions are
-              not functional yet.
-            </p>
+            ></p>
           </div>
         </div>
       </div>
