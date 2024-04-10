@@ -33,7 +33,11 @@ function CustomNavBar() {
 
   const { logout } = useAuth0();
   async function handleLogout() {
-    await logout();
+    await logout({
+      logoutParams: {
+        returnTo: window.location.origin,
+      },
+    });
   }
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
