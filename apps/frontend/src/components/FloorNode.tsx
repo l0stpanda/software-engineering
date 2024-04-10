@@ -25,7 +25,6 @@ export interface FloorNodeInfo {
 }
 
 function FloorNode(props: FloorNodesProps) {
-  console.log("FLOORNODE-=================================================");
   const [imgDimensions, setImgDimensions] = useState<{
     width: number;
     height: number;
