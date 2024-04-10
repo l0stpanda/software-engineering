@@ -2,6 +2,7 @@ import trashIcon from "../assets/trashicon.png";
 import { Select, MenuItem, SelectChangeEvent } from "@mui/material";
 import React, { useState } from "react";
 import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 
 type FlowerReqData = {
   id: number;
@@ -10,6 +11,8 @@ type FlowerReqData = {
   status: string;
 };
 function PendingRequestItem(props: FlowerReqData) {
+  const { getAccessTokenSilently } = useAuth0();
+
   // Formats date string to date format
   function formatDate(requestDate: string) {
     const dateToFormat: Date = new Date(requestDate);
@@ -19,11 +22,20 @@ function PendingRequestItem(props: FlowerReqData) {
   const [status, setStatus] = useState<string>(props.status);
 
   async function handleStatusDropdown(e: SelectChangeEvent) {
+    const token = await getAccessTokenSilently();
     setStatus(e.target.value);
-    await axios.post("/api/flowerRequest/update", {
-      id: props.id,
-      status: e.target.value,
-    });
+    await axios.post(
+      "/api/flowerRequest/update",
+      {
+        id: props.id,
+        status: e.target.value,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
     return;
   }
 
@@ -37,8 +49,13 @@ function PendingRequestItem(props: FlowerReqData) {
   async function deleteData(idVal: number) {
     console.log(idVal);
     try {
+      const token = await getAccessTokenSilently();
       //call to backend
-      await axios.delete(`api/flowerRequest/${idVal}`);
+      await axios.delete(`api/flowerRequest/${idVal}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     } catch (e) {
       console.log(e);
       return;
