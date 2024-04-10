@@ -250,7 +250,7 @@ function Map() {
             className="mr-8
                         ml-5
                         mt-2
-                        h-2/5
+                        h-1/5
                         px-0
                         bg-secondary
                         rounded-xl"
@@ -262,10 +262,7 @@ function Map() {
               pb-1.5
               text-primary
               font-header"
-            >
-              This is just a place holder for right now. Written directions are
-              not functional yet.
-            </p>
+            ></p>
           </div>
         </div>
       </div>
