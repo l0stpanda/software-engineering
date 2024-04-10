@@ -15,7 +15,7 @@ import ExportRouteE from "./routes/exportRouteE.tsx";
 import ReadRouteE from "./routes/readRouteE.tsx";
 import LostItemRequest from "./routes/lostItemRequest.tsx";
 import RoomSchedulingRequest from "./routes/roomSchedulingRequest.tsx";
-import MedicineDeliveryRequest from "./routes/MedicineDelivery.tsx";
+import MedicineDeliveryRequest from "./routes/MedicineDeliveryRequest.tsx";
 import MedicalDeviceRequest from "./routes/medicalDeviceRequest.tsx";
 import EditMap from "./routes/editMapPage.tsx";
 import { Auth0Provider } from "@auth0/auth0-react";
@@ -51,7 +51,7 @@ function App() {
         },
         {
           path: "exp",
-          element: <LoadingPage component={ExportRouteE} />,
+          element: <ExportRouteE />,
         },
         {
           path: "displayTables",
