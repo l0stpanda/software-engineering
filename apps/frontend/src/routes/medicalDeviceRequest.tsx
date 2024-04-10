@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import {
   TextField,
   Button,
@@ -22,6 +22,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { medicalDeviceDelivery } from "common/src/medicalDeviceDelivery.ts";
 import { Dayjs } from "dayjs";
 import BackgroundPattern from "../components/allyBackground.tsx";
+import LocationDropdown from "../components/locationDropdown.tsx";
 
 function MedicalDeviceRequest() {
   const [formData, setFormData] = useState<medicalDeviceDelivery>({
@@ -68,7 +69,11 @@ function MedicalDeviceRequest() {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   }
 
-  function handleSubmit() {
+  function updateRoom(val: string) {
+    setFormData({ ...formData, roomName: val });
+  }
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     if (
       formData.employeeName == "" ||
       formData.roomName == "" ||
@@ -78,9 +83,9 @@ function MedicalDeviceRequest() {
       formData.status == "" ||
       formData.deliveryDate == null
     ) {
-      alert("Please Fill in All Fields");
       return;
-    } else if (
+    }
+    if (
       !Number.isInteger(Number(formData.quantity)) ||
       Number(formData.quantity) < 0 ||
       Number(formData.quantity) > 100
@@ -115,129 +120,135 @@ function MedicalDeviceRequest() {
         >
           Najum and Sahil
         </p>
-        <div className="flex flex-col gap-4 my-4">
-          <TextField
-            onChange={handleFormInput}
-            value={formData.employeeName}
-            name="employeeName"
-            id="employeeName"
-            variant="filled"
-            label="Employee Name"
-            required={true}
-          />
-          <TextField
-            onChange={handleFormInput}
-            value={formData.roomName}
-            name="roomName"
-            id="roomName"
-            variant="filled"
-            label="Room Name"
-            required={true}
-          />
-          <TextField
-            onChange={handleFormInput}
-            value={formData.medicalDeviceName}
-            name="medicalDeviceName"
-            id="medicalDeviceName"
-            variant="filled"
-            label="Medical Device Name"
-            required={true}
-          />
-          <TextField
-            onChange={handleFormInput}
-            value={formData.quantity}
-            name="quantity"
-            id="quantity"
-            variant="filled"
-            type="number"
-            inputProps={{ min: 0, max: 100, step: 1 }}
-            label="Quantity"
-            required={true}
-          />
-          <FormControl variant="filled">
-            <InputLabel id="priority">Priority*</InputLabel>
-            <Select
-              name="priority"
-              labelId="priority"
-              id="priority"
-              value={formData.priority}
-              onChange={handlePriorityInput}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={"High"}>High</MenuItem>
-              <MenuItem value={"Medium"}>Medium</MenuItem>
-              <MenuItem value={"Low"}>Low</MenuItem>
-              <MenuItem value={"Emergency"}>Emergency</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl variant="filled">
-            <InputLabel id="status">Status*</InputLabel>
-            <Select
-              name="Status"
-              labelId="status"
-              id="status"
-              value={formData.status}
-              onChange={handleStatusInput}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
-              <MenuItem value={"Assigned"}>Assigned</MenuItem>
-              <MenuItem value={"InProgress"}>InProgress</MenuItem>
-              <MenuItem value={"Closed"}>Closed</MenuItem>
-            </Select>
-          </FormControl>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              sx={{ bgcolor: "#eceff0" }}
-              label="Delivery Date*"
-              value={formData.deliveryDate}
-              disablePast
-              onChange={handleDateChange}
-              // renderInput={(params) => <TextField {...params} />}
+        <form onSubmit={handleSubmit}>
+          <div className="flex flex-col gap-4 my-4">
+            <TextField
+              onChange={handleFormInput}
+              value={formData.employeeName}
+              name="employeeName"
+              id="employeeName"
+              variant="filled"
+              label="Employee Name"
+              required={true}
             />
-          </LocalizationProvider>
-          <div className="flex justify-center">
-            <Button
-              className="w-32 self-center pt-10"
-              onClick={handleSubmit}
-              type="submit"
-              id="requestSubmit"
-              variant="contained"
-              size="large"
-              sx={{
-                borderRadius: "30px",
-                marginRight: "10px",
-                transition: "transform 0.3s ease-in-out",
-                "&:hover": {
-                  transform: "scale(1.05)",
-                },
-              }}
-            >
-              SUBMIT
-            </Button>
+            {/*<TextField*/}
+            {/*  onChange={handleFormInput}*/}
+            {/*  value={formData.roomName}*/}
+            {/*  name="roomName"*/}
+            {/*  id="roomName"*/}
+            {/*  variant="filled"*/}
+            {/*  label="Room Name"*/}
+            {/*  required={true}*/}
+            {/*/>*/}
+            <LocationDropdown
+              room={formData.roomName}
+              update={updateRoom}
+              label={"Room"}
+            />
+            <TextField
+              onChange={handleFormInput}
+              value={formData.medicalDeviceName}
+              name="medicalDeviceName"
+              id="medicalDeviceName"
+              variant="filled"
+              label="Medical Device Name"
+              required={true}
+            />
+            <TextField
+              onChange={handleFormInput}
+              value={formData.quantity}
+              name="quantity"
+              id="quantity"
+              variant="filled"
+              type="number"
+              inputProps={{ min: 0, max: 100, step: 1 }}
+              label="Quantity"
+              required={true}
+            />
+            <FormControl variant="filled">
+              <InputLabel id="priority">Priority*</InputLabel>
+              <Select
+                name="priority"
+                labelId="priority"
+                id="priority"
+                value={formData.priority}
+                onChange={handlePriorityInput}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={"High"}>High</MenuItem>
+                <MenuItem value={"Medium"}>Medium</MenuItem>
+                <MenuItem value={"Low"}>Low</MenuItem>
+                <MenuItem value={"Emergency"}>Emergency</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl variant="filled">
+              <InputLabel id="status">Status*</InputLabel>
+              <Select
+                name="Status"
+                labelId="status"
+                id="status"
+                value={formData.status}
+                onChange={handleStatusInput}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
+                <MenuItem value={"Assigned"}>Assigned</MenuItem>
+                <MenuItem value={"InProgress"}>InProgress</MenuItem>
+                <MenuItem value={"Closed"}>Closed</MenuItem>
+              </Select>
+            </FormControl>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                sx={{ bgcolor: "#eceff0" }}
+                label="Delivery Date*"
+                value={formData.deliveryDate}
+                disablePast
+                onChange={handleDateChange}
+                // renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+            <div className="flex justify-center">
+              <Button
+                className="w-32 self-center pt-10"
+                type="submit"
+                id="requestSubmit"
+                variant="contained"
+                size="large"
+                sx={{
+                  borderRadius: "30px",
+                  marginRight: "10px",
+                  transition: "transform 0.3s ease-in-out",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                  },
+                }}
+              >
+                SUBMIT
+              </Button>
 
-            <Button
-              className="w-32 self-center pt-10"
-              onClick={clear}
-              id="requestClear"
-              variant="contained"
-              size="large"
-              sx={{
-                borderRadius: "30px",
-                transition: "transform 0.3s ease-in-out",
-                "&:hover": {
-                  transform: "scale(1.05)",
-                },
-              }}
-            >
-              CLEAR
-            </Button>
+              <Button
+                className="w-32 self-center pt-10"
+                onClick={clear}
+                id="requestClear"
+                variant="contained"
+                size="large"
+                sx={{
+                  borderRadius: "30px",
+                  transition: "transform 0.3s ease-in-out",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                  },
+                }}
+              >
+                CLEAR
+              </Button>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
       <Dialog open={open} onClose={handleSubmitClose}>
         <DialogTitle>We received your request!</DialogTitle>

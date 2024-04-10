@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import {
   Button,
   Dialog,
@@ -10,17 +10,26 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   TextField,
 } from "@mui/material";
 
 import BackgroundPattern from "../components/allyBackground.tsx";
 import { lostAndFound } from "common/src/lostAndFoundType.ts";
 import LocationDropdown from "./locationDropdown.tsx";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { Dayjs } from "dayjs";
 
 function LostFound() {
   const initialFormResponses: lostAndFound = {
     name: "",
-    date: "",
+    date: null,
     objectDesc: "",
     priority: "",
     status: "",
@@ -39,49 +48,25 @@ function LostFound() {
     setResponses({ ...responses, [e.target.name]: e.target.value });
   }
 
-  let setter = requests.map((field) => (
-    <tr>
-      <td>{field.location}</td>
-      <td>{field.date}</td>
-      <td>{field.name}</td>
-      <td>{field.type}</td>
-      <td>{field.priority}</td>
-      <td>{field.status}</td>
-      <td>{field.objectDesc}</td>
-    </tr>
-  ));
-
-  function handleSubmit() {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     if (
       responses.name == "" ||
-      responses.date == "" ||
+      responses.date == null ||
       responses.objectDesc == "" ||
       responses.priority == "" ||
       responses.status == "" ||
       responses.location == ""
     ) {
-      alert(
-        "Name, Date, Object Description and Location must all be filled out",
-      );
       return;
     }
-    //Make an array that will be pushed to and made the state set to
-    const arrs: lostAndFound[] = requests;
-    arrs.push(responses); //push singleGiftRequest onto arrs
-    setRequests(arrs); //set requests list of GiftReqeustSubmissions to be arrs (array with new request pushed onto it)
-    console.log(arrs);
 
-    //Display all GiftRequestSubmissions in requests array as a table
-    setter = requests.map((field) => (
-      <tr>
-        <td style={{ textAlign: "center" }}>{field.location}</td>
-        <td style={{ textAlign: "center" }}>{field.date}</td>
-        <td style={{ textAlign: "center" }}>{field.name}</td>
-        <td style={{ textAlign: "center" }}>{field.objectDesc}</td>
-      </tr>
-    ));
+    setRequests((prevState) => [...prevState, responses]);
     setOpen(true);
-    //clear();
+  }
+
+  function handleDateChange(date: Dayjs | null) {
+    setResponses({ ...responses, date: date });
   }
 
   function handleSubmitClose() {
@@ -139,21 +124,32 @@ function LostFound() {
               required
             />
 
-            <TextField
-              onChange={handleResponseChanges}
-              value={responses.date}
-              id="date"
-              name="date"
-              variant="filled"
-              placeholder=""
-              label="Request Date"
-              type="date"
-              InputLabelProps={{ shrink: true }}
-              required
-            />
+            {/*<TextField*/}
+            {/*  onChange={handleResponseChanges}*/}
+            {/*  value={responses.date}*/}
+            {/*  id="date"*/}
+            {/*  name="date"*/}
+            {/*  variant="filled"*/}
+            {/*  placeholder=""*/}
+            {/*  label="Request Date"*/}
+            {/*  type="date"*/}
+            {/*  InputLabelProps={{ shrink: true }}*/}
+            {/*  required*/}
+            {/*/>*/}
 
-            <FormControl variant="filled">
-              <InputLabel id="priority">Priority*</InputLabel>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                sx={{ bgcolor: "#eceff0" }}
+                label="Delivery Date*"
+                value={responses.date}
+                disablePast
+                onChange={handleDateChange}
+                // renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+
+            <FormControl variant="filled" required>
+              <InputLabel id="priority">Priority</InputLabel>
               <Select
                 name="priority"
                 labelId="priority"
@@ -171,8 +167,8 @@ function LostFound() {
               </Select>
             </FormControl>
 
-            <FormControl variant="filled">
-              <InputLabel id="status">Status*</InputLabel>
+            <FormControl variant="filled" required>
+              <InputLabel id="status">Status</InputLabel>
               <Select
                 name="status"
                 labelId="status"
@@ -191,7 +187,7 @@ function LostFound() {
             </FormControl>
 
             <FormControl variant="filled">
-              <InputLabel id="giftType">Item Type*</InputLabel>
+              <InputLabel id="giftType">Item Type</InputLabel>
               <Select
                 name="type"
                 labelId="type"
@@ -272,7 +268,7 @@ function LostFound() {
           <br />
           Name: {responses.name}
           <br />
-          Date: {responses.date}
+          Date: {responses.date?.toString()}
           <br />
           Object Description: {responses.objectDesc}
           <br />
@@ -285,20 +281,40 @@ function LostFound() {
         </DialogActions>
       </Dialog>
 
-      <table style={{ backgroundColor: "white", width: "90%" }}>
-        <tbody>
-          <tr>
-            <th style={{ textAlign: "center" }}>Location</th>
-            <th style={{ textAlign: "center" }}>Date</th>
-            <th style={{ textAlign: "center" }}>Name</th>
-            <th style={{ textAlign: "center" }}>Description</th>
-          </tr>
-        </tbody>
-        <tbody>
-          {/*This is the part that renders the information to the table*/}
-          {setter}
-        </tbody>
-      </table>
+      <Table
+        className="bg-gray rounded-xl justify-center py-10"
+        sx={{ bgcolor: "#eceff0" }}
+      >
+        <TableHead>
+          <TableRow>
+            <TableCell>Employee Name</TableCell>
+            <TableCell>Date</TableCell>
+            <TableCell>Object Description</TableCell>
+            <TableCell>Priority</TableCell>
+            <TableCell>Status</TableCell>
+            <TableCell>Item Type</TableCell>
+            <TableCell>Location</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {requests.map(
+            (
+              { name, date, objectDesc, priority, status, type, location },
+              index,
+            ) => (
+              <TableRow key={index}>
+                <TableCell>{name}</TableCell>
+                <TableCell>{date?.toString()}</TableCell>
+                <TableCell>{objectDesc}</TableCell>
+                <TableCell>{priority}</TableCell>
+                <TableCell>{status}</TableCell>
+                <TableCell>{type}</TableCell>
+                <TableCell>{location}</TableCell>
+              </TableRow>
+            ),
+          )}
+        </TableBody>
+      </Table>
     </div>
     // </div>
   );

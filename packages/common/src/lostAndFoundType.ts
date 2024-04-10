@@ -1,6 +1,8 @@
+import { Dayjs } from "dayjs";
+
 export interface lostAndFound {
   name: string;
-  date: string;
+  date: Dayjs | null;
   priority: string;
   status: string;
   type: string;

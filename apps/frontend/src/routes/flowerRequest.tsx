@@ -9,7 +9,7 @@ import {
   //InputLabel,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import axios from "axios";
 import BackgroundPattern from "../components/allyBackground.tsx";
 import { flowerReqFields } from "common/src/flowerRequest.ts";
@@ -45,7 +45,8 @@ function FlowerRequest() {
   }
 
   // Clears form, and outputs responses
-  async function handleSubmit() {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     // Catch required fields not being filled out
     console.log(responses);
     if (
@@ -53,7 +54,6 @@ function FlowerRequest() {
       responses.senderName == "" ||
       responses.roomNum == ""
     ) {
-      alert("Room Number, Send To, and Sent From must all be filled out");
       return;
     }
 
@@ -95,82 +95,83 @@ function FlowerRequest() {
         <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
           Flower Delivery Request
         </h1>
-        <div className="flex flex-col gap-4 my-4">
-          {/*This handles the dropdown stuff*/}
-          <LocationDropdown
-            room={responses.roomNum}
-            update={updateRoom}
-            label={"Room"}
-          />
-          {/*This handles the dropdown stuff*/}
-          <TextField
-            onChange={handleResponseChanges}
-            value={responses.senderName}
-            id="senderName"
-            name="senderName"
-            variant="filled"
-            label="Sent By"
-            placeholder="Name"
-            required={true}
-          />
-          <TextField
-            onChange={handleResponseChanges}
-            value={responses.sendTo}
-            id="sendTo"
-            name="sendTo"
-            variant="filled"
-            label="Send To"
-            placeholder="Name"
-            required={true}
-          />
-          <TextField
-            onChange={handleResponseChanges}
-            value={responses.attachedNote}
-            id="attachedNote"
-            name="attachedNote"
-            variant="filled"
-            label="Note for Patient"
-            multiline={true}
-            maxRows={5}
-          />
-          <div className="flex-row self-center">
-            <Button
-              className="w-32 self-center pt-10"
-              onClick={handleSubmit}
-              type="submit"
-              id="requestSubmit"
-              variant="contained"
-              size="large"
-              sx={{
-                borderRadius: "30px",
-                marginRight: "10px",
-                transition: "transform 0.3s ease-in-out",
-                "&:hover": {
-                  transform: "scale(1.05)",
-                },
-              }}
-            >
-              SUBMIT
-            </Button>
+        <form onSubmit={handleSubmit}>
+          <div className="flex flex-col gap-4 my-4">
+            {/*This handles the dropdown stuff*/}
+            <LocationDropdown
+              room={responses.roomNum}
+              update={updateRoom}
+              label={"Room"}
+            />
+            {/*This handles the dropdown stuff*/}
+            <TextField
+              onChange={handleResponseChanges}
+              value={responses.senderName}
+              id="senderName"
+              name="senderName"
+              variant="filled"
+              label="Sent By"
+              placeholder="Name"
+              required={true}
+            />
+            <TextField
+              onChange={handleResponseChanges}
+              value={responses.sendTo}
+              id="sendTo"
+              name="sendTo"
+              variant="filled"
+              label="Send To"
+              placeholder="Name"
+              required={true}
+            />
+            <TextField
+              onChange={handleResponseChanges}
+              value={responses.attachedNote}
+              id="attachedNote"
+              name="attachedNote"
+              variant="filled"
+              label="Note for Patient"
+              multiline={true}
+              maxRows={5}
+            />
+            <div className="flex-row self-center">
+              <Button
+                className="w-32 self-center pt-10"
+                type="submit"
+                id="requestSubmit"
+                variant="contained"
+                size="large"
+                sx={{
+                  borderRadius: "30px",
+                  marginRight: "10px",
+                  transition: "transform 0.3s ease-in-out",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                  },
+                }}
+              >
+                SUBMIT
+              </Button>
 
-            <Button
-              className="w-32 self-center pt-10"
-              onClick={clear}
-              id="requestClear"
-              variant="contained"
-              size="large"
-              sx={{
-                borderRadius: "30px",
-                transition: "transform 0.3s ease-in-out",
-                "&:hover": {
-                  transform: "scale(1.05)",
-                },
-              }}
-            >
-              Clear
-            </Button>
+              <Button
+                className="w-32 self-center pt-10"
+                onClick={clear}
+                id="requestClear"
+                variant="contained"
+                size="large"
+                sx={{
+                  borderRadius: "30px",
+                  transition: "transform 0.3s ease-in-out",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                  },
+                }}
+              >
+                Clear
+              </Button>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
       <Dialog open={open} onClose={handleSubmitClose}>
         <DialogTitle>We received your request!</DialogTitle>

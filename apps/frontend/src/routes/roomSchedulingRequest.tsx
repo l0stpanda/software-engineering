@@ -99,6 +99,7 @@ export default function RoomSchedulingRequest() {
 
   function handleSubmitClose() {
     setOpen(false);
+    window.location.reload();
     clear();
   }
 
