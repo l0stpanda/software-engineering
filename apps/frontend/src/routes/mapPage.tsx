@@ -7,7 +7,6 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  TextField,
 } from "@mui/material";
 import {
   TransformWrapper,
@@ -108,7 +107,6 @@ function Map() {
       setGraph(tempGraph);
     });
   }, []);
-
 
   const changeAlgorithm = (event: SelectChangeEvent) => {
     setAlgorithm(event.target.value as string);
