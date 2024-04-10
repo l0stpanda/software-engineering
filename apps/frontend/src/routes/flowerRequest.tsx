@@ -133,17 +133,30 @@ function FlowerRequest() {
             multiline={true}
             maxRows={5}
           />
-          <Button
-            className="w-32 self-center pt-10"
-            onClick={handleSubmit}
-            type="submit"
-            id="requestSubmit"
-            variant="contained"
-            size="large"
-            sx={{ borderRadius: "30px" }}
-          >
-            SUBMIT
-          </Button>
+          <div className="flex-row self-center">
+            <Button
+              className="w-32 self-center pt-10"
+              onClick={handleSubmit}
+              type="submit"
+              id="requestSubmit"
+              variant="contained"
+              size="large"
+              sx={{ borderRadius: "30px", marginRight: "10px" }}
+            >
+              SUBMIT
+            </Button>
+
+            <Button
+              className="w-32 self-center pt-10"
+              onClick={clear}
+              id="requestClear"
+              variant="contained"
+              size="large"
+              sx={{ borderRadius: "30px" }}
+            >
+              Clear
+            </Button>
+          </div>
         </div>
       </div>
       <Dialog open={open} onClose={handleSubmitClose}>

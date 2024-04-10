@@ -166,22 +166,6 @@ function Map() {
     <div>
       <BackgroundPattern />
 
-      <div className="inline-flex justify-end items-center my-5">
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Path Algorithm</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={algorithm}
-            label="Algorithm"
-            onChange={changeAlgorithm}
-          >
-            <MenuItem value="BFS">BFS</MenuItem>
-            <MenuItem value="AStar">A-Star</MenuItem>
-          </Select>
-        </FormControl>
-      </div>
-
       {/*Location and Destination things*/}
       <div
         className="my-8
@@ -257,7 +241,25 @@ function Map() {
                 label={"End"}
               />
               <br />
-
+              <div className="inline-flex justify-end items-center my-5">
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">
+                    Path Algorithm
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={algorithm}
+                    label="Algorithm"
+                    onChange={changeAlgorithm}
+                    variant="filled"
+                  >
+                    <MenuItem value="BFS">BFS</MenuItem>
+                    <MenuItem value="AStar">A-Star</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+              <br />
               <Button
                 type="button"
                 variant="contained"
