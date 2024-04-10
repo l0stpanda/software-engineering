@@ -26,6 +26,7 @@ import FloorNode from "../components/FloorNode.tsx";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { ArrowBack } from "@mui/icons-material";
 import LocationDropdown from "../components/locationDropdown.tsx";
+import ModeIcon from "@mui/icons-material/Mode";
 
 function Map() {
   const divRef = useRef<HTMLDivElement>(null);
@@ -271,27 +272,25 @@ function Map() {
             </div>
           </div>
           {/*second non-functional box for rn*/}
-          <div
-            className="mr-8
-                        ml-5
-                        mt-2
-                        h-1/5
-                        px-0
-                        bg-secondary
-                        rounded-xl"
-          >
-            <p
-              className="pr-1.5
-              pl-1.5
-              pt-1.5
-              pb-1.5
-              text-primary
-              font-header"
-            ></p>
+          <br />
+          <div className="flex flex-col justify-center px-28">
+            <a href="editMap">
+              <Button
+                type="button"
+                variant="contained"
+                startIcon={<ModeIcon />}
+                className="editMapBut"
+                size="medium"
+                sx={{ borderRadius: "30px", fontSize: "15px", font: "header" }}
+              >
+                Edit Map
+              </Button>
+            </a>
           </div>
         </div>
       </div>
     </div>
+    // </div>
   );
 }
 
