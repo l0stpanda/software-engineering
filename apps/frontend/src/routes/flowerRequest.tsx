@@ -1,25 +1,18 @@
+import React from "react";
 import {
-  //Autocomplete,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  //FormControl,
-  //InputLabel,
   TextField,
 } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
 import BackgroundPattern from "../components/backgroundPattern.tsx";
 import { flowerReqFields } from "common/src/flowerRequest.ts";
-import LocationDropdown from "../components/locationDropdown.tsx";
-//import {SelectChangeEvent} from "@mui/material/Select";
-import { useAuth0 } from "@auth0/auth0-react";
 
 function FlowerRequest() {
-  const { getAccessTokenSilently } = useAuth0();
-
   const initialFormResponses: flowerReqFields = {
     roomNum: "",
     senderName: "",
@@ -47,7 +40,6 @@ function FlowerRequest() {
   // Clears form, and outputs responses
   async function handleSubmit() {
     // Catch required fields not being filled out
-    console.log(responses);
     if (
       responses.sendTo == "" ||
       responses.senderName == "" ||
@@ -58,18 +50,13 @@ function FlowerRequest() {
     }
 
     try {
-      const token = await getAccessTokenSilently();
-      console.log(token);
       // Make post request to backend with form response data
       await axios.post("/api/flowerRequest", responses, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
     } catch (error) {
       alert(
-        "Error storing in the database, make sure nodes/edges are uploaded and you are logged in.",
+        "Error storing in the database, make sure nodes/edges are uploaded",
       );
       console.error(error);
       return;
@@ -84,10 +71,6 @@ function FlowerRequest() {
     clear();
   }
 
-  function updateRoom(val: string) {
-    setResponses({ ...responses, roomNum: val });
-  }
-
   return (
     <div className="justify-center grid h-screen place-items-center">
       <BackgroundPattern />
@@ -96,13 +79,15 @@ function FlowerRequest() {
           Flower Delivery Request
         </h1>
         <div className="flex flex-col gap-4 my-4">
-          {/*This handles the dropdown stuff*/}
-          <LocationDropdown
-            room={responses.roomNum}
-            update={updateRoom}
-            label={"Room"}
+          <TextField
+            onChange={handleResponseChanges}
+            value={responses.roomNum}
+            name="roomNum"
+            id="roomNum"
+            variant="filled"
+            label="Room Name"
+            required={true}
           />
-          {/*This handles the dropdown stuff*/}
           <TextField
             onChange={handleResponseChanges}
             value={responses.senderName}

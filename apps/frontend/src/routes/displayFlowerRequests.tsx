@@ -5,7 +5,7 @@ import PendingRequestItem from "../components/PendingRequestItem.tsx";
 // Define database json type
 type FlowerReqData = {
   id: number;
-  name: string;
+  room: string;
   sent_by: string;
   sent_to: string;
   requestDate: string;
@@ -33,12 +33,6 @@ export default function PendingFlowerRequest() {
       console.error("Error from fetchData promise:", error);
     });
   }, []);
-
-  //Have to do this because we store the node_id in the table
-  // async function idToName(id : string){
-  //     const name = await axios.get(`/import/idToName/${id}`);
-  //     return name.data;
-  // }
 
   return (
     <div className="px-8 p5 h-screen bg-background">
@@ -73,11 +67,10 @@ export default function PendingFlowerRequest() {
           {/* Map through the records and create a row for each record */}
           {records.map((record) => (
             <PendingRequestItem
-              key={record.id}
               id={record.id}
               status={record.status}
               requestDate={record.requestDate}
-              name={record.name}
+              room={record.room}
             />
           ))}
         </tbody>
