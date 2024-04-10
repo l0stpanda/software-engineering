@@ -15,7 +15,7 @@ import floor1 from "../assets/01_thefirstfloor.png";
 import floor2 from "../assets/02_thesecondfloor.png";
 import floor3 from "../assets/03_thethirdfloor.png";
 
-import FloorNode from "../components/FloorNode.tsx";
+import EditMapViewGraph from "../components/EditMapViewGraph.tsx";
 
 function EditMap() {
   const divRef = useRef<HTMLDivElement>(null);
@@ -79,34 +79,37 @@ function EditMap() {
 
   function FloorMapButtons() {
     return (
-      <div className="w-2/3 mx-auto mt-3">
+      <div className="h-2/3 my-auto ml-3">
         <ToggleButtonGroup
+          orientation="vertical"
           value={imgState}
           exclusive
           onChange={(
             _event: React.MouseEvent<HTMLElement>,
             newFloor: string,
           ) => {
-            changeFloor(newFloor);
+            if (newFloor != null) {
+              changeFloor(newFloor);
+            }
           }}
           size="large"
           color="secondary"
           fullWidth
         >
-          <ToggleButton value={lowerLevel2}>
-            <strong>L2</strong>
-          </ToggleButton>
-          <ToggleButton value={lowerLevel1}>
-            <strong>L1</strong>
-          </ToggleButton>
-          <ToggleButton value={floor1}>
-            <strong>1</strong>
+          <ToggleButton value={floor3}>
+            <strong>3</strong>
           </ToggleButton>
           <ToggleButton value={floor2}>
             <strong>2</strong>
           </ToggleButton>
-          <ToggleButton value={floor3}>
-            <strong>3</strong>
+          <ToggleButton value={floor1}>
+            <strong>1</strong>
+          </ToggleButton>
+          <ToggleButton value={lowerLevel1}>
+            <strong>L1</strong>
+          </ToggleButton>
+          <ToggleButton value={lowerLevel2}>
+            <strong>L2</strong>
           </ToggleButton>
         </ToggleButtonGroup>
       </div>
@@ -125,12 +128,12 @@ function EditMap() {
                    flex-row-reverse
                    max-w-screen-2xl"
       >
-        <div className="flex flex-col w-2/3">
+        <div className="flex flex-row w-2/3">
           {/*Map Image Box*/}
           <div
             ref={divRef}
             className="
-        h-2/3
+        h-full
         flex-grow
         ml-1
         border-primary
@@ -139,12 +142,10 @@ function EditMap() {
             <TransformWrapper>
               <Controls />
               <TransformComponent>
-                <FloorNode
+                <EditMapViewGraph
                   imageSrc={imgState}
                   graph={graph}
-                  inputLoc={["", ""]}
                   divDim={divDimensions}
-                  algorithm="BFS"
                 />
               </TransformComponent>
             </TransformWrapper>
