@@ -5,6 +5,11 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   TextField,
 } from "@mui/material";
 
@@ -17,6 +22,9 @@ function LostFound() {
     name: "",
     date: "",
     objectDesc: "",
+    priority: "",
+    status: "",
+    type: "",
     location: "",
   };
 
@@ -36,6 +44,9 @@ function LostFound() {
       <td>{field.location}</td>
       <td>{field.date}</td>
       <td>{field.name}</td>
+      <td>{field.type}</td>
+      <td>{field.priority}</td>
+      <td>{field.status}</td>
       <td>{field.objectDesc}</td>
     </tr>
   ));
@@ -45,6 +56,8 @@ function LostFound() {
       responses.name == "" ||
       responses.date == "" ||
       responses.objectDesc == "" ||
+      responses.priority == "" ||
+      responses.status == "" ||
       responses.location == ""
     ) {
       alert(
@@ -84,6 +97,18 @@ function LostFound() {
     setResponses({ ...responses, location: val });
   }
 
+  function handlePriorityInput(e: SelectChangeEvent) {
+    setResponses({ ...responses, priority: e.target.value });
+  }
+
+  function handleStatusUpdate(e: SelectChangeEvent) {
+    setResponses({ ...responses, status: e.target.value });
+  }
+
+  function handleTypeUpdate(e: SelectChangeEvent) {
+    setResponses({ ...responses, type: e.target.value });
+  }
+
   return (
     <div className="justify-center grid h-screen place-items-center">
       <BackgroundPattern />
@@ -99,7 +124,7 @@ function LostFound() {
               name="name"
               id="name"
               variant="filled"
-              label="Name of Finder"
+              label="Name of Employee"
               required
             />
 
@@ -116,6 +141,62 @@ function LostFound() {
               required
             />
 
+            <FormControl variant="filled">
+              <InputLabel id="priority">Priority*</InputLabel>
+              <Select
+                name="priority"
+                labelId="priority"
+                id="priority"
+                value={responses.priority}
+                onChange={handlePriorityInput}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={"High"}>High</MenuItem>
+                <MenuItem value={"Medium"}>Medium</MenuItem>
+                <MenuItem value={"Low"}>Low</MenuItem>
+                <MenuItem value={"Emergency"}>Emergency</MenuItem>
+              </Select>
+            </FormControl>
+
+            <FormControl variant="filled">
+              <InputLabel id="status">Status*</InputLabel>
+              <Select
+                name="status"
+                labelId="status"
+                id="status"
+                value={responses.status}
+                onChange={handleStatusUpdate}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
+                <MenuItem value={"Assigned"}>Assigned</MenuItem>
+                <MenuItem value={"InProgress"}>In Progress</MenuItem>
+                <MenuItem value={"Closed"}>Closed</MenuItem>
+              </Select>
+            </FormControl>
+
+            <FormControl variant="filled">
+              <InputLabel id="giftType">Item Type*</InputLabel>
+              <Select
+                name="type"
+                labelId="type"
+                id="type"
+                value={responses.type}
+                onChange={handleTypeUpdate}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={"Clothing"}>Clothing</MenuItem>
+                <MenuItem value={"Device"}>Device</MenuItem>
+                <MenuItem value={"Wallet"}>Wallet</MenuItem>
+                <MenuItem value={"Bag"}>Bag</MenuItem>
+              </Select>
+            </FormControl>
             <TextField
               onChange={handleResponseChanges}
               value={responses.objectDesc}
@@ -133,16 +214,29 @@ function LostFound() {
               label={"Location"}
             />
 
-            <Button
-              className="w-32 self-center pt-10"
-              type="submit"
-              id="requestSubmit"
-              variant="contained"
-              size="large"
-              sx={{ borderRadius: "30px" }}
-            >
-              SUBMIT
-            </Button>
+            <div className="flex justify-center">
+              <Button
+                className="w-32 self-center pt-10"
+                type="submit"
+                id="requestSubmit"
+                variant="contained"
+                size="large"
+                sx={{ borderRadius: "30px", marginRight: "10px" }}
+              >
+                SUBMIT
+              </Button>
+
+              <Button
+                className="w-32 self-center pt-10"
+                id="clear"
+                onClick={clear}
+                variant="contained"
+                size="large"
+                sx={{ borderRadius: "30px" }}
+              >
+                CLEAR
+              </Button>
+            </div>
           </div>
         </form>
       </div>
