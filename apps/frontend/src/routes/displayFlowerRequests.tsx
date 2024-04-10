@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import PendingRequestItem from "../components/PendingRequestItem.tsx";
+import { useAuth0 } from "@auth0/auth0-react";
 
 // Define database json type
 type FlowerReqData = {
   id: number;
-  room: string;
+  name: string;
   sent_by: string;
   sent_to: string;
   requestDate: string;
@@ -14,6 +15,8 @@ type FlowerReqData = {
 };
 
 export default function PendingFlowerRequest() {
+  const { getAccessTokenSilently } = useAuth0();
+
   // Use state for records being displayed
   const [records, setRecords] = useState<FlowerReqData[]>([]);
 
@@ -22,7 +25,12 @@ export default function PendingFlowerRequest() {
     // Fetch data from the API
     const fetchData = async () => {
       try {
-        const response = await axios.get("/api/flowerRequest");
+        const token = await getAccessTokenSilently();
+        const response = await axios.get("/api/flowerRequest", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setRecords(response.data); // Assuming the data is an array of flower request data
       } catch (error) {
         console.error("Error fetching flower requests", error);
@@ -32,7 +40,13 @@ export default function PendingFlowerRequest() {
     fetchData().catch((error) => {
       console.error("Error from fetchData promise:", error);
     });
-  }, []);
+  }, [getAccessTokenSilently]);
+
+  //Have to do this because we store the node_id in the table
+  // async function idToName(id : string){
+  //     const name = await axios.get(`/import/idToName/${id}`);
+  //     return name.data;
+  // }
 
   return (
     <div className="px-8 p5 h-screen bg-background">
@@ -67,10 +81,11 @@ export default function PendingFlowerRequest() {
           {/* Map through the records and create a row for each record */}
           {records.map((record) => (
             <PendingRequestItem
+              key={record.id}
               id={record.id}
               status={record.status}
               requestDate={record.requestDate}
-              room={record.room}
+              name={record.name}
             />
           ))}
         </tbody>
