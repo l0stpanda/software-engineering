@@ -9,6 +9,7 @@ type requestButtonProps = {
   clear: Function;
   submit: (delivery: MedicineDelivery) => void;
 };
+
 function RequestButtons(props: requestButtonProps) {
   function handleSubmit() {
     console.log(props.delivery);
@@ -32,12 +33,19 @@ function RequestButtons(props: requestButtonProps) {
   }
 
   return (
-    <div className={"requestButtonsDiv"}>
+    <div className="requestButtonsDiv flex justify-end space-x-4 mt-4">
       <Button
         type="submit"
         variant="contained"
         size="large"
-        sx={{ borderRadius: "30px" }}
+        sx={{
+          borderRadius: "15px",
+          margin: "5px",
+          transition: "transform 0.3s ease-in-out",
+          "&:hover": {
+            transform: "scale(1.05)",
+          },
+        }}
         onClick={handleSubmit}
       >
         SUBMIT
@@ -46,7 +54,14 @@ function RequestButtons(props: requestButtonProps) {
         type="submit"
         variant="contained"
         size="large"
-        sx={{ borderRadius: "30px" }}
+        sx={{
+          borderRadius: "15px",
+          margin: "5px",
+          transition: "transform 0.3s ease-in-out",
+          "&:hover": {
+            transform: "scale(1.05)",
+          },
+        }}
         onClick={handleClear}
       >
         Clear
@@ -54,4 +69,5 @@ function RequestButtons(props: requestButtonProps) {
     </div>
   );
 }
+
 export default RequestButtons;

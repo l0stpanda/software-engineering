@@ -1,13 +1,7 @@
 import React from "react";
 import {
-  // Button,
-  // Dialog,
-  // DialogActions,
-  // DialogContent,
-  // DialogTitle,
   TextField,
   Select,
-  // MenuItem,
   InputLabel,
   FormControl,
   MenuItem,
@@ -100,11 +94,18 @@ function MedicineDeliveryRequest() {
     }
   }
 
-  // Your page is everything in this div
   return (
     <div className="justify-center grid h-screen place-items-center">
       <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-4">
-        <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
+        <h1
+          className="text-2xl font-bold mb-4 text-center transform hover:-translate-y-2 transition-transform duration-300"
+          style={{
+            color: "rgb(0 40 102 / 1)",
+            fontFamily: "Nunito, sans-serif",
+            fontSize: "34px",
+            margin: "5px",
+          }}
+        >
           Medicine Delivery Form
         </h1>
         <div className="formDiv">
@@ -118,6 +119,11 @@ function MedicineDeliveryRequest() {
                 variant="filled"
                 label="Employee Name"
                 placeholder="Name"
+                InputProps={{
+                  classes: {
+                    root: "transform hover:scale-105 transition-transform duration-300",
+                  },
+                }}
               />
               <FormControl variant="filled" fullWidth>
                 <InputLabel id="priority-label">Priority</InputLabel>
@@ -128,15 +134,23 @@ function MedicineDeliveryRequest() {
                   onChange={handlePriorityInput}
                   name="priority"
                   required
+                  inputProps={{
+                    classes: {
+                      root: "transform hover:scale-105 transition-transform duration-300",
+                    },
+                  }}
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        transform: "translateZ(0)",
+                      },
+                    },
+                  }}
                 >
                   <MenuItem value="Low">Low</MenuItem>
                   <MenuItem value="Medium">Medium</MenuItem>
                   <MenuItem value="High">High</MenuItem>
                   <MenuItem value="Emergency">Emergency</MenuItem>
-                  <MenuItem value="Unassigned">Unassigned</MenuItem>
-                  <MenuItem value="Assigned">Assigned</MenuItem>
-                  <MenuItem value="InProgress">InProgress</MenuItem>
-                  <MenuItem value="Closed">Closed</MenuItem>
                 </Select>
               </FormControl>
               <TextField
@@ -147,6 +161,11 @@ function MedicineDeliveryRequest() {
                 variant="filled"
                 label="Location Name"
                 placeholder="Location"
+                InputProps={{
+                  classes: {
+                    root: "transform hover:scale-105 transition-transform duration-300",
+                  },
+                }}
               />
               <TextField
                 onChange={handleMedicineInput}
@@ -156,6 +175,11 @@ function MedicineDeliveryRequest() {
                 variant="filled"
                 label="Medicine Name"
                 placeholder="Medicine Name"
+                InputProps={{
+                  classes: {
+                    root: "transform hover:scale-105 transition-transform duration-300",
+                  },
+                }}
               />
               <FormControl variant="filled" fullWidth>
                 <InputLabel id="quantity-label">Quantity</InputLabel>
@@ -166,6 +190,18 @@ function MedicineDeliveryRequest() {
                   onChange={handleQuantityInput}
                   name="quantity"
                   required
+                  inputProps={{
+                    classes: {
+                      root: "transform hover:scale-105 transition-transform duration-300",
+                    },
+                  }}
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        transform: "translateZ(0)",
+                      },
+                    },
+                  }}
                 >
                   {[...Array(15).keys()].map((num) => (
                     <MenuItem key={num + 1} value={num + 1}>
@@ -183,6 +219,18 @@ function MedicineDeliveryRequest() {
                   onChange={handleStatusInput}
                   name="status"
                   required
+                  inputProps={{
+                    classes: {
+                      root: "transform hover:scale-105 transition-transform duration-300",
+                    },
+                  }}
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        transform: "translateZ(0)",
+                      },
+                    },
+                  }}
                 >
                   <MenuItem value="Unassigned">Unassigned</MenuItem>
                   <MenuItem value="Assigned">Assigned</MenuItem>
@@ -198,17 +246,139 @@ function MedicineDeliveryRequest() {
             submit={submit}
           />
         </div>
-        <h2>Submitted Requests</h2>
-        <ul className="submission-list">
-          {submissions.map((submission, index) => (
-            <li key={index}>
-              {index + 1}. EmployeeName: {submission.employeeName}, Priority：
-              {submission.priority}, Location：{submission.location},
-              MedicineName:{submission.medicineName}, Quantity:{" "}
-              {submission.quantity}, Status: {submission.status}
-            </li>
-          ))}
-        </ul>
+      </div>
+
+      <div className="flex justify-center items-center">
+        <div className="bg-white p-8 rounded-lg">
+          <h2
+            className="text-2xl font-bold mb-4 text-center transform hover:-translate-y-2 transition-transform duration-300"
+            style={{
+              color: "rgb(0 40 102 / 1)",
+              fontFamily: "Nunito, sans-serif",
+              fontSize: "34px",
+              margin: "30px",
+            }}
+          >
+            Submitted Requests
+          </h2>
+          <table className="w-full border-collapse bg-white rounded-lg transform hover:scale-105 transition-transform duration-300">
+            <thead>
+              <tr>
+                <th
+                  className="px-4 py-2 border border-gray-400 rounded-tl-lg"
+                  style={{ color: "#050315", fontFamily: "Nunito, sans-serif" }}
+                >
+                  Index
+                </th>
+                <th
+                  className="px-4 py-2 border border-gray-400"
+                  style={{ color: "#050315", fontFamily: "Nunito, sans-serif" }}
+                >
+                  Employee Name
+                </th>
+                <th
+                  className="px-4 py-2 border border-gray-400"
+                  style={{ color: "#050315", fontFamily: "Nunito, sans-serif" }}
+                >
+                  Priority
+                </th>
+                <th
+                  className="px-4 py-2 border border-gray-400"
+                  style={{ color: "#050315", fontFamily: "Nunito, sans-serif" }}
+                >
+                  Location
+                </th>
+                <th
+                  className="px-4 py-2 border border-gray-400"
+                  style={{ color: "#050315", fontFamily: "Nunito, sans-serif" }}
+                >
+                  Medicine Name
+                </th>
+                <th
+                  className="px-4 py-2 border border-gray-400"
+                  style={{ color: "#050315", fontFamily: "Nunito, sans-serif" }}
+                >
+                  Quantity
+                </th>
+                <th
+                  className="px-4 py-2 border border-gray-400 rounded-tr-lg"
+                  style={{ color: "#050315", fontFamily: "Nunito, sans-serif" }}
+                >
+                  Status
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {submissions.map((submission, index) => (
+                <tr key={index}>
+                  <td
+                    className="px-4 py-2 border border-gray-400 rounded-bl-lg"
+                    style={{
+                      color: "rgb(0 40 102 / 1)",
+                      fontFamily: "Nunito, sans-serif",
+                    }}
+                  >
+                    {index + 1}
+                  </td>
+                  <td
+                    className="px-4 py-2 border border-gray-400"
+                    style={{
+                      color: "rgb(0 40 102 / 1)",
+                      fontFamily: "Nunito, sans-serif",
+                    }}
+                  >
+                    {submission.employeeName}
+                  </td>
+                  <td
+                    className="px-4 py-2 border border-gray-400"
+                    style={{
+                      color: "rgb(0 40 102 / 1)",
+                      fontFamily: "Nunito, sans-serif",
+                    }}
+                  >
+                    {submission.priority}
+                  </td>
+                  <td
+                    className="px-4 py-2 border border-gray-400"
+                    style={{
+                      color: "rgb(0 40 102 / 1)",
+                      fontFamily: "Nunito, sans-serif",
+                    }}
+                  >
+                    {submission.location}
+                  </td>
+                  <td
+                    className="px-4 py-2 border border-gray-400"
+                    style={{
+                      color: "rgb(0 40 102 / 1)",
+                      fontFamily: "Nunito, sans-serif",
+                    }}
+                  >
+                    {submission.medicineName}
+                  </td>
+                  <td
+                    className="px-4 py-2 border border-gray-400"
+                    style={{
+                      color: "rgb(0 40 102 / 1)",
+                      fontFamily: "Nunito, sans-serif",
+                    }}
+                  >
+                    {submission.quantity}
+                  </td>
+                  <td
+                    className="px-4 py-2 border border-gray-400 rounded-br-lg"
+                    style={{
+                      color: "rgb(0 40 102 / 1)",
+                      fontFamily: "Nunito, sans-serif",
+                    }}
+                  >
+                    {submission.status}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
