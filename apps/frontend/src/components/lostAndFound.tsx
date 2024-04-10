@@ -5,16 +5,12 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
   TextField,
 } from "@mui/material";
 
-import BackgroundPattern from "../components/backgroundPattern.tsx";
+import BackgroundPattern from "../components/allyBackground.tsx";
 import { lostAndFound } from "common/src/lostAndFoundType.ts";
+import LocationDropdown from "./locationDropdown.tsx";
 
 function LostFound() {
   const initialFormResponses: lostAndFound = {
@@ -61,9 +57,9 @@ function LostFound() {
     // }
   }
 
-  function handleDropDown(e: SelectChangeEvent) {
-    setResponses({ ...responses, [e.target.name]: e.target.value });
-  }
+  // function handleDropDown(e: SelectChangeEvent) {
+  //   setResponses({ ...responses, [e.target.name]: e.target.value });
+  // }
 
   function handleSubmitClose() {
     setOpen(false);
@@ -72,6 +68,10 @@ function LostFound() {
 
   function clear() {
     setResponses(initialFormResponses);
+  }
+
+  function updateLoc(val: string) {
+    setResponses({ ...responses, location: val });
   }
 
   return (
@@ -116,18 +116,23 @@ function LostFound() {
             required={true}
           />
 
-          <FormControl>
-            <InputLabel>Location</InputLabel>
-            <Select
-              name="location"
-              required={true}
-              label="Location"
-              onChange={handleDropDown}
-              value={responses.location}
-            >
-              <MenuItem value={"random"}>Random Location</MenuItem>
-            </Select>
-          </FormControl>
+          <LocationDropdown
+            room={responses.location}
+            update={updateLoc}
+            label={"Location"}
+          />
+          {/*<FormControl>*/}
+          {/*  <InputLabel>Location</InputLabel>*/}
+          {/*  <Select*/}
+          {/*    name="location"*/}
+          {/*    required={true}*/}
+          {/*    label="Location"*/}
+          {/*    onChange={handleDropDown}*/}
+          {/*    value={responses.location}*/}
+          {/*  >*/}
+          {/*    <MenuItem value={"random"}>Random Location</MenuItem>*/}
+          {/*  </Select>*/}
+          {/*</FormControl>*/}
 
           <Button
             className="w-32 self-center pt-10"

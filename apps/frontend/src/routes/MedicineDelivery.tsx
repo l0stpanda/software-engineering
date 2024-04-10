@@ -11,6 +11,7 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
+import BackgroundPattern from "../components/allyBackground.tsx";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useState } from "react";
 import axios from "axios";
@@ -97,6 +98,7 @@ function MedicineRequest() {
   // Your page is everything in this div
   return (
     <div className="justify-center grid h-screen place-items-center">
+      <BackgroundPattern />
       <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-4">
         <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
           Medicine Delivery Request

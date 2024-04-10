@@ -119,6 +119,11 @@ router.get("/nodesGet", async function (req: Request, res: Response) {
 router.get("/nodeLongNames", async function (req: Request, res: Response) {
   try {
     const response = await PrismaClient.nodes.findMany({
+      orderBy: [
+        {
+          long_name: "asc",
+        },
+      ],
       where: {
         NOT: {
           node_type: "HALL",

@@ -22,7 +22,7 @@ router.post("/", async function (req: Request, res: Response) {
         sent_by: input.senderName,
         sent_to: input.sendTo,
         note: input.attachedNote,
-        status: "Pending",
+        status: "unassigned",
       },
     });
   } catch (e) {
@@ -36,12 +36,12 @@ router.post("/", async function (req: Request, res: Response) {
 router.get("/", async function (req: Request, res: Response) {
   try {
     res.send(await PrismaClient.flowers.findMany());
+    return;
   } catch (e) {
     console.log(e);
     res.sendStatus(400);
     return;
   }
-  res.sendStatus(200);
 });
 
 router.delete("/:id", async function (req: Request, res: Response) {
@@ -53,6 +53,29 @@ router.delete("/:id", async function (req: Request, res: Response) {
     await PrismaClient.flowers.delete({
       where: {
         id: id,
+      },
+    });
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(400);
+    return;
+  }
+  res.sendStatus(200);
+});
+
+//update the status
+router.post("/update", async function (req: Request, res: Response) {
+  const id = parseInt(req.body.id);
+  const status = req.body.status;
+
+  console.log("id is: " + id + "\n" + "status is : " + status);
+  try {
+    await PrismaClient.flowers.update({
+      where: {
+        id: id,
+      },
+      data: {
+        status: status,
       },
     });
   } catch (e) {

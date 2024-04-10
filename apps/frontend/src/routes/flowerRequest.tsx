@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
-import BackgroundPattern from "../components/backgroundPattern.tsx";
+import BackgroundPattern from "../components/allyBackground.tsx";
 import { flowerReqFields } from "common/src/flowerRequest.ts";
 import LocationDropdown from "../components/locationDropdown.tsx";
 //import {SelectChangeEvent} from "@mui/material/Select";
@@ -97,7 +97,11 @@ function FlowerRequest() {
         </h1>
         <div className="flex flex-col gap-4 my-4">
           {/*This handles the dropdown stuff*/}
-          <LocationDropdown room={responses.roomNum} update={updateRoom} />
+          <LocationDropdown
+            room={responses.roomNum}
+            update={updateRoom}
+            label={"Room"}
+          />
           {/*This handles the dropdown stuff*/}
           <TextField
             onChange={handleResponseChanges}
