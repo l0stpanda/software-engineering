@@ -71,11 +71,14 @@ function CustomNavBar() {
             <Button component="a" href="map">
               Map
             </Button>
-            <Button component="a" href="imp">
-              Import
-            </Button>
+            {/*<Button component="a" href="imp">*/}
+            {/*  Import*/}
+            {/*</Button>*/}
             <Button component="a" href="exp">
-              Export
+              Import/Export
+            </Button>
+            <Button component="a" href="displayTables">
+              View Tables
             </Button>
             <Button
               onClick={handleRequestsOpen}
@@ -83,6 +86,7 @@ function CustomNavBar() {
             >
               Service Requests
             </Button>
+
             <Menu
               open={open}
               onClose={handleRequestsClosed}

@@ -9,7 +9,7 @@ import HeroPage from "./routes/heroPage.tsx";
 import MapPage from "./routes/mapPage.tsx";
 import FlowerRequest from "./routes/flowerRequest.tsx";
 import PendingFlowerRequests from "./routes/displayFlowerRequests.tsx";
-import ImportRouteE from "./routes/importRouteE.tsx";
+//import ImportRouteE from "./routes/importRouteE.tsx";
 import CustomNavBar from "./components/navBar.tsx";
 import ExportRouteE from "./routes/exportRouteE.tsx";
 import ReadRouteE from "./routes/readRouteE.tsx";
@@ -45,10 +45,10 @@ function App() {
           path: "viewpending",
           element: <LoadingPage component={PendingFlowerRequests} />,
         },
-        {
-          path: "imp",
-          element: <LoadingPage component={ImportRouteE} />,
-        },
+        // {
+        //   path: "imp",
+        //   element: <LoadingPage component={ImportRouteE} />,
+        // },
         {
           path: "exp",
           element: <LoadingPage component={ExportRouteE} />,
