@@ -7,7 +7,7 @@ import FlowerRequest from "./routes/flowerRequest.tsx";
 import PendingFlowerRequests from "./routes/displayFlowerRequests.tsx";
 import ImportRouteE from "./routes/importRouteE.tsx";
 import CustomNavBar from "./components/navBar.tsx";
-import ExportRouteE from "./routes/exportRouteE.tsx";
+//import ExportRouteE from "./routes/exportRouteE.tsx";
 import ReadRouteE from "./routes/readRouteE.tsx";
 import LostItemRequest from "./routes/lostItemRequest.tsx";
 import RoomSchedulingRequest from "./routes/roomSchedulingRequest.tsx";
@@ -44,10 +44,6 @@ function App() {
         {
           path: "imp",
           element: <ImportRouteE />,
-        },
-        {
-          path: "exp",
-          element: <ExportRouteE />,
         },
         {
           path: "displayTables",
