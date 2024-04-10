@@ -1,12 +1,10 @@
 import React from "react";
-// import SingleFileUploader from "../components/fileUploader.tsx";
-// import SingleDownloader from "../components/fileDownload.tsx"; // Import the downloader component
-import DownloadAndUploader from "../components/fileDownloadAndUploader.tsx";
+import SingleFileUploader from "../components/fileUploader.tsx";
 
-export default function importRouteE() {
+export default function ImportRouteE() {
   return (
-    <div className="space-y-4">
-      <DownloadAndUploader />
+    <div>
+      <SingleFileUploader></SingleFileUploader>
     </div>
   );
 }
