@@ -5,6 +5,16 @@ import {
   InputLabel,
   FormControl,
   MenuItem,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { MedicineDelivery } from "../common/MedicineDelivery.ts";
@@ -79,9 +89,17 @@ function MedicineDeliveryRequest() {
 
   function submit(delivery: MedicineDelivery) {
     setSubmissions([...submissions, delivery]);
-    clear(); // Optionally clear form after submission
+    setOpen(true);
   }
 
+  // State for whether form confirmation dialog is open or closed
+  const [open, setOpen] = useState(false);
+
+  // Handle closing the form confirmation dialog
+  function handleSubmitClose() {
+    setOpen(false);
+    clear();
+  }
   async function handleSubmit() {
     // Catch required fields not being filled out
     if (
@@ -97,7 +115,7 @@ function MedicineDeliveryRequest() {
   }
 
   return (
-    <div className="justify-center grid h-screen place-items-center">
+    <div className="justify-center grid min-h-screen max-h-fit place-items-center">
       <BackgroundPattern />
       <div className="m-auto mt-6 flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-4">
         <h1
@@ -284,125 +302,88 @@ function MedicineDeliveryRequest() {
           >
             Submitted Requests
           </h2>
-          <table className="w-full border-collapse bg-white rounded-lg transform hover:scale-105 transition-transform duration-300">
-            <thead>
-              <tr>
-                <th
-                  className="px-4 py-2 border border-gray-400 rounded-tl-lg"
-                  style={{ color: "#050315", fontFamily: "Nunito, sans-serif" }}
-                >
+          <Table
+            className="bg-gray rounded-xl justify-center py-10"
+            sx={{ bgcolor: "#eceff0" }}
+          >
+            <TableHead className="w-full table-auto mt-4 border-collapse border-b-2 border-secondary">
+              <TableRow>
+                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
                   Index
-                </th>
-                <th
-                  className="px-4 py-2 border border-gray-400"
-                  style={{ color: "#050315", fontFamily: "Nunito, sans-serif" }}
-                >
+                </TableCell>
+                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
                   Employee Name
-                </th>
-                <th
-                  className="px-4 py-2 border border-gray-400"
-                  style={{ color: "#050315", fontFamily: "Nunito, sans-serif" }}
-                >
+                </TableCell>
+                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
                   Priority
-                </th>
-                <th
-                  className="px-4 py-2 border border-gray-400"
-                  style={{ color: "#050315", fontFamily: "Nunito, sans-serif" }}
-                >
+                </TableCell>
+                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
                   Location
-                </th>
-                <th
-                  className="px-4 py-2 border border-gray-400"
-                  style={{ color: "#050315", fontFamily: "Nunito, sans-serif" }}
-                >
+                </TableCell>
+                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
                   Medicine Name
-                </th>
-                <th
-                  className="px-4 py-2 border border-gray-400"
-                  style={{ color: "#050315", fontFamily: "Nunito, sans-serif" }}
-                >
+                </TableCell>
+                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
                   Quantity
-                </th>
-                <th
-                  className="px-4 py-2 border border-gray-400 rounded-tr-lg"
-                  style={{ color: "#050315", fontFamily: "Nunito, sans-serif" }}
-                >
+                </TableCell>
+                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
                   Status
-                </th>
-              </tr>
-            </thead>
-            <tbody>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
               {submissions.map((submission, index) => (
-                <tr key={index}>
-                  <td
-                    className="px-4 py-2 border border-gray-400 rounded-bl-lg"
-                    style={{
-                      color: "rgb(0 40 102 / 1)",
-                      fontFamily: "Nunito, sans-serif",
-                    }}
-                  >
+                <TableRow key={index}>
+                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
                     {index + 1}
-                  </td>
-                  <td
-                    className="px-4 py-2 border border-gray-400"
-                    style={{
-                      color: "rgb(0 40 102 / 1)",
-                      fontFamily: "Nunito, sans-serif",
-                    }}
-                  >
+                  </TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
                     {submission.employeeName}
-                  </td>
-                  <td
-                    className="px-4 py-2 border border-gray-400"
-                    style={{
-                      color: "rgb(0 40 102 / 1)",
-                      fontFamily: "Nunito, sans-serif",
-                    }}
-                  >
+                  </TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
                     {submission.priority}
-                  </td>
-                  <td
-                    className="px-4 py-2 border border-gray-400"
-                    style={{
-                      color: "rgb(0 40 102 / 1)",
-                      fontFamily: "Nunito, sans-serif",
-                    }}
-                  >
+                  </TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
                     {submission.location}
-                  </td>
-                  <td
-                    className="px-4 py-2 border border-gray-400"
-                    style={{
-                      color: "rgb(0 40 102 / 1)",
-                      fontFamily: "Nunito, sans-serif",
-                    }}
-                  >
+                  </TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
                     {submission.medicineName}
-                  </td>
-                  <td
-                    className="px-4 py-2 border border-gray-400"
-                    style={{
-                      color: "rgb(0 40 102 / 1)",
-                      fontFamily: "Nunito, sans-serif",
-                    }}
-                  >
+                  </TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
                     {submission.quantity}
-                  </td>
-                  <td
-                    className="px-4 py-2 border border-gray-400 rounded-br-lg"
-                    style={{
-                      color: "rgb(0 40 102 / 1)",
-                      fontFamily: "Nunito, sans-serif",
-                    }}
-                  >
+                  </TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
                     {submission.status}
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       </div>
+      <Dialog open={open} onClose={handleSubmitClose}>
+        <DialogTitle>We received your request!</DialogTitle>
+        <DialogContent>
+          <strong>Here are your responses:</strong>
+          <br />
+          Employee Name: {delivery.employeeName}
+          <br />
+          Priority: {delivery.priority}
+          <br />
+          Location: {delivery.location}
+          <br />
+          Medicine Name: {delivery.medicineName}
+          <br />
+          Quantity: {delivery.quantity}
+          <br />
+          Status: {delivery.status}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSubmitClose} autoFocus>
+            Okay
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

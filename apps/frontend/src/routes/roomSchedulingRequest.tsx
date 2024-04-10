@@ -108,7 +108,7 @@ export default function RoomSchedulingRequest() {
   }
 
   return (
-    <div className="justify-center grid h-screen place-items-center">
+    <div className="justify-center grid min-h-screen max-h-fit place-items-center">
       <AllyBackground />
       <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-4">
         <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
@@ -136,6 +136,29 @@ export default function RoomSchedulingRequest() {
             value={responses.employName}
             onChange={handleResponseChanges}
             required
+          />
+          <FormControl>
+            <InputLabel id="priority-label">Priority *</InputLabel>
+            <Select
+              labelId="priority-label"
+              label="Priority"
+              name="priority"
+              variant="filled"
+              value={responses.priority}
+              onChange={handleResponseChanges}
+              required
+            >
+              <MenuItem value="">Not Selected</MenuItem>
+              <MenuItem value="Low">Low</MenuItem>
+              <MenuItem value="Medium">Medium</MenuItem>
+              <MenuItem value="High">High</MenuItem>
+              <MenuItem value="Emergency">Emergency</MenuItem>
+            </Select>
+          </FormControl>
+          <LocationDropdown
+            room={responses.roomNum}
+            update={updateRoom}
+            label={"Room"}
           />
           <FormControl>
             <InputLabel id="startTime-label">Start Time *</InputLabel>
@@ -184,11 +207,6 @@ export default function RoomSchedulingRequest() {
             </Select>
           </FormControl>
 
-          <LocationDropdown
-            room={responses.roomNum}
-            update={updateRoom}
-            label={"Room"}
-          />
           {/*<TextField*/}
           {/*  label="Room Number"*/}
           {/*  type="number"*/}
@@ -218,24 +236,6 @@ export default function RoomSchedulingRequest() {
             </Select>
           </FormControl>
 
-          <FormControl>
-            <InputLabel id="priority-label">Priority *</InputLabel>
-            <Select
-              labelId="priority-label"
-              label="Priority"
-              name="priority"
-              variant="filled"
-              value={responses.priority}
-              onChange={handleResponseChanges}
-              required
-            >
-              <MenuItem value="">Not Selected</MenuItem>
-              <MenuItem value="Low">Low</MenuItem>
-              <MenuItem value="Medium">Medium</MenuItem>
-              <MenuItem value="High">High</MenuItem>
-              <MenuItem value="Emergency">Emergency</MenuItem>
-            </Select>
-          </FormControl>
           <div className="flex justify-center">
             <Button
               type="submit"
@@ -297,22 +297,43 @@ export default function RoomSchedulingRequest() {
 
       <br />
 
-      {/* Header for Table */}
-      <div>
-        <h2>Submitted Room Reservations:</h2>
-      </div>
-
+      <h2
+        className="text-2xl font-bold mb-4 text-center transform hover:-translate-y-2 transition-transform duration-300"
+        style={{
+          color: "rgb(0 40 102 / 1)",
+          fontFamily: "Nunito, sans-serif",
+          fontSize: "34px",
+          margin: "30px",
+        }}
+      >
+        Submitted Requests
+      </h2>
       {/* Table of submitted requests */}
       <div>
-        <Table>
-          <TableHead>
+        <Table
+          className="bg-gray rounded-xl justify-center py-10"
+          sx={{ bgcolor: "#eceff0" }}
+        >
+          <TableHead className="w-full table-auto mt-4 border-collapse border-b-2 border-secondary">
             <TableRow>
-              <TableCell>Employee Name</TableCell>
-              <TableCell>Start Time</TableCell>
-              <TableCell>Length of Reservation</TableCell>
-              <TableCell>Room Number</TableCell>
-              <TableCell>Request Status</TableCell>
-              <TableCell>Priority</TableCell>
+              <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+                Employee Name
+              </TableCell>
+              <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+                Start Time
+              </TableCell>
+              <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+                Length of Reservation
+              </TableCell>
+              <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+                Room Number
+              </TableCell>
+              <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+                Request Status
+              </TableCell>
+              <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+                Priority
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -329,12 +350,24 @@ export default function RoomSchedulingRequest() {
                 index,
               ) => (
                 <TableRow key={index}>
-                  <TableCell>{employName}</TableCell>
-                  <TableCell>{startTime}</TableCell>
-                  <TableCell>{lengthRes}</TableCell>
-                  <TableCell>{roomNum}</TableCell>
-                  <TableCell>{reqStatus}</TableCell>
-                  <TableCell>{priority}</TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+                    {employName}
+                  </TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+                    {startTime}
+                  </TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+                    {lengthRes}
+                  </TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+                    {roomNum}
+                  </TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+                    {reqStatus}
+                  </TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+                    {priority}
+                  </TableCell>
                 </TableRow>
               ),
             )}

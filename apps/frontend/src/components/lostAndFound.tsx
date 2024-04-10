@@ -136,18 +136,6 @@ function LostFound() {
             {/*  InputLabelProps={{ shrink: true }}*/}
             {/*  required*/}
             {/*/>*/}
-
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                sx={{ bgcolor: "#eceff0" }}
-                label="Delivery Date*"
-                value={responses.date}
-                disablePast
-                onChange={handleDateChange}
-                // renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
-
             <FormControl variant="filled" required>
               <InputLabel id="priority">Priority</InputLabel>
               <Select
@@ -167,24 +155,22 @@ function LostFound() {
               </Select>
             </FormControl>
 
-            <FormControl variant="filled" required>
-              <InputLabel id="status">Status</InputLabel>
-              <Select
-                name="status"
-                labelId="status"
-                id="status"
-                value={responses.status}
-                onChange={handleStatusUpdate}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
-                <MenuItem value={"Assigned"}>Assigned</MenuItem>
-                <MenuItem value={"InProgress"}>In Progress</MenuItem>
-                <MenuItem value={"Closed"}>Closed</MenuItem>
-              </Select>
-            </FormControl>
+            <LocationDropdown
+              room={responses.location}
+              update={updateLoc}
+              label={"Location"}
+            />
+
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                sx={{ bgcolor: "#eceff0" }}
+                label="Delivery Date*"
+                value={responses.date}
+                disablePast
+                onChange={handleDateChange}
+                // renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
 
             <FormControl variant="filled">
               <InputLabel id="giftType">Item Type</InputLabel>
@@ -214,12 +200,24 @@ function LostFound() {
               placeholder=""
               required
             />
-
-            <LocationDropdown
-              room={responses.location}
-              update={updateLoc}
-              label={"Location"}
-            />
+            <FormControl variant="filled" required>
+              <InputLabel id="status">Status</InputLabel>
+              <Select
+                name="status"
+                labelId="status"
+                id="status"
+                value={responses.status}
+                onChange={handleStatusUpdate}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
+                <MenuItem value={"Assigned"}>Assigned</MenuItem>
+                <MenuItem value={"InProgress"}>In Progress</MenuItem>
+                <MenuItem value={"Closed"}>Closed</MenuItem>
+              </Select>
+            </FormControl>
 
             <div className="flex justify-center">
               <Button
@@ -273,6 +271,12 @@ function LostFound() {
           Object Description: {responses.objectDesc}
           <br />
           Location: {responses.location}
+          <br />
+          Priority: {responses.priority}
+          <br />
+          Item Type: {responses.type}
+          <br />
+          Status: {responses.status}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleSubmitClose} autoFocus>
@@ -280,20 +284,44 @@ function LostFound() {
           </Button>
         </DialogActions>
       </Dialog>
-
+      <h2
+        className="text-2xl font-bold mb-4 text-center transform hover:-translate-y-2 transition-transform duration-300"
+        style={{
+          color: "rgb(0 40 102 / 1)",
+          fontFamily: "Nunito, sans-serif",
+          fontSize: "34px",
+          margin: "30px",
+        }}
+      >
+        Submitted Requests
+      </h2>
       <Table
         className="bg-gray rounded-xl justify-center py-10"
         sx={{ bgcolor: "#eceff0" }}
       >
-        <TableHead>
+        <TableHead className="w-full table-auto mt-4 border-collapse border-b-2 border-secondary">
           <TableRow>
-            <TableCell>Employee Name</TableCell>
-            <TableCell>Date</TableCell>
-            <TableCell>Object Description</TableCell>
-            <TableCell>Priority</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell>Item Type</TableCell>
-            <TableCell>Location</TableCell>
+            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+              Employee Name
+            </TableCell>
+            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+              Date
+            </TableCell>
+            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+              Object Description
+            </TableCell>
+            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+              Priority
+            </TableCell>
+            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+              Status
+            </TableCell>
+            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+              Item Type
+            </TableCell>
+            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+              Location
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -303,13 +331,27 @@ function LostFound() {
               index,
             ) => (
               <TableRow key={index}>
-                <TableCell>{name}</TableCell>
-                <TableCell>{date?.toString()}</TableCell>
-                <TableCell>{objectDesc}</TableCell>
-                <TableCell>{priority}</TableCell>
-                <TableCell>{status}</TableCell>
-                <TableCell>{type}</TableCell>
-                <TableCell>{location}</TableCell>
+                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+                  {name}
+                </TableCell>
+                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+                  {date?.toString()}
+                </TableCell>
+                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+                  {objectDesc}
+                </TableCell>
+                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+                  {priority}
+                </TableCell>
+                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+                  {status}
+                </TableCell>
+                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+                  {type}
+                </TableCell>
+                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+                  {location}
+                </TableCell>
               </TableRow>
             ),
           )}

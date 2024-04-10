@@ -15,8 +15,9 @@ export default {
         body: ["PT+Sans", "serif"],
       },
       backgroundImage: {
-        "ally-background": "url('./src/assets/PatternBackground-Test.png')",
-        "grey-pattern-background": "url('./src/assets/allyBackground.png')",
+        "grey-pattern-background":
+          "url('./src/assets/PatternBackground-Test.png')",
+        "ally-background": "url('./src/assets/allyBackground.png')",
       },
     },
   },

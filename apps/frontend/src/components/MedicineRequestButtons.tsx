@@ -24,7 +24,6 @@ function RequestButtons(props: requestButtonProps) {
       return;
     }
     props.submit(props.delivery);
-    props.clear();
   }
 
   function handleClear() {

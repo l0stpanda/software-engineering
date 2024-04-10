@@ -140,6 +140,24 @@ function MedicalDeviceRequest() {
             {/*  label="Room Name"*/}
             {/*  required={true}*/}
             {/*/>*/}
+            <FormControl variant="filled">
+              <InputLabel id="priority">Priority*</InputLabel>
+              <Select
+                name="priority"
+                labelId="priority"
+                id="priority"
+                value={formData.priority}
+                onChange={handlePriorityInput}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={"High"}>High</MenuItem>
+                <MenuItem value={"Medium"}>Medium</MenuItem>
+                <MenuItem value={"Low"}>Low</MenuItem>
+                <MenuItem value={"Emergency"}>Emergency</MenuItem>
+              </Select>
+            </FormControl>
             <LocationDropdown
               room={formData.roomName}
               update={updateRoom}
@@ -165,24 +183,7 @@ function MedicalDeviceRequest() {
               label="Quantity"
               required={true}
             />
-            <FormControl variant="filled">
-              <InputLabel id="priority">Priority*</InputLabel>
-              <Select
-                name="priority"
-                labelId="priority"
-                id="priority"
-                value={formData.priority}
-                onChange={handlePriorityInput}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={"High"}>High</MenuItem>
-                <MenuItem value={"Medium"}>Medium</MenuItem>
-                <MenuItem value={"Low"}>Low</MenuItem>
-                <MenuItem value={"Emergency"}>Emergency</MenuItem>
-              </Select>
-            </FormControl>
+
             <FormControl variant="filled">
               <InputLabel id="status">Status*</InputLabel>
               <Select
@@ -276,65 +277,75 @@ function MedicalDeviceRequest() {
           </Button>
         </DialogActions>
       </Dialog>
-      {arrayData.length > 0 && (
-        <Table
-          className="bg-gray rounded-xl justify-center py-10"
-          sx={{ bgcolor: "#eceff0" }}
-        >
-          <TableHead className="w-full table-auto mt-4 border-collapse border-b-2 border-secondary">
-            <TableRow>
+
+      <h2
+        className="text-2xl font-bold mb-4 text-center transform hover:-translate-y-2 transition-transform duration-300"
+        style={{
+          color: "rgb(0 40 102 / 1)",
+          fontFamily: "Nunito, sans-serif",
+          fontSize: "34px",
+          margin: "30px",
+        }}
+      >
+        Submitted Requests
+      </h2>
+      <Table
+        className="bg-gray rounded-xl justify-center py-10"
+        sx={{ bgcolor: "#eceff0" }}
+      >
+        <TableHead className="w-full table-auto mt-4 border-collapse border-b-2 border-secondary">
+          <TableRow>
+            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+              Employee Name
+            </TableCell>
+            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+              Room Name
+            </TableCell>
+            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+              Medical Device Name
+            </TableCell>
+            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+              Quantity
+            </TableCell>
+            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+              Priority
+            </TableCell>
+            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+              Status
+            </TableCell>
+            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
+              Date
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {arrayData.map((data, index) => (
+            <TableRow key={index}>
               <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                Employee Name
+                {data.employeeName}
               </TableCell>
               <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                Room Name
+                {data.roomName}
               </TableCell>
               <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                Medical Device Name
+                {data.medicalDeviceName}
               </TableCell>
               <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                Quantity
+                {data.quantity}
               </TableCell>
               <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                Priority
+                {data.priority}
               </TableCell>
               <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                Status
+                {data.status}
               </TableCell>
               <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                Date
+                {data.deliveryDate?.toString()}
               </TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {arrayData.map((data, index) => (
-              <TableRow key={index}>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  {data.employeeName}
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  {data.roomName}
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  {data.medicalDeviceName}
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  {data.quantity}
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  {data.priority}
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  {data.status}
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  {data.deliveryDate?.toString()}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      )}
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }
