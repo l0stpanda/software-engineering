@@ -152,8 +152,8 @@ function LostFound() {
               required
             />
 
-            <FormControl variant="filled">
-              <InputLabel id="priority">Priority*</InputLabel>
+            <FormControl variant="filled" required>
+              <InputLabel id="priority">Priority</InputLabel>
               <Select
                 name="priority"
                 labelId="priority"
@@ -171,8 +171,8 @@ function LostFound() {
               </Select>
             </FormControl>
 
-            <FormControl variant="filled">
-              <InputLabel id="status">Status*</InputLabel>
+            <FormControl variant="filled" required>
+              <InputLabel id="status">Status</InputLabel>
               <Select
                 name="status"
                 labelId="status"
@@ -190,8 +190,8 @@ function LostFound() {
               </Select>
             </FormControl>
 
-            <FormControl variant="filled">
-              <InputLabel id="giftType">Item Type*</InputLabel>
+            <FormControl variant="filled" required>
+              <InputLabel id="giftType">Item Type</InputLabel>
               <Select
                 name="type"
                 labelId="type"
