@@ -221,7 +221,14 @@ function LostFound() {
                 id="requestSubmit"
                 variant="contained"
                 size="large"
-                sx={{ borderRadius: "30px", marginRight: "10px" }}
+                sx={{
+                  borderRadius: "30px",
+                  marginRight: "10px",
+                  transition: "transform 0.3s ease-in-out",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                  },
+                }}
               >
                 SUBMIT
               </Button>
@@ -232,7 +239,13 @@ function LostFound() {
                 onClick={clear}
                 variant="contained"
                 size="large"
-                sx={{ borderRadius: "30px" }}
+                sx={{
+                  borderRadius: "30px",
+                  transition: "transform 0.3s ease-in-out",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                  },
+                }}
               >
                 CLEAR
               </Button>

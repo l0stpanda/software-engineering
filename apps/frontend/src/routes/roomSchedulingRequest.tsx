@@ -227,7 +227,14 @@ export default function RoomSchedulingRequest() {
               type="submit"
               variant="contained"
               className="w-32 self-center pt-10"
-              sx={{ borderRadius: "30px", marginRight: "10px" }}
+              sx={{
+                borderRadius: "30px",
+                marginRight: "10px",
+                transition: "transform 0.3s ease-in-out",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                },
+              }}
             >
               SUBMIT
             </Button>
@@ -236,7 +243,13 @@ export default function RoomSchedulingRequest() {
               onClick={clear}
               variant="contained"
               className="w-32 self-center pt-10"
-              sx={{ borderRadius: "30px" }}
+              sx={{
+                borderRadius: "30px",
+                transition: "transform 0.3s ease-in-out",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                },
+              }}
             >
               CLEAR
             </Button>
