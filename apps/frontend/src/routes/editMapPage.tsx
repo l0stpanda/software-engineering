@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
+// import { AddIcon, RemoveIcon, EditIcon } from "@mui/icons-material";
 import {
   TransformWrapper,
   TransformComponent,
@@ -116,7 +117,7 @@ function EditMap() {
     <div>
       <BackgroundPattern />
 
-      {/*Location and Destination things*/}
+      {/*Map and Edit Buttons*/}
       <div
         className="my-8
                    justify-center
@@ -171,18 +172,119 @@ function EditMap() {
                     border-primary
                     border-2"
           >
-            {/*non-functional box for rn*/}
-            <p
-              className="pr-1.5
-              pl-1.5
-              pt-1.5
-              pb-1.5
-              text-primary
-              font-header"
+            <h1
+              className="text-primary
+              font-header
+              font-bold
+              text-2xl"
             >
-              This is just a place holder for right now. Editing tools will go
-              here
-            </p>
+              Node Editing
+            </h1>
+            <Button
+              type="button"
+              variant="contained"
+              className="addNodeBut"
+              size="medium"
+              // startIcon={<AddIcon />}
+              sx={{
+                borderRadius: "25px",
+                fontSize: "18px",
+                marginTop: "10px",
+                minWidth: "165px",
+                minHeight: "60px",
+                ":focus": {
+                  backgroundColor: "#009BA8",
+                },
+              }}
+            >
+              Add Node
+            </Button>
+            <Button
+              type="button"
+              variant="contained"
+              className="deleteNodeBut"
+              size="medium"
+              // startIcon={<RemoveIcon />}
+              sx={{
+                borderRadius: "25px",
+                fontSize: "18px",
+                marginTop: "10px",
+                minWidth: "165px",
+                minHeight: "60px",
+                ":focus": {
+                  backgroundColor: "#009BA8",
+                },
+              }}
+            >
+              Delete Node
+            </Button>
+            <Button
+              type="button"
+              variant="contained"
+              className="editNodeBut"
+              size="medium"
+              // startIcon={<EditIcon />}
+              sx={{
+                borderRadius: "25px",
+                fontSize: "18px",
+                marginTop: "10px",
+                minWidth: "165px",
+                marginBottom: "10px",
+                minHeight: "60px",
+                ":focus": {
+                  backgroundColor: "#009BA8",
+                },
+              }}
+            >
+              Move Node
+            </Button>
+            <h1
+              className="text-primary
+              font-header
+              font-bold
+              text-2xl
+              pt-5"
+            >
+              Edge Editing
+            </h1>
+            <Button
+              type="button"
+              variant="contained"
+              className="addNodeBut"
+              size="medium"
+              // startIcon={<AddIcon />}
+              sx={{
+                borderRadius: "25px",
+                fontSize: "18px",
+                marginTop: "10px",
+                minWidth: "165px",
+                minHeight: "60px",
+                ":focus": {
+                  backgroundColor: "#009BA8",
+                },
+              }}
+            >
+              Add Edge
+            </Button>
+            <Button
+              type="button"
+              variant="contained"
+              className="deleteNodeBut"
+              size="medium"
+              // startIcon={<RemoveIcon />}
+              sx={{
+                borderRadius: "25px",
+                fontSize: "18px",
+                marginTop: "10px",
+                minWidth: "165px",
+                minHeight: "60px",
+                ":focus": {
+                  backgroundColor: "#009BA8",
+                },
+              }}
+            >
+              Delete Edge
+            </Button>
           </div>
         </div>
       </div>
