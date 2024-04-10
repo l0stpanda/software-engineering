@@ -104,6 +104,17 @@ function MedicalDeviceRequest() {
         <h1 className="m-2 font-header text-primary font-bold text-3xl text-center">
           Medical Device Delivery Form
         </h1>
+        <p
+          className="text-2xl font-bold mb-4 text-center"
+          style={{
+            color: "black",
+            fontFamily: "PTSans, sans-serif",
+            fontSize: "20px",
+            margin: "5px",
+          }}
+        >
+          Najum and Sahil
+        </p>
         <div className="flex flex-col gap-4 my-4">
           <TextField
             onChange={handleFormInput}
@@ -191,7 +202,7 @@ function MedicalDeviceRequest() {
           </LocalizationProvider>
           <div className="flex justify-center">
             <Button
-              className="py-2 px-4 mt-3 rounded items-center"
+              className="w-32 self-center pt-10"
               onClick={handleSubmit}
               type="submit"
               id="requestSubmit"
@@ -210,7 +221,7 @@ function MedicalDeviceRequest() {
             </Button>
 
             <Button
-              className="py-2 px-4 mt-3 rounded items-center"
+              className="w-32 self-center pt-10"
               onClick={clear}
               id="requestClear"
               variant="contained"

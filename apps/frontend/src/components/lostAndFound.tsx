@@ -116,6 +116,17 @@ function LostFound() {
         <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
           Lost and Found Request
         </h1>
+        <p
+          className="text-2xl font-bold mb-4 text-center"
+          style={{
+            color: "black",
+            fontFamily: "PTSans, sans-serif",
+            fontSize: "20px",
+            margin: "5px",
+          }}
+        >
+          Sam and Krishna
+        </p>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4 my-4">
             <TextField

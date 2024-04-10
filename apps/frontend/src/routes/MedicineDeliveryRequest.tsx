@@ -110,6 +110,17 @@ function MedicineDeliveryRequest() {
         >
           Medicine Delivery Form
         </h1>
+        <p
+          className="text-2xl font-bold mb-4 text-center"
+          style={{
+            color: "black",
+            fontFamily: "PTSans, sans-serif",
+            fontSize: "20px",
+            margin: "5px",
+          }}
+        >
+          Qiushi and Vincent
+        </p>
         <div className="formDiv">
           <div className="inputDiv">
             <form className="flex flex-col gap-4 my-4" onSubmit={handleSubmit}>
