@@ -128,12 +128,12 @@ function EditMap() {
                    flex-row-reverse
                    max-w-screen-2xl"
       >
-        <div className="flex flex-col w-2/3">
+        <div className="flex flex-row w-2/3">
           {/*Map Image Box*/}
           <div
             ref={divRef}
             className="
-        h-2/3
+        h-full
         flex-grow
         ml-1
         border-primary
