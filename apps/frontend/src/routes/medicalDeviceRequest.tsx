@@ -197,9 +197,20 @@ function MedicalDeviceRequest() {
               id="requestSubmit"
               variant="contained"
               size="large"
-              sx={{ borderRadius: "30px" }}
+              sx={{ borderRadius: "30px", marginRight: "10px" }}
             >
               SUBMIT
+            </Button>
+
+            <Button
+              className="py-2 px-4 mt-3 rounded items-center"
+              onClick={clear}
+              id="requestClear"
+              variant="contained"
+              size="large"
+              sx={{ borderRadius: "30px" }}
+            >
+              CLEAR
             </Button>
           </div>
         </div>

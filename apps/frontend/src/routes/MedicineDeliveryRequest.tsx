@@ -10,6 +10,7 @@ import { SelectChangeEvent } from "@mui/material/Select";
 import { MedicineDelivery } from "../common/MedicineDelivery.ts";
 import MedicineRequestButtons from "../components/MedicineRequestButtons.tsx";
 import { ChangeEvent, useState } from "react";
+import BackgroundPattern from "../components/allyBackground.tsx";
 
 function MedicineDeliveryRequest() {
   const [delivery, setDelivery] = useState<MedicineDelivery>({
@@ -96,6 +97,7 @@ function MedicineDeliveryRequest() {
 
   return (
     <div className="justify-center grid h-screen place-items-center">
+      <BackgroundPattern />
       <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-4">
         <h1
           className="text-2xl font-bold mb-4 text-center transform hover:-translate-y-2 transition-transform duration-300"
