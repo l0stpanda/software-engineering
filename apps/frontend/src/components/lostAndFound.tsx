@@ -61,14 +61,14 @@ function LostFound() {
     //Display all GiftRequestSubmissions in requests array as a table
     setter = requests.map((field) => (
       <tr>
-        <td>{field.location}</td>
-        <td>{field.date}</td>
-        <td>{field.name}</td>
-        <td>{field.objectDesc}</td>
+        <td style={{ textAlign: "center" }}>{field.location}</td>
+        <td style={{ textAlign: "center" }}>{field.date}</td>
+        <td style={{ textAlign: "center" }}>{field.name}</td>
+        <td style={{ textAlign: "center" }}>{field.objectDesc}</td>
       </tr>
     ));
     setOpen(true);
-    clear();
+    //clear();
   }
 
   function handleSubmitClose() {
@@ -91,60 +91,62 @@ function LostFound() {
         <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
           Lost and Found Request
         </h1>
-        <div className="flex flex-col gap-4 my-4">
-          <TextField
-            onChange={handleResponseChanges}
-            value={responses.name}
-            name="name"
-            id="name"
-            variant="filled"
-            label="Name of Finder"
-            required={true}
-          />
+        <form onSubmit={handleSubmit}>
+          <div className="flex flex-col gap-4 my-4">
+            <TextField
+              onChange={handleResponseChanges}
+              value={responses.name}
+              name="name"
+              id="name"
+              variant="filled"
+              label="Name of Finder"
+              required
+            />
 
-          <TextField
-            onChange={handleResponseChanges}
-            value={responses.date}
-            id="date"
-            name="date"
-            variant="filled"
-            placeholder=""
-            label="Request Date"
-            type="date"
-            InputLabelProps={{ shrink: true }}
-            required={true}
-          />
+            <TextField
+              onChange={handleResponseChanges}
+              value={responses.date}
+              id="date"
+              name="date"
+              variant="filled"
+              placeholder=""
+              label="Request Date"
+              type="date"
+              InputLabelProps={{ shrink: true }}
+              required
+            />
 
-          <TextField
-            onChange={handleResponseChanges}
-            value={responses.objectDesc}
-            id="object"
-            name="objectDesc"
-            variant="filled"
-            label="Object Description"
-            placeholder=""
-            required={true}
-          />
+            <TextField
+              onChange={handleResponseChanges}
+              value={responses.objectDesc}
+              id="object"
+              name="objectDesc"
+              variant="filled"
+              label="Object Description"
+              placeholder=""
+              required
+            />
 
-          <LocationDropdown
-            room={responses.location}
-            update={updateLoc}
-            label={"Location"}
-          />
+            <LocationDropdown
+              room={responses.location}
+              update={updateLoc}
+              label={"Location"}
+            />
 
-          <Button
-            className="w-32 self-center pt-10"
-            onClick={handleSubmit}
-            type="submit"
-            id="requestSubmit"
-            variant="contained"
-            size="large"
-            sx={{ borderRadius: "30px" }}
-          >
-            SUBMIT
-          </Button>
-        </div>
+            <Button
+              className="w-32 self-center pt-10"
+              type="submit"
+              id="requestSubmit"
+              variant="contained"
+              size="large"
+              sx={{ borderRadius: "30px" }}
+            >
+              SUBMIT
+            </Button>
+          </div>
+        </form>
       </div>
+
       <Dialog open={open} onClose={handleSubmitClose}>
         <DialogTitle>We received your request!</DialogTitle>
         <DialogContent>
@@ -165,13 +167,13 @@ function LostFound() {
         </DialogActions>
       </Dialog>
 
-      <table style={{ backgroundColor: "white" }}>
+      <table style={{ backgroundColor: "white", width: "90%" }}>
         <tbody>
           <tr>
-            <th>Location</th>
-            <th>Date</th>
-            <th>Name</th>
-            <th>Description</th>
+            <th style={{ textAlign: "center" }}>Location</th>
+            <th style={{ textAlign: "center" }}>Date</th>
+            <th style={{ textAlign: "center" }}>Name</th>
+            <th style={{ textAlign: "center" }}>Description</th>
           </tr>
         </tbody>
         <tbody>
@@ -180,7 +182,7 @@ function LostFound() {
         </tbody>
       </table>
     </div>
-    //</div>
+    // </div>
   );
 }
 
