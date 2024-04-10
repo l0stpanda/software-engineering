@@ -23,11 +23,22 @@ function LostFound() {
   const [responses, setResponses] =
     useState<lostAndFound>(initialFormResponses);
 
+  const [requests, setRequests] = useState<lostAndFound[]>([]);
+
   const [open, setOpen] = useState(false);
 
   function handleResponseChanges(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setResponses({ ...responses, [e.target.name]: e.target.value });
   }
+
+  let setter = requests.map((field) => (
+    <tr>
+      <td>{field.location}</td>
+      <td>{field.date}</td>
+      <td>{field.name}</td>
+      <td>{field.objectDesc}</td>
+    </tr>
+  ));
 
   function handleSubmit() {
     if (
@@ -41,25 +52,24 @@ function LostFound() {
       );
       return;
     }
+    //Make an array that will be pushed to and made the state set to
+    const arrs: lostAndFound[] = requests;
+    arrs.push(responses); //push singleGiftRequest onto arrs
+    setRequests(arrs); //set requests list of GiftReqeustSubmissions to be arrs (array with new request pushed onto it)
+    console.log(arrs);
 
+    //Display all GiftRequestSubmissions in requests array as a table
+    setter = requests.map((field) => (
+      <tr>
+        <td>{field.location}</td>
+        <td>{field.date}</td>
+        <td>{field.name}</td>
+        <td>{field.objectDesc}</td>
+      </tr>
+    ));
     setOpen(true);
-    // try {
-    //     // Make post request to backend with form response data
-    //     await axios.post("/api/flowerRequest", responses, {
-    //         headers: { "Content-Type": "application/json" },
-    //     });
-    // } catch (error) {
-    //     alert(
-    //         "Error storing in the database, make sure nodes/edges are uploaded",
-    //     );
-    //     console.error(error);
-    //     return;
-    // }
+    clear();
   }
-
-  // function handleDropDown(e: SelectChangeEvent) {
-  //   setResponses({ ...responses, [e.target.name]: e.target.value });
-  // }
 
   function handleSubmitClose() {
     setOpen(false);
@@ -121,18 +131,6 @@ function LostFound() {
             update={updateLoc}
             label={"Location"}
           />
-          {/*<FormControl>*/}
-          {/*  <InputLabel>Location</InputLabel>*/}
-          {/*  <Select*/}
-          {/*    name="location"*/}
-          {/*    required={true}*/}
-          {/*    label="Location"*/}
-          {/*    onChange={handleDropDown}*/}
-          {/*    value={responses.location}*/}
-          {/*  >*/}
-          {/*    <MenuItem value={"random"}>Random Location</MenuItem>*/}
-          {/*  </Select>*/}
-          {/*</FormControl>*/}
 
           <Button
             className="w-32 self-center pt-10"
@@ -166,6 +164,21 @@ function LostFound() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <table style={{ backgroundColor: "white" }}>
+        <tbody>
+          <tr>
+            <th>Location</th>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Description</th>
+          </tr>
+        </tbody>
+        <tbody>
+          {/*This is the part that renders the information to the table*/}
+          {setter}
+        </tbody>
+      </table>
     </div>
     //</div>
   );
