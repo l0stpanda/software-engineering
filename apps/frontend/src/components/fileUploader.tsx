@@ -3,11 +3,12 @@ import { edgeType } from "common/src/edgesType.ts";
 import { DeleteAllEdge, PostEdge } from "../objects/DAO_Edges.ts";
 import { nodeType } from "common/src/nodeType.ts";
 import { DeleteAllNode, PostNode } from "../objects/DAO_Nodes.ts";
-import { Button } from "@mui/material";
+import { Button, Dialog, DialogTitle } from "@mui/material";
 import BackgroundPattern from "./backgroundPattern.tsx";
 
 const SingleFileUploader = () => {
   const [file, setFile] = useState<File | null>(null);
+  const [loadingDialog, setLoadingDialog] = useState(false);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setFile(e.target.files[0]);
@@ -18,6 +19,7 @@ const SingleFileUploader = () => {
 
   const handleUpload = async () => {
     if (file) {
+      setLoadingDialog(true);
       console.log("Uploading file...");
 
       const formData = new FormData();
@@ -53,6 +55,7 @@ const SingleFileUploader = () => {
           //Throws error if Edges aren't loaded in correctly
           alert("Error loading Edges CSV");
           console.error(error);
+          setLoadingDialog(false);
           return;
         }
         alert("Edges CSV loaded successfully");
@@ -89,6 +92,7 @@ const SingleFileUploader = () => {
         } catch (error) {
           alert("Error Loading Nodes into Database");
           console.error(error);
+          setLoadingDialog(true);
           return;
         }
         alert("Nodes CSV Loaded");
@@ -97,6 +101,7 @@ const SingleFileUploader = () => {
           "The imported file has to have 'node' or 'edge' in its title in order for us to know which database you want to upload to.",
         );
       }
+      setLoadingDialog(false);
     }
   };
 
@@ -148,6 +153,9 @@ const SingleFileUploader = () => {
           </button>
         )}
       </div>
+      <Dialog open={loadingDialog}>
+        <DialogTitle>Uploading file...</DialogTitle>
+      </Dialog>
     </div>
   );
 };
