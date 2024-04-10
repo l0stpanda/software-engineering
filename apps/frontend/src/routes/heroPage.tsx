@@ -63,7 +63,7 @@ function HeroPage() {
         </h3>
         <h1 className="m-0 text-background font-header text-5xl mb-8 hover:translate-x-2 transition-transform duration-300">
           <span
-            className={`inline-block bg-white text-4xl pl-5 mb-2 ${
+            className={`inline-block bg-white text-4xl mb-2 ${
               showSubtitle ? "opacity-100 animate-fadeInLeft" : "opacity-0"
             } transition-opacity duration-1000`}
             style={{ fontSize: "35px", margin: "0" }}
@@ -72,7 +72,7 @@ function HeroPage() {
           </span>
           <br />
           <span
-            className={`inline-block bg-white text-4xl pl-5 ${
+            className={`inline-block bg-white text-4xl ${
               showSubtitle
                 ? "opacity-100 animate-fadeInLeft animate-delay-500"
                 : "opacity-0"

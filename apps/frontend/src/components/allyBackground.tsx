@@ -1,6 +1,6 @@
 function allyBackground() {
   return (
-    <div className="absolute w-full h-full bg-repeat-y bg-[url('src/assets/allyBackground.png')] -z-10"></div>
+    <div className="absolute w-full h-full bg-repeat-y bg-ally-background -z-10"></div>
   );
 }
 
