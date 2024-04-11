@@ -108,9 +108,9 @@ export default function RoomSchedulingRequest() {
   }
 
   return (
-    <div className="justify-center grid min-h-screen max-h-fit place-items-center">
+    <div className="justify-center grid min-h-screen max-h-fit place-items-center mt-6">
       <AllyBackground />
-      <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-4">
+      <div className="m-auto flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-4">
         <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
           Room Scheduling Request
         </h1>
@@ -138,7 +138,9 @@ export default function RoomSchedulingRequest() {
             required
           />
           <FormControl>
-            <InputLabel id="priority-label">Priority *</InputLabel>
+            <InputLabel id="priority-label" variant="filled">
+              Priority *
+            </InputLabel>
             <Select
               labelId="priority-label"
               label="Priority"
@@ -161,7 +163,9 @@ export default function RoomSchedulingRequest() {
             label={"Room"}
           />
           <FormControl>
-            <InputLabel id="startTime-label">Start Time *</InputLabel>
+            <InputLabel id="startTime-label" variant="filled">
+              Start Time *
+            </InputLabel>
             <Select
               labelId="startTime-label"
               label="Start Time"
@@ -187,7 +191,7 @@ export default function RoomSchedulingRequest() {
           </FormControl>
 
           <FormControl>
-            <InputLabel id="lengthRes-label">
+            <InputLabel id="lengthRes-label" variant="filled">
               Length of Reservation *
             </InputLabel>
             <Select
@@ -218,7 +222,9 @@ export default function RoomSchedulingRequest() {
           {/*/>*/}
 
           <FormControl>
-            <InputLabel id="reqStatus-label">Request Status *</InputLabel>
+            <InputLabel id="reqStatus-label" variant="filled">
+              Request Status *
+            </InputLabel>
             <Select
               labelId="reqStatus-label"
               label="Request Status"
