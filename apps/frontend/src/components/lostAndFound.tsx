@@ -120,7 +120,7 @@ function LostFound() {
               name="name"
               id="name"
               variant="filled"
-              label="Name of Employee"
+              label="Employee Name"
               required
             />
 
@@ -164,7 +164,7 @@ function LostFound() {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 sx={{ bgcolor: "#eceff0" }}
-                label="Delivery Date*"
+                label="Date*"
                 value={responses.date}
                 disablePast
                 onChange={handleDateChange}

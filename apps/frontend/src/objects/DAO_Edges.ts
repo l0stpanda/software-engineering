@@ -3,13 +3,12 @@ import axios from "axios";
 import { edgeType } from "common/src/edgesType.ts";
 
 //Function to send edges from the frontend to the database
-export async function PostEdge(curr_data: edgeType) {
+export async function PostEdge(curr_data: edgeType[]) {
   const res = await axios.post("/api/import/edgesPost", curr_data, {
     headers: { "Content-Type": "application/json" },
   });
   if (res.status == 200) {
     //Logs a success is the post is successful and logs the start node
-    console.log(curr_data.start_node);
     console.log("success");
   } else {
     //Throws error if the post is unsuccessful

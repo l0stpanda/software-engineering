@@ -243,7 +243,7 @@ function Map() {
               />
               <br />
               <div className="inline-flex justify-end items-center my-5">
-                <FormControl fullWidth>
+                <FormControl fullWidth required>
                   <InputLabel id="demo-simple-select-label">
                     Path Algorithm
                   </InputLabel>
@@ -292,6 +292,7 @@ function Map() {
         </div>
       </div>
     </div>
+
     // </div>
   );
 }

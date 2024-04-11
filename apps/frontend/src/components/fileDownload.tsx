@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import BackgroundPattern from "./backgroundPattern.tsx";
 import { Button } from "@mui/material";
+import SingleFileUploader from "./fileUploader.tsx";
 
 const Download = () => {
   const handleDownload = async (apiPath: string, fileName: string) => {
@@ -46,10 +47,10 @@ const Download = () => {
   };
 
   return (
-    <div className="justify-center grid h-screen place-items-center">
+    <div className="flex flex-col h-screen">
       <BackgroundPattern />
       {/*Box*/}
-      <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-5 gap-4">
+      <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-5 gap-4 my-8">
         <h1 className="font-header text-primary font-bold text-3xl text-center">
           Download Files
         </h1>
@@ -65,7 +66,7 @@ const Download = () => {
           className="w-32 self-center text-center"
           onClick={() => handleDownload("/api/read/nodes", "Nodes.csv")}
         >
-          Download Node CSV
+          Node CSV
         </Button>
         {/*Download Edge CSV button*/}
         <Button
@@ -76,20 +77,11 @@ const Download = () => {
           className="w-32 self-center text-center"
           onClick={() => handleDownload("/api/read/edges", "Edges.csv")}
         >
-          Download Edge CSV
+          Edge CSV
         </Button>
         {/*View Table button*/}
-        <Button
-          type="button"
-          className="w-32 self-center"
-          sx={{ borderRadius: "30px" }}
-          variant="contained"
-          component="a"
-          href="displayTables"
-        >
-          View Tables
-        </Button>
       </div>
+      <SingleFileUploader></SingleFileUploader>
     </div>
   );
 };

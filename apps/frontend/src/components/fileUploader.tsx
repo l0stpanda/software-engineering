@@ -4,7 +4,7 @@ import { DeleteAllEdge, PostEdge } from "../objects/DAO_Edges.ts";
 import { nodeType } from "common/src/nodeType.ts";
 import { DeleteAllNode, PostNode } from "../objects/DAO_Nodes.ts";
 import { Button, Dialog, DialogTitle } from "@mui/material";
-import BackgroundPattern from "./backgroundPattern.tsx";
+//import BackgroundPattern from "./backgroundPattern.tsx";
 
 const SingleFileUploader = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -41,16 +41,21 @@ const SingleFileUploader = () => {
           await DeleteAllEdge();
 
           //Fills in the edges from the new uploaded file
+          const arr: edgeType[] = [];
           for (let i = 1; i < edges_array.length - 1; i++) {
-            const curr_data: edgeType = {
-              type: "Edges",
+            const curr_data: {
+              end_node: string;
+              start_node: string;
+              id: string;
+            } = {
               id: edges_array[i][0].toString(),
               start_node: edges_array[i][1].toString(),
               end_node: edges_array[i][2].toString().replace("/r", ""),
             };
-            //Makes the backend database accessible to the frontend
-            await PostEdge(curr_data);
+            arr.push(curr_data);
           }
+          console.log(arr);
+          PostEdge(arr);
         } catch (error) {
           //Throws error if Edges aren't loaded in correctly
           alert("Error loading Edges CSV");
@@ -74,10 +79,9 @@ const SingleFileUploader = () => {
             });
 
           await DeleteAllNode();
-
+          const arr: nodeType[] = [];
           for (let i = 1; i < nodes_array.length - 1; i++) {
             const curr_data: nodeType = {
-              type: "Nodes",
               node_id: nodes_array[i][0].toString(),
               x_c: nodes_array[i][1].toString(),
               y_c: nodes_array[i][2].toString(),
@@ -87,8 +91,9 @@ const SingleFileUploader = () => {
               long_name: nodes_array[i][6].toString(),
               short_name: nodes_array[i][7].toString(),
             };
-            await PostNode(curr_data);
+            arr.push(curr_data);
           }
+          await PostNode(arr);
         } catch (error) {
           alert("Error Loading Nodes into Database");
           console.error(error);
@@ -107,12 +112,11 @@ const SingleFileUploader = () => {
 
   return (
     //User interface for clicking a button to upload an edges/nodes.csv file
-    <div className="justify-center grid h-screen place-items-center">
-      <BackgroundPattern />
+    <div className="flex flex-row h-screen justify-center">
       {/*Box*/}
       <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-5 gap-4">
         <h1 className="font-header text-primary font-bold text-3xl text-center">
-          Enter Your File
+          Upload Your File
         </h1>
         <h1 className=" font-body text-primary text-2xl text-center pb-4">
           Enter a csv file with "edges" or "nodes" in the title
@@ -137,20 +141,16 @@ const SingleFileUploader = () => {
             Upload File
           </Button>
         </label>
-        <Button
-          type="button"
-          className="w-32 self-center"
-          sx={{ borderRadius: "30px" }}
-          variant="contained"
-          component="a"
-          href="displayTables"
-        >
-          View Tables
-        </Button>
         {file && (
-          <button onClick={handleUpload} style={{ marginTop: "5%" }}>
-            Upload a file
-          </button>
+          <Button
+            type="button"
+            className="w-50 self-center"
+            sx={{ borderRadius: "30px" }}
+            variant="contained"
+            onClick={handleUpload}
+          >
+            Upload " {file.name.toString()} "
+          </Button>
         )}
       </div>
       <Dialog open={loadingDialog}>

@@ -63,7 +63,7 @@ function SingleDisplay() {
       <div hidden={tableDisplayed !== 0} id={`tab-${0}`}>
         {tableDisplayed === 0 && (
           <table className="w-full">
-            <thead className="bg-secondary border-b-2 border-b-primary">
+            <thead className="bg-secondary border-b-2 border-b-primary sticky top-0">
               <tr>
                 <th className="p-3 text-sm font-semibold tracking-wide text-left">
                   Node ID
@@ -92,7 +92,7 @@ function SingleDisplay() {
       <div hidden={tableDisplayed !== 1} id={`tab-${1}`}>
         {tableDisplayed === 1 && (
           <table className="w-full">
-            <thead className="bg-secondary border-b-2 border-b-primary">
+            <thead className="bg-secondary border-b-2 border-b-primary sticky top-0">
               <tr>
                 <th className="p-3 text-sm font-semibold tracking-wide text-left">
                   ID
