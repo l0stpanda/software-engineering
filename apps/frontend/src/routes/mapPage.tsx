@@ -33,6 +33,7 @@ function Map() {
   const divRef = useRef<HTMLDivElement>(null);
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
   const [graph, setGraph] = useState(new Graph());
+  const [update, setUpdate] = useState(0);
   const [imgState, setImgState] = useState<string>(floor1);
   const [algorithm, setAlgorithm] = useState<string>("AStar");
 
@@ -109,8 +110,10 @@ function Map() {
     const tempGraph = new Graph();
     tempGraph.loadGraph().then(() => {
       setGraph(tempGraph);
+      setUpdate(1);
+      console.log(update);
     });
-  }, []);
+  }, [update]);
 
   const changeAlgorithm = (event: SelectChangeEvent) => {
     setAlgorithm(event.target.value as string);
