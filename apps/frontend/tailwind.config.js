@@ -16,8 +16,8 @@ export default {
       },
       backgroundImage: {
         "grey-pattern-background":
-          "url('./src/assets/PatternBackground-Test.png')",
-        "ally-background": "url('./src/assets/allyBackground.png')",
+          "url(./src/assets/PatternBackground-Test.png)",
+        "ally-background": "url(./src/assets/allyBackground.png)",
       },
     },
   },
