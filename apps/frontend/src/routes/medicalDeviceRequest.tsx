@@ -140,8 +140,8 @@ function MedicalDeviceRequest() {
             {/*  label="Room Name"*/}
             {/*  required={true}*/}
             {/*/>*/}
-            <FormControl variant="filled">
-              <InputLabel id="priority">Priority*</InputLabel>
+            <FormControl variant="filled" required>
+              <InputLabel id="priority">Priority</InputLabel>
               <Select
                 name="priority"
                 labelId="priority"
@@ -184,8 +184,8 @@ function MedicalDeviceRequest() {
               required={true}
             />
 
-            <FormControl variant="filled">
-              <InputLabel id="status">Status*</InputLabel>
+            <FormControl variant="filled" required>
+              <InputLabel id="status">Status</InputLabel>
               <Select
                 name="Status"
                 labelId="status"
@@ -202,6 +202,7 @@ function MedicalDeviceRequest() {
                 <MenuItem value={"Closed"}>Closed</MenuItem>
               </Select>
             </FormControl>
+
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 sx={{ bgcolor: "#eceff0" }}
@@ -209,7 +210,7 @@ function MedicalDeviceRequest() {
                 value={formData.deliveryDate}
                 disablePast
                 onChange={handleDateChange}
-                // renderInput={(params) => <TextField {...params} />}
+                //renderInput={(params) => <TextField {...params} required/>}
               />
             </LocalizationProvider>
             <div className="flex justify-center">
