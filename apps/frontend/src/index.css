@@ -87,3 +87,12 @@ html {
 .duration-300 {
   transition-duration: 300ms;
 }
+
+@layer utilities {
+  .bg-grey-pattern-background {
+    background-image: url("assets/PatternBackground-Test.png");
+  }
+  .bg-ally-background {
+    background-image: url("assets/allyBackground.png");
+  }
+}
