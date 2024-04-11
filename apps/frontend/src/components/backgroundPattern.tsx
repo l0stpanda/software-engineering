@@ -2,7 +2,7 @@
 
 function backgroundPattern() {
   return (
-    <div className="absolute w-full h-full bg-repeat bg-grey-pattern-background -z-10"></div>
+    <div className="fixed w-screen h-full bg-repeat bg-grey-pattern-background -z-10 -translate-y-14"></div>
   );
 }
 

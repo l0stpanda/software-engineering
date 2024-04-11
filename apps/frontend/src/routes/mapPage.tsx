@@ -27,6 +27,7 @@ import { SelectChangeEvent } from "@mui/material/Select";
 import { ArrowBack } from "@mui/icons-material";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import ModeIcon from "@mui/icons-material/Mode";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function Map() {
   const divRef = useRef<HTMLDivElement>(null);
@@ -34,6 +35,8 @@ function Map() {
   const [graph, setGraph] = useState(new Graph());
   const [imgState, setImgState] = useState<string>(floor1);
   const [algorithm, setAlgorithm] = useState<string>("AStar");
+
+  const { user } = useAuth0();
 
   // Zoom in/out buttons for map viewing
   const Controls = () => {
@@ -126,7 +129,7 @@ function Map() {
 
   function FloorMapButtons() {
     return (
-      <div className="h-2/3 my-auto ml-3">
+      <div className="h-fit my-auto ml-3 bg-secondary">
         <ToggleButtonGroup
           orientation="vertical"
           value={imgState}
@@ -244,7 +247,7 @@ function Map() {
               <br />
               <div className="inline-flex justify-end items-center my-5">
                 <FormControl fullWidth required>
-                  <InputLabel id="demo-simple-select-label">
+                  <InputLabel id="demo-simple-select-label" variant="filled">
                     Path Algorithm
                   </InputLabel>
                   <Select
@@ -276,18 +279,26 @@ function Map() {
           {/*second non-functional box for rn*/}
           <br />
           <div className="flex flex-col">
-            <a href="editMap" className="self-center">
-              <Button
-                type="button"
-                variant="contained"
-                startIcon={<ModeIcon />}
-                className="editMapBut w-32"
-                size="medium"
-                sx={{ borderRadius: "30px", fontSize: "15px", font: "header" }}
-              >
-                Edit Map
-              </Button>
-            </a>
+            {user ? (
+              <a href="editMap" className="self-center">
+                <Button
+                  type="button"
+                  variant="contained"
+                  startIcon={<ModeIcon />}
+                  className="editMapBut w-32"
+                  size="medium"
+                  sx={{
+                    borderRadius: "30px",
+                    fontSize: "15px",
+                    font: "header",
+                  }}
+                >
+                  Edit Map
+                </Button>
+              </a>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       </div>

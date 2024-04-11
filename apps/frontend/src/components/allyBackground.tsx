@@ -1,6 +1,6 @@
 function allyBackground() {
   return (
-    <div className="absolute w-full h-full bg-repeat-y bg-ally-background -z-10 object-cover"></div>
+    <div className="fixed w-screen h-screen bg-repeat bg-ally-background -z-10 -translate-y-14"></div>
   );
 }
 
