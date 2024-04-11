@@ -6,6 +6,7 @@ import { MapNode } from "../objects/MapNode.ts";
 import { AStar } from "../objects/AStar.ts";
 import { Pathfinding } from "../objects/Pathfinding.ts";
 import { BFS } from "../objects/BFS.ts";
+import { DFS } from "../objects/DFS.ts";
 
 //import mapImg from "../assets/00_thelowerlevel1.png";
 
@@ -124,6 +125,8 @@ function FloorNode(props: FloorNodesProps) {
         algo.setPathAlgo(new BFS(props.graph));
       } else if (props.algorithm == "AStar") {
         algo.setPathAlgo(new AStar(props.graph));
+      } else if (props.algorithm == "DFS") {
+        algo.setPathAlgo(new DFS(props.graph));
       }
       const path = algo.findPath(input[0], input[1]);
       //console.log(path);
