@@ -42,6 +42,10 @@ function CustomNavBar() {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const [anchorElAdmin, setAnchorElAdmin] = React.useState<null | HTMLElement>(
+    null,
+  );
+  const openAdmin = Boolean(anchorElAdmin);
 
   function handleRequestsOpen(e: React.MouseEvent<HTMLElement>) {
     setAnchorEl(e.currentTarget);
@@ -49,6 +53,14 @@ function CustomNavBar() {
 
   function handleRequestsClosed() {
     setAnchorEl(null);
+  }
+
+  function handleAdminOpen(e: React.MouseEvent<HTMLElement>) {
+    setAnchorElAdmin(e.currentTarget);
+  }
+
+  function handleAdminClosed() {
+    setAnchorElAdmin(null);
   }
 
   return (
@@ -74,15 +86,28 @@ function CustomNavBar() {
             {/*<Button component="a" href="imp">*/}
             {/*  Import*/}
             {/*</Button>*/}
-            <Button component="a" href="exp">
-              Import/Export
+            <Button onClick={handleAdminOpen} endIcon={<ArrowDropDownIcon />}>
+              Admin
             </Button>
-            <Button component="a" href="displayTables">
-              View Tables
-            </Button>
+            <Menu
+              open={openAdmin}
+              onClose={handleAdminClosed}
+              anchorEl={anchorElAdmin}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+            >
+              <MenuItem href="exp" component="a">
+                Import/Export
+              </MenuItem>
+              <MenuItem href="displayTables" component="a">
+                View Tables
+              </MenuItem>
+            </Menu>
             <Button
               onClick={handleRequestsOpen}
-              startIcon={<ArrowDropDownIcon />}
+              endIcon={<ArrowDropDownIcon />}
             >
               Service Requests
             </Button>

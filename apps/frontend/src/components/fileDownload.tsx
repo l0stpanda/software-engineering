@@ -1,8 +1,6 @@
 import React from "react";
 import axios from "axios";
-import BackgroundPattern from "./backgroundPattern.tsx";
 import { Button } from "@mui/material";
-import SingleFileUploader from "./fileUploader.tsx";
 
 const Download = () => {
   const handleDownload = async (apiPath: string, fileName: string) => {
@@ -47,41 +45,36 @@ const Download = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen">
-      <BackgroundPattern />
-      {/*Box*/}
-      <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-5 gap-4 my-8">
-        <h1 className="font-header text-primary font-bold text-3xl text-center">
-          Download Files
-        </h1>
-        <h1 className=" font-body text-primary text-2xl text-center pb-4">
-          Download node or edge file
-        </h1>
-        {/*Download Node CSV button*/}
-        <Button
-          variant="contained"
-          color="primary"
-          component="span"
-          sx={{ borderRadius: "30px" }}
-          className="w-32 self-center text-center"
-          onClick={() => handleDownload("/api/read/nodes", "Nodes.csv")}
-        >
-          Node CSV
-        </Button>
-        {/*Download Edge CSV button*/}
-        <Button
-          variant="contained"
-          color="primary"
-          component="span"
-          sx={{ borderRadius: "30px" }}
-          className="w-32 self-center text-center"
-          onClick={() => handleDownload("/api/read/edges", "Edges.csv")}
-        >
-          Edge CSV
-        </Button>
-        {/*View Table button*/}
-      </div>
-      <SingleFileUploader></SingleFileUploader>
+    <div className="flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-5 gap-4">
+      <h1 className="font-header text-primary font-bold text-3xl text-center">
+        Download Files
+      </h1>
+      <h1 className=" font-body text-primary text-2xl text-center pb-4">
+        Download node or edge file
+      </h1>
+      {/*Download Node CSV button*/}
+      <Button
+        variant="contained"
+        color="primary"
+        component="span"
+        sx={{ borderRadius: "30px" }}
+        className="w-32 self-center text-center"
+        onClick={() => handleDownload("/api/read/nodes", "Nodes.csv")}
+      >
+        Node CSV
+      </Button>
+      {/*Download Edge CSV button*/}
+      <Button
+        variant="contained"
+        color="primary"
+        component="span"
+        sx={{ borderRadius: "30px" }}
+        className="w-32 self-center text-center"
+        onClick={() => handleDownload("/api/read/edges", "Edges.csv")}
+      >
+        Edge CSV
+      </Button>
+      {/*View Table button*/}
     </div>
   );
 };

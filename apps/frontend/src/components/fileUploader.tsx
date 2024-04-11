@@ -112,9 +112,8 @@ const SingleFileUploader = () => {
 
   return (
     //User interface for clicking a button to upload an edges/nodes.csv file
-    <div className="flex flex-row h-screen justify-center">
-      {/*Box*/}
-      <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-5 gap-4">
+    <>
+      <div className="flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-5 gap-4">
         <h1 className="font-header text-primary font-bold text-3xl text-center">
           Upload Your File
         </h1>
@@ -156,7 +155,7 @@ const SingleFileUploader = () => {
       <Dialog open={loadingDialog}>
         <DialogTitle>Uploading file...</DialogTitle>
       </Dialog>
-    </div>
+    </>
   );
 };
 

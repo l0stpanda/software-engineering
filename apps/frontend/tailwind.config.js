@@ -14,11 +14,6 @@ export default {
         header: ["Nunito", "sans-serif"],
         body: ["PT+Sans", "serif"],
       },
-      backgroundImage: {
-        "grey-pattern-background":
-          "url(./src/assets/PatternBackground-Test.png)",
-        "ally-background": "url(./src/assets/allyBackground.png)",
-      },
     },
   },
   plugins: [],

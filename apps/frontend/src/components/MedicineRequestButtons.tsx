@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@mui/material";
 
-import { MedicineDelivery } from "../common/MedicineDelivery.tsx";
+import { MedicineDelivery } from "../common/MedicineDelivery.ts";
 
 type requestButtonProps = {
   delivery: MedicineDelivery;
