@@ -73,6 +73,7 @@ model Nodes {
   // Foreign Key Reference
   flower_delivery_room Flowers[]        @relation("flower_room")
   general_service      GeneralService[] @relation("location")
+  // medical_device_room  MedicalDevice[]  @relation("medical_device")
 }
 
 // Edges are all set
@@ -98,5 +99,15 @@ model GeneralService {
   emp_name String
   priority String
 
-  location_room Nodes @relation("location", fields: [location], references: [node_id], onDelete: Cascade) // Maybe need to change reference to short_name/long_name later
+  location_room      Nodes           @relation("location", fields: [location], references: [node_id], onDelete: Cascade)
+  MedicalDeviceCheck medicalDevice[] @relation("idCheck")
+}
+
+model medicalDevice {
+  id        Int            @id
+  device    String
+  quantity  Int
+  date      String
+  room_name String
+  idCheck   GeneralService @relation("idCheck", fields: [id], references: [id], onDelete: Cascade)
 }

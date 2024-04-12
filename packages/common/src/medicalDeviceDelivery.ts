@@ -1,5 +1,4 @@
 import { Dayjs } from "dayjs";
-
 export type medicalDeviceDelivery = {
   employeeName: string;
   roomName: string;
