@@ -149,9 +149,9 @@ function MedicalDeviceRequest() {
                 value={formData.priority}
                 onChange={handlePriorityInput}
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
+                {/*<MenuItem value="">*/}
+                {/*  <em>None</em>*/}
+                {/*</MenuItem>*/}
                 <MenuItem value={"High"}>High</MenuItem>
                 <MenuItem value={"Medium"}>Medium</MenuItem>
                 <MenuItem value={"Low"}>Low</MenuItem>
@@ -193,9 +193,9 @@ function MedicalDeviceRequest() {
                 value={formData.status}
                 onChange={handleStatusInput}
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
+                {/*<MenuItem value="">*/}
+                {/*  <em>None</em>*/}
+                {/*</MenuItem>*/}
                 <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
                 <MenuItem value={"Assigned"}>Assigned</MenuItem>
                 <MenuItem value={"InProgress"}>InProgress</MenuItem>
