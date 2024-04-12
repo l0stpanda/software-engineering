@@ -71,7 +71,8 @@ model Nodes {
   long_name  String
 
   // Foreign Key Reference
-  flower_delivery_room Flowers[] @relation("flower_room")
+  flower_delivery_room Flowers[]        @relation("flower_room")
+  general_service      GeneralService[] @relation("location")
 }
 
 // Edges are all set
@@ -79,4 +80,23 @@ model Edges {
   id         String @id
   end_node   String //@db.VarChar(10)
   start_node String //@db.VarChar(10)
+}
+
+// Inventory Delighter table
+model Inventory {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  quant Int
+}
+
+// General Service Request Table
+model GeneralService {
+  id       Int    @id @default(autoincrement())
+  type     String
+  location String
+  status   String
+  emp_name String
+  priority String
+
+  location_room Nodes @relation("location", fields: [location], references: [node_id], onDelete: Cascade) // Maybe need to change reference to short_name/long_name later
 }
