@@ -30,8 +30,14 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
 
   useEffect(() => {
     if (divRef.current) {
-      const { clientWidth, clientHeight } = divRef.current;
-      setDivDimensions({ width: clientWidth, height: clientHeight });
+      const resizeObserver = new ResizeObserver(() => {
+        if (divRef.current) {
+          const { clientWidth, clientHeight } = divRef.current;
+          setDivDimensions({ width: clientWidth, height: clientHeight });
+        }
+      });
+      resizeObserver.observe(divRef.current);
+      return () => resizeObserver.disconnect();
     }
   }, [divRef]);
 
@@ -42,24 +48,6 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
       setImgDimensions({ width: img.width, height: img.height });
     };
   }, [props.imageSrc]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (divRef.current) {
-        const { clientWidth, clientHeight } = divRef.current;
-        setDivDimensions({ width: clientWidth, height: clientHeight });
-      }
-    };
-
-    // Listen for resize events on the window
-    window.addEventListener("resize", handleResize);
-
-    // Initial call to set dimensions
-    handleResize();
-
-    // Cleanup function to remove the resize event listener
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const handleNodeClick = (nodeid: string) => () => {
     if (clicked.length < 2 && !clicked.includes(nodeid)) {
