@@ -116,36 +116,76 @@ function FloorNode(props: FloorNodesProps) {
       const path = algo.findPath(input[0], input[1]);
       //console.log(path);
       const lines = [];
+      const floorChanges = [];
+
       if (!path) {
         console.log("No path found");
         return [];
       }
+      let changeStart: undefined | FloorNodeInfo = undefined;
       for (let i = 0; i < path.length - 1; i++) {
         const startNode = path[i];
         const endNode = path[i + 1];
         const startPoint = scaledNodes[startNode];
         const endPoint = scaledNodes[endNode];
-        if (
-          startPoint &&
-          endPoint &&
-          startPoint.floor == floor &&
-          endPoint.floor == floor
-        ) {
-          lines.push(
-            <line
-              key={i}
-              x1={startPoint.x}
-              y1={startPoint.y}
-              x2={endPoint.x}
-              y2={endPoint.y}
-              style={{ stroke: "blue", strokeWidth: 2 }}
-              className="animate-pulse"
-            />,
-          );
+
+        if (startPoint && endPoint) {
+          if (startPoint.floor != endPoint.floor) {
+            changeStart = startPoint;
+          } else if (
+            changeStart &&
+            (startPoint.floor == endPoint.floor || i == path.length - 2)
+          ) {
+            // Use endPoint.floor for next floor
+            if (changeStart && changeStart.floor == floor) {
+              floorChanges.push(
+                <rect
+                  x={changeStart.x}
+                  y={changeStart.y}
+                  width="100"
+                  height="100"
+                  stroke="red"
+                  strokeWidth="6"
+                  fill="blue"
+                />,
+              );
+            }
+
+            // Use startChange.floor for previous floor
+            if (endPoint.floor == floor) {
+              floorChanges.push(
+                <rect
+                  x={startPoint.x}
+                  y={startPoint.y}
+                  width="100"
+                  height="100"
+                  stroke="red"
+                  strokeWidth="6"
+                  fill="blue"
+                />,
+              );
+            }
+            changeStart = undefined;
+          }
+
+          if (startPoint.floor == floor && endPoint.floor == floor) {
+            lines.push(
+              <line
+                key={i}
+                x1={startPoint.x}
+                y1={startPoint.y}
+                x2={endPoint.x}
+                y2={endPoint.y}
+                style={{ stroke: "blue", strokeWidth: 2 }}
+                className="animate-pulse"
+              />,
+            );
+          }
         }
       }
-      console.log(lines);
-      return lines;
+      //console.log(lines);
+      console.log(floorChanges);
+      return [lines, floorChanges];
     }
     return [];
   };
@@ -205,6 +245,8 @@ function FloorNode(props: FloorNodesProps) {
       });
   };
 
+  const path = renderLines();
+
   return (
     <div ref={divRef} style={{ position: "relative" }}>
       <img src={props.imageSrc} className="object-contain h-full" alt="Map" />
@@ -217,7 +259,8 @@ function FloorNode(props: FloorNodesProps) {
           height: "100%",
         }}
       >
-        {renderLines()}
+        {path[0]}
+        {path[1]}
       </svg>
       {renderNodes()}
     </div>
