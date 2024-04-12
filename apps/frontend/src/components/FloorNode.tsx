@@ -132,11 +132,13 @@ function FloorNode(props: FloorNodesProps) {
         if (startPoint && endPoint) {
           if (startPoint.floor != endPoint.floor) {
             changeStart = startPoint;
-          } else if (
+          }
+          if (
             changeStart &&
             (startPoint.floor == endPoint.floor || i == path.length - 2)
           ) {
-            // Use endPoint.floor for next floor
+            // Use startPoint.floor for next floor
+            // Past
             if (changeStart && changeStart.floor == floor) {
               floorChanges.push(
                 <rect
@@ -152,18 +154,33 @@ function FloorNode(props: FloorNodesProps) {
             }
 
             // Use startChange.floor for previous floor
+            //Present
             if (endPoint.floor == floor) {
-              floorChanges.push(
-                <rect
-                  x={startPoint.x}
-                  y={startPoint.y}
-                  width="100"
-                  height="100"
-                  stroke="red"
-                  strokeWidth="6"
-                  fill="blue"
-                />,
-              );
+              if (i == path.length - 2) {
+                floorChanges.push(
+                  <rect
+                    x={endPoint.x}
+                    y={endPoint.y}
+                    width="100"
+                    height="100"
+                    stroke="red"
+                    strokeWidth="6"
+                    fill="blue"
+                  />,
+                );
+              } else {
+                floorChanges.push(
+                  <rect
+                    x={startPoint.x}
+                    y={startPoint.y}
+                    width="100"
+                    height="100"
+                    stroke="red"
+                    strokeWidth="6"
+                    fill="blue"
+                  />,
+                );
+              }
             }
             changeStart = undefined;
           }
