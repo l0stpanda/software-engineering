@@ -16,13 +16,15 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { roomSchedulerFields } from "common/src/roomScheduler.ts";
 import AllyBackground from "../components/allyBackground.tsx";
 import LocationDropdown from "../components/locationDropdown.tsx";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function RoomSchedulingRequest() {
+  const { getAccessTokenSilently } = useAuth0();
   type roomReqFields = {
     employName: string;
     startTime: string;
@@ -79,19 +81,24 @@ export default function RoomSchedulingRequest() {
       return;
     }
 
+    const token = await getAccessTokenSilently();
     await axios.post("/api/roomSchedulingRequest", responses, {
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
     setOpen(true);
   }
 
-  useEffect(() => {
-    getValues().then();
-  }, []);
-
   async function getValues() {
+    const token = await getAccessTokenSilently();
     const confirmation = await axios
-      .get("/api/roomSchedulingRequest")
+      .get("/api/roomSchedulingRequest", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => response.data);
     console.log(confirmation);
     setSched(confirmation);
@@ -99,7 +106,7 @@ export default function RoomSchedulingRequest() {
 
   function handleSubmitClose() {
     setOpen(false);
-    window.location.reload();
+    getValues();
     clear();
   }
 
