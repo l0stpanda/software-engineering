@@ -111,3 +111,18 @@ model medicalDevice {
   room_name String
   idCheck   GeneralService @relation("idCheck", fields: [id], references: [id], onDelete: Cascade)
 }
+
+// Lost Item requests are saved
+model LostItem {
+  id            Int     @id
+  name          String
+  date          String
+  description   String
+  priority      String
+  status        String
+  type          String
+  location      String
+
+  //Foreign Key References
+  lost_location GeneralService @relation("idCheckLost", fields: [id], references: [id], onDelete: Cascade)
+}
