@@ -1,25 +1,27 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import PendingRequestItem from "../components/PendingRequestItem.tsx";
+import PendingLostItem from "../components/PendingLostItem.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
-import PendingLost from "./displayLost.tsx";
 
 // Define database json type
-type FlowerReqData = {
+type lost_location = {
   id: number;
-  name: string;
-  sent_by: string;
-  sent_to: string;
-  requestDate: string;
-  note: string;
+  date: string;
+  description: string;
+  type: string;
+};
+type LostFoundData = {
+  id: number;
   status: string;
+  priority: string;
+  lost_location: lost_location[];
 };
 
-export default function PendingFlowerRequest() {
+export default function PendingLost() {
   const { getAccessTokenSilently } = useAuth0();
 
   // Use state for records being displayed
-  const [records, setRecords] = useState<FlowerReqData[]>([]);
+  const [records, setRecords] = useState<LostFoundData[]>([]);
 
   // Get records from database, and update useState
   useEffect(() => {
@@ -27,12 +29,14 @@ export default function PendingFlowerRequest() {
     const fetchData = async () => {
       try {
         const token = await getAccessTokenSilently();
-        const response = await axios.get("/api/flowerRequest", {
+        const response = await axios.get("/api/lostAndFound", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        setRecords(response.data); // Assuming the data is an array of flower request data
+
+        console.log(response.data);
+        setRecords(response.data); // Assuming the data is an array of lost and found request data
       } catch (error) {
         console.error("Error fetching flower requests", error);
       }
@@ -52,25 +56,25 @@ export default function PendingFlowerRequest() {
   return (
     <div className="px-8 p5 h-screen bg-background">
       <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
-        Pending Flower Deliveries
+        Lost and Found State
       </h1>
       <table className="w-full">
         <thead className="bg-secondary border-b-2 border-b-primary">
           <tr>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Flower Delivery Request
+              ID
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Status
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Date Entered
+              Priority
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Time Entered
+              Date
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Destination
+              Object Desc
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Delete
@@ -81,17 +85,16 @@ export default function PendingFlowerRequest() {
         <tbody>
           {/* Map through the records and create a row for each record */}
           {records.map((record) => (
-            <PendingRequestItem
+            <PendingLostItem
               key={record.id}
               id={record.id}
               status={record.status}
-              requestDate={record.requestDate}
-              name={record.name}
+              priority={record.priority}
+              lost_location={record.lost_location}
             />
           ))}
         </tbody>
       </table>
-      <PendingLost></PendingLost>
     </div>
   );
 }

@@ -32,18 +32,6 @@ model HighScore {
 //   add_date  DateTime @default(now())
 // }
 
-model RoomScheduler {
-  id         Int    @id @default(autoincrement())
-  employName String
-  startTime  String
-  lengthRes  String
-  roomNum    String
-  reqStatus  String
-  priority   String
-
-  // sent_room Nodes @relation("send_room", fields: [roomNum], references: [node_id], onDelete: Cascade) // Maybe need to change reference to short_name/long_name later
-}
-
 // Flower requests are saved
 model Flowers {
   id          Int      @id @default(autoincrement())
@@ -101,6 +89,7 @@ model GeneralService {
 
   location_room      Nodes           @relation("location", fields: [location], references: [node_id], onDelete: Cascade)
   MedicalDeviceCheck medicalDevice[] @relation("idCheck")
+  lost_location      LostItem[]      @relation("idCheckLost")
 }
 
 model medicalDevice {
@@ -114,15 +103,21 @@ model medicalDevice {
 
 // Lost Item requests are saved
 model LostItem {
-  id            Int     @id
-  name          String
-  date          String
-  description   String
-  priority      String
-  status        String
-  type          String
-  location      String
+  id          Int    @id
+  date        String
+  description String
+  type        String
 
-  //Foreign Key References
+  // Foreign Key References
   lost_location GeneralService @relation("idCheckLost", fields: [id], references: [id], onDelete: Cascade)
+}
+
+model RoomScheduler {
+  id         Int    @id @default(autoincrement())
+  employName String
+  startTime  String
+  lengthRes  String
+  roomNum    String
+  reqStatus  String
+  priority   String
 }

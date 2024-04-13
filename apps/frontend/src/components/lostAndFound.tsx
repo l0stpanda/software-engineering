@@ -10,14 +10,9 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
   TextField,
 } from "@mui/material";
-
+import { useAuth0 } from "@auth0/auth0-react";
 import BackgroundPattern from "../components/allyBackground.tsx";
 import { lostAndFound } from "common/src/lostAndFoundType.ts";
 import LocationDropdown from "./locationDropdown.tsx";
@@ -25,8 +20,10 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Dayjs } from "dayjs";
+import axios from "axios";
 
 function LostFound() {
+  const { getAccessTokenSilently } = useAuth0();
   const initialFormResponses: lostAndFound = {
     name: "",
     date: null,
@@ -40,16 +37,15 @@ function LostFound() {
   const [responses, setResponses] =
     useState<lostAndFound>(initialFormResponses);
 
-  const [requests, setRequests] = useState<lostAndFound[]>([]);
-
   const [open, setOpen] = useState(false);
 
   function handleResponseChanges(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setResponses({ ...responses, [e.target.name]: e.target.value });
   }
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const token = await getAccessTokenSilently();
     if (
       responses.name == "" ||
       responses.date == null ||
@@ -60,8 +56,12 @@ function LostFound() {
     ) {
       return;
     }
-
-    setRequests((prevState) => [...prevState, responses]);
+    await axios.post("/api/lostAndFound", responses, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
     setOpen(true);
   }
 
@@ -123,19 +123,6 @@ function LostFound() {
               label="Employee Name"
               required
             />
-
-            {/*<TextField*/}
-            {/*  onChange={handleResponseChanges}*/}
-            {/*  value={responses.date}*/}
-            {/*  id="date"*/}
-            {/*  name="date"*/}
-            {/*  variant="filled"*/}
-            {/*  placeholder=""*/}
-            {/*  label="Request Date"*/}
-            {/*  type="date"*/}
-            {/*  InputLabelProps={{ shrink: true }}*/}
-            {/*  required*/}
-            {/*/>*/}
             <FormControl variant="filled" required>
               <InputLabel id="priority">Priority</InputLabel>
               <Select
@@ -284,79 +271,6 @@ function LostFound() {
           </Button>
         </DialogActions>
       </Dialog>
-      <h2
-        className="text-2xl font-bold mb-4 text-center transform hover:-translate-y-2 transition-transform duration-300"
-        style={{
-          color: "rgb(0 40 102 / 1)",
-          fontFamily: "Nunito, sans-serif",
-          fontSize: "34px",
-          margin: "30px",
-        }}
-      >
-        Submitted Requests
-      </h2>
-      <Table
-        className="bg-gray rounded-xl justify-center py-10"
-        sx={{ bgcolor: "#eceff0" }}
-      >
-        <TableHead className="w-full table-auto mt-4 border-collapse border-b-2 border-secondary">
-          <TableRow>
-            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-              Employee Name
-            </TableCell>
-            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-              Date
-            </TableCell>
-            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-              Object Description
-            </TableCell>
-            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-              Priority
-            </TableCell>
-            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-              Status
-            </TableCell>
-            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-              Item Type
-            </TableCell>
-            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-              Location
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {requests.map(
-            (
-              { name, date, objectDesc, priority, status, type, location },
-              index,
-            ) => (
-              <TableRow key={index}>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  {name}
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  {date?.toString()}
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  {objectDesc}
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  {priority}
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  {status}
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  {type}
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  {location}
-                </TableCell>
-              </TableRow>
-            ),
-          )}
-        </TableBody>
-      </Table>
     </div>
     // </div>
   );
