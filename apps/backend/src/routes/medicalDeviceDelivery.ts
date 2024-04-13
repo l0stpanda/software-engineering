@@ -30,13 +30,13 @@ router.post("/", async function (req: Request, res: Response) {
         priority: input.priority,
       },
     });
-    if (typeof input.quantity === "string") {
+    if (input.deliveryDate != undefined) {
       await PrismaClient.medicalDevice.create({
         data: {
           id: id[0].id,
           device: input.medicalDeviceName,
-          quantity: parseInt(input.quantity),
-          date: "hello",
+          quantity: input.quantity,
+          date: input.deliveryDate?.toString(),
           room_name: input.roomName,
         },
       });
@@ -51,4 +51,5 @@ router.post("/", async function (req: Request, res: Response) {
   res.sendStatus(200);
 });
 
+//router.get("/", async funct)
 export default router;

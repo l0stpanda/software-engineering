@@ -20,7 +20,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { medicalDeviceDelivery } from "common/src/medicalDeviceDelivery.ts";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import BackgroundPattern from "../components/allyBackground.tsx";
 import LocationDropdown from "../components/locationDropdown.tsx";
 
@@ -29,10 +29,10 @@ function MedicalDeviceRequest() {
     employeeName: "",
     roomName: "",
     medicalDeviceName: "",
-    quantity: "",
+    quantity: 0,
     priority: "",
     status: "",
-    deliveryDate: null,
+    deliveryDate: dayjs(),
   });
 
   const [arrayData, setArrayData] = useState<medicalDeviceDelivery[]>([]);
@@ -43,7 +43,7 @@ function MedicalDeviceRequest() {
       employeeName: "",
       roomName: "",
       medicalDeviceName: "",
-      quantity: "",
+      quantity: 0,
       priority: "",
       status: "",
       deliveryDate: null,
@@ -78,7 +78,7 @@ function MedicalDeviceRequest() {
       formData.employeeName == "" ||
       formData.roomName == "" ||
       formData.medicalDeviceName == "" ||
-      formData.quantity == "" ||
+      formData.quantity == 0 ||
       formData.priority == "" ||
       formData.status == "" ||
       formData.deliveryDate == null

@@ -3,7 +3,7 @@ export type medicalDeviceDelivery = {
   employeeName: string;
   roomName: string;
   medicalDeviceName: string;
-  quantity: number | string;
+  quantity: number;
   priority: string;
   status: string;
   deliveryDate: Dayjs | null;
