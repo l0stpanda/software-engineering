@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import { Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
-// import { AddIcon, RemoveIcon, EditIcon } from "@mui/icons-material";
 import {
   TransformWrapper,
   TransformComponent,
@@ -14,15 +13,14 @@ import lowerLevel2 from "../assets/00_thelowerlevel2.png";
 import floor1 from "../assets/01_thefirstfloor.png";
 import floor2 from "../assets/02_thesecondfloor.png";
 import floor3 from "../assets/03_thethirdfloor.png";
-
 import EditMapViewGraph from "../components/EditMapViewGraph.tsx";
+import { MapNode } from "../objects/MapNode.ts";
 
 function EditMap() {
   const divRef = useRef<HTMLDivElement>(null);
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
   const [graph, setGraph] = useState(new Graph());
   const [imgState, setImgState] = useState<string>(lowerLevel1);
-
   // Zoom in/out buttons for map viewing
   const Controls = () => {
     const { zoomIn, zoomOut } = useControls();
@@ -116,6 +114,12 @@ function EditMap() {
     );
   }
 
+  const [clicked, setClicked] = useState<MapNode | undefined>(undefined);
+
+  const handleNodeCallback = (childData: string) => {
+    setClicked(graph.getNode(childData));
+  };
+
   return (
     <div>
       <BackgroundPattern />
@@ -146,6 +150,7 @@ function EditMap() {
                   imageSrc={imgState}
                   graph={graph}
                   divDim={divDimensions}
+                  parentCallback={handleNodeCallback}
                 />
               </TransformComponent>
             </TransformWrapper>
@@ -160,6 +165,29 @@ function EditMap() {
                 w-1/4
                 mt-10"
         >
+          <div
+            className="mr-8
+                    ml-5
+                    py-5
+                    px-0
+                    flex
+                    flex-col
+                    items-center
+                    bg-background
+                    rounded-xl
+                    border-primary
+                    border-2"
+          >
+            {clicked?.getNodeID()}
+            <br />
+            {clicked?.getLongName()}
+            <br />
+            {clicked?.getFloor()}
+            <br />
+            {clicked?.getNodeType()}
+            <br />
+          </div>
+
           <div
             className="mr-8
                     ml-5

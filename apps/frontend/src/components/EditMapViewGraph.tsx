@@ -1,17 +1,21 @@
-//import { Edge, InputNode } from "./FloorMap.tsx";
 import { useEffect, useRef, useState } from "react";
 import { Graph } from "../objects/Graph.ts";
-//import { BFS } from "../objects/BFS.ts";
-// import { MapNode } from "../objects/MapNode.ts";
 import { FloorNodeInfo } from "./FloorNode.tsx";
 import { MapEdge } from "../objects/MapEdge.ts";
 
-//import mapImg from "../assets/00_thelowerlevel1.png";
+/*
+Functionality:
+Add node
+- give information about the node
+
+
+ */
 
 interface EditMapViewGraphProps {
   imageSrc: string;
   graph: Graph;
   divDim: { width: number; height: number };
+  parentCallback: (childData: string) => void;
 }
 
 function EditMapViewGraph(props: EditMapViewGraphProps) {
@@ -24,7 +28,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     width: props.divDim.width,
     height: props.divDim.height,
   });
-  const [clicked, setClicked] = useState<string[]>([]);
+  const [clicked, setClicked] = useState<string>("");
   const floor: string = getFloorByImage(props.imageSrc);
   const nodes = props.graph.getMap();
 
@@ -49,25 +53,12 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     };
   }, [props.imageSrc]);
 
+  // function triggered when node is clicked
   const handleNodeClick = (nodeid: string) => () => {
-    if (clicked.length < 2 && !clicked.includes(nodeid)) {
-      setClicked((prevClicked) => [...prevClicked, nodeid]);
-      //set the start node to green
-    }
-    if (clicked.length == 2) {
-      setClicked([nodeid]);
-    }
-  };
-
-  const calculateInput = (): string[] => {
-    let input: string[] = [];
-    if (clicked.length === 2) {
-      input = [clicked[0], clicked[1]];
-    } else {
-      console.log("Invalid IDs.");
-    }
-
-    return input;
+    setClicked(nodeid);
+    props.parentCallback(nodeid);
+    // need to log clicked so it can be used
+    console.log(clicked);
   };
 
   const renderLines = () => {
@@ -103,7 +94,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
             x2={endPoint.x}
             y2={endPoint.y}
             style={{ stroke: "blue", strokeWidth: 2 }}
-            className="animate-pulse"
+            className="" //"path"
           />,
         );
       }
@@ -127,25 +118,12 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     return Object.values(scaledNodes)
       .filter((node) => node.floor == floor)
       .map((node, id) => {
-        let nodeColor: string;
-        let animation: string = "border border-slate-300 hover:border-red-400";
-        const input = calculateInput();
+        const nodeColor: string = "#009BA8";
+        const animation: string =
+          "border border-slate-300 hover:border-red-400";
 
         //console.log(node.key, ids.startId, ids.endId);
         //if start node
-        if (node.key == input[0]) {
-          nodeColor = "#39FF14";
-          animation = animation.concat(" animate-bounce -m-[2.8px]");
-        }
-        //if end node
-        else if (node.key == input[1]) {
-          nodeColor = "red";
-          animation = animation.concat(" animate-bounce -m-[2.8px]");
-        }
-        //neither
-        else {
-          nodeColor = "#009BA8";
-        }
         return (
           <div
             key={id}
@@ -168,21 +146,23 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
   };
 
   return (
-    <div ref={divRef} style={{ position: "relative" }}>
-      <img src={props.imageSrc} className="object-contain h-full" alt="Map" />
-      <svg
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-        }}
-      >
-        {renderLines()}
-      </svg>
-      {renderNodes()}
-    </div>
+    <>
+      <div ref={divRef} style={{ position: "relative" }}>
+        <img src={props.imageSrc} className="object-contain h-full" alt="Map" />
+        <svg
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          {renderLines()}
+        </svg>
+        {renderNodes()}
+      </div>
+    </>
   );
 }
 
