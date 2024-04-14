@@ -1,10 +1,12 @@
-//import { Edge, InputNode } from "./FloorMap.tsx";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Graph } from "../objects/Graph.ts";
-//import { BFS } from "../objects/BFS.ts";
-// import { MapNode } from "../objects/MapNode.ts";
 import { FloorNodeInfo } from "./FloorNode.tsx";
 import { MapEdge } from "../objects/MapEdge.ts";
+import { useDrag, useDrop } from "react-dnd";
+import type { XYCoord } from "react-dnd";
+import { DragItem } from "../objects/DragItem.ts";
+import update from "immutability-helper";
+//import { node } from "prop-types";
 
 //import mapImg from "../assets/00_thelowerlevel1.png";
 
@@ -15,6 +17,40 @@ interface EditMapViewGraphProps {
 }
 
 function EditMapViewGraph(props: EditMapViewGraphProps) {
+  const [nodePositions, setNodePositions] = useState<{
+    [id: number]: {
+      left: number;
+      top: number;
+    };
+  }>({});
+
+  const moveBox = useCallback(
+    (id: number, left: number, top: number) => {
+      setNodePositions(
+        update(nodePositions, {
+          [id]: {
+            $merge: { left, top },
+          },
+        }),
+      );
+    },
+    [nodePositions, setNodePositions],
+  );
+
+  const [, drop] = useDrop(
+    () => ({
+      accept: "Node",
+      drop(item: DragItem, monitor) {
+        const delta = monitor.getDifferenceFromInitialOffset() as XYCoord;
+        const left = Math.round(item.left + delta.x);
+        const top = Math.round(item.top + delta.y);
+        moveBox(item.id, left, top);
+        return undefined;
+      },
+    }),
+    [moveBox],
+  );
+
   const [imgDimensions, setImgDimensions] = useState<{
     width: number;
     height: number;
@@ -29,6 +65,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
   const nodes = props.graph.getMap();
 
   useEffect(() => {
+    drop(divRef.current);
     if (divRef.current) {
       const resizeObserver = new ResizeObserver(() => {
         if (divRef.current) {
@@ -39,7 +76,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
       resizeObserver.observe(divRef.current);
       return () => resizeObserver.disconnect();
     }
-  }, [divRef]);
+  }, [divRef, drop]);
 
   useEffect(() => {
     const img = new Image();
@@ -123,47 +160,81 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     };
   });
 
+  function EditableNode(props: { id: number; nodeKey: string }) {
+    let nodeColor: string;
+    let animation: string = "border border-slate-300 hover:border-red-400";
+    const input = calculateInput();
+    const id = props.id;
+
+    const { left, top } = nodePositions[props.id];
+
+    const [{ isDragging }, drag] = useDrag(
+      () => ({
+        type: "Node",
+        item: { id, left, top },
+        collect: (monitor) => ({
+          isDragging: monitor.isDragging(),
+        }),
+      }),
+      [id, left, top],
+    );
+
+    if (isDragging) {
+      return <div ref={drag} />;
+    }
+
+    //console.log(node.key, ids.startId, ids.endId);
+    //if start node
+    if (props.nodeKey == input[0]) {
+      nodeColor = "#39FF14";
+      animation = animation.concat(" animate-bounce -m-[2.8px]");
+    }
+    //if end node
+    else if (props.nodeKey == input[1]) {
+      nodeColor = "red";
+      animation = animation.concat(" animate-bounce -m-[2.8px]");
+    }
+    //neither
+    else {
+      nodeColor = "#009BA8";
+    }
+    return (
+      <div
+        key={id}
+        id="Node"
+        style={{
+          position: "absolute",
+          left: left + "px",
+          top: top + "px",
+          width: "6px",
+          height: "6px",
+          backgroundColor: nodeColor,
+          borderRadius: "50%",
+          transform: "translate(-50%, -50%)",
+          cursor: "pointer",
+        }}
+        className={animation}
+        onClick={handleNodeClick(props.nodeKey)}
+        ref={drag}
+      ></div>
+    );
+  }
+
   const renderNodes = () => {
+    const tempNodePosList = nodePositions;
+    Object.values(scaledNodes)
+      .filter((node) => node.floor == floor)
+      .map((node, id) => {
+        tempNodePosList[id] = {
+          left: node.x,
+          top: node.y,
+        };
+      });
+    setNodePositions(tempNodePosList);
     return Object.values(scaledNodes)
       .filter((node) => node.floor == floor)
       .map((node, id) => {
-        let nodeColor: string;
-        let animation: string = "border border-slate-300 hover:border-red-400";
-        const input = calculateInput();
-
-        //console.log(node.key, ids.startId, ids.endId);
-        //if start node
-        if (node.key == input[0]) {
-          nodeColor = "#39FF14";
-          animation = animation.concat(" animate-bounce -m-[2.8px]");
-        }
-        //if end node
-        else if (node.key == input[1]) {
-          nodeColor = "red";
-          animation = animation.concat(" animate-bounce -m-[2.8px]");
-        }
-        //neither
-        else {
-          nodeColor = "#009BA8";
-        }
-        return (
-          <div
-            key={id}
-            style={{
-              position: "absolute",
-              left: node.x + "px",
-              top: node.y + "px",
-              width: "6px",
-              height: "6px",
-              backgroundColor: nodeColor,
-              borderRadius: "50%",
-              transform: "translate(-50%, -50%)",
-              cursor: "pointer",
-            }}
-            className={animation}
-            onClick={handleNodeClick(node.key)}
-          ></div>
-        );
+        return <EditableNode id={id} nodeKey={node.key} />;
       });
   };
 
