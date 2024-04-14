@@ -150,7 +150,7 @@ export default function RoomSchedulingRequest() {
               onChange={handleResponseChanges}
               required
             >
-              <MenuItem value="">Not Selected</MenuItem>
+              {/*<MenuItem value="">Not Selected</MenuItem>*/}
               <MenuItem value="Low">Low</MenuItem>
               <MenuItem value="Medium">Medium</MenuItem>
               <MenuItem value="High">High</MenuItem>
@@ -177,7 +177,7 @@ export default function RoomSchedulingRequest() {
               required
             >
               Start Time
-              <MenuItem value="">Not Selected</MenuItem>
+              {/*<MenuItem value="">Not Selected</MenuItem>*/}
               <MenuItem value="9:00AM">9:00AM</MenuItem>
               <MenuItem value="10:00AM">10:00AM</MenuItem>
               <MenuItem value="11:00AM">11:00AM</MenuItem>
@@ -203,7 +203,7 @@ export default function RoomSchedulingRequest() {
               onChange={handleResponseChanges}
               required
             >
-              <MenuItem value="">Not Selected</MenuItem>
+              {/*<MenuItem value="">Not Selected</MenuItem>*/}
               <MenuItem value="30 Minutes">30 Minutes</MenuItem>
               <MenuItem value="60 Minutes">60 Minutes</MenuItem>
               <MenuItem value="90 Minutes">90 Minutes</MenuItem>
@@ -234,7 +234,7 @@ export default function RoomSchedulingRequest() {
               onChange={handleResponseChanges}
               required
             >
-              <MenuItem value="">Not Selected</MenuItem>
+              {/*<MenuItem value="">Not Selected</MenuItem>*/}
               <MenuItem value="Unassigned">Unassigned</MenuItem>
               <MenuItem value="Assigned">Assigned</MenuItem>
               <MenuItem value="In Progress">In Progress</MenuItem>

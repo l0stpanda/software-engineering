@@ -145,9 +145,9 @@ function LostFound() {
                 value={responses.priority}
                 onChange={handlePriorityInput}
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
+                {/*<MenuItem value="">*/}
+                {/*  <em>None</em>*/}
+                {/*</MenuItem>*/}
                 <MenuItem value={"High"}>High</MenuItem>
                 <MenuItem value={"Medium"}>Medium</MenuItem>
                 <MenuItem value={"Low"}>Low</MenuItem>
@@ -181,9 +181,9 @@ function LostFound() {
                 value={responses.type}
                 onChange={handleTypeUpdate}
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
+                {/*<MenuItem value="">*/}
+                {/*  <em>None</em>*/}
+                {/*</MenuItem>*/}
                 <MenuItem value={"Clothing"}>Clothing</MenuItem>
                 <MenuItem value={"Device"}>Device</MenuItem>
                 <MenuItem value={"Wallet"}>Wallet</MenuItem>
@@ -209,9 +209,9 @@ function LostFound() {
                 value={responses.status}
                 onChange={handleStatusUpdate}
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
+                {/*<MenuItem value="">*/}
+                {/*  <em>None</em>*/}
+                {/*</MenuItem>*/}
                 <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
                 <MenuItem value={"Assigned"}>Assigned</MenuItem>
                 <MenuItem value={"InProgress"}>In Progress</MenuItem>
