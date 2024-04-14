@@ -14,6 +14,22 @@ router.post("/", async function (req: Request, res: Response) {
       },
     });
 
+    const id1 = await PrismaClient.generalService.findMany({
+      where: {
+        type: "Lost and Found",
+        location: roomStuff[0].node_id,
+        status: input.status,
+        emp_name: input.name,
+        priority: input.priority,
+      },
+    });
+
+    if (id1.length >= 1) {
+      console.log("SOMETHING BAD!!!!!!");
+      res.sendStatus(400);
+      return;
+    }
+
     await PrismaClient.generalService.create({
       data: {
         type: "Lost and Found",

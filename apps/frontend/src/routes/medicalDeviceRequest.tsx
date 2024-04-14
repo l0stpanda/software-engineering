@@ -93,12 +93,20 @@ function MedicalDeviceRequest() {
       return;
     }
 
-    await axios.post("api/medicalDevice", formData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      await axios.post("api/medicalDevice", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (e) {
+      alert(
+        "Error storing in the database, make sure nodes/edges are uploaded and you are logged in.",
+      );
+      console.error(e);
+      return;
+    }
 
     setOpen(true); // Open dialog box on successful submission
   }
@@ -196,7 +204,7 @@ function MedicalDeviceRequest() {
                 </MenuItem>
                 <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
                 <MenuItem value={"Assigned"}>Assigned</MenuItem>
-                <MenuItem value={"InProgress"}>InProgress</MenuItem>
+                <MenuItem value={"InProgress"}>In Progress</MenuItem>
                 <MenuItem value={"Closed"}>Closed</MenuItem>
               </Select>
             </FormControl>

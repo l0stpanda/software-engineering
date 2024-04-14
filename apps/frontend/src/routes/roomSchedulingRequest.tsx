@@ -78,10 +78,18 @@ export default function RoomSchedulingRequest() {
       alert("You must fill out all forms!");
       return;
     }
+    try {
+      await axios.post("/api/roomSchedulingRequest", responses, {
+        headers: { "Content-Type": "application/json" },
+      });
+    } catch (e) {
+      alert(
+        "Error storing in the database, make sure nodes/edges are uploaded and you are logged in.",
+      );
+      console.error(e);
+      return;
+    }
 
-    await axios.post("/api/roomSchedulingRequest", responses, {
-      headers: { "Content-Type": "application/json" },
-    });
     setOpen(true);
   }
 

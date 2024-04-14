@@ -13,6 +13,22 @@ router.post("/", async function (req: Request, res: Response) {
       },
     });
 
+    const id1 = await PrismaClient.generalService.findMany({
+      where: {
+        type: "Room Scheduling",
+        location: roomStuff[0].node_id,
+        status: input.reqStatus,
+        emp_name: input.employName,
+        priority: input.priority,
+      },
+    });
+
+    if (id1.length >= 1) {
+      console.log("SOMETHING BAD!!!!!!");
+      res.sendStatus(400);
+      return;
+    }
+
     await PrismaClient.generalService.create({
       data: {
         type: "Room Scheduling",
