@@ -67,15 +67,19 @@ function MedicineDeliveryRequest() {
     setDelivery({ ...delivery, medicineName: e.target.value });
   }
 
-  function handleQuantityInput(
-    e:
-      | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-      | SelectChangeEvent,
-  ) {
-    const name = e.target.name;
-    const value = e.target.value;
-    setDelivery({ ...delivery, [name]: value });
+  function handleQuantityInput(e: ChangeEvent<HTMLInputElement>) {
+    setDelivery({ ...delivery, quantity: e.target.value });
   }
+
+  // function handleQuantityInput( e : ChangeEvent<HTMLInputElement>)
+  // //   e:
+  // //     | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  // //     | SelectChangeEvent,
+  // // ) {
+  // //   const name = e.target.name;
+  // //   const value = e.target.value;
+  //   setDelivery({ ...delivery, quantity: e.target.value });
+  // }
 
   function handleStatusInput(
     e:
@@ -180,6 +184,7 @@ function MedicineDeliveryRequest() {
                                       },
                                     }}*/
                 >
+                  <MenuItem value="">None</MenuItem>
                   <MenuItem value="Low">Low</MenuItem>
                   <MenuItem value="Medium">Medium</MenuItem>
                   <MenuItem value="High">High</MenuItem>
@@ -220,35 +225,18 @@ function MedicineDeliveryRequest() {
                                   },
                                 }}*/
               />
-              <FormControl variant="filled" fullWidth required>
-                <InputLabel id="quantity-label">Quantity</InputLabel>
-                <Select
-                  labelId="quantity-label"
-                  id="quantity"
-                  value={delivery.quantity}
-                  onChange={handleQuantityInput}
-                  name="quantity"
-                  required
-                  /*inputProps={{
-                                      classes: {
-                                        root: "transform hover:scale-105 transition-transform duration-300",
-                                      },
-                                    }}
-                                    MenuProps={{
-                                      PaperProps: {
-                                        style: {
-                                          transform: "translateZ(0)",
-                                        },
-                                      },
-                                    }}*/
-                >
-                  {[...Array(15).keys()].map((num) => (
-                    <MenuItem key={num + 1} value={num + 1}>
-                      {num + 1}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <TextField
+                onChange={handleQuantityInput}
+                value={delivery.quantity}
+                name="quantity"
+                id="quantity"
+                variant="filled"
+                type="number"
+                inputProps={{ min: 0, max: 100, step: 1 }}
+                label="Quantity"
+                required={true}
+              />
+
               <FormControl variant="filled" fullWidth required>
                 <InputLabel id="status-label">Status</InputLabel>
                 <Select
@@ -271,6 +259,7 @@ function MedicineDeliveryRequest() {
                                       },
                                     }}*/
                 >
+                  <MenuItem value="">None</MenuItem>
                   <MenuItem value="Unassigned">Unassigned</MenuItem>
                   <MenuItem value="Assigned">Assigned</MenuItem>
                   <MenuItem value="InProgress">InProgress</MenuItem>

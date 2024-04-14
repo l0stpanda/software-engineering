@@ -19,17 +19,17 @@ import LocationDropdown from "./locationDropdown.tsx";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import axios from "axios";
 
 function LostFound() {
   const { getAccessTokenSilently } = useAuth0();
   const initialFormResponses: lostAndFound = {
     name: "",
-    date: null,
+    date: dayjs(),
     objectDesc: "",
-    priority: "",
-    status: "",
+    priority: "Medium",
+    status: "Unassigned",
     type: "",
     location: "",
   };
@@ -160,7 +160,7 @@ function LostFound() {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 sx={{ bgcolor: "#eceff0" }}
-                label="Date *"
+                label="Date Found *"
                 value={responses.date}
                 disablePast
                 onChange={handleDateChange}

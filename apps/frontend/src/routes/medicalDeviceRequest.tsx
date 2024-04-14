@@ -27,9 +27,9 @@ function MedicalDeviceRequest() {
     employeeName: "",
     roomName: "",
     medicalDeviceName: "",
-    quantity: 0,
-    priority: "",
-    status: "",
+    quantity: 1,
+    priority: "Medium",
+    status: "Unassigned",
     deliveryDate: dayjs(),
   });
 
@@ -40,9 +40,9 @@ function MedicalDeviceRequest() {
       employeeName: "",
       roomName: "",
       medicalDeviceName: "",
-      quantity: 0,
-      priority: "",
-      status: "",
+      quantity: 1,
+      priority: "Medium",
+      status: "Unassigned",
       deliveryDate: null,
     });
   }
