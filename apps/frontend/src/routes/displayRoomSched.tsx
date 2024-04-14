@@ -1,26 +1,27 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import PendingRequestItem from "../components/PendingRequestItem.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
-import PendingLost from "./displayLost.tsx";
-import PendingRoomSched from "./displayRoomSched.tsx";
+import PendingRoomSchedItem from "../components/PendingRoomSched.tsx";
 
 // Define database json type
-type FlowerReqData = {
+type roomSched = {
   id: number;
-  name: string;
-  sent_by: string;
-  sent_to: string;
-  requestDate: string;
-  note: string;
+  startTime: string;
+  lengthRes: string;
+  room_name: string;
+};
+type LostFoundData = {
+  id: number;
   status: string;
+  priority: string;
+  roomSched: roomSched[];
 };
 
-export default function PendingFlowerRequest() {
+export default function PendingRoomSched() {
   const { getAccessTokenSilently } = useAuth0();
 
   // Use state for records being displayed
-  const [records, setRecords] = useState<FlowerReqData[]>([]);
+  const [records, setRecords] = useState<LostFoundData[]>([]);
 
   // Get records from database, and update useState
   useEffect(() => {
@@ -28,12 +29,14 @@ export default function PendingFlowerRequest() {
     const fetchData = async () => {
       try {
         const token = await getAccessTokenSilently();
-        const response = await axios.get("/api/flowerRequest", {
+        const response = await axios.get("/api/roomSchedulingRequest", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        setRecords(response.data); // Assuming the data is an array of flower request data
+
+        console.log(response.data);
+        setRecords(response.data); // Assuming the data is an array of lost and found request data
       } catch (error) {
         console.error("Error fetching flower requests", error);
       }
@@ -44,34 +47,31 @@ export default function PendingFlowerRequest() {
     });
   }, [getAccessTokenSilently]);
 
-  //Have to do this because we store the node_id in the table
-  // async function idToName(id : string){
-  //     const name = await axios.get(`/import/idToName/${id}`);
-  //     return name.data;
-  // }
-
   return (
     <div className="px-8 p5 h-screen bg-background">
       <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
-        Pending Flower Deliveries
+        Room Scheduling List
       </h1>
       <table className="w-full">
         <thead className="bg-secondary border-b-2 border-b-primary">
           <tr>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Flower Delivery Request
+              ID
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Status
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Date Entered
+              Priority
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Time Entered
+              Length of Reservation
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Destination
+              Time of Reservation
+            </th>
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              Location
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Delete
@@ -82,18 +82,16 @@ export default function PendingFlowerRequest() {
         <tbody>
           {/* Map through the records and create a row for each record */}
           {records.map((record) => (
-            <PendingRequestItem
+            <PendingRoomSchedItem
               key={record.id}
               id={record.id}
               status={record.status}
-              requestDate={record.requestDate}
-              name={record.name}
+              priority={record.priority}
+              roomSched={record.roomSched}
             />
           ))}
         </tbody>
       </table>
-      <PendingLost></PendingLost>
-      <PendingRoomSched></PendingRoomSched>
     </div>
   );
 }

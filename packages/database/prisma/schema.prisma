@@ -90,6 +90,7 @@ model GeneralService {
   location_room      Nodes           @relation("location", fields: [location], references: [node_id], onDelete: Cascade)
   MedicalDeviceCheck medicalDevice[] @relation("idCheck")
   lost_location      LostItem[]      @relation("idCheckLost")
+  roomSched          RoomScheduler[] @relation("roomSchedID")
 }
 
 model medicalDevice {
@@ -113,11 +114,10 @@ model LostItem {
 }
 
 model RoomScheduler {
-  id         Int    @id @default(autoincrement())
-  employName String
-  startTime  String
-  lengthRes  String
-  roomNum    String
-  reqStatus  String
-  priority   String
+  id        Int    @id
+  startTime String
+  lengthRes String
+  room_name String
+
+  roomSchedID GeneralService @relation("roomSchedID", fields: [id], references: [id], onDelete: Cascade)
 }

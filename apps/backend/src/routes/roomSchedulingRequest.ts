@@ -7,14 +7,38 @@ const router: Router = express.Router();
 router.post("/", async function (req: Request, res: Response) {
   const input: roomSchedulerFields = req.body;
   try {
+    const roomStuff = await PrismaClient.nodes.findMany({
+      where: {
+        long_name: input.roomNum,
+      },
+    });
+
+    await PrismaClient.generalService.create({
+      data: {
+        type: "Room Scheduling",
+        location: roomStuff[0].node_id,
+        status: input.reqStatus,
+        emp_name: input.employName,
+        priority: input.priority,
+      },
+    });
+
+    const findID = await PrismaClient.generalService.findMany({
+      where: {
+        type: "Room Scheduling",
+        location: roomStuff[0].node_id,
+        status: input.reqStatus,
+        emp_name: input.employName,
+        priority: input.priority,
+      },
+    });
+
     await PrismaClient.roomScheduler.create({
       data: {
-        employName: input.employName,
+        id: findID[0].id,
         startTime: input.startTime,
         lengthRes: input.lengthRes,
-        roomNum: input.roomNum,
-        priority: input.priority,
-        reqStatus: input.reqStatus,
+        room_name: input.roomNum,
       },
     });
   } catch (e) {
@@ -27,7 +51,16 @@ router.post("/", async function (req: Request, res: Response) {
 
 router.get("/", async function (req: Request, res: Response) {
   try {
-    res.send(await PrismaClient.roomScheduler.findMany());
+    res.send(
+      await PrismaClient.generalService.findMany({
+        where: {
+          type: "Room Scheduling",
+        },
+        include: {
+          roomSched: true,
+        },
+      }),
+    );
   } catch (e) {
     console.log(e);
     res.sendStatus(400);
@@ -36,23 +69,40 @@ router.get("/", async function (req: Request, res: Response) {
   res.sendStatus(200);
 });
 
-// router.delete("/:id", async function (req: Request, res: Response) {
-//   console.log(req.params.id);
-//   const id: number = parseInt(req.params.id);
-//   console.log(id);
-//   try {
-//     console.log();
-//     await PrismaClient.roomScheduler.delete({
-//       where: {
-//         id: id,
-//       },
-//     });
-//   } catch (e) {
-//     console.log(e);
-//     res.sendStatus(400);
-//     return;
-//   }
-//   res.sendStatus(200);
-// });
+router.delete("/:id", async function (req: Request, res: Response) {
+  const id: number = parseInt(req.params.id);
+  try {
+    await PrismaClient.generalService.delete({
+      where: {
+        id: id,
+      },
+    });
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(400);
+    return;
+  }
+  res.sendStatus(200);
+});
 
+router.post("/update", async function (req: Request, res: Response) {
+  const id = req.body.id;
+  const status = req.body.status;
+
+  try {
+    await PrismaClient.generalService.update({
+      where: {
+        id: id,
+      },
+      data: {
+        status: status,
+      },
+    });
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(400);
+    return;
+  }
+  res.sendStatus(200);
+});
 export default router;
