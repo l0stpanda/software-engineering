@@ -132,3 +132,21 @@ model MedicineRequest {
   room_name     String
   medicineReqID GeneralService @relation("medicineReqID", fields: [id], references: [id], onDelete: Cascade)
 }
+
+// Tables for To do list i hope and goddamn pray
+model User {
+  id        Int    @id @default(autoincrement())
+  email     String @unique
+  name      String
+  // Foreign Key Reference
+  roomSched Todo[] @relation("UserID")
+}
+
+model Todo {
+  id        Int     @id @default(autoincrement())
+  task      String
+  email     String
+  completed Boolean @default(false)
+  // Foreign Key Reference
+  user      User    @relation("UserID", fields: [email], references: [email], onDelete: Cascade)
+}
