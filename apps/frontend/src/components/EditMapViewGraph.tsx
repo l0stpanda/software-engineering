@@ -160,10 +160,23 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     };
   });
 
-  function EditableNode(props: { id: number; nodeKey: string }) {
+  function EditableNode(props: {
+    id: number;
+    left: number;
+    top: number;
+    nodeKey: string;
+  }) {
     let nodeColor: string;
     let animation: string = "border border-slate-300 hover:border-red-400";
     const input = calculateInput();
+
+    const tempNodePosList = nodePositions;
+    tempNodePosList[props.id] = {
+      left: props.left,
+      top: props.top,
+    };
+    setNodePositions(tempNodePosList);
+
     const id = props.id;
 
     const { left, top } = nodePositions[props.id];
@@ -220,23 +233,13 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     );
   }
 
-  const renderNodes = () => {
-    const tempNodePosList = nodePositions;
-    Object.values(scaledNodes)
-      .filter((node) => node.floor == floor)
-      .map((node, id) => {
-        tempNodePosList[id] = {
-          left: node.x,
-          top: node.y,
-        };
-      });
-    setNodePositions(tempNodePosList);
+  function renderNodes() {
     return Object.values(scaledNodes)
       .filter((node) => node.floor == floor)
-      .map((node, id) => {
-        return <EditableNode id={id} nodeKey={node.key} />;
-      });
-  };
+      .map((node, id) => (
+        <EditableNode id={id} left={node.x} top={node.x} nodeKey={node.key} />
+      ));
+  }
 
   return (
     <div ref={divRef} style={{ position: "relative" }}>
