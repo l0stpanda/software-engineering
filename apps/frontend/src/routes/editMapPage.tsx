@@ -1,11 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import { Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
 // import { AddIcon, RemoveIcon, EditIcon } from "@mui/icons-material";
-import {
-  TransformWrapper,
-  TransformComponent,
-  useControls,
-} from "react-zoom-pan-pinch";
+import {} from //  TransformWrapper,
+//  TransformComponent,
+//  useControls,
+"react-zoom-pan-pinch";
 import { useState } from "react";
 import BackgroundPattern from "../components/backgroundPattern.tsx";
 import { Graph } from "../objects/Graph.ts";
@@ -24,36 +23,36 @@ function EditMap() {
   const [imgState, setImgState] = useState<string>(lowerLevel1);
 
   // Zoom in/out buttons for map viewing
-  const Controls = () => {
-    const { zoomIn, zoomOut } = useControls();
-    return (
-      <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2">
-        <Button
-          onClick={() => zoomIn()}
-          type="button"
-          id="zoomInBut"
-          variant="contained"
-          className="zoomInBut"
-          size="medium"
-          sx={{ borderRadius: "30px", fontSize: "22px", font: "header" }}
-        >
-          +
-        </Button>
-
-        <Button
-          onClick={() => zoomOut()}
-          type="button"
-          id="zoomOutBut"
-          variant="contained"
-          className="zoomOutBut"
-          size="medium"
-          sx={{ borderRadius: "30px", fontSize: "22px", font: "header" }}
-        >
-          -
-        </Button>
-      </div>
-    );
-  };
+  // const Controls = () => {
+  //   const { zoomIn, zoomOut } = useControls();
+  //   return (
+  //     <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2">
+  //       <Button
+  //         onClick={() => zoomIn()}
+  //         type="button"
+  //         id="zoomInBut"
+  //         variant="contained"
+  //         className="zoomInBut"
+  //         size="medium"
+  //         sx={{ borderRadius: "30px", fontSize: "22px", font: "header" }}
+  //       >
+  //         +
+  //       </Button>
+  //
+  //       <Button
+  //         onClick={() => zoomOut()}
+  //         type="button"
+  //         id="zoomOutBut"
+  //         variant="contained"
+  //         className="zoomOutBut"
+  //         size="medium"
+  //         sx={{ borderRadius: "30px", fontSize: "22px", font: "header" }}
+  //       >
+  //         -
+  //       </Button>
+  //     </div>
+  //   );
+  // };
 
   // Changes the map image
   const changeFloor = (floor: string) => {
@@ -139,16 +138,16 @@ function EditMap() {
         border-primary
         border-2"
           >
-            <TransformWrapper>
-              <Controls />
-              <TransformComponent>
-                <EditMapViewGraph
-                  imageSrc={imgState}
-                  graph={graph}
-                  divDim={divDimensions}
-                />
-              </TransformComponent>
-            </TransformWrapper>
+            {/*<TransformWrapper>*/}
+            {/*  <Controls />*/}
+            {/*  <TransformComponent>*/}
+            <EditMapViewGraph
+              imageSrc={imgState}
+              graph={graph}
+              divDim={divDimensions}
+            />
+            {/*  </TransformComponent>*/}
+            {/*</TransformWrapper>*/}
           </div>
           {/*Buttons for displaying floor images*/}
           <FloorMapButtons />

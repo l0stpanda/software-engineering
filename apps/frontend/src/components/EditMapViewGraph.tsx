@@ -17,15 +17,74 @@ interface EditMapViewGraphProps {
 }
 
 function EditMapViewGraph(props: EditMapViewGraphProps) {
+  const [imgDimensions, setImgDimensions] = useState<{
+    width: number;
+    height: number;
+  }>({ width: 0, height: 0 });
+  const divRef = useRef(null);
+  const [divDimensions, setDivDimensions] = useState({
+    width: props.divDim.width,
+    height: props.divDim.height,
+  });
+  // const [clicked, setClicked] = useState<string[]>([]);
+  const floor: string = getFloorByImage(props.imageSrc);
+  const nodes = props.graph.getMap();
+
+  useEffect(() => {
+    if (divRef.current) {
+      const resizeObserver = new ResizeObserver(() => {
+        if (divRef.current) {
+          const { clientWidth, clientHeight } = divRef.current;
+          setDivDimensions({ width: clientWidth, height: clientHeight });
+        }
+      });
+      resizeObserver.observe(divRef.current);
+      return () => resizeObserver.disconnect();
+    }
+  }, [divRef]);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = props.imageSrc;
+    img.onload = () => {
+      setImgDimensions({ width: img.width, height: img.height });
+    };
+  }, [props.imageSrc]);
+
+  const tempNodePosList: {
+    [id: number]: {
+      left: number;
+      top: number;
+    };
+  } = {};
+  const scaledNodes: { [key: string]: FloorNodeInfo } = {};
+  let idNum = 0;
+  nodes.forEach((node) => {
+    const id: string = node.getNodeID();
+    scaledNodes[id] = {
+      key: node.getNodeID(),
+      x: node.getX() * (divDimensions.width / imgDimensions.width),
+      y: node.getY() * (divDimensions.height / imgDimensions.height),
+      floor: node.getFloor(),
+    };
+    console.log(idNum + " " + id);
+    tempNodePosList[idNum] = {
+      left: scaledNodes[id].x,
+      top: scaledNodes[id].y,
+    };
+    idNum++;
+  });
+
   const [nodePositions, setNodePositions] = useState<{
     [id: number]: {
       left: number;
       top: number;
     };
-  }>({});
+  }>(tempNodePosList);
 
   const moveBox = useCallback(
     (id: number, left: number, top: number) => {
+      console.log("time to move a box!");
       setNodePositions(
         update(nodePositions, {
           [id]: {
@@ -51,61 +110,26 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     [moveBox],
   );
 
-  const [imgDimensions, setImgDimensions] = useState<{
-    width: number;
-    height: number;
-  }>({ width: 0, height: 0 });
-  const divRef = useRef(null);
-  const [divDimensions, setDivDimensions] = useState({
-    width: props.divDim.width,
-    height: props.divDim.height,
-  });
-  const [clicked, setClicked] = useState<string[]>([]);
-  const floor: string = getFloorByImage(props.imageSrc);
-  const nodes = props.graph.getMap();
+  // const handleNodeClick = (nodeid: string) => () => {
+  //   if (clicked.length < 2 && !clicked.includes(nodeid)) {
+  //     setClicked((prevClicked) => [...prevClicked, nodeid]);
+  //     //set the start node to green
+  //   }
+  //   if (clicked.length == 2) {
+  //     setClicked([nodeid]);
+  //   }
+  // };
 
-  useEffect(() => {
-    drop(divRef.current);
-    if (divRef.current) {
-      const resizeObserver = new ResizeObserver(() => {
-        if (divRef.current) {
-          const { clientWidth, clientHeight } = divRef.current;
-          setDivDimensions({ width: clientWidth, height: clientHeight });
-        }
-      });
-      resizeObserver.observe(divRef.current);
-      return () => resizeObserver.disconnect();
-    }
-  }, [divRef, drop]);
-
-  useEffect(() => {
-    const img = new Image();
-    img.src = props.imageSrc;
-    img.onload = () => {
-      setImgDimensions({ width: img.width, height: img.height });
-    };
-  }, [props.imageSrc]);
-
-  const handleNodeClick = (nodeid: string) => () => {
-    if (clicked.length < 2 && !clicked.includes(nodeid)) {
-      setClicked((prevClicked) => [...prevClicked, nodeid]);
-      //set the start node to green
-    }
-    if (clicked.length == 2) {
-      setClicked([nodeid]);
-    }
-  };
-
-  const calculateInput = (): string[] => {
-    let input: string[] = [];
-    if (clicked.length === 2) {
-      input = [clicked[0], clicked[1]];
-    } else {
-      console.log("Invalid IDs.");
-    }
-
-    return input;
-  };
+  // const calculateInput = (): string[] => {
+  //   let input: string[] = [];
+  //   if (clicked.length === 2) {
+  //     input = [clicked[0], clicked[1]];
+  //   } else {
+  //     console.log("Invalid IDs.");
+  //   }
+  //
+  //   return input;
+  // };
 
   const renderLines = () => {
     const nodeList = props.graph.getNodesByFloor(floor);
@@ -149,33 +173,15 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     return lines;
   };
 
-  const scaledNodes: { [key: string]: FloorNodeInfo } = {};
-  nodes.forEach((node) => {
-    const id: string = node.getNodeID();
-    scaledNodes[id] = {
-      key: node.getNodeID(),
-      x: node.getX() * (divDimensions.width / imgDimensions.width),
-      y: node.getY() * (divDimensions.height / imgDimensions.height),
-      floor: node.getFloor(),
-    };
-  });
-
   function EditableNode(props: {
     id: number;
     left: number;
     top: number;
     nodeKey: string;
   }) {
-    let nodeColor: string;
-    let animation: string = "border border-slate-300 hover:border-red-400";
-    const input = calculateInput();
-
-    const tempNodePosList = nodePositions;
-    tempNodePosList[props.id] = {
-      left: props.left,
-      top: props.top,
-    };
-    setNodePositions(tempNodePosList);
+    const nodeColor: string = "#009BA8";
+    const animation: string = "border border-slate-300 hover:border-red-400";
+    // const input = calculateInput();
 
     const id = props.id;
 
@@ -184,37 +190,38 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     const [{ isDragging }, drag] = useDrag(
       () => ({
         type: "Node",
-        item: { id, left, top },
+        item: { id },
         collect: (monitor) => ({
           isDragging: monitor.isDragging(),
         }),
       }),
-      [id, left, top],
+      [id],
     );
 
     if (isDragging) {
-      return <div ref={drag} />;
+      console.log("We're dragging!");
+      //return <div ref={drag} />;
     }
 
     //console.log(node.key, ids.startId, ids.endId);
     //if start node
-    if (props.nodeKey == input[0]) {
-      nodeColor = "#39FF14";
-      animation = animation.concat(" animate-bounce -m-[2.8px]");
-    }
-    //if end node
-    else if (props.nodeKey == input[1]) {
-      nodeColor = "red";
-      animation = animation.concat(" animate-bounce -m-[2.8px]");
-    }
-    //neither
-    else {
-      nodeColor = "#009BA8";
-    }
+    // if (props.nodeKey == input[0]) {
+    //   nodeColor = "#39FF14";
+    //   animation = animation.concat(" animate-bounce -m-[2.8px]");
+    // }
+    // //if end node
+    // else if (props.nodeKey == input[1]) {
+    //   nodeColor = "red";
+    //   animation = animation.concat(" animate-bounce -m-[2.8px]");
+    // }
+    // //neither
+    // else {
+    //}
+
     return (
       <div
-        key={id}
-        id="Node"
+        key={props.nodeKey}
+        id={id.toString()}
         style={{
           position: "absolute",
           left: left + "px",
@@ -227,7 +234,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
           cursor: "pointer",
         }}
         className={animation}
-        onClick={handleNodeClick(props.nodeKey)}
+        // onClick={handleNodeClick(props.nodeKey)}
         ref={drag}
       ></div>
     );
@@ -237,25 +244,27 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     return Object.values(scaledNodes)
       .filter((node) => node.floor == floor)
       .map((node, id) => (
-        <EditableNode id={id} left={node.x} top={node.x} nodeKey={node.key} />
+        <EditableNode id={id} left={node.x} top={node.y} nodeKey={node.key} />
       ));
   }
 
   return (
     <div ref={divRef} style={{ position: "relative" }}>
-      <img src={props.imageSrc} className="object-contain h-full" alt="Map" />
-      <svg
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-        }}
-      >
-        {renderLines()}
-      </svg>
-      {renderNodes()}
+      <div ref={drop}>
+        <img src={props.imageSrc} className="object-contain h-full" alt="Map" />
+        <svg
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          {renderLines()}
+        </svg>
+        {renderNodes()}
+      </div>
     </div>
   );
 }
