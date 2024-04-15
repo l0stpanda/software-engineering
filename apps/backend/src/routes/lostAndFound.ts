@@ -1,24 +1,25 @@
 import express, { Router, Request, Response } from "express";
-//import { Prisma } from "database";
 import PrismaClient from "../bin/database-connection.ts";
-import { roomSchedulerFields } from "common/src/roomScheduler.ts";
+import { lostAndFound } from "common/src/lostAndFoundType.ts";
 
 const router: Router = express.Router();
+
 router.post("/", async function (req: Request, res: Response) {
-  const input: roomSchedulerFields = req.body;
+  const input: lostAndFound = req.body;
+
   try {
     const roomStuff = await PrismaClient.nodes.findMany({
       where: {
-        long_name: input.roomNum,
+        long_name: input.location,
       },
     });
 
     const id1 = await PrismaClient.generalService.findMany({
       where: {
-        type: "Room Scheduling",
+        type: "Lost and Found",
         location: roomStuff[0].node_id,
-        status: input.reqStatus,
-        emp_name: input.employName,
+        status: input.status,
+        emp_name: input.name,
         priority: input.priority,
       },
     });
@@ -31,54 +32,54 @@ router.post("/", async function (req: Request, res: Response) {
 
     await PrismaClient.generalService.create({
       data: {
-        type: "Room Scheduling",
+        type: "Lost and Found",
         location: roomStuff[0].node_id,
-        status: input.reqStatus,
-        emp_name: input.employName,
+        status: input.status,
+        emp_name: input.name,
         priority: input.priority,
       },
     });
 
     const findID = await PrismaClient.generalService.findMany({
       where: {
-        type: "Room Scheduling",
+        type: "Lost and Found",
         location: roomStuff[0].node_id,
-        status: input.reqStatus,
-        emp_name: input.employName,
+        status: input.status,
+        emp_name: input.name,
         priority: input.priority,
       },
     });
 
-    await PrismaClient.roomScheduler.create({
-      data: {
-        id: findID[0].id,
-        startTime: input.startTime,
-        lengthRes: input.lengthRes,
-        room_name: input.roomNum,
-      },
-    });
+    if (input.date != undefined) {
+      await PrismaClient.lostItem.create({
+        data: {
+          id: findID[0].id,
+          date: input.date.toString(),
+          description: input.objectDesc,
+          type: input.type,
+        },
+      });
+    }
   } catch (e) {
     console.log(e);
     res.sendStatus(400);
     return;
   }
-  return res.sendStatus(200);
+  res.sendStatus(200);
 });
 
 router.get("/", async function (req: Request, res: Response) {
+  const data = await PrismaClient.generalService.findMany({
+    where: {
+      type: "Lost and Found",
+    },
+    include: {
+      lost_location: true,
+    },
+  });
   try {
-    res.send(
-      await PrismaClient.generalService.findMany({
-        where: {
-          type: "Room Scheduling",
-        },
-        include: {
-          roomSched: true,
-        },
-      }),
-    );
+    res.send(data);
   } catch (e) {
-    console.log(e);
     res.sendStatus(400);
     return;
   }
