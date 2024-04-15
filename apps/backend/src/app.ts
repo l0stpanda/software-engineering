@@ -11,9 +11,8 @@ import roomScheduler from "./routes/roomSchedulingRequest.ts";
 import medicalDeviceDelivery from "./routes/medicalDeviceDelivery.ts";
 import inventory from "./routes/inventory.ts";
 import lostAndFound from "./routes/lostAndFound.ts";
+import medicineRequest from "./routes/medicineRequest.ts";
 import { auth } from "express-oauth2-jwt-bearer";
-// import readRouterE from "./routes/readE.ts";
-// import readRouterN from "./routes/readN.ts";
 
 const app: Express = express(); // Setup the backend
 
@@ -46,6 +45,7 @@ app.use("/api/flowerRequest", flowerRequest);
 app.use("/api/inventory", inventory);
 app.use("/api/medicalDevice", medicalDeviceDelivery);
 app.use("/api/lostAndFound", lostAndFound);
+app.use("/api/medicineRequest", medicineRequest);
 // Enable auth0 enforcement
 app.use(
   auth({

@@ -5,6 +5,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import PendingLost from "./displayLost.tsx";
 import PendingRoomSched from "./displayRoomSched.tsx";
 import PendingMedicalDevice from "./displayMedicalDevice.tsx";
+import PendingMedicineDelivery from "./displayMedicineDelivery.tsx";
 
 // Define database json type
 type FlowerReqData = {
@@ -98,6 +99,7 @@ export default function PendingFlowerRequest() {
       <PendingLost></PendingLost>
       <PendingRoomSched></PendingRoomSched>
       <PendingMedicalDevice></PendingMedicalDevice>
+      <PendingMedicineDelivery></PendingMedicineDelivery>
     </div>
   );
 }
