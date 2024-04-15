@@ -10,11 +10,6 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { MedicineDelivery } from "../common/MedicineDelivery.ts";
@@ -22,8 +17,10 @@ import MedicineRequestButtons from "../components/MedicineRequestButtons.tsx";
 import { ChangeEvent, useState } from "react";
 import BackgroundPattern from "../components/allyBackground.tsx";
 import LocationDropdown from "../components/locationDropdown.tsx";
-
+import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 function MedicineDeliveryRequest() {
+  const { getAccessTokenSilently } = useAuth0();
   const [delivery, setDelivery] = useState<MedicineDelivery>({
     employeeName: "",
     priority: "Medium",
@@ -32,7 +29,6 @@ function MedicineDeliveryRequest() {
     quantity: "1",
     status: "Unassigned",
   });
-  const [submissions, setSubmissions] = useState<MedicineDelivery[]>([]);
 
   function clear() {
     setDelivery({
@@ -91,8 +87,20 @@ function MedicineDeliveryRequest() {
     setDelivery({ ...delivery, [name]: value });
   }
 
-  function submit(delivery: MedicineDelivery) {
-    setSubmissions([...submissions, delivery]);
+  async function submit(delivery: MedicineDelivery) {
+    const token = await getAccessTokenSilently();
+    try {
+      await axios.post("/api/medicineRequest", delivery, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (e) {
+      alert("Error storing in the database.");
+      console.error(e);
+      return;
+    }
     setOpen(true);
   }
 
@@ -278,78 +286,7 @@ function MedicineDeliveryRequest() {
         </div>
       </div>
 
-      <div className="flex justify-center items-center">
-        <div className="bg-white p-8 rounded-lg">
-          <h2
-            className="text-2xl font-bold mb-4 text-center transform hover:-translate-y-2 transition-transform duration-300"
-            style={{
-              color: "rgb(0 40 102 / 1)",
-              fontFamily: "Nunito, sans-serif",
-              fontSize: "34px",
-              margin: "30px",
-            }}
-          >
-            Submitted Requests
-          </h2>
-          <Table
-            className="bg-gray rounded-xl justify-center py-10"
-            sx={{ bgcolor: "#eceff0" }}
-          >
-            <TableHead className="w-full table-auto mt-4 border-collapse border-b-2 border-secondary">
-              <TableRow>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  Index
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  Employee Name
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  Priority
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  Location
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  Medicine Name
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  Quantity
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  Status
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {submissions.map((submission, index) => (
-                <TableRow key={index}>
-                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                    {index + 1}
-                  </TableCell>
-                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                    {submission.employeeName}
-                  </TableCell>
-                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                    {submission.priority}
-                  </TableCell>
-                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                    {submission.location}
-                  </TableCell>
-                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                    {submission.medicineName}
-                  </TableCell>
-                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                    {submission.quantity}
-                  </TableCell>
-                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                    {submission.status}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </div>
+      <div className="flex justify-center items-center"></div>
       <Dialog open={open} onClose={handleSubmitClose}>
         <DialogTitle>We received your request!</DialogTitle>
         <DialogContent>

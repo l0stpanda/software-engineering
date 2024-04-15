@@ -87,10 +87,11 @@ model GeneralService {
   emp_name String
   priority String
 
-  location_room      Nodes           @relation("location", fields: [location], references: [node_id], onDelete: Cascade)
-  medicalDeviceCheck medicalDevice[] @relation("idCheck")
-  lost_location      LostItem[]      @relation("idCheckLost")
-  roomSched          RoomScheduler[] @relation("roomSchedID")
+  location_room      Nodes             @relation("location", fields: [location], references: [node_id], onDelete: Cascade)
+  medicalDeviceCheck medicalDevice[]   @relation("idCheck")
+  lost_location      LostItem[]        @relation("idCheckLost")
+  roomSched          RoomScheduler[]   @relation("roomSchedID")
+  medicineReqID      MedicineRequest[] @relation("medicineReqID")
 }
 
 // medical device requests are saved
@@ -122,4 +123,12 @@ model RoomScheduler {
   room_name String
 
   roomSchedID GeneralService @relation("roomSchedID", fields: [id], references: [id], onDelete: Cascade)
+}
+
+model MedicineRequest {
+  id            Int            @id
+  medicine_name String
+  quantity      Int
+  room_name     String
+  medicineReqID GeneralService @relation("medicineReqID", fields: [id], references: [id], onDelete: Cascade)
 }
