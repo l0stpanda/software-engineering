@@ -91,7 +91,7 @@ function FlowerRequest() {
   return (
     <div className="justify-center flex flex-grow place-items-center">
       <BackgroundPattern />
-      <div className="m-auto flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-4">
+      <div className="m-auto shadow-2xl flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-4">
         <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
           Flower Delivery Request
         </h1>

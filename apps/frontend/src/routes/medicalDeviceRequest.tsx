@@ -119,8 +119,8 @@ function MedicalDeviceRequest() {
   return (
     <div className="justify-center grid h-screen place-items-center bg-repeat mt-6">
       <BackgroundPattern />
-      <div className="overflow-m-auto flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-4">
-        <h1 className="m-2 font-header text-primary font-bold text-3xl text-center">
+      <div className="overflow-m-auto shadow-2xl flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-4">
+        <h1 className="m-2 font-header text-primary font-bold text-2xl text-center">
           Medical Device Delivery Form
         </h1>
         <p
