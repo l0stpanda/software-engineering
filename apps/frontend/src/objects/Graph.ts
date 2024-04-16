@@ -1,15 +1,15 @@
 import { MapNode } from "./MapNode.ts";
 import { Nodes, Edges } from "database";
 import axios from "axios";
+import { MapEdge } from "./MapEdge.ts";
 
 export class Graph {
   private adjMap: Map<string, MapNode>; // Map<nodeID, Node object>
   private nameMap: Map<string, string>;
 
-  constructor(adjMap: Map<string, MapNode>) {
-    this.adjMap = adjMap;
+  constructor() {
+    this.adjMap = new Map<string, MapNode>();
     this.nameMap = new Map<string, string>();
-    this.loadGraph();
   }
 
   // Add a node to the graph
@@ -24,24 +24,30 @@ export class Graph {
     const destNode = this.adjMap.get(destID);
 
     if (srcNode instanceof MapNode && destNode instanceof MapNode) {
-      srcNode.addAdjacency(destNode);
-      destNode.addAdjacency(srcNode);
+      const edge = new MapEdge(srcNode, destNode);
+      srcNode.addAdjacency(edge);
+      destNode.addAdjacency(edge);
     } else {
       console.log("Edge is incomplete or a node does not exist");
     }
   }
 
   async getAllEdges() {
-    return await axios.get("/api/import").then((response) => response.data);
+    return await axios
+      .get("/api/import/edgesGet")
+      .then((response) => response.data);
   }
 
   async getAllNodes() {
-    return await axios.get("/api/importN").then((response) => response.data);
+    return await axios
+      .get("/api/import/nodesGet")
+      .then((response) => response.data);
   }
 
   async loadGraph(): Promise<void> {
     const nodes: Nodes[] = await this.getAllNodes();
     const edges: Edges[] = await this.getAllEdges();
+    console.log(edges);
 
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
@@ -56,7 +62,7 @@ export class Graph {
           node.building,
           node.node_type,
           node.long_name,
-          node.short_name,
+          node.short_name.replace("\r", ""),
         );
         await this.addNode(new_node);
       }
@@ -64,8 +70,7 @@ export class Graph {
 
     for (let i = 0; i < edges.length; i++) {
       const src_node = edges[i].start_node;
-      const dest_node = edges[i].end_node;
-
+      const dest_node = edges[i].end_node.replace("\r", "");
       await this.addEdge(src_node, dest_node);
     }
   }
@@ -78,17 +83,20 @@ export class Graph {
     return this.adjMap.get(nodeID);
   }
 
-  nodeFromName(name: string) {
-    const id = this.idFromName(name);
-
-    if (id != undefined) {
-      return this.adjMap.get(id);
-    }
-
-    return undefined;
-  }
-
   idFromName(name: string) {
     return this.nameMap.get(name);
+  }
+
+  getNodesByFloor(floor: string): MapNode[] {
+    const nodes = this.adjMap.values();
+    const result: MapNode[] = [];
+
+    for (const node of nodes) {
+      if (node.getFloor() == floor) {
+        result.push(node);
+      }
+    }
+
+    return result;
   }
 }

@@ -1,11 +1,25 @@
 import { Graph } from "./Graph.ts";
 import { MapNode } from "./MapNode.ts";
 
+export interface IPathfinding {
+  findPath(src: string, dst: string): string[] | undefined;
+}
+
 export class Pathfinding {
+  private _pathAlgo: IPathfinding | undefined;
   protected graph: Graph;
 
   constructor(graph: Graph) {
     this.graph = graph;
+  }
+
+  get pathAlgo(): IPathfinding | undefined {
+    return this._pathAlgo;
+  }
+
+  setPathAlgo(newAlgo: IPathfinding): string {
+    this._pathAlgo = newAlgo;
+    return "";
   }
 
   // Prints out the path found by FindPath
@@ -23,8 +37,7 @@ export class Pathfinding {
 
   // Just a parent function
   findPath(srcID: string, destID: string): string[] | undefined {
-    console.log(srcID + destID);
-    return undefined;
+    return this._pathAlgo?.findPath(srcID, destID);
   }
 
   getDirections(path: string[]) {
@@ -33,89 +46,25 @@ export class Pathfinding {
       // Special case for start node
       if (i == 0) {
         const nextNode = this.graph.getNode(path[1]);
-        const futureNode = this.graph.getNode(path[2]);
-        if (nextNode != undefined && futureNode != undefined) {
-          if (nextNode.getNodeType() == "HALL") {
-            directions.push(
-              "Take " +
-                nextNode.getLongName() +
-                " going towards " +
-                futureNode.getLongName(),
-            );
-          } else {
-            directions.push(
-              "Go by " +
-                nextNode.getLongName() +
-                " going towards " +
-                futureNode.getLongName(),
-            );
-          }
+        if (nextNode) {
+          directions.push(`Start towards ${nextNode.getLongName()}`);
         }
       } else {
         const prevNode = this.graph.getNode(path[i - 1]);
         const nextNode = this.graph.getNode(path[i + 1]);
         const currNode = this.graph.getNode(path[i]);
 
-        if (
-          prevNode != undefined &&
-          nextNode != undefined &&
-          currNode != undefined
-        ) {
-          const movements = this.getMovement(nextNode, prevNode, currNode);
-          const xDirection = movements[0];
-          const yDirection = movements[1];
-          const moveDirection = movements[2];
-
-          if (xDirection != 0 && yDirection != 0) {
-            switch (moveDirection) {
-              // Going East
-              case 1:
-                if (yDirection < 0) {
-                  directions.push("Turn left at " + currNode.getLongName());
-                } else {
-                  directions.push("Turn right at " + currNode.getLongName());
-                }
-                break;
-
-              // Going West
-              case -1:
-                if (yDirection > 0) {
-                  directions.push("Turn left at " + currNode.getLongName());
-                } else {
-                  directions.push("Turn right at " + currNode.getLongName());
-                }
-                break;
-
-              // Going South
-              case 2:
-                if (xDirection > 0) {
-                  directions.push("Turn left at " + currNode.getLongName());
-                } else {
-                  directions.push("Turn right at " + currNode.getLongName());
-                }
-                break;
-
-              // Going North
-              case -2:
-                if (xDirection < 0) {
-                  directions.push("Turn left at " + currNode.getLongName());
-                } else {
-                  directions.push("Turn right at " + currNode.getLongName());
-                }
-                break;
-
-              default:
-                console.error("How did we get here?");
-                break;
-            }
-          } else {
-            if (i == path.length - 2) {
-              directions.push("Go straight to your destination");
-            } else {
-              directions.push(
-                "Continue straight past " + currNode.getLongName(),
-              );
-            }
+        if (prevNode && nextNode && currNode) {
+          switch (this.getMovement(nextNode, prevNode, currNode)) {
+            case "forward":
+              directions.push(`Continue straight at ${currNode.getLongName()}`);
+              break;
+            case "right":
+              directions.push(`Turn right at ${currNode.getLongName()}`);
+              break;
+            case "left":
+              directions.push(`Turn left at ${currNode.getLongName()}`);
+              break;
           }
         }
       }
@@ -129,23 +78,46 @@ export class Pathfinding {
     1 or -1 is its respective driection on x
     2 or -2 is its respective direction in the y direction
    */
-  private getMovement(nextNode: MapNode, prevNode: MapNode, currNode: MapNode) {
-    const movements: number[] = [];
-    movements.push(prevNode.getX() - nextNode.getX());
-    movements.push(nextNode.getY() - prevNode.getY());
-    const xMovement = prevNode.getX() - currNode.getX();
+  private getMovement(
+    nextNode: MapNode,
+    prevNode: MapNode,
+    currNode: MapNode,
+  ): string {
+    const xMovement = currNode.getX() - prevNode.getX();
     const yMovement = currNode.getY() - prevNode.getY();
+    const xMovementNext = nextNode.getX() - currNode.getX();
+    const yMovementNext = nextNode.getY() - currNode.getY();
+    const hypotenusePrev = this.getEuclidian(prevNode, currNode);
+    const hypotenuseNext = this.getEuclidian(currNode, nextNode);
+    let anglePrev = Math.acos(xMovement / hypotenusePrev);
+    let angleNext = Math.acos(xMovementNext / hypotenuseNext);
 
-    switch (xMovement) {
-      case 0:
-        movements.push(2 * (yMovement / Math.abs(yMovement)));
-        break;
+    // Trig to get direction of movement
+    if (yMovement < 0) anglePrev += Math.PI;
 
-      default:
-        movements.push(xMovement / Math.abs(xMovement));
-        break;
+    // Get the new direction of movement
+    if (yMovementNext < 0) angleNext += Math.PI;
+
+    let diff = 0;
+
+    if (yMovement <= 0 || yMovementNext <= 0)
+      diff = (angleNext - anglePrev + 2 * Math.PI) % (2 * Math.PI);
+    else diff = (anglePrev - angleNext + 2 * Math.PI) % (2 * Math.PI);
+
+    console.log(angleNext, anglePrev, diff);
+
+    if (diff < Math.PI / 4 || diff > (7 * Math.PI) / 4) return "forward";
+    else if (diff < Math.PI) {
+      if (xMovementNext <= 0 || xMovement <= 0) return "right";
+      return "left";
     }
+    if (xMovementNext <= 0 || xMovement <= 0) return "left";
+    return "right";
+  }
 
-    return movements;
+  private getEuclidian(node1: MapNode, node2: MapNode): number {
+    return Math.sqrt(
+      (node2.getX() - node1.getX()) ** 2 + (node2.getY() - node1.getY()) ** 2,
+    );
   }
 }

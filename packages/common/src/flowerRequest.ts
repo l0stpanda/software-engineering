@@ -1,5 +1,6 @@
-export interface flowerRequestType {
-  room: string;
-  sent_by: string;
-  note: string;
+export interface flowerReqFields {
+  roomNum: string;
+  senderName: string;
+  sendTo: string;
+  attachedNote: string;
 }

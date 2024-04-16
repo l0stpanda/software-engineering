@@ -1,5 +1,4 @@
 export interface nodeType {
-  type: string;
   node_id: string;
   node_type: string;
   floor: string;

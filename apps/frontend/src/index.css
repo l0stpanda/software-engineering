@@ -14,7 +14,8 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
-body {
+body,
+html {
   width: 100%;
   height: 100%;
 }
@@ -37,4 +38,61 @@ body {
 
 .example-component {
   background-color: cyan;
+}
+
+.duration-300 {
+  transition-duration: 300ms;
+}
+@keyframes parallaxSlide {
+  0% {
+    background-position: center 0;
+  }
+  50% {
+    background-position: center 100%;
+  }
+  100% {
+    background-position: center 0;
+  }
+}
+
+@keyframes fadeInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fadeInLeft {
+  animation-name: fadeInLeft;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+.animate-delay-500 {
+  animation-delay: 0.5s;
+}
+
+.hover-translate-x-2:hover {
+  transform: translateX(0.5rem);
+}
+
+.transition-transform {
+  transition-property: transform;
+}
+
+.duration-300 {
+  transition-duration: 300ms;
+}
+
+@layer utilities {
+  .bg-grey-pattern-background {
+    background-image: url("assets/PatternBackground-Test.png");
+  }
+  .bg-ally-background {
+    background-image: url("assets/allyBackground.png");
+  }
 }

@@ -12,7 +12,7 @@ export default {
     extend: {
       fontFamily: {
         header: ["Nunito", "sans-serif"],
-        body: ["PTSans", "serif"],
+        body: ["PT+Sans", "serif"],
       },
     },
   },

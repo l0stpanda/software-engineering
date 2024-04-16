@@ -3,14 +3,19 @@ import express, { Express, NextFunction, Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import exampleRouter from "./routes/example.ts";
-import importRouterE from "./routes/importE.ts";
-import importRouterN from "./routes/importN.ts";
+import importRouter from "./routes/import.ts";
 import flowerRequest from "./routes/flowerRequest.ts";
 import loginRequest from "./routes/login.ts";
+import readRouter from "./routes/read.ts";
+import roomScheduler from "./routes/roomSchedulingRequest.ts";
+import inventory from "./routes/inventory.ts";
+import { auth } from "express-oauth2-jwt-bearer";
+// import readRouterE from "./routes/readE.ts";
+// import readRouterN from "./routes/readN.ts";
 
 const app: Express = express(); // Setup the backend
-console.log("please");
-// Setup generic middlewear
+
+// Setup generic middleware
 app.use(
   logger("dev", {
     stream: {
@@ -26,13 +31,25 @@ app.use(cookieParser()); // Cookie parser
 // Setup routers. ALL ROUTERS MUST use /api as a start point, or they
 // won't be reached by the default proxy and prod setup
 app.use("/api/high-score", exampleRouter);
-app.use("/api/import", importRouterE);
-app.use("/api/importN", importRouterN);
-app.use("/api/flowerRequest", flowerRequest);
-app.use("/api/login", loginRequest);
+app.use("/api/roomSchedulingRequest", roomScheduler);
+
 app.use("/healthcheck", (req, res) => {
   res.status(200).send();
 });
+
+app.use("/api/import", importRouter);
+app.use("/api/login", loginRequest);
+app.use("/api/read", readRouter);
+app.use("/api/flowerRequest", flowerRequest);
+app.use("/api/inventory", inventory);
+// Enable auth0 enforcement
+app.use(
+  auth({
+    audience: "/api",
+    issuerBaseURL: "https://dev-xiwtn1gzwzvxk2ab.us.auth0.com",
+    tokenSigningAlg: "RS256",
+  }),
+);
 
 /**
  * Catch all 404 errors, and forward them to the error handler

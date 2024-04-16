@@ -1,22 +1,25 @@
 import React, { useState } from "react";
-//import axios from "axios";
 import { edgeType } from "common/src/edgesType.ts";
 import { DeleteAllEdge, PostEdge } from "../objects/DAO_Edges.ts";
 import { nodeType } from "common/src/nodeType.ts";
 import { DeleteAllNode, PostNode } from "../objects/DAO_Nodes.ts";
-import { Button } from "@mui/material";
+import { Button, Dialog, DialogTitle } from "@mui/material";
+//import BackgroundPattern from "./backgroundPattern.tsx";
 
-//This handles uploads and downloads on the same page
 const SingleFileUploader = () => {
   const [file, setFile] = useState<File | null>(null);
+  const [loadingDialog, setLoadingDialog] = useState(false);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setFile(e.target.files[0]);
     }
   };
 
+  //Function to do uploads for edges and nodes
+
   const handleUpload = async () => {
     if (file) {
+      setLoadingDialog(true);
       console.log("Uploading file...");
 
       const formData = new FormData();
@@ -27,36 +30,48 @@ const SingleFileUploader = () => {
         console.log("EDGES UPLOADING");
         try {
           const edges: string = await file.text();
+          setFile(null);
           const edges_array: string[][] = edges
             .split("\n")
             .map((row: string): string[] => {
               return row.split(",");
             });
 
+          //Clears the edges to make way for the new upload
           await DeleteAllEdge();
 
+          //Fills in the edges from the new uploaded file
+          const arr: edgeType[] = [];
           for (let i = 1; i < edges_array.length - 1; i++) {
-            const curr_data: edgeType = {
-              type: "Edges",
-              start_node: edges_array[i][0].toString(),
-              end_node: edges_array[i][1].toString().replace("/r", ""),
+            const curr_data: {
+              end_node: string;
+              start_node: string;
+              id: string;
+            } = {
+              id: edges_array[i][0].toString(),
+              start_node: edges_array[i][1].toString(),
+              end_node: edges_array[i][2].toString().replace("/r", ""),
             };
-
-            await PostEdge(curr_data);
+            arr.push(curr_data);
           }
+          console.log(arr);
+          PostEdge(arr);
         } catch (error) {
+          //Throws error if Edges aren't loaded in correctly
           alert("Error loading Edges CSV");
           console.error(error);
+          setLoadingDialog(false);
           return;
         }
         alert("Edges CSV loaded successfully");
       }
 
-      //Handles nodes
+      //Same functionality as above, but now for nodes
       else if (file.name.toString().toLowerCase().includes("node")) {
         console.log("IMPORTING NODES");
         try {
           const nodes: string = await file.text();
+          setFile(null);
           const nodes_array: string[][] = nodes
             .split("\n")
             .map((row: string): string[] => {
@@ -64,10 +79,9 @@ const SingleFileUploader = () => {
             });
 
           await DeleteAllNode();
-
+          const arr: nodeType[] = [];
           for (let i = 1; i < nodes_array.length - 1; i++) {
             const curr_data: nodeType = {
-              type: "Nodes",
               node_id: nodes_array[i][0].toString(),
               x_c: nodes_array[i][1].toString(),
               y_c: nodes_array[i][2].toString(),
@@ -77,11 +91,13 @@ const SingleFileUploader = () => {
               long_name: nodes_array[i][6].toString(),
               short_name: nodes_array[i][7].toString(),
             };
-            await PostNode(curr_data);
+            arr.push(curr_data);
           }
+          await PostNode(arr);
         } catch (error) {
           alert("Error Loading Nodes into Database");
           console.error(error);
+          setLoadingDialog(true);
           return;
         }
         alert("Nodes CSV Loaded");
@@ -90,39 +106,56 @@ const SingleFileUploader = () => {
           "The imported file has to have 'node' or 'edge' in its title in order for us to know which database you want to upload to.",
         );
       }
+      setLoadingDialog(false);
     }
   };
 
   return (
-    <div className="justify-center grid h-screen place-items-center">
-      <div className="m-auto flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-4">
-        <h1 style={{ textAlign: "center", marginBottom: "5%" }}>
-          Enter your File
+    //User interface for clicking a button to upload an edges/nodes.csv file
+    <>
+      <div className="flex flex-col bg-background rounded-xl px-6 h-fit w-[700px] justify-center py-5 gap-4">
+        <h1 className="font-header text-primary font-bold text-3xl text-center">
+          Upload Your File
         </h1>
-        <h1 style={{ textAlign: "center", marginBottom: "5%" }}>
-          Enter a csv file with "edges" or "nodes" the title
+        <h1 className=" font-body text-primary text-2xl text-center pb-4">
+          Enter a csv file with "edges" or "nodes" in the title
         </h1>
-        <Button
-          className="w-32 self-center"
-          variant="contained"
-          size="large"
-          sx={{ borderRadius: "30px" }}
-        >
-          <input
-            id="file"
-            type="file"
-            accept=".csv"
-            style={{ backgroundColor: "#002866" }}
-            onChange={handleFileChange}
-          />
-        </Button>
+        {/*Ugly input box for CSV upload*/}
+        <input
+          style={{ display: "none" }}
+          id="contained-button-file"
+          type="file"
+          onChange={handleFileChange}
+          accept=".csv"
+        />
+        {/*Pretty input box for CSV upload*/}
+        <label className="self-center" htmlFor="contained-button-file">
+          <Button
+            variant="contained"
+            color="primary"
+            component="span"
+            sx={{ borderRadius: "30px" }}
+            className="w-32"
+          >
+            Upload File
+          </Button>
+        </label>
         {file && (
-          <button onClick={handleUpload} style={{ marginTop: "5%" }}>
-            Upload a file
-          </button>
+          <Button
+            type="button"
+            className="w-50 self-center"
+            sx={{ borderRadius: "30px" }}
+            variant="contained"
+            onClick={handleUpload}
+          >
+            Upload " {file.name.toString()} "
+          </Button>
         )}
       </div>
-    </div>
+      <Dialog open={loadingDialog}>
+        <DialogTitle>Uploading file...</DialogTitle>
+      </Dialog>
+    </>
   );
 };
 
