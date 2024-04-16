@@ -1,10 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import { Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import {
-  TransformWrapper,
-  TransformComponent,
-  useControls,
-} from "react-zoom-pan-pinch";
 import { useState } from "react";
 import BackgroundPattern from "../components/backgroundPattern.tsx";
 import { Graph } from "../objects/Graph.ts";
@@ -15,43 +10,62 @@ import floor2 from "../assets/02_thesecondfloor.png";
 import floor3 from "../assets/03_thethirdfloor.png";
 import EditMapViewGraph from "../components/EditMapViewGraph.tsx";
 import { MapNode } from "../objects/MapNode.ts";
+// import {ZoomPanPinch} from "react-zoom-pan-pinch/dist/src/core/instance.core";
+// import CanvasMap from "../components/CanvasMap.tsx";
 
 function EditMap() {
   const divRef = useRef<HTMLDivElement>(null);
+  const parentDivRef = useRef<HTMLDivElement>(null);
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
   const [graph, setGraph] = useState(new Graph());
   const [imgState, setImgState] = useState<string>(lowerLevel1);
-  // Zoom in/out buttons for map viewing
-  const Controls = () => {
-    const { zoomIn, zoomOut } = useControls();
-    return (
-      <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2">
-        <Button
-          onClick={() => zoomIn()}
-          type="button"
-          id="zoomInBut"
-          variant="contained"
-          className="zoomInBut"
-          size="medium"
-          sx={{ borderRadius: "30px", fontSize: "22px", font: "header" }}
-        >
-          +
-        </Button>
+  const [clicked, setClicked] = useState<MapNode | undefined>(undefined);
+  const [mode, setMode] = useState<string | undefined>(undefined);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [nodeId, setNodeId] = useState("");
+  const [longName, setLongName] = useState("");
 
-        <Button
-          onClick={() => zoomOut()}
-          type="button"
-          id="zoomOutBut"
-          variant="contained"
-          className="zoomOutBut"
-          size="medium"
-          sx={{ borderRadius: "30px", fontSize: "22px", font: "header" }}
-        >
-          -
-        </Button>
-      </div>
-    );
-  };
+  // // Zoom in/out buttons for map viewing
+  // const Controls = () => {
+  //   const { zoomIn, zoomOut } = useControls();
+  //   return (
+  //     <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2">
+  //       <Button
+  //         onClick={() => zoomIn()}
+  //         type="button"
+  //         id="zoomInBut"
+  //         variant="contained"
+  //         className="zoomInBut"
+  //         size="medium"
+  //         sx={{ borderRadius: "30px", fontSize: "22px", font: "header" }}
+  //       >
+  //         +
+  //       </Button>
+  //
+  //       <Button
+  //         onClick={() => zoomOut()}
+  //         type="button"
+  //         id="zoomOutBut"
+  //         variant="contained"
+  //         className="zoomOutBut"
+  //         size="medium"
+  //         sx={{ borderRadius: "30px", fontSize: "22px", font: "header" }}
+  //       >
+  //         -
+  //       </Button>
+  //     </div>
+  //   );
+  // };
+
+  // const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
+
+  // const zoomToImage = () => {
+  //     if (transformComponentRef.current) {
+  //         console.log(transformComponentRef);
+  //         const { zoomToElement } = transformComponentRef.current;
+  //         zoomToElement("imgExample");
+  //     }
+  // };
 
   // Changes the map image
   const changeFloor = (floor: string) => {
@@ -67,7 +81,7 @@ function EditMap() {
     }
   }, [divRef]);
 
-  // Updates the graph when it has been received from the database
+  //Updates the graph when it has been received from the database
   useEffect(() => {
     const tempGraph = new Graph();
     tempGraph.loadGraph().then(() => {
@@ -114,11 +128,42 @@ function EditMap() {
     );
   }
 
-  const [clicked, setClicked] = useState<MapNode | undefined>(undefined);
-
+  // // Gets the node information from child
   const handleNodeCallback = (childData: string) => {
     setClicked(graph.getNode(childData));
   };
+
+  const handleEditMode = (newMode: string) => {
+    setMode(newMode);
+    console.log(mode);
+    if (newMode !== "add_node") {
+      setIsOpen(false);
+    }
+  };
+
+  const handlePopup = (childData: boolean) => {
+    if (mode === "add_node") {
+      setIsOpen(childData);
+      console.log(isOpen);
+    } else {
+      setIsOpen(false);
+    }
+  };
+
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    console.log("Node id: ", nodeId);
+    console.log("Long name: ", longName);
+  };
+
+  // const handleZoom = (newZoom) => {
+  //   setZoom(newZoom);
+  // };
+
+  if (parentDivRef && divRef) {
+    console.log("parent div ref: ", parentDivRef);
+    console.log("child div ref: ", divRef);
+  }
 
   return (
     <div>
@@ -126,6 +171,7 @@ function EditMap() {
 
       {/*Map and Edit Buttons*/}
       <div
+        ref={parentDivRef}
         className="my-8
                    justify-center
                    flex
@@ -135,6 +181,7 @@ function EditMap() {
         <div className="flex flex-row w-2/3">
           {/*Map Image Box*/}
           <div
+            style={{ overflow: "hidden" }}
             ref={divRef}
             className="
         h-full
@@ -143,20 +190,68 @@ function EditMap() {
         border-primary
         border-2"
           >
-            <TransformWrapper>
-              <Controls />
-              <TransformComponent>
-                <EditMapViewGraph
-                  imageSrc={imgState}
-                  graph={graph}
-                  divDim={divDimensions}
-                  parentCallback={handleNodeCallback}
-                />
-              </TransformComponent>
-            </TransformWrapper>
+            <EditMapViewGraph
+              imageSrc={imgState}
+              graph={graph}
+              divDim={divDimensions}
+              nodeInfoCallback={handleNodeCallback}
+              popupCallback={handlePopup}
+              mode={mode}
+            />
           </div>
           {/*Buttons for displaying floor images*/}
           <FloorMapButtons />
+          {/*Form for adding a new node*/}
+          {isOpen && (
+            <div
+              className="mr-8
+                    ml-5
+                    py-5
+                    px-0
+                    flex
+                    flex-col
+                    items-center
+                    bg-background
+                    rounded-xl
+                    border-primary
+                    border-2"
+            >
+              <form
+                onSubmit={handleSubmit}
+                className="flex flex-col items-center"
+              >
+                {/* Node ID input field */}
+                <label>
+                  Node ID:
+                  <input
+                    type="text"
+                    value={nodeId}
+                    onChange={(e) => setNodeId(e.target.value)}
+                    className="m-2 p-2 border-primary border-2 rounded-md"
+                    required
+                  />
+                </label>
+                {/* Long Name input field */}
+                <label>
+                  Long Name:
+                  <input
+                    type="text"
+                    value={longName}
+                    onChange={(e) => setLongName(e.target.value)}
+                    className="m-2 p-2 border-primary border-2 rounded-md"
+                    required
+                  />
+                </label>
+                {/* Submit button */}
+                <button
+                  type="submit"
+                  className="m-2 p-2 bg-primary text-white rounded-md"
+                >
+                  Submit
+                </button>
+              </form>
+            </div>
+          )}
         </div>
 
         {/*boxes.*/}
@@ -214,6 +309,7 @@ function EditMap() {
               variant="contained"
               className="addNodeBut"
               size="medium"
+              onClick={() => handleEditMode("add_node")}
               // startIcon={<AddIcon />}
               sx={{
                 borderRadius: "25px",
@@ -233,6 +329,7 @@ function EditMap() {
               variant="contained"
               className="deleteNodeBut"
               size="medium"
+              onClick={() => handleEditMode("delete_node")}
               // startIcon={<RemoveIcon />}
               sx={{
                 borderRadius: "25px",
@@ -252,6 +349,7 @@ function EditMap() {
               variant="contained"
               className="editNodeBut"
               size="medium"
+              onClick={() => handleEditMode("move_node")}
               // startIcon={<EditIcon />}
               sx={{
                 borderRadius: "25px",
@@ -281,6 +379,7 @@ function EditMap() {
               variant="contained"
               className="addNodeBut"
               size="medium"
+              onClick={() => handleEditMode("add_edge")}
               // startIcon={<AddIcon />}
               sx={{
                 borderRadius: "25px",
@@ -300,6 +399,7 @@ function EditMap() {
               variant="contained"
               className="deleteNodeBut"
               size="medium"
+              onClick={() => handleEditMode("delete_edge")}
               // startIcon={<RemoveIcon />}
               sx={{
                 borderRadius: "25px",

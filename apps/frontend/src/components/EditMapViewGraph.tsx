@@ -15,7 +15,9 @@ interface EditMapViewGraphProps {
   imageSrc: string;
   graph: Graph;
   divDim: { width: number; height: number };
-  parentCallback: (childData: string) => void;
+  nodeInfoCallback: (childData: string) => void;
+  popupCallback: (childData: boolean) => void;
+  mode: string | undefined;
 }
 
 function EditMapViewGraph(props: EditMapViewGraphProps) {
@@ -23,7 +25,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     width: number;
     height: number;
   }>({ width: 0, height: 0 });
-  const divRef = useRef(null);
+  const divRef = useRef<HTMLDivElement | null>(null);
   const [divDimensions, setDivDimensions] = useState({
     width: props.divDim.width,
     height: props.divDim.height,
@@ -31,6 +33,23 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
   const [clicked, setClicked] = useState<string>("");
   const floor: string = getFloorByImage(props.imageSrc);
   const nodes = props.graph.getMap();
+  const [pan, setPan] = useState(false);
+  const [translateX, setTranslateX] = useState(0);
+  const [translateY, setTranslateY] = useState(0);
+  const [scale, setScale] = useState(1);
+  const [originalX, setOriginalX] = useState(0);
+  const [originalY, setOriginalY] = useState(0);
+  const [adjX, setAdjX] = useState(0);
+  const [adjY, setAdjY] = useState(0);
+
+  const [worldX, setWorldX] = useState(0);
+  const [worldY, setWorldY] = useState(0);
+
+  // const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+  // const [mouseLoc, setMouseLoc] = useState({
+  //     x: 0,
+  //     y: 0
+  // });
 
   useEffect(() => {
     if (divRef.current) {
@@ -56,7 +75,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
   // function triggered when node is clicked
   const handleNodeClick = (nodeid: string) => () => {
     setClicked(nodeid);
-    props.parentCallback(nodeid);
+    props.nodeInfoCallback(nodeid);
     // need to log clicked so it can be used
     console.log(clicked);
   };
@@ -145,9 +164,88 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
       });
   };
 
+  // function triggered when clicking anywhere in the div
+  // const handleNodeCreation = (e: { clientX: number; clientY: number; }) => {
+  //     if (props.mode === "add_node" && divRef.current) {
+  //         // console.log("mouse: ", e.clientX, e.clientY);
+  //         // console.log("zoom :", Object.values(props.zoom)[0]);
+  //         // const { offsetLeft, offsetTop } = divRef.current;
+  //         // const halfDivX = divDimensions.width / 2;
+  //         // const halfDivY = divDimensions.height / 2;
+  //         // console.log("divRef: ",clientWidth, clientHeight);
+  //         const tempDiv = document.getElementById("tempDiv");
+  //         if (tempDiv && divRef.current) {
+  //
+  //             tempDiv.style.left = e.clientX + "px";
+  //             tempDiv.style.top = e.clientY + "px";
+  //
+  //             console.log("tempDiv: ", tempDiv.style.left, tempDiv.style.top);
+  //         }
+  //
+  //         props.popupCallback(true);
+  //     }
+  // };
+
+  const handleMouseMove = (e: { clientX: number; clientY: number }) => {
+    if (pan) {
+      setTranslateX(e.clientX - originalX);
+      setTranslateY(e.clientY - originalY);
+    }
+  };
+
+  const handleMouseDown = (e: { clientX: number; clientY: number }) => {
+    const tempDiv = document.getElementById("tempDiv");
+    if (props.mode === "add_node" && tempDiv && divRef.current) {
+      // setAdjX((((e.clientX - divRef.current.offsetLeft - translateX) * divDimensions.width) / divDimensions.width / 2) / scale + (divDimensions.width/2));
+      // setAdjY(((e.clientY - divRef.current.offsetTop - translateY) * divDimensions.height / divDimensions.height / 2 ) / scale + (divDimensions.height/2));
+      //before zoom
+      setWorldX(e.clientX / scale + divRef.current?.offsetLeft);
+      setWorldY(e.clientY / scale + divRef.current?.offsetTop);
+
+      tempDiv.style.left = worldX + "px";
+      tempDiv.style.top = worldY + "px";
+      setOriginalX(e.clientX - translateX);
+      setOriginalY(e.clientY - translateY);
+      setPan(true);
+    } else {
+      setOriginalX(e.clientX - translateX);
+      setOriginalY(e.clientY - translateY);
+      setPan(true);
+    }
+  };
+
+  const handleMouseUp = () => {
+    setPan(false);
+  };
+
+  const handleWheel = (e: {
+    clientX: number;
+    clientY: number;
+    deltaY: number;
+  }) => {
+    if (divRef.current) {
+      const scaleFactor = e.deltaY < 0 ? 1.1 : 0.9;
+      setAdjX(e.clientX - divDimensions.width / 2 - divRef.current.offsetLeft); // x coordinate on the canvas
+      setAdjY(e.clientY - divDimensions.height / 2 - divRef.current.offsetTop); // y coordinate on the canvas
+      setTranslateX(adjX - (adjX - translateX) / scaleFactor);
+      setTranslateY(adjY - (adjY - translateY) / scaleFactor);
+      setScale(scale / scaleFactor);
+    }
+  };
+
   return (
     <>
-      <div ref={divRef} style={{ position: "relative" }}>
+      <div
+        onMouseMove={handleMouseMove}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onWheel={handleWheel}
+        ref={divRef}
+        style={{
+          position: "relative",
+          transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`,
+        }}
+      >
         <img src={props.imageSrc} className="object-contain h-full" alt="Map" />
         <svg
           style={{
@@ -161,6 +259,20 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
           {renderLines()}
         </svg>
         {renderNodes()}
+        {props.mode === "add_node" && (
+          <div
+            id="tempDiv"
+            className="absolute border border-slate-300"
+            style={{
+              width: "15px",
+              height: "15px",
+              backgroundColor: "#009BA8",
+              borderRadius: "50%",
+              transform: "translate(-50%, -50%)",
+              zIndex: 999,
+            }}
+          ></div>
+        )}
       </div>
     </>
   );
