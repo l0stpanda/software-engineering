@@ -140,13 +140,14 @@ model User {
   name      String
   // Foreign Key Reference
   roomSched Todo[] @relation("UserID")
+  // So each user will have 
 }
 
 model Todo {
-  id        Int     @id @default(autoincrement())
-  task      String
-  email     String
-  completed Boolean @default(false)
+  id       Int    @id @default(autoincrement())
+  task     String
+  priority String
+  email    String
   // Foreign Key Reference
-  user      User    @relation("UserID", fields: [email], references: [email], onDelete: Cascade)
+  user     User   @relation("UserID", fields: [email], references: [email], onDelete: Cascade)
 }
