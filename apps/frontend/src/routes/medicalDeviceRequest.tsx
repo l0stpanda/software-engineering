@@ -222,8 +222,8 @@ function MedicalDeviceRequest() {
             <div className="flex justify-center">
               <Button
                 className="w-32 self-center pt-10"
-                type="submit"
-                id="requestSubmit"
+                onClick={clear}
+                id="requestClear"
                 variant="contained"
                 size="large"
                 sx={{
@@ -235,13 +235,13 @@ function MedicalDeviceRequest() {
                   },
                 }}
               >
-                SUBMIT
+                CLEAR
               </Button>
 
               <Button
                 className="w-32 self-center pt-10"
-                onClick={clear}
-                id="requestClear"
+                type="submit"
+                id="requestSubmit"
                 variant="contained"
                 size="large"
                 sx={{
@@ -252,7 +252,7 @@ function MedicalDeviceRequest() {
                   },
                 }}
               >
-                CLEAR
+                SUBMIT
               </Button>
             </div>
           </div>

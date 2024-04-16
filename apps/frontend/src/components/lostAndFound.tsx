@@ -218,8 +218,8 @@ function LostFound() {
             <div className="flex justify-center">
               <Button
                 className="w-32 self-center pt-10"
-                type="submit"
-                id="requestSubmit"
+                id="clear"
+                onClick={clear}
                 variant="contained"
                 size="large"
                 sx={{
@@ -231,13 +231,13 @@ function LostFound() {
                   },
                 }}
               >
-                SUBMIT
+                CLEAR
               </Button>
 
               <Button
                 className="w-32 self-center pt-10"
-                id="clear"
-                onClick={clear}
+                type="submit"
+                id="requestSubmit"
                 variant="contained"
                 size="large"
                 sx={{
@@ -248,7 +248,7 @@ function LostFound() {
                   },
                 }}
               >
-                CLEAR
+                SUBMIT
               </Button>
             </div>
           </div>

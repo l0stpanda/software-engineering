@@ -137,8 +137,8 @@ function FlowerRequest() {
             <div className="flex-row self-center">
               <Button
                 className="w-32 self-center pt-10"
-                type="submit"
-                id="requestSubmit"
+                onClick={clear}
+                id="requestClear"
                 variant="contained"
                 size="large"
                 sx={{
@@ -150,13 +150,13 @@ function FlowerRequest() {
                   },
                 }}
               >
-                SUBMIT
+                Clear
               </Button>
 
               <Button
                 className="w-32 self-center pt-10"
-                onClick={clear}
-                id="requestClear"
+                type="submit"
+                id="requestSubmit"
                 variant="contained"
                 size="large"
                 sx={{
@@ -167,7 +167,7 @@ function FlowerRequest() {
                   },
                 }}
               >
-                Clear
+                SUBMIT
               </Button>
             </div>
           </div>
