@@ -173,7 +173,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
 
   function EditableNode(props: { nodeKey: string }) {
     const nodeColor: string = "#009BA8";
-    const animation: string = "border border-slate-300 hover:border-red-400";
+    const animation: string = "border border-slate-300";
     // const input = calculateInput();
 
     const id = props.nodeKey;
