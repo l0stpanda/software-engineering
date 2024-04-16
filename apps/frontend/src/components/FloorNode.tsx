@@ -143,17 +143,15 @@ function FloorNode(props: FloorNodesProps) {
             if (changeStart && changeStart.floor == floor) {
               floorChanges.push(
                 <Box
-                  className="z-10 bg-primary m-0 p-0 text-background text-center "
+                  className="z-10 bg-primary m-0 p-0 text-background text-center text-[5px] flex-auto p-0.5"
                   sx={{
-                    left: startPoint.x + "px",
-                    top: startPoint.y + 15 + "px",
-                    width: "100px",
-                    height: "30px",
+                    left: startPoint.x - 27 + "px",
+                    top: startPoint.y + 1 + "px",
                     borderRadius: 1,
                     position: "absolute",
                   }}
                 >
-                  Go to floor {startPoint.floor}
+                  Go from floor {startPoint.floor}
                 </Box>,
               );
             }
@@ -163,35 +161,31 @@ function FloorNode(props: FloorNodesProps) {
             if (endPoint.floor == floor) {
               if (i == path.length - 2) {
                 floorChanges.push(
-                  <g>
-                    <rect
-                      x={endPoint.x}
-                      y={endPoint.y}
-                      width="100"
-                      height="20"
-                      stroke="red"
-                      strokeWidth="1"
-                      fill="blue"
-                      rx="15"
-                    />
-                    <text x={endPoint.x} y={endPoint.y} fill="white">
-                      start floor test
-                    </text>
-                  </g>,
+                  <Box
+                    className="z-10 bg-primary m-0 p-0 text-background text-center text-[5px] flex-auto p-0.5"
+                    sx={{
+                      left: startPoint.x - 27 + "px",
+                      top: startPoint.y + 1 + "px",
+                      borderRadius: 1,
+                      position: "absolute",
+                    }}
+                  >
+                    Go to floor {changeStart.floor}
+                  </Box>,
                 );
               } else {
                 floorChanges.push(
-                  <rect
-                    x={startPoint.x}
-                    y={startPoint.y}
-                    z={10}
-                    width="100"
-                    height="20"
-                    stroke="red"
-                    strokeWidth="1"
-                    fill="blue"
-                    rx="15"
-                  />,
+                  <Box
+                    className="z-10 bg-primary m-0 p-0 text-background text-center text-[5px] flex-auto p-0.5"
+                    sx={{
+                      left: startPoint.x - 27 + "px",
+                      top: startPoint.y + 1 + "px",
+                      borderRadius: 1,
+                      position: "absolute",
+                    }}
+                  >
+                    Go to floor {changeStart.floor}
+                  </Box>,
                 );
               }
             }
