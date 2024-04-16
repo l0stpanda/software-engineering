@@ -58,9 +58,9 @@ function TODOListItem(props: toDoNow) {
       alert("Problem Checking Off");
       return;
     }
-    alert("Successfully updated TODO item with ID number " + props.id);
+    // alert("Successfully updated TODO item with ID number " + props.id);
     //window must be reloaded on delete to show updated results
-    // window.location.reload();
+    //window.location.reload();
   }
 
   return (
