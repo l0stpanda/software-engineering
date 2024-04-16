@@ -135,11 +135,10 @@ model MedicineRequest {
 
 // Tables for To do list i hope and goddamn pray
 model User {
-  id        Int    @id @default(autoincrement())
-  email     String @unique
-  name      String
+  id       Int    @id @default(autoincrement())
+  email    String @unique
   // Foreign Key Reference
-  roomSched Todo[] @relation("UserID")
+  todoList Todo[] @relation("UserID")
   // So each user will have 
 }
 

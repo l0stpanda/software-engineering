@@ -2,20 +2,39 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import TODOListItem from "../components/TODOListItem.tsx";
-import { toDo } from "common/src/toDo.ts";
-import { Button, Dialog, TextField } from "@mui/material";
+//import { toDo } from "common/src/toDo.ts";
+import {
+  Button,
+  Dialog,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  TextField,
+} from "@mui/material";
 //import LoginDialog from "../components/loginDialog.tsx";
+type toDoNow = {
+  id: number;
+  task: string;
+  priority: string;
+  email: string | undefined;
+};
 
 export default function DisplayTODOList() {
   const { getAccessTokenSilently, user } = useAuth0();
-  const [toDoResponse, setToDoResponse] = useState<toDo>({
+
+  const [toDoResponse, setToDoResponse] = useState<toDoNow>({
+    id: 0,
     task: "",
     priority: "",
-    email: "",
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    email: user.email,
   });
 
   // Use state for records being displayed
-  const [records, setRecords] = useState<toDo[]>([]);
+  const [records, setRecords] = useState<toDoNow[]>([]);
 
   const [open, setOpen] = useState<boolean>(false);
 
@@ -26,14 +45,11 @@ export default function DisplayTODOList() {
       try {
         const token = await getAccessTokenSilently();
         if (user != undefined) {
-          const response = await axios.get(
-            `/api/roomSchedulingRequest/${user.email}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
+          const response = await axios.get(`/api/todoStuff/${user.email}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
             },
-          );
+          });
           console.log(response.data);
           setRecords(response.data); // Assuming the data is an array of lost and found request data
         } else {
@@ -55,14 +71,28 @@ export default function DisplayTODOList() {
   }
 
   async function handleSubmit() {
+    const token = await getAccessTokenSilently();
+    try {
+      await axios.post(`/api/todoStuff`, toDoResponse, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (e) {
+      console.log(e);
+      alert("Problems have occured");
+      return;
+    }
+
     setToDoResponse({
+      id: 0,
       task: "",
       email: "",
       priority: "",
     });
     alert("New Task has been created");
     setOpen(false);
-    return;
+    window.location.reload();
   }
 
   function handleOpen() {
@@ -73,6 +103,10 @@ export default function DisplayTODOList() {
   function handleSubmitClose() {
     setOpen(false);
     return;
+  }
+
+  function handleDropdownChange(e: SelectChangeEvent) {
+    setToDoResponse({ ...toDoResponse, priority: e.target.value });
   }
 
   return (
@@ -87,19 +121,10 @@ export default function DisplayTODOList() {
               ID
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Status
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Priority
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Length of Reservation
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Time of Reservation
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Location
+              Task
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Delete
@@ -111,7 +136,8 @@ export default function DisplayTODOList() {
           {/* Map through the records and create a row for each record */}
           {records.map((record) => (
             <TODOListItem
-              key={record.email}
+              key={record.id}
+              id={record.id}
               email={record.email}
               priority={record.priority}
               task={record.task}
@@ -132,7 +158,7 @@ export default function DisplayTODOList() {
       </Button>
 
       <Dialog open={open} onClose={handleSubmitClose}>
-        <div>
+        <form>
           <div className="m-auto flex flex-col bg-background rounded-xl px-6 min-w-96 h-fit justify-center py-4">
             <h1 className="my-3 font-header text-primary font-bold text-3xl text-center">
               New Task
@@ -143,28 +169,28 @@ export default function DisplayTODOList() {
                 value={toDoResponse.task}
                 variant="filled"
                 fullWidth={true}
+                required
                 label="Task"
                 name="task"
                 type="required"
               />
-              <TextField
-                onChange={handleFormUpdate}
-                value={toDoResponse.priority}
-                variant="filled"
-                fullWidth={true}
-                label="Priority"
-                name="priority"
-                type="required"
-              />
-              <TextField
-                onChange={handleFormUpdate}
-                value={toDoResponse.email}
-                variant="filled"
-                fullWidth={true}
-                label="Email"
-                name="email"
-                type="required"
-              />
+
+              <FormControl variant="filled" required>
+                <InputLabel id="priority">Priority</InputLabel>
+                <Select
+                  name="priority"
+                  labelId="priority"
+                  id="priority"
+                  value={toDoResponse.priority}
+                  onChange={handleDropdownChange}
+                >
+                  <MenuItem value={"High"}>High</MenuItem>
+                  <MenuItem value={"Medium"}>Medium</MenuItem>
+                  <MenuItem value={"Low"}>Low</MenuItem>
+                  <MenuItem value={"Emergency"}>Emergency</MenuItem>
+                </Select>
+              </FormControl>
+
               <Button
                 onClick={handleSubmit}
                 variant="contained"
@@ -175,7 +201,7 @@ export default function DisplayTODOList() {
               </Button>
             </div>
           </div>
-        </div>
+        </form>
       </Dialog>
     </div>
   );

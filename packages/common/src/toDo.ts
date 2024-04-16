@@ -1,5 +1,5 @@
 export interface toDo {
   task: string;
   priority: string;
-  email: string;
+  email: string | undefined;
 }
