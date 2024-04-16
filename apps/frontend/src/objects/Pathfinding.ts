@@ -98,26 +98,37 @@ export class Pathfinding {
     // Get the new direction of movement
     if (yMovementNext < 0) angleNext += Math.PI;
 
-    let diff = 0;
+    const diff = angleNext - anglePrev;
 
-    if (yMovement <= 0 || yMovementNext <= 0)
-      diff = (angleNext - anglePrev + 2 * Math.PI) % (2 * Math.PI);
-    else diff = (anglePrev - angleNext + 2 * Math.PI) % (2 * Math.PI);
+    console.log(anglePrev, angleNext, diff);
 
-    console.log(angleNext, anglePrev, diff);
-
-    if (diff < Math.PI / 4 || diff > (7 * Math.PI) / 4) return "forward";
-    else if (diff < Math.PI) {
-      if (xMovementNext <= 0 || xMovement <= 0) return "right";
+    if (this.forward(diff)) return "forward";
+    else if (this.left(diff)) {
       return "left";
     }
-    if (xMovementNext <= 0 || xMovement <= 0) return "left";
     return "right";
   }
 
   private getEuclidian(node1: MapNode, node2: MapNode): number {
     return Math.sqrt(
       (node2.getX() - node1.getX()) ** 2 + (node2.getY() - node1.getY()) ** 2,
+    );
+  }
+
+  private forward(diff: number) {
+    return (
+      (diff < Math.PI / 4 && diff > -Math.PI / 4) ||
+      (diff > (7 * Math.PI) / 4 && diff < 9 * Math.PI) ||
+      diff > 15 * Math.PI ||
+      diff < -7 * Math.PI
+    );
+  }
+
+  private left(diff: number) {
+    return (
+      (diff > 0 && diff < Math.PI) ||
+      (diff > 2 * Math.PI && diff < 3 * Math.PI) ||
+      (diff > -Math.PI && diff < -2 * Math.PI)
     );
   }
 }
