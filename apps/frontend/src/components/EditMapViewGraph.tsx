@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Graph } from "../objects/Graph.ts";
 import { FloorNodeInfo } from "./FloorNode.tsx";
 import { MapEdge } from "../objects/MapEdge.ts";
+import { useTransformContext } from "react-zoom-pan-pinch";
 
 /*
 Functionality:
@@ -15,12 +16,15 @@ interface EditMapViewGraphProps {
   imageSrc: string;
   graph: Graph;
   divDim: { width: number; height: number };
+  divPos: number[];
   nodeInfoCallback: (childData: string) => void;
   popupCallback: (childData: boolean) => void;
   mode: string | undefined;
 }
 
 function EditMapViewGraph(props: EditMapViewGraphProps) {
+  const context = useTransformContext();
+
   const [imgDimensions, setImgDimensions] = useState<{
     width: number;
     height: number;
@@ -33,14 +37,6 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
   const [clicked, setClicked] = useState<string>("");
   const floor: string = getFloorByImage(props.imageSrc);
   const nodes = props.graph.getMap();
-  const [pan, setPan] = useState(false);
-  const [translateX, setTranslateX] = useState(0);
-  const [translateY, setTranslateY] = useState(0);
-  const [scale, setScale] = useState(1);
-  const [originalX, setOriginalX] = useState(0);
-  const [originalY, setOriginalY] = useState(0);
-  const [adjX, setAdjX] = useState(0);
-  const [adjY, setAdjY] = useState(0);
 
   const [worldX, setWorldX] = useState(0);
   const [worldY, setWorldY] = useState(0);
@@ -186,65 +182,33 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
   //     }
   // };
 
-  const handleMouseMove = (e: { clientX: number; clientY: number }) => {
-    if (pan) {
-      setTranslateX(e.clientX - originalX);
-      setTranslateY(e.clientY - originalY);
-    }
-  };
-
   const handleMouseDown = (e: { clientX: number; clientY: number }) => {
     const tempDiv = document.getElementById("tempDiv");
-    if (props.mode === "add_node" && tempDiv && divRef.current) {
+    if (props.mode === "add_node" && tempDiv && context.bounds) {
       // setAdjX((((e.clientX - divRef.current.offsetLeft - translateX) * divDimensions.width) / divDimensions.width / 2) / scale + (divDimensions.width/2));
       // setAdjY(((e.clientY - divRef.current.offsetTop - translateY) * divDimensions.height / divDimensions.height / 2 ) / scale + (divDimensions.height/2));
       //before zoom
-      setWorldX(e.clientX / scale + divRef.current?.offsetLeft);
-      setWorldY(e.clientY / scale + divRef.current?.offsetTop);
+      console.log(context.transformState);
+      setWorldX(
+        (e.clientX - props.divPos[1] - context.transformState.positionX) /
+          context.transformState.scale,
+      );
+      setWorldY(
+        (e.clientY - props.divPos[0] - context.transformState.positionY) /
+          context.transformState.scale,
+      );
 
       tempDiv.style.left = worldX + "px";
       tempDiv.style.top = worldY + "px";
-      setOriginalX(e.clientX - translateX);
-      setOriginalY(e.clientY - translateY);
-      setPan(true);
-    } else {
-      setOriginalX(e.clientX - translateX);
-      setOriginalY(e.clientY - translateY);
-      setPan(true);
-    }
-  };
-
-  const handleMouseUp = () => {
-    setPan(false);
-  };
-
-  const handleWheel = (e: {
-    clientX: number;
-    clientY: number;
-    deltaY: number;
-  }) => {
-    if (divRef.current) {
-      const scaleFactor = e.deltaY < 0 ? 1.1 : 0.9;
-      setAdjX(e.clientX - divDimensions.width / 2 - divRef.current.offsetLeft); // x coordinate on the canvas
-      setAdjY(e.clientY - divDimensions.height / 2 - divRef.current.offsetTop); // y coordinate on the canvas
-      setTranslateX(adjX - (adjX - translateX) / scaleFactor);
-      setTranslateY(adjY - (adjY - translateY) / scaleFactor);
-      setScale(scale / scaleFactor);
     }
   };
 
   return (
     <>
       <div
-        onMouseMove={handleMouseMove}
         onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        onWheel={handleWheel}
         ref={divRef}
-        style={{
-          position: "relative",
-          transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`,
-        }}
+        style={{ position: "relative" }}
       >
         <img src={props.imageSrc} className="object-contain h-full" alt="Map" />
         <svg

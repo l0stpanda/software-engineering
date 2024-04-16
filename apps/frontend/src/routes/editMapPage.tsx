@@ -10,6 +10,11 @@ import floor2 from "../assets/02_thesecondfloor.png";
 import floor3 from "../assets/03_thethirdfloor.png";
 import EditMapViewGraph from "../components/EditMapViewGraph.tsx";
 import { MapNode } from "../objects/MapNode.ts";
+import {
+  TransformComponent,
+  TransformWrapper,
+  useControls,
+} from "react-zoom-pan-pinch";
 // import {ZoomPanPinch} from "react-zoom-pan-pinch/dist/src/core/instance.core";
 // import CanvasMap from "../components/CanvasMap.tsx";
 
@@ -25,47 +30,37 @@ function EditMap() {
   const [nodeId, setNodeId] = useState("");
   const [longName, setLongName] = useState("");
 
-  // // Zoom in/out buttons for map viewing
-  // const Controls = () => {
-  //   const { zoomIn, zoomOut } = useControls();
-  //   return (
-  //     <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2">
-  //       <Button
-  //         onClick={() => zoomIn()}
-  //         type="button"
-  //         id="zoomInBut"
-  //         variant="contained"
-  //         className="zoomInBut"
-  //         size="medium"
-  //         sx={{ borderRadius: "30px", fontSize: "22px", font: "header" }}
-  //       >
-  //         +
-  //       </Button>
-  //
-  //       <Button
-  //         onClick={() => zoomOut()}
-  //         type="button"
-  //         id="zoomOutBut"
-  //         variant="contained"
-  //         className="zoomOutBut"
-  //         size="medium"
-  //         sx={{ borderRadius: "30px", fontSize: "22px", font: "header" }}
-  //       >
-  //         -
-  //       </Button>
-  //     </div>
-  //   );
-  // };
+  // Zoom in/out buttons for map viewing
+  const Controls = () => {
+    const { zoomIn, zoomOut } = useControls();
+    return (
+      <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2">
+        <Button
+          onClick={() => zoomIn()}
+          type="button"
+          id="zoomInBut"
+          variant="contained"
+          className="zoomInBut"
+          size="medium"
+          sx={{ borderRadius: "30px", fontSize: "22px", font: "header" }}
+        >
+          +
+        </Button>
 
-  // const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
-
-  // const zoomToImage = () => {
-  //     if (transformComponentRef.current) {
-  //         console.log(transformComponentRef);
-  //         const { zoomToElement } = transformComponentRef.current;
-  //         zoomToElement("imgExample");
-  //     }
-  // };
+        <Button
+          onClick={() => zoomOut()}
+          type="button"
+          id="zoomOutBut"
+          variant="contained"
+          className="zoomOutBut"
+          size="medium"
+          sx={{ borderRadius: "30px", fontSize: "22px", font: "header" }}
+        >
+          -
+        </Button>
+      </div>
+    );
+  };
 
   // Changes the map image
   const changeFloor = (floor: string) => {
@@ -165,6 +160,11 @@ function EditMap() {
     console.log("child div ref: ", divRef);
   }
 
+  let divPos: number[] = [];
+  if (divRef.current) {
+    divPos = [divRef.current.offsetTop, divRef.current.offsetLeft];
+  }
+
   return (
     <div>
       <BackgroundPattern />
@@ -181,7 +181,6 @@ function EditMap() {
         <div className="flex flex-row w-2/3">
           {/*Map Image Box*/}
           <div
-            style={{ overflow: "hidden" }}
             ref={divRef}
             className="
         h-full
@@ -190,14 +189,20 @@ function EditMap() {
         border-primary
         border-2"
           >
-            <EditMapViewGraph
-              imageSrc={imgState}
-              graph={graph}
-              divDim={divDimensions}
-              nodeInfoCallback={handleNodeCallback}
-              popupCallback={handlePopup}
-              mode={mode}
-            />
+            <TransformWrapper>
+              <Controls />
+              <TransformComponent>
+                <EditMapViewGraph
+                  imageSrc={imgState}
+                  graph={graph}
+                  divDim={divDimensions}
+                  divPos={divPos}
+                  nodeInfoCallback={handleNodeCallback}
+                  popupCallback={handlePopup}
+                  mode={mode}
+                />
+              </TransformComponent>
+            </TransformWrapper>
           </div>
           {/*Buttons for displaying floor images*/}
           <FloorMapButtons />
