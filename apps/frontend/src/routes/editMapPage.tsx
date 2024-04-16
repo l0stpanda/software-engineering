@@ -20,7 +20,6 @@ import {
 
 function EditMap() {
   const divRef = useRef<HTMLDivElement>(null);
-  const parentDivRef = useRef<HTMLDivElement>(null);
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
   const [graph, setGraph] = useState(new Graph());
   const [imgState, setImgState] = useState<string>(lowerLevel1);
@@ -155,11 +154,6 @@ function EditMap() {
   //   setZoom(newZoom);
   // };
 
-  if (parentDivRef && divRef) {
-    console.log("parent div ref: ", parentDivRef);
-    console.log("child div ref: ", divRef);
-  }
-
   let divPos: number[] = [];
   if (divRef.current) {
     divPos = [divRef.current.offsetTop, divRef.current.offsetLeft];
@@ -171,7 +165,6 @@ function EditMap() {
 
       {/*Map and Edit Buttons*/}
       <div
-        ref={parentDivRef}
         className="my-8
                    justify-center
                    flex
@@ -189,7 +182,7 @@ function EditMap() {
         border-primary
         border-2"
           >
-            <TransformWrapper>
+            <TransformWrapper panning={{ disabled: true }}>
               <Controls />
               <TransformComponent>
                 <EditMapViewGraph

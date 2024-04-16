@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import PendingRequestItem from "../components/PendingRequestItem.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
+import PendingLost from "./displayLost.tsx";
+import PendingRoomSched from "./displayRoomSched.tsx";
+import PendingMedicalDevice from "./displayMedicalDevice.tsx";
+import PendingMedicineDelivery from "./displayMedicineDelivery.tsx";
 
 // Define database json type
 type FlowerReqData = {
@@ -49,47 +53,53 @@ export default function PendingFlowerRequest() {
   // }
 
   return (
-    <div className="px-8 p5 h-screen bg-background">
-      <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
-        Pending Flower Deliveries
-      </h1>
-      <table className="w-full">
-        <thead className="bg-secondary border-b-2 border-b-primary">
-          <tr>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Flower Delivery Request
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Status
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Date Entered
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Time Entered
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Destination
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Delete
-            </th>
-            {/* Dynamically generate column headers */}
-          </tr>
-        </thead>
-        <tbody>
-          {/* Map through the records and create a row for each record */}
-          {records.map((record) => (
-            <PendingRequestItem
-              key={record.id}
-              id={record.id}
-              status={record.status}
-              requestDate={record.requestDate}
-              name={record.name}
-            />
-          ))}
-        </tbody>
-      </table>
+    <div>
+      <div className="px-8 p5 h-screen bg-background">
+        <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
+          Pending Flower Deliveries
+        </h1>
+        <table className="w-full">
+          <thead className="bg-secondary border-b-2 border-b-primary">
+            <tr>
+              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                Flower Delivery Request
+              </th>
+              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                Status
+              </th>
+              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                Date Entered
+              </th>
+              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                Time Entered
+              </th>
+              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                Destination
+              </th>
+              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                Delete
+              </th>
+              {/* Dynamically generate column headers */}
+            </tr>
+          </thead>
+          <tbody>
+            {/* Map through the records and create a row for each record */}
+            {records.map((record) => (
+              <PendingRequestItem
+                key={record.id}
+                id={record.id}
+                status={record.status}
+                requestDate={record.requestDate}
+                name={record.name}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <PendingLost></PendingLost>
+      <PendingRoomSched></PendingRoomSched>
+      <PendingMedicalDevice></PendingMedicalDevice>
+      <PendingMedicineDelivery></PendingMedicineDelivery>
     </div>
   );
 }
