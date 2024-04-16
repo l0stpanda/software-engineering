@@ -6,6 +6,7 @@ import { MapNode } from "../objects/MapNode.ts";
 import { AStar } from "../objects/AStar.ts";
 import { Pathfinding } from "../objects/Pathfinding.ts";
 import { BFS } from "../objects/BFS.ts";
+import { Box } from "@mui/material";
 
 //import mapImg from "../assets/00_thelowerlevel1.png";
 
@@ -141,15 +142,19 @@ function FloorNode(props: FloorNodesProps) {
             // Past
             if (changeStart && changeStart.floor == floor) {
               floorChanges.push(
-                <rect
-                  x={changeStart.x}
-                  y={changeStart.y}
-                  width="100"
-                  height="100"
-                  stroke="red"
-                  strokeWidth="6"
-                  fill="blue"
-                />,
+                <Box
+                  className="z-10 bg-primary m-0 p-0 text-background text-center "
+                  sx={{
+                    left: startPoint.x + "px",
+                    top: startPoint.y + 15 + "px",
+                    width: "100px",
+                    height: "30px",
+                    borderRadius: 1,
+                    position: "absolute",
+                  }}
+                >
+                  Go to floor {startPoint.floor}
+                </Box>,
               );
             }
 
@@ -158,26 +163,34 @@ function FloorNode(props: FloorNodesProps) {
             if (endPoint.floor == floor) {
               if (i == path.length - 2) {
                 floorChanges.push(
-                  <rect
-                    x={endPoint.x}
-                    y={endPoint.y}
-                    width="100"
-                    height="100"
-                    stroke="red"
-                    strokeWidth="6"
-                    fill="blue"
-                  />,
+                  <g>
+                    <rect
+                      x={endPoint.x}
+                      y={endPoint.y}
+                      width="100"
+                      height="20"
+                      stroke="red"
+                      strokeWidth="1"
+                      fill="blue"
+                      rx="15"
+                    />
+                    <text x={endPoint.x} y={endPoint.y} fill="white">
+                      start floor test
+                    </text>
+                  </g>,
                 );
               } else {
                 floorChanges.push(
                   <rect
                     x={startPoint.x}
                     y={startPoint.y}
+                    z={10}
                     width="100"
-                    height="100"
+                    height="20"
                     stroke="red"
-                    strokeWidth="6"
+                    strokeWidth="1"
                     fill="blue"
+                    rx="15"
                   />,
                 );
               }
@@ -277,9 +290,9 @@ function FloorNode(props: FloorNodesProps) {
         }}
       >
         {path[0]}
-        {path[1]}
       </svg>
       {renderNodes()}
+      {path[1]}
     </div>
   );
 }
