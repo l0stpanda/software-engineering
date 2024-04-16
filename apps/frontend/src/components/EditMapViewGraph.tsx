@@ -189,6 +189,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
       // setAdjY(((e.clientY - divRef.current.offsetTop - translateY) * divDimensions.height / divDimensions.height / 2 ) / scale + (divDimensions.height/2));
       //before zoom
       console.log(context.transformState);
+      console.log(e.clientX, e.clientY);
       setWorldX(
         (e.clientX - props.divPos[1] - context.transformState.positionX) /
           context.transformState.scale,
@@ -197,7 +198,12 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
         (e.clientY - props.divPos[0] - context.transformState.positionY) /
           context.transformState.scale,
       );
+    }
+  };
 
+  const handleMouseUp = () => {
+    const tempDiv = document.getElementById("tempDiv");
+    if (tempDiv) {
       tempDiv.style.left = worldX + "px";
       tempDiv.style.top = worldY + "px";
     }
@@ -207,6 +213,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     <>
       <div
         onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
         ref={divRef}
         style={{ position: "relative" }}
       >

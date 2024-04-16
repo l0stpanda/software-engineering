@@ -86,7 +86,7 @@ function EditMap() {
 
   function FloorMapButtons() {
     return (
-      <div className="h-2/3 my-auto ml-3">
+      <div className="h-fit my-auto ml-3 bg-secondary">
         <ToggleButtonGroup
           orientation="vertical"
           value={imgState}
