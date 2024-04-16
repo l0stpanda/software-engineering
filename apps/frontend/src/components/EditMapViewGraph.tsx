@@ -1,7 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Graph } from "../objects/Graph.ts";
 import { FloorNodeInfo } from "./FloorNode.tsx";
 import { MapEdge } from "../objects/MapEdge.ts";
+import { useDrag, useDrop } from "react-dnd";
+import type { XYCoord } from "react-dnd";
+import { DragItem } from "../objects/DragItem.ts";
 import { useTransformContext } from "react-zoom-pan-pinch";
 
 /*
@@ -38,6 +41,10 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
   const floor: string = getFloorByImage(props.imageSrc);
   const nodes = props.graph.getMap();
 
+  // Will be changed soon
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [draggable, setDraggable] = useState<boolean>(true);
+
   const [worldX, setWorldX] = useState(0);
   const [worldY, setWorldY] = useState(0);
 
@@ -67,6 +74,52 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
       setImgDimensions({ width: img.width, height: img.height });
     };
   }, [props.imageSrc]);
+
+  const [scaledNodes, setScaledNodes] = useState<{
+    [key: string]: FloorNodeInfo;
+  }>({});
+
+  //const scaledNodes: { [key: string]: FloorNodeInfo } = {};
+  useEffect(() => {
+    const tempNodePosList: { [key: string]: FloorNodeInfo } = {};
+    nodes.forEach((node) => {
+      const id: string = node.getNodeID();
+      tempNodePosList[id] = {
+        key: node.getNodeID(),
+        x: node.getX() * (divDimensions.width / imgDimensions.width),
+        y: node.getY() * (divDimensions.height / imgDimensions.height),
+        floor: node.getFloor(),
+      };
+    });
+    setScaledNodes(tempNodePosList);
+  }, [divDimensions, nodes, imgDimensions]);
+
+  const moveBox = useCallback(
+    (id: string, left: number, top: number) => {
+      console.log("time to move a box!");
+      const oldNodePos = scaledNodes[id];
+      oldNodePos.x = left;
+      oldNodePos.y = top;
+      console.log(left + " " + top);
+      // Axios call here
+      setScaledNodes({ ...scaledNodes, [id]: oldNodePos });
+    },
+    [scaledNodes, setScaledNodes],
+  );
+
+  const [, drop] = useDrop(
+    () => ({
+      accept: "Node",
+      drop(item: DragItem, monitor) {
+        const delta = monitor.getDifferenceFromInitialOffset() as XYCoord;
+        const left = Math.round(item.x + delta.x);
+        const top = Math.round(item.y + delta.y);
+        moveBox(item.id, left, top);
+        return undefined;
+      },
+    }),
+    [moveBox],
+  );
 
   // function triggered when node is clicked
   const handleNodeClick = (nodeid: string) => () => {
@@ -118,69 +171,57 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     return lines;
   };
 
-  const scaledNodes: { [key: string]: FloorNodeInfo } = {};
-  nodes.forEach((node) => {
-    const id: string = node.getNodeID();
-    scaledNodes[id] = {
-      key: node.getNodeID(),
-      x: node.getX() * (divDimensions.width / imgDimensions.width),
-      y: node.getY() * (divDimensions.height / imgDimensions.height),
-      floor: node.getFloor(),
-    };
-  });
+  function EditableNode(props: { nodeKey: string }) {
+    const nodeColor: string = "#009BA8";
+    const animation: string = "border border-slate-300 hover:border-red-400";
+    // const input = calculateInput();
+
+    const id = props.nodeKey;
+    const { x, y } = scaledNodes[id];
+
+    const [{ isDragging }, drag] = useDrag(
+      () => ({
+        type: "Node",
+        item: { id, x, y },
+        canDrag: draggable,
+        collect: (monitor) => ({
+          isDragging: monitor.isDragging(),
+        }),
+      }),
+      [id, draggable],
+    );
+
+    if (isDragging) {
+      return <div ref={drag} />;
+    }
+
+    return (
+      <div
+        key={props.nodeKey}
+        id={id}
+        style={{
+          position: "absolute",
+          left: x + "px",
+          top: y + "px",
+          width: "6px",
+          height: "6px",
+          backgroundColor: nodeColor,
+          borderRadius: "50%",
+          transform: "translate(-50%, -50%)",
+          cursor: "pointer",
+        }}
+        className={animation}
+        onClick={handleNodeClick(props.nodeKey)}
+        ref={drag}
+      ></div>
+    );
+  }
 
   const renderNodes = () => {
     return Object.values(scaledNodes)
       .filter((node) => node.floor == floor)
-      .map((node, id) => {
-        const nodeColor: string = "#009BA8";
-        const animation: string =
-          "border border-slate-300 hover:border-red-400";
-
-        //console.log(node.key, ids.startId, ids.endId);
-        //if start node
-        return (
-          <div
-            key={id}
-            style={{
-              position: "absolute",
-              left: node.x + "px",
-              top: node.y + "px",
-              width: "6px",
-              height: "6px",
-              backgroundColor: nodeColor,
-              borderRadius: "50%",
-              transform: "translate(-50%, -50%)",
-              cursor: "pointer",
-            }}
-            className={animation}
-            onClick={handleNodeClick(node.key)}
-          ></div>
-        );
-      });
+      .map((node) => <EditableNode nodeKey={node.key} />);
   };
-
-  // function triggered when clicking anywhere in the div
-  // const handleNodeCreation = (e: { clientX: number; clientY: number; }) => {
-  //     if (props.mode === "add_node" && divRef.current) {
-  //         // console.log("mouse: ", e.clientX, e.clientY);
-  //         // console.log("zoom :", Object.values(props.zoom)[0]);
-  //         // const { offsetLeft, offsetTop } = divRef.current;
-  //         // const halfDivX = divDimensions.width / 2;
-  //         // const halfDivY = divDimensions.height / 2;
-  //         // console.log("divRef: ",clientWidth, clientHeight);
-  //         const tempDiv = document.getElementById("tempDiv");
-  //         if (tempDiv && divRef.current) {
-  //
-  //             tempDiv.style.left = e.clientX + "px";
-  //             tempDiv.style.top = e.clientY + "px";
-  //
-  //             console.log("tempDiv: ", tempDiv.style.left, tempDiv.style.top);
-  //         }
-  //
-  //         props.popupCallback(true);
-  //     }
-  // };
 
   const handleMouseDown = (e: { clientX: number; clientY: number }) => {
     const tempDiv = document.getElementById("tempDiv");
@@ -189,6 +230,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
       // setAdjY(((e.clientY - divRef.current.offsetTop - translateY) * divDimensions.height / divDimensions.height / 2 ) / scale + (divDimensions.height/2));
       //before zoom
       console.log(context.transformState);
+      console.log(e.clientX, e.clientY);
       setWorldX(
         (e.clientX - props.divPos[1] - context.transformState.positionX) /
           context.transformState.scale,
@@ -197,19 +239,25 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
         (e.clientY - props.divPos[0] - context.transformState.positionY) /
           context.transformState.scale,
       );
+    }
+  };
 
+  const handleMouseUp = () => {
+    const tempDiv = document.getElementById("tempDiv");
+    if (tempDiv) {
       tempDiv.style.left = worldX + "px";
       tempDiv.style.top = worldY + "px";
     }
   };
 
   return (
-    <>
-      <div
-        onMouseDown={handleMouseDown}
-        ref={divRef}
-        style={{ position: "relative" }}
-      >
+    <div
+      ref={divRef}
+      style={{ position: "relative" }}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+    >
+      <div ref={drop}>
         <img src={props.imageSrc} className="object-contain h-full" alt="Map" />
         <svg
           style={{
@@ -238,7 +286,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
           ></div>
         )}
       </div>
-    </>
+    </div>
   );
 }
 

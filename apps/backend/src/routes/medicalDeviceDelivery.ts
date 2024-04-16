@@ -1,24 +1,23 @@
 import express, { Router, Request, Response } from "express";
-//import { Prisma } from "database";
 import PrismaClient from "../bin/database-connection.ts";
-import { roomSchedulerFields } from "common/src/roomScheduler.ts";
-
 const router: Router = express.Router();
+import { medicalDeviceDelivery } from "common/src/medicalDeviceDelivery.ts";
+//Creates record in the general db and the specific db for medical device service requests
 router.post("/", async function (req: Request, res: Response) {
-  const input: roomSchedulerFields = req.body;
+  const input: medicalDeviceDelivery = req.body;
   try {
     const roomStuff = await PrismaClient.nodes.findMany({
       where: {
-        long_name: input.roomNum,
+        long_name: input.roomName,
       },
     });
 
     const id1 = await PrismaClient.generalService.findMany({
       where: {
-        type: "Room Scheduling",
+        type: "Medical Device Delivery",
         location: roomStuff[0].node_id,
-        status: input.reqStatus,
-        emp_name: input.employName,
+        status: input.status,
+        emp_name: input.employeeName,
         priority: input.priority,
       },
     });
@@ -31,38 +30,50 @@ router.post("/", async function (req: Request, res: Response) {
 
     await PrismaClient.generalService.create({
       data: {
-        type: "Room Scheduling",
+        type: "Medical Device Delivery",
         location: roomStuff[0].node_id,
-        status: input.reqStatus,
-        emp_name: input.employName,
+        status: input.status,
+        emp_name: input.employeeName,
         priority: input.priority,
       },
     });
 
-    const findID = await PrismaClient.generalService.findMany({
+    const id = await PrismaClient.generalService.findMany({
       where: {
-        type: "Room Scheduling",
+        type: "Medical Device Delivery",
         location: roomStuff[0].node_id,
-        status: input.reqStatus,
-        emp_name: input.employName,
+        status: input.status,
+        emp_name: input.employeeName,
         priority: input.priority,
       },
     });
 
-    await PrismaClient.roomScheduler.create({
-      data: {
-        id: findID[0].id,
-        startTime: input.startTime,
-        lengthRes: input.lengthRes,
-        room_name: input.roomNum,
-      },
-    });
+    if (id.length > 1) {
+      res.sendStatus(400);
+      return;
+    }
+
+    if (input.deliveryDate != undefined) {
+      //This willa always be the case so don't worry about it being here.
+      console.log("ID I AM FINDING IS " + id[0].id);
+      await PrismaClient.medicalDevice.create({
+        data: {
+          id: id[0].id,
+          device: input.medicalDeviceName,
+          quantity: Number(input.quantity),
+          date: input.deliveryDate?.toString(),
+          room_name: input.roomName,
+        },
+      });
+    }
   } catch (e) {
+    //Console log error if the data can't be stored
     console.log(e);
     res.sendStatus(400);
     return;
   }
-  return res.sendStatus(200);
+  //Console log "Ok" if the database successfully collects the data
+  res.sendStatus(200);
 });
 
 router.get("/", async function (req: Request, res: Response) {
@@ -70,10 +81,10 @@ router.get("/", async function (req: Request, res: Response) {
     res.send(
       await PrismaClient.generalService.findMany({
         where: {
-          type: "Room Scheduling",
+          type: "Medical Device Delivery",
         },
         include: {
-          roomSched: true,
+          medicalDeviceCheck: true,
         },
       }),
     );
@@ -82,7 +93,6 @@ router.get("/", async function (req: Request, res: Response) {
     res.sendStatus(400);
     return;
   }
-  res.sendStatus(200);
 });
 
 router.delete("/:id", async function (req: Request, res: Response) {
