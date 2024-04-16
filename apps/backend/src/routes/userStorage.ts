@@ -10,6 +10,7 @@ type toDoNow = {
   task: string;
   priority: string;
   email: string | undefined;
+  complete: boolean;
 };
 
 //Registering the login details from the front end to the backend to be stored in the database
@@ -37,6 +38,7 @@ router.post("/", async function (req: Request, res: Response) {
           task: input.task,
           priority: input.priority,
           email: input.email,
+          complete: input.complete,
         },
       });
     }
@@ -79,4 +81,24 @@ router.delete("/:id", async function (req: Request, res: Response) {
   }
   res.sendStatus(200);
 });
+
+router.put("/:id", async function (req: Request, res: Response) {
+  const id = parseInt(req.params.id);
+  const input: toDoNow = req.body;
+  try {
+    await PrismaClient.todo.update({
+      data: {
+        complete: input.complete,
+      },
+      where: {
+        id: id,
+      },
+    });
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(400);
+  }
+  res.sendStatus(200);
+});
+
 export default router;

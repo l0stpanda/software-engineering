@@ -19,6 +19,7 @@ type toDoNow = {
   task: string;
   priority: string;
   email: string | undefined;
+  complete: boolean;
 };
 
 export default function DisplayTODOList() {
@@ -31,6 +32,7 @@ export default function DisplayTODOList() {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     email: user.email,
+    complete: false,
   });
 
   // Use state for records being displayed
@@ -89,6 +91,7 @@ export default function DisplayTODOList() {
       task: "",
       email: "",
       priority: "",
+      complete: false,
     });
     alert("New Task has been created");
     setOpen(false);
@@ -111,12 +114,27 @@ export default function DisplayTODOList() {
 
   return (
     <div className="px-8 p5 h-screen bg-background">
-      <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
-        TODO List
-      </h1>
+      <div className="flex flex-row">
+        <h1 className="my-2 font-header text-primary font-bold text-3xl text-center mx-auto">
+          TODO List
+        </h1>
+        <Button
+          variant="contained"
+          color="primary"
+          component="span"
+          sx={{ borderRadius: "30px", margin: "auto 0" }}
+          className="w-32 text-center self-end"
+          onClick={handleOpen}
+        >
+          New Task
+        </Button>
+      </div>
       <table className="w-full">
         <thead className="bg-secondary border-b-2 border-b-primary">
           <tr>
+            <th className="p-3 text-sm font-semibold tracking-wide text-left max-w-8">
+              Completed
+            </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
               ID
             </th>
@@ -141,21 +159,11 @@ export default function DisplayTODOList() {
               email={record.email}
               priority={record.priority}
               task={record.task}
+              complete={record.complete}
             />
           ))}
         </tbody>
       </table>
-
-      <Button
-        variant="contained"
-        color="primary"
-        component="span"
-        sx={{ borderRadius: "30px" }}
-        className="w-32 self-center text-center"
-        onClick={handleOpen}
-      >
-        New Task
-      </Button>
 
       <Dialog open={open} onClose={handleSubmitClose}>
         <form>

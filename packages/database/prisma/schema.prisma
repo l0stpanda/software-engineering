@@ -143,10 +143,11 @@ model User {
 }
 
 model Todo {
-  id       Int    @id @default(autoincrement())
+  id       Int     @id @default(autoincrement())
   task     String
   priority String
   email    String
+  complete Boolean
   // Foreign Key Reference
-  user     User   @relation("UserID", fields: [email], references: [email], onDelete: Cascade)
+  user     User    @relation("UserID", fields: [email], references: [email], onDelete: Cascade)
 }
