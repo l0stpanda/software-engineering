@@ -44,33 +44,23 @@ function TODOListItem(props: toDoNow) {
   }
 
   async function updateTodo() {
-    if (completed) {
-      setCompleted(false);
-    } else {
-      setCompleted(true);
-    }
     try {
       const token = await getAccessTokenSilently();
-      //call to backend
-      await axios.put(
+      setCompleted(!completed);
+      await axios.post(
         `/api/todoStuff/${props.id}`,
-        {
-          complete: completed,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
+        { bool: !completed },
+        { headers: { Authorization: `Bearer ${token}` } },
       );
+      //call to backend
     } catch (e) {
       console.log(e);
-      alert("Problem Deleting");
+      alert("Problem Checking Off");
       return;
     }
     alert("Successfully updated TODO item with ID number " + props.id);
     //window must be reloaded on delete to show updated results
-    window.location.reload();
+    // window.location.reload();
   }
 
   return (
