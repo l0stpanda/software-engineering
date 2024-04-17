@@ -8,9 +8,12 @@ import flowerRequest from "./routes/flowerRequest.ts";
 import loginRequest from "./routes/login.ts";
 import readRouter from "./routes/read.ts";
 import roomScheduler from "./routes/roomSchedulingRequest.ts";
+import medicalDeviceDelivery from "./routes/medicalDeviceDelivery.ts";
+import inventory from "./routes/inventory.ts";
+import lostAndFound from "./routes/lostAndFound.ts";
+import medicineRequest from "./routes/medicineRequest.ts";
+import userStuff from "./routes/userStorage.ts";
 import { auth } from "express-oauth2-jwt-bearer";
-// import readRouterE from "./routes/readE.ts";
-// import readRouterN from "./routes/readN.ts";
 
 const app: Express = express(); // Setup the backend
 
@@ -39,7 +42,12 @@ app.use("/healthcheck", (req, res) => {
 app.use("/api/import", importRouter);
 app.use("/api/login", loginRequest);
 app.use("/api/read", readRouter);
-
+app.use("/api/flowerRequest", flowerRequest);
+app.use("/api/inventory", inventory);
+app.use("/api/medicalDevice", medicalDeviceDelivery);
+app.use("/api/lostAndFound", lostAndFound);
+app.use("/api/medicineRequest", medicineRequest);
+app.use("/api/todoStuff", userStuff);
 // Enable auth0 enforcement
 app.use(
   auth({
@@ -48,8 +56,6 @@ app.use(
     tokenSigningAlg: "RS256",
   }),
 );
-
-app.use("/api/flowerRequest", flowerRequest);
 
 /**
  * Catch all 404 errors, and forward them to the error handler

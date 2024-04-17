@@ -1,7 +1,7 @@
 import mapImg from "../assets/00_thelowerlevel1.png";
 import React, { useState, useEffect } from "react";
-import { Dialog } from "@mui/material";
-import LoginDialog from "../components/loginDialog.tsx";
+// import { Dialog } from "@mui/material";
+//import LoginDialog from "../components/loginDialog.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 
 function HeroPage() {
@@ -9,7 +9,7 @@ function HeroPage() {
   const { loginWithRedirect } = useAuth0();
 
   // Use state for whether login dialog is visible or not
-  const [dialogOpen, setDialogOpen] = useState(false);
+  //const [dialogOpen, setDialogOpen] = useState(false);
   const [showTitle, setShowTitle] = useState(false);
   const [showSubtitle, setShowSubtitle] = useState(false);
 
@@ -23,9 +23,9 @@ function HeroPage() {
   }
 
   // Close login dialog
-  function setLoginClose() {
-    setDialogOpen(false);
-  }
+  // function setLoginClose() {
+  //   setDialogOpen(false);
+  // }
 
   useEffect(() => {
     // Show title after a delay
@@ -107,9 +107,9 @@ function HeroPage() {
           </h1>
         </button>
       </div>
-      <Dialog open={dialogOpen} onClose={setLoginClose}>
-        <LoginDialog />
-      </Dialog>
+      {/*<Dialog open={dialogOpen} onClose={setLoginClose}>*/}
+      {/*  <LoginDialog />*/}
+      {/*</Dialog>Dialog*/}
     </div>
   );
 }

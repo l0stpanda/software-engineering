@@ -32,18 +32,6 @@ model HighScore {
 //   add_date  DateTime @default(now())
 // }
 
-model RoomScheduler {
-  id         Int    @id @default(autoincrement())
-  employName String
-  startTime  String
-  lengthRes  String
-  roomNum    String
-  reqStatus  String
-  priority   String
-
-  // sent_room Nodes @relation("send_room", fields: [roomNum], references: [node_id], onDelete: Cascade) // Maybe need to change reference to short_name/long_name later
-}
-
 // Flower requests are saved
 model Flowers {
   id          Int      @id @default(autoincrement())
@@ -71,7 +59,9 @@ model Nodes {
   long_name  String
 
   // Foreign Key Reference
-  flower_delivery_room Flowers[] @relation("flower_room")
+  flower_delivery_room Flowers[]        @relation("flower_room")
+  general_service      GeneralService[] @relation("location")
+  // medical_device_room  MedicalDevice[]  @relation("medical_device")
 }
 
 // Edges are all set
@@ -79,4 +69,85 @@ model Edges {
   id         String @id
   end_node   String //@db.VarChar(10)
   start_node String //@db.VarChar(10)
+}
+
+// Inventory Delighter table
+model Inventory {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  quant Int
+}
+
+// General Service Request Table
+model GeneralService {
+  id       Int    @id @default(autoincrement())
+  type     String
+  location String
+  status   String
+  emp_name String
+  priority String
+
+  location_room      Nodes             @relation("location", fields: [location], references: [node_id], onDelete: Cascade)
+  medicalDeviceCheck medicalDevice[]   @relation("idCheck")
+  lost_location      LostItem[]        @relation("idCheckLost")
+  roomSched          RoomScheduler[]   @relation("roomSchedID")
+  medicineReqID      MedicineRequest[] @relation("medicineReqID")
+}
+
+// medical device requests are saved
+model medicalDevice {
+  id        Int            @id
+  device    String
+  quantity  Int
+  date      String
+  room_name String
+  idCheck   GeneralService @relation("idCheck", fields: [id], references: [id], onDelete: Cascade)
+}
+
+// Lost Item requests are saved
+model LostItem {
+  id          Int    @id
+  date        String
+  description String
+  type        String
+
+  // Foreign Key References
+  lost_location GeneralService @relation("idCheckLost", fields: [id], references: [id], onDelete: Cascade)
+}
+
+// room schedulers are saved
+model RoomScheduler {
+  id        Int    @id
+  startTime String
+  lengthRes String
+  room_name String
+
+  roomSchedID GeneralService @relation("roomSchedID", fields: [id], references: [id], onDelete: Cascade)
+}
+
+model MedicineRequest {
+  id            Int            @id
+  medicine_name String
+  quantity      Int
+  room_name     String
+  medicineReqID GeneralService @relation("medicineReqID", fields: [id], references: [id], onDelete: Cascade)
+}
+
+// Tables for To do list
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  // Foreign Key Reference
+  todoList Todo[] @relation("UserID")
+  // So each user will have 
+}
+
+model Todo {
+  id       Int     @id @default(autoincrement())
+  task     String
+  priority String
+  email    String
+  complete Boolean
+  // Foreign Key Reference
+  user     User    @relation("UserID", fields: [email], references: [email], onDelete: Cascade)
 }
