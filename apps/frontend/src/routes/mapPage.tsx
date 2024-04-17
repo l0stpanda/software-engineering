@@ -170,7 +170,7 @@ function Map() {
   }
 
   return (
-    <div>
+    <div className="flex justify-center">
       <BackgroundPattern />
 
       {/*Location and Destination things*/}
