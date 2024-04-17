@@ -28,6 +28,7 @@ function EditMap() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [nodeId, setNodeId] = useState("");
   const [longName, setLongName] = useState("");
+  const [isMoveable, setIsMoveable] = useState(false);
 
   // Zoom in/out buttons for map viewing
   const Controls = () => {
@@ -130,8 +131,12 @@ function EditMap() {
   const handleEditMode = (newMode: string) => {
     setMode(newMode);
     console.log(mode);
-    if (newMode !== "add_node") {
+    if (newMode === "add_node") {
+      setIsOpen(true);
+    }
+    if (newMode === "move_node") {
       setIsOpen(false);
+      setIsMoveable(true);
     }
   };
 
@@ -182,7 +187,7 @@ function EditMap() {
         border-primary
         border-2"
           >
-            <TransformWrapper panning={{ disabled: true }}>
+            <TransformWrapper disabled={isMoveable}>
               <Controls />
               <TransformComponent>
                 <EditMapViewGraph
