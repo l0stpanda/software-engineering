@@ -15,6 +15,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import AllyBackground from "../components/allyBackground.tsx";
 import LocationDropdown from "../components/locationDropdown.tsx";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function RoomSchedulingRequest() {
   type roomReqFields = {
@@ -34,6 +35,8 @@ export default function RoomSchedulingRequest() {
     reqStatus: "Unassigned",
     priority: "Medium",
   });
+
+  const { getAccessTokenSilently } = useAuth0();
 
   const [open, setOpen] = useState(false);
   function handleResponseChanges(
@@ -71,8 +74,12 @@ export default function RoomSchedulingRequest() {
       return;
     }
     try {
+      const token = await getAccessTokenSilently();
       await axios.post("/api/roomSchedulingRequest", responses, {
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
     } catch (e) {
       alert(
