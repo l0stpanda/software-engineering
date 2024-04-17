@@ -132,11 +132,12 @@ function EditMap() {
     setMode(newMode);
     console.log(mode);
     if (newMode === "add_node") {
-      setIsOpen(true);
-    }
-    if (newMode === "move_node") {
+      setIsMoveable(false);
+    } else if (newMode === "move_node") {
       setIsOpen(false);
       setIsMoveable(true);
+    } else if (newMode === "delete_node") {
+      setIsOpen(false);
     }
   };
 
@@ -154,10 +155,6 @@ function EditMap() {
     console.log("Node id: ", nodeId);
     console.log("Long name: ", longName);
   };
-
-  // const handleZoom = (newZoom) => {
-  //   setZoom(newZoom);
-  // };
 
   let divPos: number[] = [];
   if (divRef.current) {

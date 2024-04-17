@@ -48,12 +48,6 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
   const [worldX, setWorldX] = useState(0);
   const [worldY, setWorldY] = useState(0);
 
-  // const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
-  // const [mouseLoc, setMouseLoc] = useState({
-  //     x: 0,
-  //     y: 0
-  // });
-
   useEffect(() => {
     if (divRef.current) {
       const resizeObserver = new ResizeObserver(() => {
@@ -100,11 +94,13 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
       const oldNodePos = scaledNodes[id];
       oldNodePos.x = left;
       oldNodePos.y = top;
-      console.log(left + " " + top);
+      const newPosX = left * (imgDimensions.width / divDimensions.width);
+      const newPosY = top * (imgDimensions.width / divDimensions.height);
+      console.log(newPosX + " " + newPosY);
       // Axios call here
       setScaledNodes({ ...scaledNodes, [id]: oldNodePos });
     },
-    [scaledNodes, setScaledNodes],
+    [divDimensions, imgDimensions.width, scaledNodes],
   );
 
   const [, drop] = useDrop(
@@ -127,6 +123,9 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     props.nodeInfoCallback(nodeid);
     // need to log clicked so it can be used
     console.log(clicked);
+    if (props.mode === "add_mode") {
+      props.popupCallback(true);
+    }
   };
 
   const renderLines = () => {
@@ -226,9 +225,6 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
   const handleMouseDown = (e: { clientX: number; clientY: number }) => {
     const tempDiv = document.getElementById("tempDiv");
     if (props.mode === "add_node" && tempDiv && context.bounds) {
-      // setAdjX((((e.clientX - divRef.current.offsetLeft - translateX) * divDimensions.width) / divDimensions.width / 2) / scale + (divDimensions.width/2));
-      // setAdjY(((e.clientY - divRef.current.offsetTop - translateY) * divDimensions.height / divDimensions.height / 2 ) / scale + (divDimensions.height/2));
-      //before zoom
       console.log(context.transformState);
       console.log(e.clientX, e.clientY);
       setWorldX(
@@ -243,6 +239,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
   };
 
   const handleMouseUp = () => {
+    props.popupCallback(true);
     const tempDiv = document.getElementById("tempDiv");
     if (tempDiv) {
       tempDiv.style.left = worldX + "px";
