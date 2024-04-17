@@ -6,6 +6,7 @@ import PendingLost from "./displayLost.tsx";
 import PendingRoomSched from "./displayRoomSched.tsx";
 import PendingMedicalDevice from "./displayMedicalDevice.tsx";
 import PendingMedicineDelivery from "./displayMedicineDelivery.tsx";
+import { Tab, Tabs } from "@mui/material";
 
 // Define database json type
 type FlowerReqData = {
@@ -20,6 +21,12 @@ type FlowerReqData = {
 
 export default function PendingFlowerRequest() {
   const { getAccessTokenSilently } = useAuth0();
+  const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
+
+  const handleTabChange = (e: React.SyntheticEvent, tabIndex: number) => {
+    console.log(tabIndex);
+    setCurrentTabIndex(tabIndex);
+  };
 
   // Use state for records being displayed
   const [records, setRecords] = useState<FlowerReqData[]>([]);
@@ -46,60 +53,78 @@ export default function PendingFlowerRequest() {
     });
   }, [getAccessTokenSilently]);
 
-  //Have to do this because we store the node_id in the table
-  // async function idToName(id : string){
-  //     const name = await axios.get(`/import/idToName/${id}`);
-  //     return name.data;
-  // }
-
   return (
     <div>
-      <div className="px-8 p5 h-screen bg-background">
-        <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
-          Pending Flower Deliveries
-        </h1>
-        <table className="w-full">
-          <thead className="bg-secondary border-b-2 border-b-primary">
-            <tr>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                Flower Delivery Request
-              </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                Status
-              </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                Date Entered
-              </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                Time Entered
-              </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                Destination
-              </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                Delete
-              </th>
-              {/* Dynamically generate column headers */}
-            </tr>
-          </thead>
-          <tbody>
-            {/* Map through the records and create a row for each record */}
-            {records.map((record) => (
-              <PendingRequestItem
-                key={record.id}
-                id={record.id}
-                status={record.status}
-                requestDate={record.requestDate}
-                name={record.name}
-              />
-            ))}
-          </tbody>
-        </table>
+      <React.Fragment>
+        <Tabs value={currentTabIndex} onChange={handleTabChange}>
+          <Tab label="Flower Request" id="tab-0" />
+          <Tab label="Lost and Found" id="tab-1" />
+          <Tab label="Room Scheduling" id="tab-2" />
+          <Tab label="Medical Device Delivery" id="tab-3" />
+          <Tab label="Medicine Delivery" id="tab-4" />
+        </Tabs>
+      </React.Fragment>
+
+      <div id="tab-0" className="px-8 p5 bg-background">
+        {currentTabIndex === 0 && (
+          <div>
+            <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
+              Pending Flower Deliveries
+            </h1>
+            <table className="w-full">
+              <thead className="bg-secondary border-b-2 border-b-primary">
+                <tr>
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                    Flower Delivery Request
+                  </th>
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                    Status
+                  </th>
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                    Date Entered
+                  </th>
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                    Time Entered
+                  </th>
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                    Destination
+                  </th>
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                    Delete
+                  </th>
+                  {/* Dynamically generate column headers */}
+                </tr>
+              </thead>
+              <tbody>
+                {/* Map through the records and create a row for each record */}
+                {records.map((record) => (
+                  <PendingRequestItem
+                    key={record.id}
+                    id={record.id}
+                    status={record.status}
+                    requestDate={record.requestDate}
+                    name={record.name}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
-      <PendingLost></PendingLost>
-      <PendingRoomSched></PendingRoomSched>
-      <PendingMedicalDevice></PendingMedicalDevice>
-      <PendingMedicineDelivery></PendingMedicineDelivery>
+      <div id="tab-1">
+        {currentTabIndex === 1 && <PendingLost></PendingLost>}{" "}
+      </div>
+      <div id="tab-2">
+        {currentTabIndex === 2 && <PendingRoomSched></PendingRoomSched>}{" "}
+      </div>
+      <div id="tab-3">
+        {currentTabIndex === 3 && <PendingMedicalDevice></PendingMedicalDevice>}{" "}
+      </div>
+      <div id="tab-4">
+        {currentTabIndex === 4 && (
+          <PendingMedicineDelivery></PendingMedicineDelivery>
+        )}{" "}
+      </div>
     </div>
   );
 }
