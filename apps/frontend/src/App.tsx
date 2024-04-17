@@ -22,6 +22,7 @@ import { Auth0Provider } from "@auth0/auth0-react";
 import LoadingPage from "./routes/LoadingCallback.tsx";
 import SpinningLoader from "./components/spinningLoader.tsx";
 import TodoList from "./routes/todoList.tsx";
+import DisplayInventory from "./routes/disInventoryList.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -85,6 +86,10 @@ function App() {
         {
           path: "todo",
           element: <LoadingPage component={TodoList} />,
+        },
+        {
+          path: "inventory",
+          element: <LoadingPage component={DisplayInventory} />,
         },
       ],
     },
