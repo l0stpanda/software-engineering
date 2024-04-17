@@ -135,11 +135,12 @@ function EditMap() {
     setMode(newMode);
     console.log(mode);
     if (newMode === "add_node") {
-      setIsOpen(true);
-    }
-    if (newMode === "move_node") {
+      setIsMoveable(false);
+    } else if (newMode === "move_node") {
       setIsOpen(false);
       setIsMoveable(true);
+    } else if (newMode === "delete_node") {
+      setIsOpen(false);
     }
   };
 
@@ -157,10 +158,6 @@ function EditMap() {
     console.log("Node id: ", nodeId);
     console.log("Long name: ", longName);
   };
-
-  // const handleZoom = (newZoom) => {
-  //   setZoom(newZoom);
-  // };
 
   let divPos: number[] = [];
   if (divRef.current) {
@@ -212,7 +209,6 @@ function EditMap() {
             <div
               className="mr-8
                     ml-5
-                    py-5
                     px-0
                     flex
                     flex-col
@@ -263,8 +259,7 @@ function EditMap() {
         {/*boxes.*/}
         <div
           className="flex flex-col
-                w-1/4
-                mt-10"
+                w-1/4"
         >
           <div
             className="mr-8
