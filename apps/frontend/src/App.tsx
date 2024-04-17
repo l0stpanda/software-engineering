@@ -21,6 +21,8 @@ import EditMap from "./routes/editMapPage.tsx";
 import { Auth0Provider } from "@auth0/auth0-react";
 import LoadingPage from "./routes/LoadingCallback.tsx";
 import SpinningLoader from "./components/spinningLoader.tsx";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import TodoList from "./routes/todoList.tsx";
 
 function App() {
@@ -110,10 +112,12 @@ function App() {
           scope: "openid profile email offline_access",
         }}
       >
-        <div className="w-full flex flex-col">
-          <CustomNavBar />
-          <Outlet />
-        </div>
+        <DndProvider backend={HTML5Backend}>
+          <div className="w-full flex flex-col">
+            <CustomNavBar />
+            <Outlet />
+          </div>
+        </DndProvider>
       </Auth0Provider>
     );
   }

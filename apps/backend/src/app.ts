@@ -12,6 +12,7 @@ import medicalDeviceDelivery from "./routes/medicalDeviceDelivery.ts";
 import inventory from "./routes/inventory.ts";
 import lostAndFound from "./routes/lostAndFound.ts";
 import medicineRequest from "./routes/medicineRequest.ts";
+import editMap from "./routes/editPage.ts";
 import userStuff from "./routes/userStorage.ts";
 import { auth } from "express-oauth2-jwt-bearer";
 
@@ -47,6 +48,8 @@ app.use("/api/inventory", inventory);
 app.use("/api/medicalDevice", medicalDeviceDelivery);
 app.use("/api/lostAndFound", lostAndFound);
 app.use("/api/medicineRequest", medicineRequest);
+app.use("/api/editMap", editMap);
+
 app.use("/api/todoStuff", userStuff);
 // Enable auth0 enforcement
 app.use(

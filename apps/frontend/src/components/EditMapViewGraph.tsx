@@ -1,32 +1,53 @@
-//import { Edge, InputNode } from "./FloorMap.tsx";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Graph } from "../objects/Graph.ts";
-//import { BFS } from "../objects/BFS.ts";
-// import { MapNode } from "../objects/MapNode.ts";
 import { FloorNodeInfo } from "./FloorNode.tsx";
 import { MapEdge } from "../objects/MapEdge.ts";
+import { useDrag, useDrop } from "react-dnd";
+import type { XYCoord } from "react-dnd";
+import { DragItem } from "../objects/DragItem.ts";
+import { useTransformContext } from "react-zoom-pan-pinch";
+import axios from "axios";
 
-//import mapImg from "../assets/00_thelowerlevel1.png";
+/*
+Functionality:
+Add node
+- give information about the node
+
+
+ */
 
 interface EditMapViewGraphProps {
   imageSrc: string;
   graph: Graph;
   divDim: { width: number; height: number };
+  divPos: number[];
+  nodeInfoCallback: (childData: string) => void;
+  popupCallback: (childData: boolean) => void;
+  mode: string | null;
 }
 
 function EditMapViewGraph(props: EditMapViewGraphProps) {
+  const context = useTransformContext();
+
   const [imgDimensions, setImgDimensions] = useState<{
     width: number;
     height: number;
   }>({ width: 0, height: 0 });
-  const divRef = useRef(null);
+  const divRef = useRef<HTMLDivElement | null>(null);
   const [divDimensions, setDivDimensions] = useState({
     width: props.divDim.width,
     height: props.divDim.height,
   });
-  const [clicked, setClicked] = useState<string[]>([]);
+  const [clicked, setClicked] = useState<string>("");
   const floor: string = getFloorByImage(props.imageSrc);
   const nodes = props.graph.getMap();
+
+  // Will be changed soon
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [draggable, setDraggable] = useState<boolean>(true);
+
+  const [worldX, setWorldX] = useState(0);
+  const [worldY, setWorldY] = useState(0);
 
   useEffect(() => {
     if (divRef.current) {
@@ -49,25 +70,71 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     };
   }, [props.imageSrc]);
 
+  const [scaledNodes, setScaledNodes] = useState<{
+    [key: string]: FloorNodeInfo;
+  }>({});
+
+  useEffect(() => {
+    const tempNodePosList: { [key: string]: FloorNodeInfo } = {};
+    nodes.forEach((node) => {
+      const id: string = node.getNodeID();
+      tempNodePosList[id] = {
+        key: node.getNodeID(),
+        x: node.getX() * (divDimensions.width / imgDimensions.width),
+        y: node.getY() * (divDimensions.height / imgDimensions.height),
+        floor: node.getFloor(),
+      };
+    });
+    setScaledNodes(tempNodePosList);
+  }, [divDimensions, nodes, imgDimensions]);
+
+  const moveBox = useCallback(
+    (id: string, left: number, top: number) => {
+      console.log("time to move a box!");
+      const oldNodePos = scaledNodes[id];
+      oldNodePos.x = left;
+      oldNodePos.y = top;
+      const newPosX = left * (imgDimensions.width / divDimensions.width);
+      const newPosY = top * (imgDimensions.width / divDimensions.height);
+      console.log(newPosX + " " + newPosY);
+      // Axios call here
+      axios
+        .post(
+          "/api/editMap/editNode",
+          { node_id: id, x: newPosX, y: newPosY },
+          { headers: {} },
+        )
+        .then();
+      setScaledNodes({ ...scaledNodes, [id]: oldNodePos });
+    },
+    [divDimensions, imgDimensions, scaledNodes, setScaledNodes],
+  );
+
+  const [, drop] = useDrop(
+    () => ({
+      accept: "Node",
+      drop(item: DragItem, monitor) {
+        const delta = monitor.getDifferenceFromInitialOffset() as XYCoord;
+        const left = Math.round(
+          item.x + delta.x / context.transformState.scale,
+        );
+        const top = Math.round(item.y + delta.y / context.transformState.scale);
+        moveBox(item.id, left, top);
+        return undefined;
+      },
+    }),
+    [moveBox],
+  );
+
+  // function triggered when node is clicked
   const handleNodeClick = (nodeid: string) => () => {
-    if (clicked.length < 2 && !clicked.includes(nodeid)) {
-      setClicked((prevClicked) => [...prevClicked, nodeid]);
-      //set the start node to green
+    setClicked(nodeid);
+    props.nodeInfoCallback(nodeid);
+    // need to log clicked so it can be used
+    console.log(clicked);
+    if (props.mode === "add_mode") {
+      props.popupCallback(true);
     }
-    if (clicked.length == 2) {
-      setClicked([nodeid]);
-    }
-  };
-
-  const calculateInput = (): string[] => {
-    let input: string[] = [];
-    if (clicked.length === 2) {
-      input = [clicked[0], clicked[1]];
-    } else {
-      console.log("Invalid IDs.");
-    }
-
-    return input;
   };
 
   const renderLines = () => {
@@ -103,7 +170,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
             x2={endPoint.x}
             y2={endPoint.y}
             style={{ stroke: "blue", strokeWidth: 2 }}
-            className="animate-pulse"
+            className="" //"path"
           />,
         );
       }
@@ -112,76 +179,119 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     return lines;
   };
 
-  const scaledNodes: { [key: string]: FloorNodeInfo } = {};
-  nodes.forEach((node) => {
-    const id: string = node.getNodeID();
-    scaledNodes[id] = {
-      key: node.getNodeID(),
-      x: node.getX() * (divDimensions.width / imgDimensions.width),
-      y: node.getY() * (divDimensions.height / imgDimensions.height),
-      floor: node.getFloor(),
-    };
-  });
+  function EditableNode(props: { nodeKey: string }) {
+    const nodeColor: string = "#009BA8";
+    const animation: string = "border border-slate-300";
+    // const input = calculateInput();
+
+    const id = props.nodeKey;
+    const { x, y } = scaledNodes[id];
+
+    const [{ isDragging }, drag] = useDrag(
+      () => ({
+        type: "Node",
+        item: { id, x, y },
+        canDrag: draggable,
+        collect: (monitor) => ({
+          isDragging: monitor.isDragging(),
+        }),
+      }),
+      [id, draggable],
+    );
+
+    if (isDragging) {
+      return <div ref={drag} />;
+    }
+
+    return (
+      <div
+        key={props.nodeKey}
+        id={id}
+        style={{
+          position: "absolute",
+          left: x + "px",
+          top: y + "px",
+          width: "6px",
+          height: "6px",
+          backgroundColor: nodeColor,
+          borderRadius: "50%",
+          transform: "translate(-50%, -50%)",
+          cursor: "pointer",
+        }}
+        className={animation}
+        onClick={handleNodeClick(props.nodeKey)}
+        ref={drag}
+      ></div>
+    );
+  }
 
   const renderNodes = () => {
     return Object.values(scaledNodes)
       .filter((node) => node.floor == floor)
-      .map((node, id) => {
-        let nodeColor: string;
-        let animation: string = "border border-slate-300 hover:border-red-400";
-        const input = calculateInput();
+      .map((node) => <EditableNode nodeKey={node.key} />);
+  };
 
-        //console.log(node.key, ids.startId, ids.endId);
-        //if start node
-        if (node.key == input[0]) {
-          nodeColor = "#39FF14";
-          animation = animation.concat(" animate-bounce -m-[2.8px]");
-        }
-        //if end node
-        else if (node.key == input[1]) {
-          nodeColor = "red";
-          animation = animation.concat(" animate-bounce -m-[2.8px]");
-        }
-        //neither
-        else {
-          nodeColor = "#009BA8";
-        }
-        return (
-          <div
-            key={id}
-            style={{
-              position: "absolute",
-              left: node.x + "px",
-              top: node.y + "px",
-              width: "6px",
-              height: "6px",
-              backgroundColor: nodeColor,
-              borderRadius: "50%",
-              transform: "translate(-50%, -50%)",
-              cursor: "pointer",
-            }}
-            className={animation}
-            onClick={handleNodeClick(node.key)}
-          ></div>
-        );
-      });
+  const handleMouseDown = (e: { clientX: number; clientY: number }) => {
+    const tempDiv = document.getElementById("tempDiv");
+    if (props.mode === "add_node" && tempDiv && context.bounds) {
+      console.log(context.transformState);
+      console.log(e.clientX, e.clientY);
+      setWorldX(
+        (e.clientX - props.divPos[1] - context.transformState.positionX) /
+          context.transformState.scale,
+      );
+      setWorldY(
+        (e.clientY - props.divPos[0] - context.transformState.positionY) /
+          context.transformState.scale,
+      );
+    }
+  };
+
+  const handleMouseUp = () => {
+    props.popupCallback(true);
+    const tempDiv = document.getElementById("tempDiv");
+    if (tempDiv) {
+      tempDiv.style.left = worldX + "px";
+      tempDiv.style.top = worldY + "px";
+    }
   };
 
   return (
-    <div ref={divRef} style={{ position: "relative" }}>
-      <img src={props.imageSrc} className="object-contain h-full" alt="Map" />
-      <svg
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-        }}
-      >
-        {renderLines()}
-      </svg>
-      {renderNodes()}
+    <div
+      ref={divRef}
+      style={{ position: "relative" }}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+    >
+      <div ref={drop}>
+        <img src={props.imageSrc} className="object-contain h-full" alt="Map" />
+        <svg
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          {renderLines()}
+        </svg>
+        {renderNodes()}
+        {props.mode === "add_node" && (
+          <div
+            id="tempDiv"
+            className="absolute border border-slate-300"
+            style={{
+              width: "15px",
+              height: "15px",
+              backgroundColor: "#009BA8",
+              borderRadius: "50%",
+              transform: "translate(-50%, -50%)",
+              zIndex: 999,
+            }}
+          ></div>
+        )}
+      </div>
     </div>
   );
 }
