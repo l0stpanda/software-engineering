@@ -8,6 +8,7 @@ import { Pathfinding } from "../objects/Pathfinding.ts";
 import { BFS } from "../objects/BFS.ts";
 import { Box } from "@mui/material";
 import { DFS } from "../objects/DFS.ts";
+
 //import mapImg from "../assets/00_thelowerlevel1.png";
 
 interface FloorNodesProps {
@@ -119,10 +120,13 @@ function FloorNode(props: FloorNodesProps) {
       const path = algo.findPath(input[0], input[1]);
       //console.log(path);
       const lines = [];
+      const floorChanges = [];
+
       if (!path) {
         console.log("No path found");
         return [];
       }
+      let changeStart: undefined | FloorNodeInfo = undefined;
       for (let i = 0; i < path.length - 1; i++) {
         const startNode = path[i];
         const endNode = path[i + 1];
@@ -206,8 +210,9 @@ function FloorNode(props: FloorNodesProps) {
           }
         }
       }
-      console.log(lines);
-      return lines;
+      //console.log(lines);
+      console.log(floorChanges);
+      return [lines, floorChanges];
     }
     return [];
   };
@@ -267,6 +272,8 @@ function FloorNode(props: FloorNodesProps) {
       });
   };
 
+  const path = renderLines();
+
   return (
     <div ref={divRef} style={{ position: "relative" }}>
       <img src={props.imageSrc} className="object-contain h-full" alt="Map" />
@@ -279,9 +286,10 @@ function FloorNode(props: FloorNodesProps) {
           height: "100%",
         }}
       >
-        {renderLines()}
+        {path[0]}
       </svg>
       {renderNodes()}
+      {path[1]}
     </div>
   );
 }
