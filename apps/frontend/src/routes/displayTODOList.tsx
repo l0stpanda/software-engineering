@@ -116,7 +116,7 @@ export default function DisplayTODOList() {
     <div className="px-8 p5 h-screen bg-background">
       <div className="flex flex-row">
         <h1 className="my-2 font-header text-primary font-bold text-3xl text-center mx-auto">
-          TODO List
+          Task Board
         </h1>
         <Button
           variant="contained"
