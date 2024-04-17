@@ -46,9 +46,9 @@ function RequestButtons(props: requestButtonProps) {
             transform: "scale(1.05)",
           },
         }}
-        onClick={handleSubmit}
+        onClick={handleClear}
       >
-        SUBMIT
+        Clear
       </Button>
       <Button
         className="w-32"
@@ -63,9 +63,9 @@ function RequestButtons(props: requestButtonProps) {
             transform: "scale(1.05)",
           },
         }}
-        onClick={handleClear}
+        onClick={handleSubmit}
       >
-        Clear
+        SUBMIT
       </Button>
     </div>
   );

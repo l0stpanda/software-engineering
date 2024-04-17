@@ -170,7 +170,7 @@ function Map() {
   }
 
   return (
-    <div>
+    <div className="flex justify-center">
       <BackgroundPattern />
 
       {/*Location and Destination things*/}
@@ -181,7 +181,7 @@ function Map() {
                    flex-row-reverse
                    max-w-screen-2xl"
       >
-        <div className="flex flex-row w-2/3">
+        <div className="flex flex-row w-[80%]">
           {/*Map Image Box*/}
           <div
             ref={divRef}
@@ -263,6 +263,7 @@ function Map() {
                   >
                     <MenuItem value="BFS">BFS</MenuItem>
                     <MenuItem value="AStar">A-Star</MenuItem>
+                    <MenuItem value="DFS">DFS</MenuItem>
                   </Select>
                 </FormControl>
               </div>

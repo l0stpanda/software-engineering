@@ -1,11 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import { Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
-// import { AddIcon, RemoveIcon, EditIcon } from "@mui/icons-material";
-import {
-  TransformWrapper,
-  TransformComponent,
-  useControls,
-} from "react-zoom-pan-pinch";
 import { useState } from "react";
 import BackgroundPattern from "../components/backgroundPattern.tsx";
 import { Graph } from "../objects/Graph.ts";
@@ -14,14 +8,28 @@ import lowerLevel2 from "../assets/00_thelowerlevel2.png";
 import floor1 from "../assets/01_thefirstfloor.png";
 import floor2 from "../assets/02_thesecondfloor.png";
 import floor3 from "../assets/03_thethirdfloor.png";
-
 import EditMapViewGraph from "../components/EditMapViewGraph.tsx";
+import { MapNode } from "../objects/MapNode.ts";
+import {
+  TransformComponent,
+  TransformWrapper,
+  useControls,
+} from "react-zoom-pan-pinch";
+import EditNodeForm from "../components/EditNodeForm.tsx";
+// import {ZoomPanPinch} from "react-zoom-pan-pinch/dist/src/core/instance.core";
+// import CanvasMap from "../components/CanvasMap.tsx";
 
 function EditMap() {
   const divRef = useRef<HTMLDivElement>(null);
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
   const [graph, setGraph] = useState(new Graph());
   const [imgState, setImgState] = useState<string>(lowerLevel1);
+  const [clicked, setClicked] = useState<MapNode | undefined>(undefined);
+  const [mode, setMode] = useState<string | null>(null);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  // const [nodeId, setNodeId] = useState("");
+  // const [longName, setLongName] = useState("");
+  const [isMoveable, setIsMoveable] = useState(false);
 
   // Zoom in/out buttons for map viewing
   const Controls = () => {
@@ -69,7 +77,7 @@ function EditMap() {
     }
   }, [divRef]);
 
-  // Updates the graph when it has been received from the database
+  //Updates the graph when it has been received from the database
   useEffect(() => {
     const tempGraph = new Graph();
     tempGraph.loadGraph().then(() => {
@@ -79,7 +87,7 @@ function EditMap() {
 
   function FloorMapButtons() {
     return (
-      <div className="h-2/3 my-auto ml-3">
+      <div className="h-fit my-auto ml-3 bg-secondary">
         <ToggleButtonGroup
           orientation="vertical"
           value={imgState}
@@ -116,8 +124,49 @@ function EditMap() {
     );
   }
 
+  // // Gets the node information from child
+  const handleNodeCallback = (childData: string) => {
+    setClicked(graph.getNode(childData));
+  };
+
+  const handleEditMode = (
+    event: React.MouseEvent<HTMLElement>,
+    newMode: string | null,
+  ) => {
+    setMode(newMode);
+    console.log(mode);
+    if (newMode === "add_node") {
+      setIsMoveable(false);
+    } else if (newMode === "move_node") {
+      setIsOpen(false);
+      setIsMoveable(true);
+    } else if (newMode === "delete_node") {
+      setIsOpen(false);
+    }
+  };
+
+  const handlePopup = (childData: boolean) => {
+    if (mode === "add_node") {
+      setIsOpen(childData);
+      console.log(isOpen);
+    } else {
+      setIsOpen(false);
+    }
+  };
+
+  // const handleSubmit = (e: { preventDefault: () => void }) => {
+  //   e.preventDefault();
+  //   console.log("Node id: ", nodeId);
+  //   console.log("Long name: ", longName);
+  // };
+
+  let divPos: number[] = [];
+  if (divRef.current) {
+    divPos = [divRef.current.offsetTop, divRef.current.offsetLeft];
+  }
+
   return (
-    <div>
+    <div className="flex justify-center">
       <BackgroundPattern />
 
       {/*Map and Edit Buttons*/}
@@ -139,13 +188,17 @@ function EditMap() {
         border-primary
         border-2"
           >
-            <TransformWrapper>
+            <TransformWrapper disabled={isMoveable}>
               <Controls />
               <TransformComponent>
                 <EditMapViewGraph
                   imageSrc={imgState}
                   graph={graph}
                   divDim={divDimensions}
+                  divPos={divPos}
+                  nodeInfoCallback={handleNodeCallback}
+                  popupCallback={handlePopup}
+                  mode={mode}
                 />
               </TransformComponent>
             </TransformWrapper>
@@ -153,13 +206,17 @@ function EditMap() {
           {/*Buttons for displaying floor images*/}
           <FloorMapButtons />
         </div>
-
         {/*boxes.*/}
         <div
           className="flex flex-col
-                w-1/4
-                mt-10"
+                w-1/4"
         >
+          {/*Form for adding a new node*/}
+          {isOpen && (
+            <EditNodeForm node={new MapNode("", 0, 0, "", "", "", "", "")} />
+          )}
+          {clicked && <EditNodeForm node={clicked} />}
+
           <div
             className="mr-8
                     ml-5
@@ -181,111 +238,31 @@ function EditMap() {
             >
               Node Editing
             </h1>
-            <Button
-              type="button"
-              variant="contained"
-              className="addNodeBut"
-              size="medium"
-              // startIcon={<AddIcon />}
-              sx={{
-                borderRadius: "25px",
-                fontSize: "18px",
-                marginTop: "10px",
-                minWidth: "165px",
-                minHeight: "60px",
-                ":focus": {
-                  backgroundColor: "#009BA8",
-                },
-              }}
-            >
-              Add Node
-            </Button>
-            <Button
-              type="button"
-              variant="contained"
-              className="deleteNodeBut"
-              size="medium"
-              // startIcon={<RemoveIcon />}
-              sx={{
-                borderRadius: "25px",
-                fontSize: "18px",
-                marginTop: "10px",
-                minWidth: "165px",
-                minHeight: "60px",
-                ":focus": {
-                  backgroundColor: "#009BA8",
-                },
-              }}
-            >
-              Delete Node
-            </Button>
-            <Button
-              type="button"
-              variant="contained"
-              className="editNodeBut"
-              size="medium"
-              // startIcon={<EditIcon />}
-              sx={{
-                borderRadius: "25px",
-                fontSize: "18px",
-                marginTop: "10px",
-                minWidth: "165px",
-                marginBottom: "10px",
-                minHeight: "60px",
-                ":focus": {
-                  backgroundColor: "#009BA8",
-                },
-              }}
-            >
-              Move Node
-            </Button>
-            <h1
-              className="text-primary
+            <div className="px-10 w-full">
+              <ToggleButtonGroup
+                value={mode}
+                exclusive
+                onChange={handleEditMode}
+                orientation="vertical"
+                fullWidth
+                color="primary"
+              >
+                <ToggleButton value="add_node">Add Node</ToggleButton>
+                <ToggleButton value="delete_node">Delete Node</ToggleButton>
+                <ToggleButton value="move_node">Move Node</ToggleButton>
+                <h1
+                  className="text-primary
               font-header
               font-bold
               text-2xl
               pt-5"
-            >
-              Edge Editing
-            </h1>
-            <Button
-              type="button"
-              variant="contained"
-              className="addNodeBut"
-              size="medium"
-              // startIcon={<AddIcon />}
-              sx={{
-                borderRadius: "25px",
-                fontSize: "18px",
-                marginTop: "10px",
-                minWidth: "165px",
-                minHeight: "60px",
-                ":focus": {
-                  backgroundColor: "#009BA8",
-                },
-              }}
-            >
-              Add Edge
-            </Button>
-            <Button
-              type="button"
-              variant="contained"
-              className="deleteNodeBut"
-              size="medium"
-              // startIcon={<RemoveIcon />}
-              sx={{
-                borderRadius: "25px",
-                fontSize: "18px",
-                marginTop: "10px",
-                minWidth: "165px",
-                minHeight: "60px",
-                ":focus": {
-                  backgroundColor: "#009BA8",
-                },
-              }}
-            >
-              Delete Edge
-            </Button>
+                >
+                  Edge Editing
+                </h1>
+                <ToggleButton value="add_edge">Add Edge</ToggleButton>
+                <ToggleButton value="delete_edge">Delete Edge</ToggleButton>
+              </ToggleButtonGroup>
+            </div>
           </div>
         </div>
       </div>

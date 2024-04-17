@@ -64,4 +64,8 @@ export class MapNode {
   getFloor() {
     return this.floor;
   }
+
+  getShortName() {
+    return this.shortName;
+  }
 }
