@@ -129,7 +129,7 @@ function MedicineDeliveryRequest() {
   return (
     <div className="justify-center grid min-h-screen max-h-fit place-items-center">
       <BackgroundPattern />
-      <div className="m-auto mt-6 flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-4">
+      <div className="m-auto mt-6 shadow-2xl flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-4">
         <h1
           className="text-2xl font-bold mb-4 text-center transform hover:-translate-y-2 transition-transform duration-300"
           style={{
