@@ -91,7 +91,7 @@ function FlowerRequest() {
   return (
     <div className="justify-center flex flex-grow place-items-center">
       <BackgroundPattern />
-      <div className="m-auto flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-4">
+      <div className="m-auto shadow-2xl flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-4">
         <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
           Flower Delivery Request
         </h1>
@@ -137,8 +137,8 @@ function FlowerRequest() {
             <div className="flex-row self-center">
               <Button
                 className="w-32 self-center pt-10"
-                type="submit"
-                id="requestSubmit"
+                onClick={clear}
+                id="requestClear"
                 variant="contained"
                 size="large"
                 sx={{
@@ -150,13 +150,13 @@ function FlowerRequest() {
                   },
                 }}
               >
-                SUBMIT
+                Clear
               </Button>
 
               <Button
                 className="w-32 self-center pt-10"
-                onClick={clear}
-                id="requestClear"
+                type="submit"
+                id="requestSubmit"
                 variant="contained"
                 size="large"
                 sx={{
@@ -167,7 +167,7 @@ function FlowerRequest() {
                   },
                 }}
               >
-                Clear
+                SUBMIT
               </Button>
             </div>
           </div>
