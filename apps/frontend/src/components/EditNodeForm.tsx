@@ -3,6 +3,7 @@ import { TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 
 interface editNodeProps {
   node: MapNode;
@@ -24,7 +25,7 @@ export default function EditNodeForm(props: editNodeProps) {
     nodeType: props.node.getNodeType(),
     shortName: props.node.getShortName(),
   });
-
+  const { getAccessTokenSilently } = useAuth0();
   useEffect(() => {
     setNodeInfo({
       ID: props.node.getNodeID(),
@@ -39,7 +40,8 @@ export default function EditNodeForm(props: editNodeProps) {
     setNodeInfo({ ...nodeInfo, [e.target.name]: e.target.value });
   }
 
-  function handleNodeSubmit() {
+  async function handleNodeSubmit() {
+    const token = await getAccessTokenSilently();
     axios
       .post(
         "/api/editMap/editNodeInfo",
@@ -50,7 +52,12 @@ export default function EditNodeForm(props: editNodeProps) {
           nodeType: nodeInfo.nodeType,
           shortName: nodeInfo.shortName,
         },
-        { headers: {} },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        },
       )
       .then();
   }

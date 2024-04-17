@@ -7,6 +7,7 @@ import type { XYCoord } from "react-dnd";
 import { DragItem } from "../objects/DragItem.ts";
 import { useTransformContext } from "react-zoom-pan-pinch";
 import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 
 /*
 Functionality:
@@ -28,7 +29,7 @@ interface EditMapViewGraphProps {
 
 function EditMapViewGraph(props: EditMapViewGraphProps) {
   const context = useTransformContext();
-
+  const { getAccessTokenSilently } = useAuth0();
   const [imgDimensions, setImgDimensions] = useState<{
     width: number;
     height: number;
@@ -89,7 +90,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
   }, [divDimensions, nodes, imgDimensions]);
 
   const moveBox = useCallback(
-    (id: string, left: number, top: number) => {
+    async (id: string, left: number, top: number) => {
       console.log("time to move a box!");
       const oldNodePos = scaledNodes[id];
       oldNodePos.x = left;
@@ -98,16 +99,28 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
       const newPosY = top * (imgDimensions.width / divDimensions.height);
       console.log(newPosX + " " + newPosY);
       // Axios call here
+      const token = await getAccessTokenSilently();
       axios
         .post(
           "/api/editMap/editNode",
           { node_id: id, x: newPosX, y: newPosY },
-          { headers: {} },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          },
         )
         .then();
       setScaledNodes({ ...scaledNodes, [id]: oldNodePos });
     },
-    [divDimensions, imgDimensions, scaledNodes, setScaledNodes],
+    [
+      divDimensions.height,
+      divDimensions.width,
+      getAccessTokenSilently,
+      imgDimensions.width,
+      scaledNodes,
+    ],
   );
 
   const [, drop] = useDrop(
