@@ -24,7 +24,7 @@ function EditMap() {
   const [graph, setGraph] = useState(new Graph());
   const [imgState, setImgState] = useState<string>(lowerLevel1);
   const [clicked, setClicked] = useState<MapNode | undefined>(undefined);
-  const [mode, setMode] = useState<string | undefined>(undefined);
+  const [mode, setMode] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [nodeId, setNodeId] = useState("");
   const [longName, setLongName] = useState("");
@@ -128,7 +128,10 @@ function EditMap() {
     setClicked(graph.getNode(childData));
   };
 
-  const handleEditMode = (newMode: string) => {
+  const handleEditMode = (
+    event: React.MouseEvent<HTMLElement>,
+    newMode: string | null,
+  ) => {
     setMode(newMode);
     console.log(mode);
     if (newMode === "add_node") {
@@ -307,116 +310,31 @@ function EditMap() {
             >
               Node Editing
             </h1>
-            <Button
-              type="button"
-              variant="contained"
-              className="addNodeBut"
-              size="medium"
-              onClick={() => handleEditMode("add_node")}
-              // startIcon={<AddIcon />}
-              sx={{
-                borderRadius: "25px",
-                fontSize: "18px",
-                marginTop: "10px",
-                minWidth: "165px",
-                minHeight: "60px",
-                ":focus": {
-                  backgroundColor: "#009BA8",
-                },
-              }}
-            >
-              Add Node
-            </Button>
-            <Button
-              type="button"
-              variant="contained"
-              className="deleteNodeBut"
-              size="medium"
-              onClick={() => handleEditMode("delete_node")}
-              // startIcon={<RemoveIcon />}
-              sx={{
-                borderRadius: "25px",
-                fontSize: "18px",
-                marginTop: "10px",
-                minWidth: "165px",
-                minHeight: "60px",
-                ":focus": {
-                  backgroundColor: "#009BA8",
-                },
-              }}
-            >
-              Delete Node
-            </Button>
-            <Button
-              type="button"
-              variant="contained"
-              className="editNodeBut"
-              size="medium"
-              onClick={() => handleEditMode("move_node")}
-              // startIcon={<EditIcon />}
-              sx={{
-                borderRadius: "25px",
-                fontSize: "18px",
-                marginTop: "10px",
-                minWidth: "165px",
-                marginBottom: "10px",
-                minHeight: "60px",
-                ":focus": {
-                  backgroundColor: "#009BA8",
-                },
-              }}
-            >
-              Move Node
-            </Button>
-            <h1
-              className="text-primary
+            <div className="px-10 w-full">
+              <ToggleButtonGroup
+                value={mode}
+                exclusive
+                onChange={handleEditMode}
+                orientation="vertical"
+                fullWidth
+                color="primary"
+              >
+                <ToggleButton value="add_node">Add Node</ToggleButton>
+                <ToggleButton value="delete_node">Delete Node</ToggleButton>
+                <ToggleButton value="move_node">Move Node</ToggleButton>
+                <h1
+                  className="text-primary
               font-header
               font-bold
               text-2xl
               pt-5"
-            >
-              Edge Editing
-            </h1>
-            <Button
-              type="button"
-              variant="contained"
-              className="addNodeBut"
-              size="medium"
-              onClick={() => handleEditMode("add_edge")}
-              // startIcon={<AddIcon />}
-              sx={{
-                borderRadius: "25px",
-                fontSize: "18px",
-                marginTop: "10px",
-                minWidth: "165px",
-                minHeight: "60px",
-                ":focus": {
-                  backgroundColor: "#009BA8",
-                },
-              }}
-            >
-              Add Edge
-            </Button>
-            <Button
-              type="button"
-              variant="contained"
-              className="deleteNodeBut"
-              size="medium"
-              onClick={() => handleEditMode("delete_edge")}
-              // startIcon={<RemoveIcon />}
-              sx={{
-                borderRadius: "25px",
-                fontSize: "18px",
-                marginTop: "10px",
-                minWidth: "165px",
-                minHeight: "60px",
-                ":focus": {
-                  backgroundColor: "#009BA8",
-                },
-              }}
-            >
-              Delete Edge
-            </Button>
+                >
+                  Edge Editing
+                </h1>
+                <ToggleButton value="add_edge">Add Edge</ToggleButton>
+                <ToggleButton value="delete_edge">Delete Edge</ToggleButton>
+              </ToggleButtonGroup>
+            </div>
           </div>
         </div>
       </div>

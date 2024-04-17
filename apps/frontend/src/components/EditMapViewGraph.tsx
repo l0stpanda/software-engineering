@@ -6,6 +6,7 @@ import { useDrag, useDrop } from "react-dnd";
 import type { XYCoord } from "react-dnd";
 import { DragItem } from "../objects/DragItem.ts";
 import { useTransformContext } from "react-zoom-pan-pinch";
+import axios from "axios";
 
 /*
 Functionality:
@@ -22,7 +23,7 @@ interface EditMapViewGraphProps {
   divPos: number[];
   nodeInfoCallback: (childData: string) => void;
   popupCallback: (childData: boolean) => void;
-  mode: string | undefined;
+  mode: string | null;
 }
 
 function EditMapViewGraph(props: EditMapViewGraphProps) {
@@ -79,7 +80,6 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     [key: string]: FloorNodeInfo;
   }>({});
 
-  //const scaledNodes: { [key: string]: FloorNodeInfo } = {};
   useEffect(() => {
     const tempNodePosList: { [key: string]: FloorNodeInfo } = {};
     nodes.forEach((node) => {
@@ -100,11 +100,19 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
       const oldNodePos = scaledNodes[id];
       oldNodePos.x = left;
       oldNodePos.y = top;
+      const newPosX = left * (imgDimensions.width / divDimensions.width);
+      const newPosY = top * (imgDimensions.height / divDimensions.height);
       console.log(left + " " + top);
-      // Axios call here
+      axios
+        .post(
+          "/api/editMap/editNode",
+          { node_id: id, x: newPosX, y: newPosY },
+          { headers: {} },
+        )
+        .then();
       setScaledNodes({ ...scaledNodes, [id]: oldNodePos });
     },
-    [scaledNodes, setScaledNodes],
+    [divDimensions, imgDimensions, scaledNodes, setScaledNodes],
   );
 
   const [, drop] = useDrop(
@@ -112,8 +120,12 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
       accept: "Node",
       drop(item: DragItem, monitor) {
         const delta = monitor.getDifferenceFromInitialOffset() as XYCoord;
-        const left = Math.round(item.x + delta.x);
-        const top = Math.round(item.y + delta.y);
+        const left = Math.round(
+          (item.x + delta.x) / context.transformState.scale,
+        );
+        const top = Math.round(
+          (item.y + delta.y) / context.transformState.scale,
+        );
         moveBox(item.id, left, top);
         return undefined;
       },
