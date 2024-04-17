@@ -6,6 +6,7 @@ import { MapNode } from "../objects/MapNode.ts";
 import { AStar } from "../objects/AStar.ts";
 import { Pathfinding } from "../objects/Pathfinding.ts";
 import { BFS } from "../objects/BFS.ts";
+import { Box } from "@mui/material";
 import { DFS } from "../objects/DFS.ts";
 
 //import mapImg from "../assets/00_thelowerlevel1.png";
@@ -119,36 +120,99 @@ function FloorNode(props: FloorNodesProps) {
       const path = algo.findPath(input[0], input[1]);
       //console.log(path);
       const lines = [];
+      const floorChanges = [];
+
       if (!path) {
         console.log("No path found");
         return [];
       }
+      let changeStart: undefined | FloorNodeInfo = undefined;
       for (let i = 0; i < path.length - 1; i++) {
         const startNode = path[i];
         const endNode = path[i + 1];
         const startPoint = scaledNodes[startNode];
         const endPoint = scaledNodes[endNode];
-        if (
-          startPoint &&
-          endPoint &&
-          startPoint.floor == floor &&
-          endPoint.floor == floor
-        ) {
-          lines.push(
-            <line
-              key={i}
-              x1={startPoint.x}
-              y1={startPoint.y}
-              x2={endPoint.x}
-              y2={endPoint.y}
-              style={{ stroke: "blue", strokeWidth: 2 }}
-              className="animate-pulse"
-            />,
-          );
+
+        if (startPoint && endPoint) {
+          if (startPoint.floor != endPoint.floor) {
+            changeStart = startPoint;
+          }
+          if (
+            changeStart &&
+            (startPoint.floor == endPoint.floor || i == path.length - 2)
+          ) {
+            // Use startPoint.floor for next floor
+            // Past
+            if (changeStart && changeStart.floor == floor) {
+              floorChanges.push(
+                <Box
+                  className="z-10 bg-primary m-0 p-0 text-background text-center text-[5px] flex-auto p-0.5"
+                  sx={{
+                    left: startPoint.x - 27 + "px",
+                    top: startPoint.y + 1 + "px",
+                    borderRadius: 1,
+                    position: "absolute",
+                  }}
+                >
+                  Go from floor {startPoint.floor}
+                </Box>,
+              );
+            }
+
+            // Use startChange.floor for previous floor
+            //Present
+            if (endPoint.floor == floor) {
+              if (i == path.length - 2) {
+                floorChanges.push(
+                  <Box
+                    className="z-10 bg-primary m-0 p-0 text-background text-center text-[5px] flex-auto p-0.5"
+                    sx={{
+                      left: startPoint.x - 27 + "px",
+                      top: startPoint.y + 1 + "px",
+                      borderRadius: 1,
+                      position: "absolute",
+                    }}
+                  >
+                    Go to floor {changeStart.floor}
+                  </Box>,
+                );
+              } else {
+                floorChanges.push(
+                  <Box
+                    className="z-10 bg-primary m-0 p-0 text-background text-center text-[5px] flex-auto p-0.5"
+                    sx={{
+                      left: startPoint.x - 27 + "px",
+                      top: startPoint.y + 1 + "px",
+                      borderRadius: 1,
+                      position: "absolute",
+                    }}
+                  >
+                    Go to floor {changeStart.floor}
+                  </Box>,
+                );
+              }
+            }
+            changeStart = undefined;
+          }
+
+          if (startPoint.floor == floor && endPoint.floor == floor) {
+            lines.push(
+              <line
+                key={i}
+                x1={startPoint.x}
+                y1={startPoint.y}
+                x2={endPoint.x}
+                y2={endPoint.y}
+                style={{ stroke: "blue", strokeWidth: 2 }}
+                className="animate-pulse"
+              />,
+            );
+          }
         }
       }
-      console.log(lines);
-      return lines;
+      //console.log(lines);
+      console.log(floorChanges);
+      return [lines, floorChanges];
     }
     return [];
   };
@@ -208,6 +272,8 @@ function FloorNode(props: FloorNodesProps) {
       });
   };
 
+  const path = renderLines();
+
   return (
     <div ref={divRef} style={{ position: "relative" }}>
       <img src={props.imageSrc} className="object-contain h-full" alt="Map" />
@@ -220,9 +286,10 @@ function FloorNode(props: FloorNodesProps) {
           height: "100%",
         }}
       >
-        {renderLines()}
+        {path[0]}
       </svg>
       {renderNodes()}
+      {path[1]}
     </div>
   );
 }
