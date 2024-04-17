@@ -166,7 +166,7 @@ function EditMap() {
   }
 
   return (
-    <div>
+    <div className="flex justify-center">
       <BackgroundPattern />
 
       {/*Map and Edit Buttons*/}
