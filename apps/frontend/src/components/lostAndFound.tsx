@@ -110,17 +110,17 @@ function LostFound() {
         <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
           Lost and Found Request
         </h1>
-        <p
-          className="text-2xl font-bold mb-4 text-center"
-          style={{
-            color: "black",
-            fontFamily: "PTSans, sans-serif",
-            fontSize: "20px",
-            margin: "5px",
-          }}
-        >
-          Sam and Krishna
-        </p>
+        {/*<p*/}
+        {/*  className="text-2xl font-bold mb-4 text-center"*/}
+        {/*  style={{*/}
+        {/*    color: "black",*/}
+        {/*    fontFamily: "PTSans, sans-serif",*/}
+        {/*    fontSize: "20px",*/}
+        {/*    margin: "5px",*/}
+        {/*  }}*/}
+        {/*>*/}
+        {/*  Sam and Krishna*/}
+        {/*</p>*/}
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4 my-4">
             <TextField
@@ -218,8 +218,8 @@ function LostFound() {
             <div className="flex justify-center">
               <Button
                 className="w-32 self-center pt-10"
-                type="submit"
-                id="requestSubmit"
+                id="clear"
+                onClick={clear}
                 variant="contained"
                 size="large"
                 sx={{
@@ -231,13 +231,13 @@ function LostFound() {
                   },
                 }}
               >
-                SUBMIT
+                CLEAR
               </Button>
 
               <Button
                 className="w-32 self-center pt-10"
-                id="clear"
-                onClick={clear}
+                type="submit"
+                id="requestSubmit"
                 variant="contained"
                 size="large"
                 sx={{
@@ -248,7 +248,7 @@ function LostFound() {
                   },
                 }}
               >
-                CLEAR
+                SUBMIT
               </Button>
             </div>
           </div>

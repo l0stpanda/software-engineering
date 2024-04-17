@@ -23,6 +23,7 @@ import LoadingPage from "./routes/LoadingCallback.tsx";
 import SpinningLoader from "./components/spinningLoader.tsx";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import TodoList from "./routes/todoList.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -82,6 +83,10 @@ function App() {
         {
           path: "editMap",
           element: <LoadingPage component={EditMap} />,
+        },
+        {
+          path: "todo",
+          element: <LoadingPage component={TodoList} />,
         },
       ],
     },

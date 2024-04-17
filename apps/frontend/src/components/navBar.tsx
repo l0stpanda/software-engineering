@@ -140,6 +140,9 @@ function CustomNavBar() {
                 Lost Item
               </MenuItem>
             </Menu>
+            <Button component="a" href="todo">
+              Task Board
+            </Button>
             <Button
               variant="contained"
               sx={{ margin: "0 0 0 1rem" }}

@@ -243,7 +243,7 @@ export default function RoomSchedulingRequest() {
 
           <div className="flex justify-center">
             <Button
-              type="submit"
+              onClick={clear}
               variant="contained"
               className="w-32 self-center pt-10"
               sx={{
@@ -255,11 +255,11 @@ export default function RoomSchedulingRequest() {
                 },
               }}
             >
-              SUBMIT
+              CLEAR
             </Button>
 
             <Button
-              onClick={clear}
+              type="submit"
               variant="contained"
               className="w-32 self-center pt-10"
               sx={{
@@ -270,7 +270,7 @@ export default function RoomSchedulingRequest() {
                 },
               }}
             >
-              CLEAR
+              SUBMIT
             </Button>
           </div>
         </form>
