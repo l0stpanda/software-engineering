@@ -15,6 +15,7 @@ import {
   TransformWrapper,
   useControls,
 } from "react-zoom-pan-pinch";
+import EditNodeForm from "../components/EditNodeForm.tsx";
 // import {ZoomPanPinch} from "react-zoom-pan-pinch/dist/src/core/instance.core";
 // import CanvasMap from "../components/CanvasMap.tsx";
 
@@ -261,28 +262,7 @@ function EditMap() {
           className="flex flex-col
                 w-1/4"
         >
-          <div
-            className="mr-8
-                    ml-5
-                    py-5
-                    px-0
-                    flex
-                    flex-col
-                    items-center
-                    bg-background
-                    rounded-xl
-                    border-primary
-                    border-2"
-          >
-            {clicked?.getNodeID()}
-            <br />
-            {clicked?.getLongName()}
-            <br />
-            {clicked?.getFloor()}
-            <br />
-            {clicked?.getNodeType()}
-            <br />
-          </div>
+          {clicked && <EditNodeForm node={clicked} />}
 
           <div
             className="mr-8
