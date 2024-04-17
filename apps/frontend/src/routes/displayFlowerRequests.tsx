@@ -56,13 +56,13 @@ export default function PendingFlowerRequest() {
     <div>
       <div className="px-8 p5 h-screen bg-background">
         <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
-          Pending Flower Deliveries
+          Pending Requests
         </h1>
         <table className="w-full">
           <thead className="bg-secondary border-b-2 border-b-primary">
             <tr>
               <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                Flower Delivery Request
+                Request
               </th>
               <th className="p-3 text-sm font-semibold tracking-wide text-left">
                 Status
