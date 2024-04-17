@@ -27,8 +27,8 @@ function EditMap() {
   const [clicked, setClicked] = useState<MapNode | undefined>(undefined);
   const [mode, setMode] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [nodeId, setNodeId] = useState("");
-  const [longName, setLongName] = useState("");
+  // const [nodeId, setNodeId] = useState("");
+  // const [longName, setLongName] = useState("");
   const [isMoveable, setIsMoveable] = useState(false);
 
   // Zoom in/out buttons for map viewing
@@ -154,11 +154,11 @@ function EditMap() {
     }
   };
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    console.log("Node id: ", nodeId);
-    console.log("Long name: ", longName);
-  };
+  // const handleSubmit = (e: { preventDefault: () => void }) => {
+  //   e.preventDefault();
+  //   console.log("Node id: ", nodeId);
+  //   console.log("Long name: ", longName);
+  // };
 
   let divPos: number[] = [];
   if (divRef.current) {
@@ -205,63 +205,16 @@ function EditMap() {
           </div>
           {/*Buttons for displaying floor images*/}
           <FloorMapButtons />
-          {/*Form for adding a new node*/}
-          {isOpen && (
-            <div
-              className="mr-8
-                    ml-5
-                    px-0
-                    flex
-                    flex-col
-                    items-center
-                    bg-background
-                    rounded-xl
-                    border-primary
-                    border-2"
-            >
-              <form
-                onSubmit={handleSubmit}
-                className="flex flex-col items-center"
-              >
-                {/* Node ID input field */}
-                <label>
-                  Node ID:
-                  <input
-                    type="text"
-                    value={nodeId}
-                    onChange={(e) => setNodeId(e.target.value)}
-                    className="m-2 p-2 border-primary border-2 rounded-md"
-                    required
-                  />
-                </label>
-                {/* Long Name input field */}
-                <label>
-                  Long Name:
-                  <input
-                    type="text"
-                    value={longName}
-                    onChange={(e) => setLongName(e.target.value)}
-                    className="m-2 p-2 border-primary border-2 rounded-md"
-                    required
-                  />
-                </label>
-                {/* Submit button */}
-                <button
-                  type="submit"
-                  className="m-2 p-2 bg-primary text-white rounded-md"
-                >
-                  Submit
-                </button>
-              </form>
-            </div>
-          )}
         </div>
-
         {/*boxes.*/}
         <div
           className="flex flex-col
                 w-1/4"
         >
+          {/*Form for adding a new node*/}
+          {isOpen && (
+            <EditNodeForm node={new MapNode("", 0, 0, "", "", "", "", "")} />
+          )}
           {clicked && <EditNodeForm node={clicked} />}
 
           <div
