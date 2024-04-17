@@ -108,8 +108,10 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
       accept: "Node",
       drop(item: DragItem, monitor) {
         const delta = monitor.getDifferenceFromInitialOffset() as XYCoord;
-        const left = Math.round(item.x + delta.x);
-        const top = Math.round(item.y + delta.y);
+        const left = Math.round(
+          item.x + delta.x / context.transformState.scale,
+        );
+        const top = Math.round(item.y + delta.y / context.transformState.scale);
         moveBox(item.id, left, top);
         return undefined;
       },

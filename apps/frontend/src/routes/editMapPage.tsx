@@ -206,7 +206,6 @@ function EditMap() {
             <div
               className="mr-8
                     ml-5
-                    py-5
                     px-0
                     flex
                     flex-col
@@ -257,8 +256,7 @@ function EditMap() {
         {/*boxes.*/}
         <div
           className="flex flex-col
-                w-1/4
-                mt-10"
+                w-1/4"
         >
           <div
             className="mr-8
