@@ -75,7 +75,7 @@ function Map() {
     start: "",
     end: "",
   });
-  const [submitValues, setSubmitValues] = useState(["", ""]);
+  // const [submitValues, setSubmitValues] = useState(["", ""]);
 
   // Carter's function code bc idk how to do it
   // function handleFormChanges(event: React.ChangeEvent<HTMLInputElement>) {
@@ -84,12 +84,12 @@ function Map() {
   // }
 
   // Handles changes to the start/end destination boxes
-  function handleFormSubmit() {
-    const cleanStart = navigatingNodes.start.replace("\r", "");
-    const cleanEnd = navigatingNodes.end.replace("\r", "");
-    console.log(cleanStart, cleanEnd);
-    setSubmitValues([cleanStart, cleanEnd]);
-  }
+  // function handleFormSubmit() {
+  //   const cleanStart = navigatingNodes.start.replace("\r", "");
+  //   const cleanEnd = navigatingNodes.end.replace("\r", "");
+  //   console.log(cleanStart, cleanEnd);
+  //   setSubmitValues([cleanStart, cleanEnd]);
+  // }
 
   // Changes the map image
   const changeFloor = (floor: string) => {
@@ -120,6 +120,17 @@ function Map() {
   };
 
   //Needs to be here for navigation dropdown
+  //   function updateStartAndEnd (start: string, end: string){
+  //       updateStart(start);
+  //       console.log(end);
+  //       //If both the fields are full then clear them and call the first function
+  //       updateEnd(end);
+  //   }
+
+  function updateStartAndEnd(startNode: string, endNode: string) {
+    setNavigatingNodes({ start: startNode, end: endNode });
+  }
+
   function updateStart(val: string) {
     // setResponses({ ...responses, roomNum: val });
     setNavigatingNodes({ ...navigatingNodes, start: val });
@@ -198,9 +209,11 @@ function Map() {
                 <FloorNode
                   imageSrc={imgState}
                   graph={graph}
-                  inputLoc={[submitValues[0], submitValues[1]]}
+                  inputLoc={navigatingNodes}
                   divDim={divDimensions}
                   algorithm={algorithm}
+                  updateStartAndEnd={updateStartAndEnd}
+                  updateEnd={updateEnd}
                 />
               </TransformComponent>
             </TransformWrapper>
@@ -268,16 +281,16 @@ function Map() {
                 </FormControl>
               </div>
               <br />
-              <Button
-                type="button"
-                variant="contained"
-                className="submitButton"
-                size="medium"
-                onClick={handleFormSubmit}
-                sx={{ borderRadius: "30px" }}
-              >
-                Submit
-              </Button>
+              {/*<Button*/}
+              {/*  type="button"*/}
+              {/*  variant="contained"*/}
+              {/*  className="submitButton"*/}
+              {/*  size="medium"*/}
+              {/*  onClick={handleFormSubmit}*/}
+              {/*  sx={{ borderRadius: "30px" }}*/}
+              {/*>*/}
+              {/*  Submit*/}
+              {/*</Button>*/}
             </div>
           </div>
           {/*second non-functional box for rn*/}
