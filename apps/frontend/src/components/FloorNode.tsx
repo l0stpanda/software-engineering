@@ -134,7 +134,7 @@ function FloorNode(props: FloorNodesProps) {
         const endPoint = scaledNodes[endNode];
 
         if (startPoint && endPoint) {
-          if (startPoint.floor != endPoint.floor) {
+          if (startPoint.floor != endPoint.floor && !changeStart) {
             changeStart = startPoint;
           }
           if (
@@ -143,18 +143,18 @@ function FloorNode(props: FloorNodesProps) {
           ) {
             // Use startPoint.floor for next floor
             // Past
-            if (changeStart && changeStart.floor == floor) {
+            if (changeStart.floor == floor) {
               floorChanges.push(
                 <Box
                   className="z-10 bg-primary m-0 text-background text-center text-[5px] flex-auto p-0.5"
                   sx={{
-                    left: startPoint.x - 2 + "px",
-                    top: startPoint.y + 4 + "px",
+                    left: changeStart.x - 2 + "px",
+                    top: changeStart.y + 4 + "px",
                     borderRadius: 1,
                     position: "absolute",
                   }}
                 >
-                  From {startPoint.floor}
+                  To {startPoint.floor}
                 </Box>,
               );
             }
@@ -173,7 +173,7 @@ function FloorNode(props: FloorNodesProps) {
                       position: "absolute",
                     }}
                   >
-                    To {changeStart.floor}
+                    From {changeStart.floor}
                   </Box>,
                 );
               } else {
@@ -187,7 +187,7 @@ function FloorNode(props: FloorNodesProps) {
                       position: "absolute",
                     }}
                   >
-                    To {changeStart.floor}
+                    From {changeStart.floor}
                   </Box>,
                 );
               }

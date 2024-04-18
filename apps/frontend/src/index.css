@@ -100,7 +100,7 @@ html {
 .path {
   stroke-dasharray: 5;
   stroke-dashoffset: 1000;
-  animation: dash 40s linear infinite;
+  animation: dash 40s linear reverse infinite;
 }
 
 @keyframes dash {

@@ -4,12 +4,22 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 
+type FlowerArray = {
+  sent_by: string;
+  sent_to: string;
+  requestDate: string;
+  note: string;
+  room_name: string;
+};
+
 type FlowerReqData = {
   id: number;
-  name: string;
-  requestDate: string;
   status: string;
+  priority: string;
+  location: string;
+  flowerID: FlowerArray[];
 };
+
 function PendingRequestItem(props: FlowerReqData) {
   const { getAccessTokenSilently } = useAuth0();
 
@@ -77,15 +87,19 @@ function PendingRequestItem(props: FlowerReqData) {
           value={status}
           defaultValue={props.status}
         >
-          <MenuItem value={"unassigned"}>Unassigned</MenuItem>
-          <MenuItem value={"assigned"}>Assigned</MenuItem>
-          <MenuItem value={"inprogress"}>In Progress</MenuItem>
-          <MenuItem value={"closed"}>Closed</MenuItem>
+          <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
+          <MenuItem value={"Assigned"}>Assigned</MenuItem>
+          <MenuItem value={"InProgress"}>In Progress</MenuItem>
+          <MenuItem value={"Closed"}>Closed</MenuItem>
         </Select>
       </td>
-      <td className="p-3 text-sm">{formatDate(props.requestDate)}</td>
-      <td className="p-3 text-sm">{formatTime(props.requestDate)}</td>
-      <td className="p-3 text-sm">{props.name}</td>
+      <td className="p-3 text-sm">
+        {formatDate(props.flowerID[0].requestDate)}
+      </td>
+      <td className="p-3 text-sm">
+        {formatTime(props.flowerID[0].requestDate)}
+      </td>
+      <td className="p-3 text-sm">{props.flowerID[0].room_name}</td>
       <td className="p-3 text-sm">
         <button>
           <img

@@ -5,6 +5,11 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   //FormControl,
   //InputLabel,
   TextField,
@@ -21,10 +26,13 @@ function FlowerRequest() {
   const { getAccessTokenSilently } = useAuth0();
 
   const initialFormResponses: flowerReqFields = {
+    empName: "",
     roomNum: "",
     senderName: "",
+    priority: "Medium",
     sendTo: "",
     attachedNote: "",
+    status: "Unassigned",
   };
 
   // State for form responses
@@ -78,12 +86,17 @@ function FlowerRequest() {
     setOpen(true);
   }
 
+  function handlePriorityInput(e: SelectChangeEvent) {
+    setResponses({ ...responses, priority: e.target.value });
+  }
   // Handle closing the form confirmation dialog
   function handleSubmitClose() {
     setOpen(false);
     clear();
   }
-
+  function handleStatusUpdate(e: SelectChangeEvent) {
+    setResponses({ ...responses, status: e.target.value });
+  }
   function updateRoom(val: string) {
     setResponses({ ...responses, roomNum: val });
   }
@@ -97,6 +110,34 @@ function FlowerRequest() {
         </h1>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4 my-4">
+            <TextField
+              onChange={handleResponseChanges}
+              value={responses.empName}
+              id="empName"
+              name="empName"
+              variant="filled"
+              label="Employee Name"
+              placeholder="Name"
+              required={true}
+            />
+            <FormControl variant="filled" required>
+              <InputLabel id="priority">Priority</InputLabel>
+              <Select
+                name="priority"
+                labelId="priority"
+                id="priority"
+                value={responses.priority}
+                onChange={handlePriorityInput}
+              >
+                {/*<MenuItem value="">*/}
+                {/*  <em>None</em>*/}
+                {/*</MenuItem>*/}
+                <MenuItem value={"High"}>High</MenuItem>
+                <MenuItem value={"Medium"}>Medium</MenuItem>
+                <MenuItem value={"Low"}>Low</MenuItem>
+                <MenuItem value={"Emergency"}>Emergency</MenuItem>
+              </Select>
+            </FormControl>
             {/*This handles the dropdown stuff*/}
             <LocationDropdown
               room={responses.roomNum}
@@ -111,7 +152,7 @@ function FlowerRequest() {
               name="senderName"
               variant="filled"
               label="Sent By"
-              placeholder="Name"
+              placeholder="Sent By"
               required={true}
             />
             <TextField
@@ -134,6 +175,25 @@ function FlowerRequest() {
               multiline={true}
               maxRows={5}
             />
+
+            <FormControl variant="filled" required>
+              <InputLabel id="status">Status</InputLabel>
+              <Select
+                name="status"
+                labelId="status"
+                id="status"
+                value={responses.status}
+                onChange={handleStatusUpdate}
+              >
+                {/*<MenuItem value="">*/}
+                {/*  <em>None</em>*/}
+                {/*</MenuItem>*/}
+                <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
+                <MenuItem value={"Assigned"}>Assigned</MenuItem>
+                <MenuItem value={"InProgress"}>In Progress</MenuItem>
+                <MenuItem value={"Closed"}>Closed</MenuItem>
+              </Select>
+            </FormControl>
             <div className="flex-row self-center">
               <Button
                 className="w-32 self-center pt-10"

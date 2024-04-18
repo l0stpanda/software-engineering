@@ -9,14 +9,20 @@ import PendingMedicineDelivery from "./displayMedicineDelivery.tsx";
 import { Tab, Tabs } from "@mui/material";
 
 // Define database json type
-type FlowerReqData = {
-  id: number;
-  name: string;
+type FlowerArray = {
   sent_by: string;
   sent_to: string;
   requestDate: string;
   note: string;
+  room_name: string;
+};
+
+type FlowerReqData = {
+  id: number;
   status: string;
+  priority: string;
+  location: string;
+  flowerID: FlowerArray[];
 };
 
 export default function PendingFlowerRequest() {
@@ -43,6 +49,7 @@ export default function PendingFlowerRequest() {
           },
         });
         setRecords(response.data); // Assuming the data is an array of flower request data
+        console.log(response.data);
       } catch (error) {
         console.error("Error fetching flower requests", error);
       }
@@ -102,8 +109,9 @@ export default function PendingFlowerRequest() {
                     key={record.id}
                     id={record.id}
                     status={record.status}
-                    requestDate={record.requestDate}
-                    name={record.name}
+                    priority={record.priority}
+                    location={record.location}
+                    flowerID={record.flowerID}
                   />
                 ))}
               </tbody>

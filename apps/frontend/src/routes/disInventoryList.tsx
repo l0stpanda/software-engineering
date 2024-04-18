@@ -1,8 +1,8 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
-import TODOListItem from "../components/TODOListItem.tsx";
-//import { toDo } from "common/src/toDo.ts";
+import InventoryItem from "../components/inventoryItem.tsx";
+import { inventoryType } from "common/src/inventoryType.ts";
 import {
   Button,
   Dialog,
@@ -13,31 +13,19 @@ import {
   SelectChangeEvent,
   TextField,
 } from "@mui/material";
-//import LoginDialog from "../components/loginDialog.tsx";
-type toDoNow = {
-  id: number;
-  task: string;
-  priority: string;
-  email: string | undefined;
-  complete: boolean;
-};
 
-export default function DisplayTODOList() {
+export default function DisplayInventory() {
   const { getAccessTokenSilently, user } = useAuth0();
 
-  const [toDoResponse, setToDoResponse] = useState<toDoNow>({
+  const [inventoryResponse, setinventoryResponse] = useState<inventoryType>({
     id: 0,
-    task: "",
-    priority: "",
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    email: user.email,
-    complete: false,
+    name: "",
+    type: "medicine",
+    quant: 0,
   });
 
   // Use state for records being displayed
-  const [records, setRecords] = useState<toDoNow[]>([]);
-
+  const [records, setRecords] = useState<inventoryType[]>([]);
   const [open, setOpen] = useState<boolean>(false);
 
   // Get records from database, and update useState
@@ -46,20 +34,14 @@ export default function DisplayTODOList() {
     const fetchData = async () => {
       try {
         const token = await getAccessTokenSilently();
-        if (user != undefined) {
-          const response = await axios.get(`/api/todoStuff/${user.email}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          console.log(response.data);
-          setRecords(response.data); // Assuming the data is an array of lost and found request data
-        } else {
-          alert("You need to login");
-          return;
-        }
+        const response = await axios.get("/api/inventory", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setRecords(response.data); // Assuming the data is an array of inventory
       } catch (error) {
-        console.error("Error fetching flower requests", error);
+        console.error("Error fetching inventory list", error);
       }
     };
 
@@ -68,19 +50,23 @@ export default function DisplayTODOList() {
     });
   }, [getAccessTokenSilently, user]);
 
-  function handleFormUpdate(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    setToDoResponse({ ...toDoResponse, [e.target.name]: e.target.value });
+  function handleFormUpdate(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    setinventoryResponse({
+      ...inventoryResponse,
+      [name]: name === "quant" ? Number(value) : value,
+    });
   }
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    if (toDoResponse.task == "" || toDoResponse.task == "") {
-      return;
-    }
-
+  async function handleSubmit() {
+    const updatedInventoryResponse = {
+      ...inventoryResponse,
+      quant: Number(inventoryResponse.quant),
+    };
     const token = await getAccessTokenSilently();
+    console.log(updatedInventoryResponse);
     try {
-      await axios.post(`/api/todoStuff`, toDoResponse, {
+      await axios.post(`/api/inventory`, updatedInventoryResponse, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -91,14 +77,13 @@ export default function DisplayTODOList() {
       return;
     }
 
-    setToDoResponse({
+    setinventoryResponse({
       id: 0,
-      task: "",
-      email: "",
-      priority: "",
-      complete: false,
+      name: "",
+      type: "",
+      quant: 0,
     });
-    alert("New Task has been created");
+    alert("New Item has been created");
     setOpen(false);
     window.location.reload();
   }
@@ -114,96 +99,104 @@ export default function DisplayTODOList() {
   }
 
   function handleDropdownChange(e: SelectChangeEvent) {
-    setToDoResponse({ ...toDoResponse, priority: e.target.value });
+    setinventoryResponse({ ...inventoryResponse, type: e.target.value });
   }
 
   return (
     <div className="px-8 p5 h-screen bg-background">
       <div className="flex flex-row">
         <h1 className="my-2 font-header text-primary font-bold text-3xl text-center mx-auto">
-          Task Board
+          Inventory List
         </h1>
         <Button
           variant="contained"
           color="primary"
           component="span"
           sx={{ borderRadius: "30px", margin: "auto 0" }}
-          className="w-32 text-center self-end"
+          className="w-50 text-center self-end"
           onClick={handleOpen}
         >
-          New Task
+          New Inventory Item
         </Button>
       </div>
       <table className="w-full">
         <thead className="bg-secondary border-b-2 border-b-primary">
           <tr>
             <th className="p-3 text-sm font-semibold tracking-wide text-left max-w-8">
-              Completed
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
               ID
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Priority
+              Name
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Task
+              Type
+            </th>
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              Quantity
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Delete
             </th>
-            {/* Dynamically generate column headers */}
           </tr>
         </thead>
         <tbody>
           {/* Map through the records and create a row for each record */}
           {records.map((record) => (
-            <TODOListItem
+            <InventoryItem
               key={record.id}
               id={record.id}
-              email={record.email}
-              priority={record.priority}
-              task={record.task}
-              complete={record.complete}
+              name={record.name}
+              type={record.type}
+              quant={record.quant}
             />
           ))}
         </tbody>
       </table>
+
       <Dialog open={open} onClose={handleSubmitClose}>
-        <form onSubmit={handleSubmit}>
+        <form>
           <div className="m-auto flex flex-col bg-background rounded-xl px-6 min-w-96 h-fit justify-center py-4">
             <h1 className="my-3 font-header text-primary font-bold text-3xl text-center">
-              New Task
+              New Item
             </h1>
             <div className="flex flex-col gap-2 my-2">
               <TextField
                 onChange={handleFormUpdate}
-                value={toDoResponse.task}
+                value={inventoryResponse.name}
                 variant="filled"
                 fullWidth={true}
-                required={true}
-                label="Task"
-                name="task"
+                required
+                label="Name"
+                name="name"
+                type="required"
               />
 
-              <FormControl variant="filled" required={true}>
-                <InputLabel id="priority">Priority</InputLabel>
+              <FormControl variant="filled" required>
+                <InputLabel id="type">Type</InputLabel>
                 <Select
-                  name="priority"
-                  labelId="priority"
-                  id="priority"
-                  value={toDoResponse.priority}
+                  name="type"
+                  labelId="type"
+                  id="type"
+                  value={inventoryResponse.type}
                   onChange={handleDropdownChange}
                 >
-                  <MenuItem value={"High"}>High</MenuItem>
-                  <MenuItem value={"Medium"}>Medium</MenuItem>
-                  <MenuItem value={"Low"}>Low</MenuItem>
-                  <MenuItem value={"Emergency"}>Emergency</MenuItem>
+                  <MenuItem value={"medicine"}>medicine</MenuItem>
+                  <MenuItem value={"medical device"}>medical device</MenuItem>
                 </Select>
               </FormControl>
+
+              <TextField
+                onChange={handleFormUpdate}
+                value={inventoryResponse.quant}
+                variant="filled"
+                fullWidth={true}
+                required
+                label="Quant"
+                name="quant"
+                type="required"
+              />
               <Button
-                //onClick={handleSubmit}
-                type="submit"
+                onClick={handleSubmit}
                 variant="contained"
                 className="w-32 self-center"
                 sx={{ borderRadius: "30px" }}
