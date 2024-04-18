@@ -9,33 +9,30 @@ import {
   DialogTitle,
   InputLabel,
   MenuItem,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
 } from "@mui/material";
+import { useAuth0 } from "@auth0/auth0-react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { medicalDeviceDelivery } from "common/src/medicalDeviceDelivery.ts";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import BackgroundPattern from "../components/allyBackground.tsx";
 import LocationDropdown from "../components/locationDropdown.tsx";
+import axios from "axios";
 
 function MedicalDeviceRequest() {
+  const { getAccessTokenSilently } = useAuth0();
   const [formData, setFormData] = useState<medicalDeviceDelivery>({
     employeeName: "",
     roomName: "",
     medicalDeviceName: "",
-    quantity: "",
-    priority: "",
-    status: "",
-    deliveryDate: null,
+    quantity: 1,
+    priority: "Medium",
+    status: "Unassigned",
+    deliveryDate: dayjs(),
   });
 
-  const [arrayData, setArrayData] = useState<medicalDeviceDelivery[]>([]);
   const [open, setOpen] = useState(false);
 
   function clear() {
@@ -43,9 +40,9 @@ function MedicalDeviceRequest() {
       employeeName: "",
       roomName: "",
       medicalDeviceName: "",
-      quantity: "",
-      priority: "",
-      status: "",
+      quantity: 1,
+      priority: "Medium",
+      status: "Unassigned",
       deliveryDate: null,
     });
   }
@@ -72,13 +69,15 @@ function MedicalDeviceRequest() {
   function updateRoom(val: string) {
     setFormData({ ...formData, roomName: val });
   }
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const token = await getAccessTokenSilently();
     if (
       formData.employeeName == "" ||
       formData.roomName == "" ||
       formData.medicalDeviceName == "" ||
-      formData.quantity == "" ||
+      formData.quantity == 0 ||
       formData.priority == "" ||
       formData.status == "" ||
       formData.deliveryDate == null
@@ -93,7 +92,22 @@ function MedicalDeviceRequest() {
       alert("Quantity must be an integer between 0 and 100");
       return;
     }
-    setArrayData((prevState) => [...prevState, formData]);
+
+    try {
+      await axios.post("api/medicalDevice", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (e) {
+      alert(
+        "Error storing in the database, make sure nodes/edges are uploaded and you are logged in.",
+      );
+      console.error(e);
+      return;
+    }
+
     setOpen(true); // Open dialog box on successful submission
   }
 
@@ -105,8 +119,8 @@ function MedicalDeviceRequest() {
   return (
     <div className="justify-center grid h-screen place-items-center bg-repeat mt-6">
       <BackgroundPattern />
-      <div className="overflow-m-auto flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-4">
-        <h1 className="m-2 font-header text-primary font-bold text-3xl text-center">
+      <div className="overflow-m-auto shadow-2xl flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-4">
+        <h1 className="m-2 font-header text-primary font-bold text-2xl text-center">
           Medical Device Delivery Form
         </h1>
         <p
@@ -131,15 +145,7 @@ function MedicalDeviceRequest() {
               label="Employee Name"
               required={true}
             />
-            {/*<TextField*/}
-            {/*  onChange={handleFormInput}*/}
-            {/*  value={formData.roomName}*/}
-            {/*  name="roomName"*/}
-            {/*  id="roomName"*/}
-            {/*  variant="filled"*/}
-            {/*  label="Room Name"*/}
-            {/*  required={true}*/}
-            {/*/>*/}
+
             <FormControl variant="filled" required>
               <InputLabel id="priority">Priority</InputLabel>
               <Select
@@ -149,9 +155,9 @@ function MedicalDeviceRequest() {
                 value={formData.priority}
                 onChange={handlePriorityInput}
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
+                {/*<MenuItem value="">*/}
+                {/*  <em>None</em>*/}
+                {/*</MenuItem>*/}
                 <MenuItem value={"High"}>High</MenuItem>
                 <MenuItem value={"Medium"}>Medium</MenuItem>
                 <MenuItem value={"Low"}>Low</MenuItem>
@@ -193,12 +199,12 @@ function MedicalDeviceRequest() {
                 value={formData.status}
                 onChange={handleStatusInput}
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
+                {/*<MenuItem value="">*/}
+                {/*  <em>None</em>*/}
+                {/*</MenuItem>*/}
                 <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
                 <MenuItem value={"Assigned"}>Assigned</MenuItem>
-                <MenuItem value={"InProgress"}>InProgress</MenuItem>
+                <MenuItem value={"InProgress"}>In Progress</MenuItem>
                 <MenuItem value={"Closed"}>Closed</MenuItem>
               </Select>
             </FormControl>
@@ -216,8 +222,8 @@ function MedicalDeviceRequest() {
             <div className="flex justify-center">
               <Button
                 className="w-32 self-center pt-10"
-                type="submit"
-                id="requestSubmit"
+                onClick={clear}
+                id="requestClear"
                 variant="contained"
                 size="large"
                 sx={{
@@ -229,13 +235,13 @@ function MedicalDeviceRequest() {
                   },
                 }}
               >
-                SUBMIT
+                CLEAR
               </Button>
 
               <Button
                 className="w-32 self-center pt-10"
-                onClick={clear}
-                id="requestClear"
+                type="submit"
+                id="requestSubmit"
                 variant="contained"
                 size="large"
                 sx={{
@@ -246,7 +252,7 @@ function MedicalDeviceRequest() {
                   },
                 }}
               >
-                CLEAR
+                SUBMIT
               </Button>
             </div>
           </div>
@@ -278,75 +284,6 @@ function MedicalDeviceRequest() {
           </Button>
         </DialogActions>
       </Dialog>
-
-      <h2
-        className="text-2xl font-bold mb-4 text-center transform hover:-translate-y-2 transition-transform duration-300"
-        style={{
-          color: "rgb(0 40 102 / 1)",
-          fontFamily: "Nunito, sans-serif",
-          fontSize: "34px",
-          margin: "30px",
-        }}
-      >
-        Submitted Requests
-      </h2>
-      <Table
-        className="bg-gray rounded-xl justify-center py-10"
-        sx={{ bgcolor: "#eceff0" }}
-      >
-        <TableHead className="w-full table-auto mt-4 border-collapse border-b-2 border-secondary">
-          <TableRow>
-            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-              Employee Name
-            </TableCell>
-            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-              Room Name
-            </TableCell>
-            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-              Medical Device Name
-            </TableCell>
-            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-              Quantity
-            </TableCell>
-            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-              Priority
-            </TableCell>
-            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-              Status
-            </TableCell>
-            <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-              Date
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {arrayData.map((data, index) => (
-            <TableRow key={index}>
-              <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                {data.employeeName}
-              </TableCell>
-              <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                {data.roomName}
-              </TableCell>
-              <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                {data.medicalDeviceName}
-              </TableCell>
-              <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                {data.quantity}
-              </TableCell>
-              <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                {data.priority}
-              </TableCell>
-              <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                {data.status}
-              </TableCell>
-              <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                {data.deliveryDate?.toString()}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
     </div>
   );
 }

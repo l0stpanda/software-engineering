@@ -170,7 +170,7 @@ function Map() {
   }
 
   return (
-    <div>
+    <div className="flex justify-center">
       <BackgroundPattern />
 
       {/*Location and Destination things*/}
@@ -181,28 +181,28 @@ function Map() {
                    flex-row-reverse
                    max-w-screen-2xl"
       >
-        <div className="flex flex-row w-2/3">
+        <div className="flex flex-row w-[80%]">
           {/*Map Image Box*/}
           <div
             ref={divRef}
             className="
         h-full
         flex-grow
-        ml-1
-        border-primary
-        border-2"
+        ml-1"
           >
             <TransformWrapper>
-              <Controls />
-              <TransformComponent>
-                <FloorNode
-                  imageSrc={imgState}
-                  graph={graph}
-                  inputLoc={[submitValues[0], submitValues[1]]}
-                  divDim={divDimensions}
-                  algorithm={algorithm}
-                />
-              </TransformComponent>
+              <div className="border-2 border-primary rounded-xl overflow-clip">
+                <Controls />
+                <TransformComponent>
+                  <FloorNode
+                    imageSrc={imgState}
+                    graph={graph}
+                    inputLoc={[submitValues[0], submitValues[1]]}
+                    divDim={divDimensions}
+                    algorithm={algorithm}
+                  />
+                </TransformComponent>
+              </div>
             </TransformWrapper>
           </div>
           {/*Buttons for displaying floor images*/}
@@ -263,6 +263,7 @@ function Map() {
                   >
                     <MenuItem value="BFS">BFS</MenuItem>
                     <MenuItem value="AStar">A-Star</MenuItem>
+                    <MenuItem value="DFS">DFS</MenuItem>
                   </Select>
                 </FormControl>
               </div>

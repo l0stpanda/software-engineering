@@ -10,11 +10,6 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { MedicineDelivery } from "../common/MedicineDelivery.ts";
@@ -22,8 +17,10 @@ import MedicineRequestButtons from "../components/MedicineRequestButtons.tsx";
 import { ChangeEvent, useState } from "react";
 import BackgroundPattern from "../components/allyBackground.tsx";
 import LocationDropdown from "../components/locationDropdown.tsx";
-
+import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 function MedicineDeliveryRequest() {
+  const { getAccessTokenSilently } = useAuth0();
   const [delivery, setDelivery] = useState<MedicineDelivery>({
     employeeName: "",
     priority: "Medium",
@@ -32,7 +29,6 @@ function MedicineDeliveryRequest() {
     quantity: "1",
     status: "Unassigned",
   });
-  const [submissions, setSubmissions] = useState<MedicineDelivery[]>([]);
 
   function clear() {
     setDelivery({
@@ -67,15 +63,19 @@ function MedicineDeliveryRequest() {
     setDelivery({ ...delivery, medicineName: e.target.value });
   }
 
-  function handleQuantityInput(
-    e:
-      | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-      | SelectChangeEvent,
-  ) {
-    const name = e.target.name;
-    const value = e.target.value;
-    setDelivery({ ...delivery, [name]: value });
+  function handleQuantityInput(e: ChangeEvent<HTMLInputElement>) {
+    setDelivery({ ...delivery, quantity: e.target.value });
   }
+
+  // function handleQuantityInput( e : ChangeEvent<HTMLInputElement>)
+  // //   e:
+  // //     | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  // //     | SelectChangeEvent,
+  // // ) {
+  // //   const name = e.target.name;
+  // //   const value = e.target.value;
+  //   setDelivery({ ...delivery, quantity: e.target.value });
+  // }
 
   function handleStatusInput(
     e:
@@ -87,8 +87,20 @@ function MedicineDeliveryRequest() {
     setDelivery({ ...delivery, [name]: value });
   }
 
-  function submit(delivery: MedicineDelivery) {
-    setSubmissions([...submissions, delivery]);
+  async function submit(delivery: MedicineDelivery) {
+    const token = await getAccessTokenSilently();
+    try {
+      await axios.post("/api/medicineRequest", delivery, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (e) {
+      alert("Error storing in the database.");
+      console.error(e);
+      return;
+    }
     setOpen(true);
   }
 
@@ -117,7 +129,7 @@ function MedicineDeliveryRequest() {
   return (
     <div className="justify-center grid min-h-screen max-h-fit place-items-center">
       <BackgroundPattern />
-      <div className="m-auto mt-6 flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-4">
+      <div className="m-auto mt-6 shadow-2xl flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-4">
         <h1
           className="text-2xl font-bold mb-4 text-center transform hover:-translate-y-2 transition-transform duration-300"
           style={{
@@ -180,6 +192,7 @@ function MedicineDeliveryRequest() {
                                       },
                                     }}*/
                 >
+                  <MenuItem value="">None</MenuItem>
                   <MenuItem value="Low">Low</MenuItem>
                   <MenuItem value="Medium">Medium</MenuItem>
                   <MenuItem value="High">High</MenuItem>
@@ -220,35 +233,18 @@ function MedicineDeliveryRequest() {
                                   },
                                 }}*/
               />
-              <FormControl variant="filled" fullWidth required>
-                <InputLabel id="quantity-label">Quantity</InputLabel>
-                <Select
-                  labelId="quantity-label"
-                  id="quantity"
-                  value={delivery.quantity}
-                  onChange={handleQuantityInput}
-                  name="quantity"
-                  required
-                  /*inputProps={{
-                                      classes: {
-                                        root: "transform hover:scale-105 transition-transform duration-300",
-                                      },
-                                    }}
-                                    MenuProps={{
-                                      PaperProps: {
-                                        style: {
-                                          transform: "translateZ(0)",
-                                        },
-                                      },
-                                    }}*/
-                >
-                  {[...Array(15).keys()].map((num) => (
-                    <MenuItem key={num + 1} value={num + 1}>
-                      {num + 1}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <TextField
+                onChange={handleQuantityInput}
+                value={delivery.quantity}
+                name="quantity"
+                id="quantity"
+                variant="filled"
+                type="number"
+                inputProps={{ min: 0, max: 100, step: 1 }}
+                label="Quantity"
+                required={true}
+              />
+
               <FormControl variant="filled" fullWidth required>
                 <InputLabel id="status-label">Status</InputLabel>
                 <Select
@@ -271,6 +267,7 @@ function MedicineDeliveryRequest() {
                                       },
                                     }}*/
                 >
+                  <MenuItem value="">None</MenuItem>
                   <MenuItem value="Unassigned">Unassigned</MenuItem>
                   <MenuItem value="Assigned">Assigned</MenuItem>
                   <MenuItem value="InProgress">InProgress</MenuItem>
@@ -289,78 +286,7 @@ function MedicineDeliveryRequest() {
         </div>
       </div>
 
-      <div className="flex justify-center items-center">
-        <div className="bg-white p-8 rounded-lg">
-          <h2
-            className="text-2xl font-bold mb-4 text-center transform hover:-translate-y-2 transition-transform duration-300"
-            style={{
-              color: "rgb(0 40 102 / 1)",
-              fontFamily: "Nunito, sans-serif",
-              fontSize: "34px",
-              margin: "30px",
-            }}
-          >
-            Submitted Requests
-          </h2>
-          <Table
-            className="bg-gray rounded-xl justify-center py-10"
-            sx={{ bgcolor: "#eceff0" }}
-          >
-            <TableHead className="w-full table-auto mt-4 border-collapse border-b-2 border-secondary">
-              <TableRow>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  Index
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  Employee Name
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  Priority
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  Location
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  Medicine Name
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  Quantity
-                </TableCell>
-                <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                  Status
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {submissions.map((submission, index) => (
-                <TableRow key={index}>
-                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                    {index + 1}
-                  </TableCell>
-                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                    {submission.employeeName}
-                  </TableCell>
-                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                    {submission.priority}
-                  </TableCell>
-                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                    {submission.location}
-                  </TableCell>
-                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                    {submission.medicineName}
-                  </TableCell>
-                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                    {submission.quantity}
-                  </TableCell>
-                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                    {submission.status}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </div>
+      <div className="flex justify-center items-center"></div>
       <Dialog open={open} onClose={handleSubmitClose}>
         <DialogTitle>We received your request!</DialogTitle>
         <DialogContent>

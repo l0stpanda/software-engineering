@@ -42,12 +42,18 @@ export class Pathfinding {
 
   getDirections(path: string[]) {
     const directions: string[] = [];
+    let changeFloors: string | undefined = undefined;
     for (let i = 0; i < path.length - 1; i++) {
       // Special case for start node
       if (i == 0) {
         const nextNode = this.graph.getNode(path[1]);
-        if (nextNode) {
-          directions.push(`Start towards ${nextNode.getLongName()}`);
+        const currNode = this.graph.getNode(path[0]);
+        if (nextNode && currNode) {
+          if (currNode.getFloor() != nextNode.getFloor()) {
+            changeFloors = currNode.getLongName();
+          } else {
+            directions.push(`Start towards ${nextNode.getLongName()}`);
+          }
         }
       } else {
         const prevNode = this.graph.getNode(path[i - 1]);
@@ -55,16 +61,31 @@ export class Pathfinding {
         const currNode = this.graph.getNode(path[i]);
 
         if (prevNode && nextNode && currNode) {
-          switch (this.getMovement(nextNode, prevNode, currNode)) {
-            case "forward":
-              directions.push(`Continue straight at ${currNode.getLongName()}`);
-              break;
-            case "right":
-              directions.push(`Turn right at ${currNode.getLongName()}`);
-              break;
-            case "left":
-              directions.push(`Turn left at ${currNode.getLongName()}`);
-              break;
+          if (!changeFloors && nextNode.getFloor() == currNode.getFloor()) {
+            switch (this.getMovement(nextNode, prevNode, currNode)) {
+              case "forward":
+                directions.push(
+                  `Continue straight at ${currNode.getLongName()}`,
+                );
+                break;
+              case "right":
+                directions.push(`Turn right at ${currNode.getLongName()}`);
+                break;
+              case "left":
+                directions.push(`Turn left at ${currNode.getLongName()}`);
+                break;
+            }
+          } else if (!changeFloors) {
+            changeFloors = currNode.getLongName();
+          } else if (
+            changeFloors &&
+            nextNode.getFloor() == currNode.getFloor()
+          ) {
+            directions.push(
+              `Take ${changeFloors} to floor ${currNode.getFloor()}`,
+            );
+            changeFloors = undefined;
+            i--;
           }
         }
       }
@@ -84,23 +105,21 @@ export class Pathfinding {
     currNode: MapNode,
   ): string {
     const xMovement = currNode.getX() - prevNode.getX();
-    const yMovement = currNode.getY() - prevNode.getY();
+    const yMovement = prevNode.getY() - currNode.getY();
     const xMovementNext = nextNode.getX() - currNode.getX();
-    const yMovementNext = nextNode.getY() - currNode.getY();
+    const yMovementNext = currNode.getY() - nextNode.getY();
     const hypotenusePrev = this.getEuclidian(prevNode, currNode);
     const hypotenuseNext = this.getEuclidian(currNode, nextNode);
     let anglePrev = Math.acos(xMovement / hypotenusePrev);
     let angleNext = Math.acos(xMovementNext / hypotenuseNext);
 
     // Trig to get direction of movement
-    if (yMovement < 0) anglePrev += Math.PI;
+    if (yMovement < 0) anglePrev = -anglePrev;
 
     // Get the new direction of movement
-    if (yMovementNext < 0) angleNext += Math.PI;
+    if (yMovementNext < 0) angleNext = -angleNext;
 
     const diff = angleNext - anglePrev;
-
-    console.log(anglePrev, angleNext, diff);
 
     if (this.forward(diff)) return "forward";
     else if (this.left(diff)) {
@@ -118,9 +137,10 @@ export class Pathfinding {
   private forward(diff: number) {
     return (
       (diff < Math.PI / 4 && diff > -Math.PI / 4) ||
-      (diff > (7 * Math.PI) / 4 && diff < 9 * Math.PI) ||
-      diff > 15 * Math.PI ||
-      diff < -7 * Math.PI
+      (diff > (7 * Math.PI) / 4 && diff < (9 * Math.PI) / 4) ||
+      (diff < (-7 * Math.PI) / 4 && diff > (-9 * Math.PI) / 4) ||
+      (diff > (15 * Math.PI) / 4 && diff < (17 * Math.PI) / 4) ||
+      (diff < (-15 * Math.PI) / 4 && diff > (-17 * Math.PI) / 4)
     );
   }
 
@@ -128,7 +148,9 @@ export class Pathfinding {
     return (
       (diff > 0 && diff < Math.PI) ||
       (diff > 2 * Math.PI && diff < 3 * Math.PI) ||
-      (diff > -Math.PI && diff < -2 * Math.PI)
+      (diff > -2 * Math.PI && diff < -Math.PI) ||
+      (diff > 4 * Math.PI && diff < 5 * Math.PI) ||
+      (diff > -4 * Math.PI && diff < -3 * Math.PI)
     );
   }
 }
