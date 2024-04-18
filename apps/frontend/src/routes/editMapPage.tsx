@@ -142,6 +142,8 @@ function EditMap() {
       setIsMoveable(true);
     } else if (newMode === "delete_node") {
       setIsOpen(false);
+    } else {
+        setIsMoveable(false);
     }
   };
 
@@ -186,7 +188,8 @@ function EditMap() {
         flex-grow
         ml-1
         border-primary
-        border-2"
+        {/*border-2*/}
+        "
           >
             <TransformWrapper disabled={isMoveable}>
               <Controls />
