@@ -79,11 +79,16 @@ function FloorNode(props: FloorNodesProps) {
   const handleNodeClick = (nodeid: string) => () => {
     if (clicked.length < 2 && !clicked.includes(nodeid)) {
       setClicked((prevClicked) => [...prevClicked, nodeid]);
+      setIds((state) => ({
+        ...state, // <-- shallow copy previous state
+        endId: nodeid, // <-- update property by dynamic key
+      }));
     }
     if (clicked.length == 2) {
-      setClicked([nodeid]);
+      setClicked((prevClicked) => [...prevClicked, nodeid]);
+      setIds({ startId: nodeid, endId: undefined });
     }
-    setIds({ startId: undefined, endId: undefined });
+    //setIds({ startId: undefined, endId: undefined });
   };
 
   const calculateInput = (): string[] => {
