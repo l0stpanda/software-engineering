@@ -186,27 +186,26 @@ function EditMap() {
             className="
         h-full
         flex-grow
-        ml-1
-        border-primary
-        {/*border-2*/}
-        "
+        ml-1"
           >
-            <TransformWrapper disabled={isMoveable}>
-              <Controls />
-              <TransformComponent>
-                <EditMapViewGraph
-                  imageSrc={imgState}
-                  graph={graph}
-                  divDim={divDimensions}
-                  divPos={divPos}
-                  nodeInfoCallback={handleNodeCallback}
-                  popupCallback={handlePopup}
-                  mode={mode}
-                />
-              </TransformComponent>
-            </TransformWrapper>
+              <TransformWrapper disabled={isMoveable}>
+                  <div className="border-2 border-primary rounded-xl overflow-clip">
+                      <Controls/>
+                      <TransformComponent>
+                          <EditMapViewGraph
+                              imageSrc={imgState}
+                              graph={graph}
+                              divDim={divDimensions}
+                              divPos={divPos}
+                              nodeInfoCallback={handleNodeCallback}
+                              popupCallback={handlePopup}
+                              mode={mode}
+                          />
+                      </TransformComponent>
+                  </div>
+              </TransformWrapper>
           </div>
-          {/*Buttons for displaying floor images*/}
+            {/*Buttons for displaying floor images*/}
           <FloorMapButtons />
         </div>
         {/*boxes.*/}
