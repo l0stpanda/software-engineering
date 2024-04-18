@@ -100,6 +100,6 @@ export class AStar extends Pathfinding {
       path.push(current.getNodeID());
     }
 
-    return path;
+    return path.reverse();
   }
 }
