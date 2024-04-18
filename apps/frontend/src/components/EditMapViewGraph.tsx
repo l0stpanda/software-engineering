@@ -96,8 +96,8 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
       oldNodePos.x = left;
       oldNodePos.y = top;
       const newPosX = left * (imgDimensions.width / divDimensions.width);
-      const newPosY = top * (imgDimensions.width / divDimensions.height);
-      console.log(newPosX + " " + newPosY);
+      const newPosY = top * (imgDimensions.height / divDimensions.height);
+      console.log(newPosX, newPosY);
       // Axios call here
       const token = await getAccessTokenSilently();
       axios
@@ -114,13 +114,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
         .then();
       setScaledNodes({ ...scaledNodes, [id]: oldNodePos });
     },
-    [
-      divDimensions.height,
-      divDimensions.width,
-      getAccessTokenSilently,
-      imgDimensions.width,
-      scaledNodes,
-    ],
+    [divDimensions, getAccessTokenSilently, imgDimensions, scaledNodes],
   );
 
   const [, drop] = useDrop(

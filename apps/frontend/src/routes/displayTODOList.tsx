@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import TODOListItem from "../components/TODOListItem.tsx";
@@ -72,7 +72,12 @@ export default function DisplayTODOList() {
     setToDoResponse({ ...toDoResponse, [e.target.name]: e.target.value });
   }
 
-  async function handleSubmit() {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (toDoResponse.task == "" || toDoResponse.task == "") {
+      return;
+    }
+
     const token = await getAccessTokenSilently();
     try {
       await axios.post(`/api/todoStuff`, toDoResponse, {
@@ -164,9 +169,8 @@ export default function DisplayTODOList() {
           ))}
         </tbody>
       </table>
-
       <Dialog open={open} onClose={handleSubmitClose}>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="m-auto flex flex-col bg-background rounded-xl px-6 min-w-96 h-fit justify-center py-4">
             <h1 className="my-3 font-header text-primary font-bold text-3xl text-center">
               New Task
@@ -177,13 +181,12 @@ export default function DisplayTODOList() {
                 value={toDoResponse.task}
                 variant="filled"
                 fullWidth={true}
-                required
+                required={true}
                 label="Task"
                 name="task"
-                type="required"
               />
 
-              <FormControl variant="filled" required>
+              <FormControl variant="filled" required={true}>
                 <InputLabel id="priority">Priority</InputLabel>
                 <Select
                   name="priority"
@@ -198,9 +201,9 @@ export default function DisplayTODOList() {
                   <MenuItem value={"Emergency"}>Emergency</MenuItem>
                 </Select>
               </FormControl>
-
               <Button
-                onClick={handleSubmit}
+                //onClick={handleSubmit}
+                type="submit"
                 variant="contained"
                 className="w-32 self-center"
                 sx={{ borderRadius: "30px" }}

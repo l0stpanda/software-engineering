@@ -42,6 +42,7 @@ app.use("/healthcheck", (req, res) => {
 app.use("/api/import", importRouter);
 app.use("/api/login", loginRequest);
 app.use("/api/read", readRouter);
+
 // Enable auth0 enforcement
 app.use(
   auth({
