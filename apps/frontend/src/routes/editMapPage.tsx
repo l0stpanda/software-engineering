@@ -142,6 +142,8 @@ function EditMap() {
       setIsMoveable(true);
     } else if (newMode === "delete_node") {
       setIsOpen(false);
+    } else {
+        setIsMoveable(false);
     }
   };
 
