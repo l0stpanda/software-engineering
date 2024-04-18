@@ -188,24 +188,24 @@ function Map() {
             className="
         h-full
         flex-grow
-        ml-1
-        border-primary
-        border-2"
+        ml-1"
           >
-            <TransformWrapper>
-              <Controls />
-              <TransformComponent>
-                <FloorNode
-                  imageSrc={imgState}
-                  graph={graph}
-                  inputLoc={[submitValues[0], submitValues[1]]}
-                  divDim={divDimensions}
-                  algorithm={algorithm}
-                />
-              </TransformComponent>
-            </TransformWrapper>
+              <TransformWrapper>
+                  <div className="border-2 border-primary rounded-xl overflow-clip">
+                      <Controls/>
+                      <TransformComponent>
+                          <FloorNode
+                              imageSrc={imgState}
+                              graph={graph}
+                              inputLoc={[submitValues[0], submitValues[1]]}
+                              divDim={divDimensions}
+                              algorithm={algorithm}
+                          />
+                      </TransformComponent>
+                  </div>
+              </TransformWrapper>
           </div>
-          {/*Buttons for displaying floor images*/}
+            {/*Buttons for displaying floor images*/}
           <FloorMapButtons />
         </div>
         {/*boxes.*/}
