@@ -75,6 +75,7 @@ model Edges {
 model Inventory {
   id    Int    @id @default(autoincrement())
   name  String @unique
+  type  String
   quant Int
 }
 
