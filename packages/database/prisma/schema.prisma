@@ -61,6 +61,7 @@ model Nodes {
   // Foreign Key Reference
   flower_delivery_room Flowers[]        @relation("flower_room")
   general_service      GeneralService[] @relation("location")
+  // medical_device_room  MedicalDevice[]  @relation("medical_device")
 }
 
 // Edges are all set
@@ -138,7 +139,7 @@ model User {
   email    String @unique
   // Foreign Key Reference
   todoList Todo[] @relation("UserID")
-  // So each user will have 
+  // So each user will have
 }
 
 model Todo {
@@ -149,5 +150,4 @@ model Todo {
   complete Boolean
   // Foreign Key Reference
   user     User    @relation("UserID", fields: [email], references: [email], onDelete: Cascade)
-  // location_room Nodes @relation("location", fields: [location], references: [node_id], onDelete: Cascade) // Maybe need to change reference to short_name/long_name later
 }
