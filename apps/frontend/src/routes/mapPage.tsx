@@ -264,6 +264,7 @@ function Map() {
                     <MenuItem value="BFS">BFS</MenuItem>
                     <MenuItem value="AStar">A-Star</MenuItem>
                     <MenuItem value="DFS">DFS</MenuItem>
+                    <MenuItem value="Dijkstra">Dijkstra</MenuItem>
                   </Select>
                 </FormControl>
               </div>
