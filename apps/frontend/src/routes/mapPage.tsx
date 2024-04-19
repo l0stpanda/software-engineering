@@ -74,7 +74,7 @@ function Map() {
   const Controls = () => {
     const { zoomIn, zoomOut } = useControls();
     return (
-      <div className="absolute top-5 right-1 z-10 flex gap-2">
+      <div className="absolute top-20 right-9 z-10 flex flex-col gap-2">
         <Button
           onClick={() => zoomIn()}
           type="button"
@@ -163,7 +163,7 @@ function Map() {
 
   function FloorMapButtons() {
     return (
-      <div className="absolute z-10 h-fit my-auto ml-3 bg-secondary">
+      <div className="absolute z-10 h-fit my-auto ml-3 bg-secondary bottom-7 right-9">
         <ToggleButtonGroup
           orientation="vertical"
           value={imgState}
@@ -201,18 +201,17 @@ function Map() {
   }
 
   return (
-    <div className="flex">
-      <div className="flex flex-row">
+    <div className="">
+      <div className="">
         {/*Map Image Box*/}
         <div
           ref={divRef}
           className="
-        h-full
-        flex-grow
-        ml-1"
+                    h-screen
+                    w-screen"
         >
           <TransformWrapper>
-            <div className="border-2 border-primary">
+            <div className="">
               {/*Buttons for displaying floor images*/}
               <FloorMapButtons />
               <Controls />
@@ -229,30 +228,30 @@ function Map() {
           </TransformWrapper>
         </div>
         {/*Location and Destination things*/}
-        <div
-          className="
-                   flex
-                   flex-row-reverse"
-        ></div>
+        <div className=""></div>
         {/*boxes.*/}
-        <div className="flex flex-col">
+        <div className="fixed top-20 left-10">
           <a href="">
-            <Button sx={{ margin: "0 0 1rem 1rem" }} startIcon={<ArrowBack />}>
+            <Button
+              sx={{ margin: "0 0 1rem 1rem" }}
+              startIcon={<ArrowBack />}
+              variant="contained"
+            >
               Home
             </Button>
           </a>
           <div
             className="mr-8
-                    ml-5
-                    py-5
-                    px-0
-                    flex
-                    flex-col
-                    items-center
-                    bg-background
-                    rounded-xl
-                    border-primary
-                    border-2"
+                        ml-5
+                        py-5
+                        px-5
+                        flex
+                        flex-col
+                        items-center
+                        bg-background
+                        rounded-xl
+                        border-primary
+                        border-2"
           >
             <div className="flex flex-col">
               <h2 className="text-primary font-header pb-4">
@@ -301,27 +300,28 @@ function Map() {
                 Submit
               </Button>
             </div>
+
+            <div className="flex flex-col">
+              {user ? (
+                <a href="editMap" className="justify-center my-2">
+                  <Button
+                    type="button"
+                    variant="contained"
+                    startIcon={<ModeIcon />}
+                    className="editMapBut"
+                    size="medium"
+                  >
+                    Edit Map
+                  </Button>
+                </a>
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
 
           {/* Edit map button */}
           <br />
-          <div className="flex flex-col">
-            {user ? (
-              <a href="editMap" className="absolute bottom-0 left-0 p-4">
-                <Button
-                  type="button"
-                  variant="contained"
-                  startIcon={<ModeIcon />}
-                  className="editMapBut"
-                  size="medium"
-                >
-                  Edit Map
-                </Button>
-              </a>
-            ) : (
-              <></>
-            )}
-          </div>
         </div>
       </div>
     </div>

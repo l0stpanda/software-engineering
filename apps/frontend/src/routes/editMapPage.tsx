@@ -143,7 +143,7 @@ function EditMap() {
     } else if (newMode === "delete_node") {
       setIsOpen(false);
     } else {
-        setIsMoveable(false);
+      setIsMoveable(false);
     }
   };
 
@@ -188,24 +188,24 @@ function EditMap() {
         flex-grow
         ml-1"
           >
-              <TransformWrapper disabled={isMoveable}>
-                  <div className="border-2 border-primary rounded-xl overflow-clip">
-                      <Controls/>
-                      <TransformComponent>
-                          <EditMapViewGraph
-                              imageSrc={imgState}
-                              graph={graph}
-                              divDim={divDimensions}
-                              divPos={divPos}
-                              nodeInfoCallback={handleNodeCallback}
-                              popupCallback={handlePopup}
-                              mode={mode}
-                          />
-                      </TransformComponent>
-                  </div>
-              </TransformWrapper>
+            <TransformWrapper disabled={isMoveable}>
+              <div className="border-2 border-primary rounded-xl overflow-clip">
+                <Controls />
+                <TransformComponent>
+                  <EditMapViewGraph
+                    imageSrc={imgState}
+                    graph={graph}
+                    divDim={divDimensions}
+                    divPos={divPos}
+                    nodeInfoCallback={handleNodeCallback}
+                    popupCallback={handlePopup}
+                    mode={mode}
+                  />
+                </TransformComponent>
+              </div>
+            </TransformWrapper>
           </div>
-            {/*Buttons for displaying floor images*/}
+          {/*Buttons for displaying floor images*/}
           <FloorMapButtons />
         </div>
         {/*boxes.*/}
