@@ -190,22 +190,22 @@ function Map() {
         flex-grow
         ml-1"
           >
-              <TransformWrapper>
-                  <div className="border-2 border-primary rounded-xl overflow-clip">
-                      <Controls/>
-                      <TransformComponent>
-                          <FloorNode
-                              imageSrc={imgState}
-                              graph={graph}
-                              inputLoc={[submitValues[0], submitValues[1]]}
-                              divDim={divDimensions}
-                              algorithm={algorithm}
-                          />
-                      </TransformComponent>
-                  </div>
-              </TransformWrapper>
+            <TransformWrapper>
+              <div className="border-2 border-primary rounded-xl overflow-clip">
+                <Controls />
+                <TransformComponent>
+                  <FloorNode
+                    imageSrc={imgState}
+                    graph={graph}
+                    inputLoc={[submitValues[0], submitValues[1]]}
+                    divDim={divDimensions}
+                    algorithm={algorithm}
+                  />
+                </TransformComponent>
+              </div>
+            </TransformWrapper>
           </div>
-            {/*Buttons for displaying floor images*/}
+          {/*Buttons for displaying floor images*/}
           <FloorMapButtons />
         </div>
         {/*boxes.*/}
@@ -264,6 +264,7 @@ function Map() {
                     <MenuItem value="BFS">BFS</MenuItem>
                     <MenuItem value="AStar">A-Star</MenuItem>
                     <MenuItem value="DFS">DFS</MenuItem>
+                    <MenuItem value="Dijkstra">Dijkstra</MenuItem>
                   </Select>
                 </FormControl>
               </div>
