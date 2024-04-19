@@ -1,11 +1,12 @@
 import express, { Router, Request, Response } from "express";
-//import { Prisma } from "database";
 import PrismaClient from "../bin/database-connection.ts";
 import { flowerReqFields } from "common/src/flowerRequest.ts";
 
 const router: Router = express.Router();
+
 router.post("/", async function (req: Request, res: Response) {
   const input: flowerReqFields = req.body;
+
   try {
     const roomStuff = await PrismaClient.nodes.findMany({
       where: {
@@ -13,44 +14,81 @@ router.post("/", async function (req: Request, res: Response) {
       },
     });
 
-    console.log(roomStuff);
-    //The roomStuff[0] is assuming that we are only ever going to reference unique long names
+    const id1 = await PrismaClient.generalService.findMany({
+      where: {
+        type: "Flower Request",
+        location: roomStuff[0].node_id,
+        status: input.status,
+        emp_name: input.empName,
+        priority: input.priority,
+      },
+    });
+
+    if (id1.length >= 1) {
+      console.log("SOMETHING BAD!!!!!!");
+      res.sendStatus(400);
+      return;
+    }
+
+    await PrismaClient.generalService.create({
+      data: {
+        type: "Flower Request",
+        location: roomStuff[0].node_id,
+        status: input.status,
+        emp_name: input.empName,
+        priority: input.priority,
+      },
+    });
+
+    const findID = await PrismaClient.generalService.findMany({
+      where: {
+        type: "Flower Request",
+        location: roomStuff[0].node_id,
+        status: input.status,
+        emp_name: input.empName,
+        priority: input.priority,
+      },
+    });
+
     await PrismaClient.flowers.create({
       data: {
-        room: roomStuff[0].node_id,
-        name: input.roomNum,
+        id: findID[0].id,
         sent_by: input.senderName,
         sent_to: input.sendTo,
         note: input.attachedNote,
-        status: "unassigned",
+        room_name: input.roomNum,
       },
     });
-  } catch (e) {
-    console.log(e);
-    return res.sendStatus(400);
-  }
-  return res.sendStatus(200);
-});
-
-//Used to give all of the information in the flowers table
-router.get("/", async function (req: Request, res: Response) {
-  try {
-    res.send(await PrismaClient.flowers.findMany());
-    return;
   } catch (e) {
     console.log(e);
     res.sendStatus(400);
     return;
   }
+  res.sendStatus(200);
+});
+
+router.get("/", async function (req: Request, res: Response) {
+  const data = await PrismaClient.generalService.findMany({
+    where: {
+      type: "Flower Request",
+    },
+    include: {
+      flowerID: true,
+    },
+  });
+  try {
+    res.send(data);
+  } catch (e) {
+    res.sendStatus(400);
+    return;
+  }
+  res.sendStatus(200);
 });
 
 router.delete("/:id", async function (req: Request, res: Response) {
-  console.log(req.params.id);
   const id: number = parseInt(req.params.id);
-  console.log(id);
   try {
-    console.log();
-    await PrismaClient.flowers.delete({
+    await PrismaClient.generalService.delete({
       where: {
         id: id,
       },
@@ -63,14 +101,12 @@ router.delete("/:id", async function (req: Request, res: Response) {
   res.sendStatus(200);
 });
 
-//update the status
 router.post("/update", async function (req: Request, res: Response) {
-  const id = parseInt(req.body.id);
+  const id = req.body.id;
   const status = req.body.status;
 
-  console.log("id is: " + id + "\n" + "status is : " + status);
   try {
-    await PrismaClient.flowers.update({
+    await PrismaClient.generalService.update({
       where: {
         id: id,
       },
@@ -85,5 +121,4 @@ router.post("/update", async function (req: Request, res: Response) {
   }
   res.sendStatus(200);
 });
-
 export default router;

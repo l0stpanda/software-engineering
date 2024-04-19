@@ -9,22 +9,15 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { roomSchedulerFields } from "common/src/roomScheduler.ts";
 import AllyBackground from "../components/allyBackground.tsx";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export default function RoomSchedulingRequest() {
-  const { getAccessTokenSilently } = useAuth0();
   type roomReqFields = {
     employName: string;
     startTime: string;
@@ -39,13 +32,13 @@ export default function RoomSchedulingRequest() {
     startTime: "",
     lengthRes: "",
     roomNum: "",
-    reqStatus: "",
-    priority: "",
+    reqStatus: "Unassigned",
+    priority: "Medium",
   });
 
-  const [open, setOpen] = useState(false);
-  const [sched, setSched] = useState<roomSchedulerFields[]>([]); // Initialize state to hold the edges data
+  const { getAccessTokenSilently } = useAuth0();
 
+  const [open, setOpen] = useState(false);
   function handleResponseChanges(
     e:
       | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -80,33 +73,39 @@ export default function RoomSchedulingRequest() {
       alert("You must fill out all forms!");
       return;
     }
+    try {
+      const token = await getAccessTokenSilently();
+      await axios.post("/api/roomSchedulingRequest", responses, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (e) {
+      alert(
+        "Error storing in the database, make sure nodes/edges are uploaded and you are logged in.",
+      );
+      console.error(e);
+      return;
+    }
 
-    const token = await getAccessTokenSilently();
-    await axios.post("/api/roomSchedulingRequest", responses, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
     setOpen(true);
   }
 
+  useEffect(() => {
+    getValues().then();
+  }, []);
+
   async function getValues() {
-    const token = await getAccessTokenSilently();
     const confirmation = await axios
-      .get("/api/roomSchedulingRequest", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .get("/api/roomSchedulingRequest")
       .then((response) => response.data);
     console.log(confirmation);
-    setSched(confirmation);
   }
 
   function handleSubmitClose() {
     setOpen(false);
-    getValues();
+    window.location.reload();
     clear();
   }
 
@@ -117,7 +116,7 @@ export default function RoomSchedulingRequest() {
   return (
     <div className="justify-center grid min-h-screen max-h-fit place-items-center mt-6">
       <AllyBackground />
-      <div className="m-auto flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-4">
+      <div className="m-auto shadow-2xl flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-4">
         <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
           Room Scheduling Request
         </h1>
@@ -157,7 +156,7 @@ export default function RoomSchedulingRequest() {
               onChange={handleResponseChanges}
               required
             >
-              <MenuItem value="">Not Selected</MenuItem>
+              <MenuItem value="">None</MenuItem>
               <MenuItem value="Low">Low</MenuItem>
               <MenuItem value="Medium">Medium</MenuItem>
               <MenuItem value="High">High</MenuItem>
@@ -184,7 +183,7 @@ export default function RoomSchedulingRequest() {
               required
             >
               Start Time
-              <MenuItem value="">Not Selected</MenuItem>
+              <MenuItem value="">None</MenuItem>
               <MenuItem value="9:00AM">9:00AM</MenuItem>
               <MenuItem value="10:00AM">10:00AM</MenuItem>
               <MenuItem value="11:00AM">11:00AM</MenuItem>
@@ -251,7 +250,7 @@ export default function RoomSchedulingRequest() {
 
           <div className="flex justify-center">
             <Button
-              type="submit"
+              onClick={clear}
               variant="contained"
               className="w-32 self-center pt-10"
               sx={{
@@ -263,11 +262,11 @@ export default function RoomSchedulingRequest() {
                 },
               }}
             >
-              SUBMIT
+              CLEAR
             </Button>
 
             <Button
-              onClick={clear}
+              type="submit"
               variant="contained"
               className="w-32 self-center pt-10"
               sx={{
@@ -278,7 +277,7 @@ export default function RoomSchedulingRequest() {
                 },
               }}
             >
-              CLEAR
+              SUBMIT
             </Button>
           </div>
         </form>
@@ -307,86 +306,6 @@ export default function RoomSchedulingRequest() {
           </Button>
         </DialogActions>
       </Dialog>
-
-      <br />
-
-      <h2
-        className="text-2xl font-bold mb-4 text-center transform hover:-translate-y-2 transition-transform duration-300"
-        style={{
-          color: "rgb(0 40 102 / 1)",
-          fontFamily: "Nunito, sans-serif",
-          fontSize: "34px",
-          margin: "30px",
-        }}
-      >
-        Submitted Requests
-      </h2>
-      {/* Table of submitted requests */}
-      <div>
-        <Table
-          className="bg-gray rounded-xl justify-center py-10"
-          sx={{ bgcolor: "#eceff0" }}
-        >
-          <TableHead className="w-full table-auto mt-4 border-collapse border-b-2 border-secondary">
-            <TableRow>
-              <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                Employee Name
-              </TableCell>
-              <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                Start Time
-              </TableCell>
-              <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                Length of Reservation
-              </TableCell>
-              <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                Room Number
-              </TableCell>
-              <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                Request Status
-              </TableCell>
-              <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                Priority
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {sched.map(
-              (
-                {
-                  employName,
-                  lengthRes,
-                  priority,
-                  reqStatus,
-                  roomNum,
-                  startTime,
-                },
-                index,
-              ) => (
-                <TableRow key={index}>
-                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                    {employName}
-                  </TableCell>
-                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                    {startTime}
-                  </TableCell>
-                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                    {lengthRes}
-                  </TableCell>
-                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                    {roomNum}
-                  </TableCell>
-                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                    {reqStatus}
-                  </TableCell>
-                  <TableCell className="px-4 py-2 text-sm font-semibold tracking-wide text-left bg-gray-100">
-                    {priority}
-                  </TableCell>
-                </TableRow>
-              ),
-            )}
-          </TableBody>
-        </Table>
-      </div>
     </div>
   );
 }

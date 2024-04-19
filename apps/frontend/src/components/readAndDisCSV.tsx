@@ -66,7 +66,7 @@ function SingleDisplay() {
             <thead className="bg-secondary border-b-2 border-b-primary sticky top-0">
               <tr>
                 <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                  Node ID
+                  Edge ID
                 </th>
                 <th className="p-3 text-sm font-semibold tracking-wide text-left">
                   Start Node

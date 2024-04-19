@@ -96,3 +96,18 @@ html {
     background-image: url("assets/allyBackground.png");
   }
 }
+
+.path {
+  stroke-dasharray: 5;
+  stroke-dashoffset: 1000;
+  animation: dash 40s linear reverse infinite;
+}
+
+@keyframes dash {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: 1000;
+  }
+}

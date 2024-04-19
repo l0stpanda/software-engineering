@@ -68,11 +68,14 @@ function CustomNavBar() {
       <div className="w-full flex justify-between">
         <Toolbar disableGutters={true}>
           <div className="h-12 flex px-2 py-2">
-            <img
-              src={BWLogo}
-              className="object-contain"
-              alt="Brigham & Women's Hospital"
-            />
+            <a href="">
+              <img
+                src={BWLogo}
+                className="object-contain"
+                style={{ width: "100%", height: "100%" }}
+                alt="Brigham & Women's Hospital"
+              />
+            </a>
           </div>
         </Toolbar>
         {user ? (
@@ -140,6 +143,9 @@ function CustomNavBar() {
                 Lost Item
               </MenuItem>
             </Menu>
+            <Button component="a" href="todo">
+              Task Board
+            </Button>
             <Button
               variant="contained"
               sx={{ margin: "0 0 0 1rem" }}
