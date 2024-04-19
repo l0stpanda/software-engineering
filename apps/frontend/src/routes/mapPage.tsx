@@ -14,7 +14,7 @@ import {
   useControls,
 } from "react-zoom-pan-pinch";
 import { useState } from "react";
-import BackgroundPattern from "../components/backgroundPattern.tsx";
+//import BackgroundPattern from "../components/backgroundPattern.tsx";
 import { Graph } from "../objects/Graph.ts";
 import lowerLevel1 from "../assets/00_thelowerlevel1.png";
 import lowerLevel2 from "../assets/00_thelowerlevel2.png";
@@ -40,10 +40,41 @@ function Map() {
   const { user } = useAuth0();
 
   // Zoom in/out buttons for map viewing
+  // const Controls = () => {
+  //     const {zoomIn, zoomOut} = useControls();
+  //     return (
+  //         <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2">
+  //             <Button
+  //                 onClick={() => zoomIn()}
+  //                 type="button"
+  //                 id="zoomInBut"
+  //                 variant="contained"
+  //                 className="zoomInBut"
+  //                 size="medium"
+  //                 sx={{borderRadius: "30px", fontSize: "22px", font: "header"}}
+  //             >
+  //                 +
+  //             </Button>
+  //
+  //             <Button
+  //                 onClick={() => zoomOut()}
+  //                 type="button"
+  //                 id="zoomOutBut"
+  //                 variant="contained"
+  //                 className="zoomOutBut"
+  //                 size="medium"
+  //                 sx={{borderRadius: "30px", fontSize: "22px", font: "header"}}
+  //             >
+  //                 -
+  //             </Button>
+  //         </div>
+  //     );
+  // };
+
   const Controls = () => {
     const { zoomIn, zoomOut } = useControls();
     return (
-      <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2">
+      <div className="absolute top-5 right-1 z-10 flex gap-2">
         <Button
           onClick={() => zoomIn()}
           type="button"
@@ -132,7 +163,7 @@ function Map() {
 
   function FloorMapButtons() {
     return (
-      <div className="h-fit my-auto ml-3 bg-secondary">
+      <div className="absolute z-10 h-fit my-auto ml-3 bg-secondary">
         <ToggleButtonGroup
           orientation="vertical"
           value={imgState}
@@ -170,49 +201,41 @@ function Map() {
   }
 
   return (
-    <div className="flex justify-center">
-      <BackgroundPattern />
-
-      {/*Location and Destination things*/}
-      <div
-        className="my-8
-                   justify-center
-                   flex
-                   flex-row-reverse
-                   max-w-screen-2xl"
-      >
-        <div className="flex flex-row w-[80%]">
-          {/*Map Image Box*/}
-          <div
-            ref={divRef}
-            className="
+    <div className="flex">
+      <div className="flex flex-row">
+        {/*Map Image Box*/}
+        <div
+          ref={divRef}
+          className="
         h-full
         flex-grow
         ml-1"
-          >
-              <TransformWrapper>
-                  <div className="border-2 border-primary rounded-xl overflow-clip">
-                      <Controls/>
-                      <TransformComponent>
-                          <FloorNode
-                              imageSrc={imgState}
-                              graph={graph}
-                              inputLoc={[submitValues[0], submitValues[1]]}
-                              divDim={divDimensions}
-                              algorithm={algorithm}
-                          />
-                      </TransformComponent>
-                  </div>
-              </TransformWrapper>
-          </div>
-            {/*Buttons for displaying floor images*/}
-          <FloorMapButtons />
-        </div>
-        {/*boxes.*/}
-        <div
-          className="flex flex-col
-                w-1/4"
         >
+          <TransformWrapper>
+            <div className="border-2 border-primary">
+              {/*Buttons for displaying floor images*/}
+              <FloorMapButtons />
+              <Controls />
+              <TransformComponent>
+                <FloorNode
+                  imageSrc={imgState}
+                  graph={graph}
+                  inputLoc={[submitValues[0], submitValues[1]]}
+                  divDim={divDimensions}
+                  algorithm={algorithm}
+                />
+              </TransformComponent>
+            </div>
+          </TransformWrapper>
+        </div>
+        {/*Location and Destination things*/}
+        <div
+          className="
+                   flex
+                   flex-row-reverse"
+        ></div>
+        {/*boxes.*/}
+        <div className="flex flex-col">
           <a href="">
             <Button sx={{ margin: "0 0 1rem 1rem" }} startIcon={<ArrowBack />}>
               Home
@@ -231,7 +254,7 @@ function Map() {
                     border-primary
                     border-2"
           >
-            <div className="flex flex-col justify-center">
+            <div className="flex flex-col">
               <h2 className="text-primary font-header pb-4">
                 Where would you like to go?
               </h2>
@@ -248,7 +271,7 @@ function Map() {
                 label={"End"}
               />
               <br />
-              <div className="inline-flex justify-end items-center my-5">
+              <div>
                 <FormControl fullWidth required>
                   <InputLabel id="demo-simple-select-label" variant="filled">
                     Path Algorithm
@@ -274,28 +297,23 @@ function Map() {
                 className="submitButton"
                 size="medium"
                 onClick={handleFormSubmit}
-                sx={{ borderRadius: "30px" }}
               >
                 Submit
               </Button>
             </div>
           </div>
-          {/*second non-functional box for rn*/}
+
+          {/* Edit map button */}
           <br />
           <div className="flex flex-col">
             {user ? (
-              <a href="editMap" className="self-center">
+              <a href="editMap" className="absolute bottom-0 left-0 p-4">
                 <Button
                   type="button"
                   variant="contained"
                   startIcon={<ModeIcon />}
-                  className="editMapBut w-32"
+                  className="editMapBut"
                   size="medium"
-                  sx={{
-                    borderRadius: "30px",
-                    fontSize: "15px",
-                    font: "header",
-                  }}
                 >
                   Edit Map
                 </Button>
@@ -307,8 +325,6 @@ function Map() {
         </div>
       </div>
     </div>
-
-    // </div>
   );
 }
 
