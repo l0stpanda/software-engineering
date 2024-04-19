@@ -1,4 +1,3 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import {
   Button,
   // Dialog,
@@ -9,41 +8,17 @@ import {
   // SelectChangeEvent,
   // TextField,
 } from "@mui/material";
-import axios from "axios";
 
-import { inventoryType } from "common/src/inventoryType.ts";
+// import { inventoryType } from "common/src/inventoryType.ts";
 
-function InventoryItem(props: inventoryType) {
-  const { getAccessTokenSilently } = useAuth0();
-
-  //takes in the id of the request to be deleted and deletes in the database
-  async function deleteData(idVal: number) {
-    if (
-      !window.confirm(
-        `Are you sure you want to delete the inventory item with ID ${idVal}?`,
-      )
-    ) {
-      return;
-    }
-    console.log(idVal);
-    try {
-      const token = await getAccessTokenSilently();
-      //call to backend
-      await axios.delete(`/api/inventory/${idVal}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-    } catch (e) {
-      console.log(e);
-      alert("Problem Deleting");
-      return;
-    }
-    alert("Successfully deleted inventory item with ID number " + idVal);
-    //window must be reloaded on delete to show updated results
-    window.location.reload();
-  }
-
+interface InventoryItemProps {
+  id: number;
+  name: string;
+  type: string;
+  quant: number;
+  onDelete: (id: number) => Promise<void>;
+}
+function InventoryItem(props: InventoryItemProps) {
   return (
     <>
       <tr className="bg-background border-b-2 border-secondary" key={props.id}>
@@ -57,7 +32,7 @@ function InventoryItem(props: inventoryType) {
             component="span"
             sx={{ borderRadius: "30px", margin: "auto 0" }}
             className="w-50 text-center self-end"
-            onClick={() => deleteData(props.id)}
+            onClick={() => props.onDelete(props.id)}
           >
             Delete
           </Button>

@@ -78,6 +78,10 @@ export default function DisplayInventory() {
       ...inventoryResponse,
       quant: Number(inventoryResponse.quant),
     };
+    if (updatedInventoryResponse.name == "") {
+      showSnackbar("Name must be filled out", "error");
+      return;
+    }
     const token = await getAccessTokenSilently();
     try {
       await axios.post(`/api/inventory`, updatedInventoryResponse, {
@@ -106,6 +110,37 @@ export default function DisplayInventory() {
     });
     setOpen(false);
   }
+  const handleDelete = async (id: number) => {
+    if (
+      !window.confirm(
+        `Are you sure you want to delete the inventory item with ID ${id}?`,
+      )
+    ) {
+      return;
+    }
+
+    try {
+      const token = await getAccessTokenSilently();
+      await axios.delete(`/api/inventory/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const received = await axios.get("/api/inventory", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setRecords(received.data);
+      showSnackbar(
+        "Successfully deleted inventory item with ID number " + id,
+        "success",
+      );
+    } catch (e) {
+      console.error(e);
+      alert("Problem Deleting");
+    }
+  };
 
   function handleOpen() {
     setOpen(true);
@@ -164,6 +199,7 @@ export default function DisplayInventory() {
               name={record.name}
               type={record.type}
               quant={record.quant}
+              onDelete={handleDelete}
             />
           ))}
         </tbody>
