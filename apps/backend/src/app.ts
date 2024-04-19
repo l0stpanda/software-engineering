@@ -15,6 +15,7 @@ import medicineRequest from "./routes/medicineRequest.ts";
 import editMap from "./routes/editPage.ts";
 import userStuff from "./routes/userStorage.ts";
 import { auth } from "express-oauth2-jwt-bearer";
+import adminAccess from "./routes/adminAccess.ts";
 // import readRouterE from "./routes/readE.ts";
 // import readRouterN from "./routes/readN.ts";
 
@@ -44,6 +45,7 @@ app.use("/healthcheck", (req, res) => {
 app.use("/api/import", importRouter);
 app.use("/api/login", loginRequest);
 app.use("/api/read", readRouter);
+app.use("/api/adminAccess", adminAccess);
 
 // Enable auth0 enforcement
 app.use(
