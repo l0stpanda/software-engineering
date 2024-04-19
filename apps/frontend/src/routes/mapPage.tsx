@@ -231,32 +231,32 @@ function Map() {
         <div className=""></div>
         {/*boxes.*/}
         <div className="fixed top-20 left-10">
-          <a href="">
-            <Button
-              sx={{ margin: "0 0 1rem 1rem" }}
-              startIcon={<ArrowBack />}
-              variant="contained"
-            >
-              Home
-            </Button>
-          </a>
           <div
             className="mr-8
                         ml-5
                         py-5
                         px-5
                         flex
-                        flex-col
+                        flex-row
                         items-center
                         bg-background
                         rounded-xl
                         border-primary
                         border-2"
           >
-            <div className="flex flex-col">
-              <h2 className="text-primary font-header pb-4">
-                Where would you like to go?
-              </h2>
+            <a href="">
+              <Button
+                sx={{ margin: "0 0 1rem 1rem" }}
+                startIcon={<ArrowBack />}
+                variant="contained"
+              >
+                Home
+              </Button>
+            </a>
+            <div className="flex flex-row w-500">
+              {/*<h2 className="text-primary font-header pb-4">*/}
+              {/*    Where would you like to go?*/}
+              {/*</h2>*/}
 
               <LocationDropdown
                 room={navigatingNodes.start}
