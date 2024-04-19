@@ -1,14 +1,29 @@
 import React from "react";
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import SpinningLoader from "../components/spinningLoader.tsx";
-import axios from "axios";
-import HeroPage from "./heroPage.tsx";
-import MapPage from "./mapPage.tsx";
+// import axios from "axios";
+// import HeroPage from "./heroPage.tsx";
+// import MapPage from "./mapPage.tsx";
 
 export default function LoadingPage(props: {
   component: React.ComponentType;
   adminOnly: boolean;
 }) {
+  // async function getAdminPage() {
+  //     let comp: JSX.Element = <SpinningLoader/>;
+  //     axios
+  //         .get("/api/adminAccess", {})
+  //         .then((response) => {
+  //             console.log(response.status);
+  //             comp = <MapPage/>;
+  //         })
+  //         .catch(() => {
+  //             // console.log("Unauthorized access");
+  //             comp =  <HeroPage />;
+  //         });
+  //     return comp;
+  // }
+
   const Component = withAuthenticationRequired(props.component, {
     onRedirecting: () => (
       // Loading Screen
@@ -16,17 +31,7 @@ export default function LoadingPage(props: {
     ),
   });
   if (props.adminOnly) {
-    try {
-      axios
-        .get("/api/adminAccess", {})
-        .then()
-        .catch(() => {
-          console.log("Unauthorized access");
-          return <HeroPage />;
-        });
-    } catch {
-      return <MapPage />;
-    }
+    return <Component />;
   } else {
     return <Component />;
   }
