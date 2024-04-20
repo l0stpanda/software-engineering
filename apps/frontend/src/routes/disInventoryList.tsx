@@ -16,6 +16,7 @@ import {
   TextField,
 } from "@mui/material";
 
+//default
 export default function DisplayInventory() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
