@@ -97,7 +97,6 @@ function Map() {
 
   // Changes the map image
   const changeFloor = (floor: string) => {
-    console.log(floor);
     setImgState(floor);
   };
 

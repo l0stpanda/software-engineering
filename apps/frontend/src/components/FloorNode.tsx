@@ -134,16 +134,7 @@ function FloorNode(props: FloorNodesProps) {
 
       console.log(props.pathRef);
 
-      for (let i = 0; i < path.length; i++) {
-        if (
-          path.length != props.pathRef.length ||
-          path[i] != props.pathRef[i]
-        ) {
-          props.pathSetter(path);
-          console.log("Update Path");
-          break;
-        }
-      }
+      if (props.pathRef.toString() !== path.toString()) props.pathSetter(path);
 
       let changeStart: undefined | FloorNodeInfo = undefined;
       for (let i = 0; i < path.length - 1; i++) {
