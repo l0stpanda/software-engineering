@@ -24,6 +24,7 @@ import SpinningLoader from "./components/spinningLoader.tsx";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import TodoList from "./routes/todoList.tsx";
+import SanitationRequest from "./routes/sanitationRequest.tsx";
 import DisplayInventory from "./routes/disInventoryList.tsx";
 
 function App() {
@@ -88,6 +89,10 @@ function App() {
         {
           path: "todo",
           element: <LoadingPage component={TodoList} />,
+        },
+        {
+          path: "sanitationRequest",
+          element: <LoadingPage component={SanitationRequest} />,
         },
         {
           path: "inventory",
