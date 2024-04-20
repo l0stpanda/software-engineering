@@ -38,7 +38,13 @@ function Map() {
   const [update, setUpdate] = useState(0);
   const [imgState, setImgState] = useState<string>(floor1);
   const [algorithm, setAlgorithm] = useState<string>("AStar");
-  const [directions, setDirections] = useState<string[]>([]);
+  const [directions, setDirections] = useState<string[][]>([
+    [],
+    [],
+    [],
+    [],
+    [],
+  ]);
   const [path, setPath] = useState<string[]>([]);
 
   const { user } = useAuth0();
