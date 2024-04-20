@@ -137,10 +137,12 @@ model MedicineRequest {
 
 // Tables for To do list
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
+  id       String  @id
+  email    String  @unique
+  username String?
+  role     String
   // Foreign Key Reference
-  todoList Todo[] @relation("UserID")
+  todoList Todo[]  @relation("UserID")
   // So each user will have
 }
 
