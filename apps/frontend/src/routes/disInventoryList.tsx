@@ -138,7 +138,7 @@ export default function DisplayInventory() {
       );
     } catch (e) {
       console.error(e);
-      alert("Problem Deleting");
+      showSnackbar("Problem Deleting", "error");
     }
   };
 
