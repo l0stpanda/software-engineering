@@ -112,9 +112,12 @@ export default function DisplayInventory() {
     setOpen(false);
   }
   const handleDelete = async (id: number) => {
+    const item = records.find((record) => record.id === id);
+    const itemName = item ? item.name : "Unknown Item"; // Default to "Unknown Item" if not found
+
     if (
       !window.confirm(
-        `Are you sure you want to delete the inventory item with ID ${id}?`,
+        `Are you sure you want to delete the inventory item ${itemName}?`,
       )
     ) {
       return;
