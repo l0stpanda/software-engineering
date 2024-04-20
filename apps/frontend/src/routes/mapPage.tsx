@@ -28,6 +28,8 @@ import { ArrowBack } from "@mui/icons-material";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import ModeIcon from "@mui/icons-material/Mode";
 import { useAuth0 } from "@auth0/auth0-react";
+import * as console from "console";
+import { getDirections } from "../objects/Pathfinding.ts";
 
 function Map() {
   const divRef = useRef<HTMLDivElement>(null);
@@ -36,6 +38,8 @@ function Map() {
   const [update, setUpdate] = useState(0);
   const [imgState, setImgState] = useState<string>(floor1);
   const [algorithm, setAlgorithm] = useState<string>("AStar");
+  const [directions, setDirections] = useState<string[]>([]);
+  const [path, setPath] = useState<string[]>([]);
 
   const { user } = useAuth0();
 
@@ -114,6 +118,10 @@ function Map() {
       console.log(update);
     });
   }, [update]);
+
+  useEffect(() => {
+    setDirections(getDirections(path, graph));
+  }, [path, graph]);
 
   const changeAlgorithm = (event: SelectChangeEvent) => {
     setAlgorithm(event.target.value as string);
@@ -200,7 +208,10 @@ function Map() {
                     inputLoc={[submitValues[0], submitValues[1]]}
                     divDim={divDimensions}
                     algorithm={algorithm}
+                    pathRef={path}
+                    pathSetter={setPath}
                   />
+                  <p>{directions}</p>
                 </TransformComponent>
               </div>
             </TransformWrapper>
