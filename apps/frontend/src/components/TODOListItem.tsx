@@ -12,9 +12,12 @@ import { useState } from "react";
 //import { toDo } from "common/src/toDo.ts";
 type toDoNow = {
   id: number;
+  user_id: string | undefined;
   task: string;
   priority: string;
   email: string | undefined;
+  username: string | undefined;
+  role: string | undefined;
   complete: boolean;
 };
 function TODOListItem(props: toDoNow) {

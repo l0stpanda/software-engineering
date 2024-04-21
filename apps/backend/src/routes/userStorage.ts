@@ -7,9 +7,12 @@ const router: Router = express.Router();
 
 type toDoNow = {
   id: number;
+  user_id: string;
   task: string;
   priority: string;
-  email: string | undefined;
+  email: string;
+  username: string;
+  role: string;
   complete: boolean;
 };
 
@@ -28,7 +31,10 @@ router.post("/", async function (req: Request, res: Response) {
       if (users_email.length == 0) {
         await PrismaClient.user.create({
           data: {
+            id: input.user_id,
             email: input.email,
+            username: input.username,
+            role: input.role,
           },
         });
       }
@@ -101,5 +107,4 @@ router.post("/:id", async function (req: Request, res: Response) {
   }
   res.sendStatus(200);
 });
-
 export default router;
