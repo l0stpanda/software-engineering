@@ -138,7 +138,10 @@ function EditMap() {
         console.log(
           "Clicked a node while creating an edge" + newNode.getLongName(),
         );
-        if (edgeNodes[0].getLongName() != "") {
+        if (
+          edgeNodes[0].getLongName() != "" &&
+          edgeNodes[1].getLongName() == ""
+        ) {
           const newEdges = [edgeNodes[0], newNode];
           setEdgeNodes(newEdges);
         } else {
@@ -156,18 +159,27 @@ function EditMap() {
   ) => {
     setMode(newMode);
     console.log(mode);
-    if (newMode === "add_node") {
-      setIsMoveable(false);
-    } else if (newMode === "move_node") {
-      setIsOpen(false);
-      setIsMoveable(true);
-    } else if (newMode === "delete_node") {
-      setIsOpen(false);
-    } else if (newMode === "add_edge") {
-      setIsOpen(false);
-      setEdgeCreationOpen(true);
-    } else {
-      setIsMoveable(false);
+    setEdgeCreationOpen(false);
+    setIsOpen(false);
+    setIsMoveable(false);
+    setEdgeNodes([
+      new MapNode("", 0, 0, "", "", "", "", ""),
+      new MapNode("", 0, 0, "", "", "", "", ""),
+    ]);
+    switch (newMode) {
+      case "add_node":
+        break;
+      case "move_node":
+        setIsMoveable(true);
+        break;
+      case "delete_node":
+        break;
+      case "add_edge":
+        setEdgeCreationOpen(true);
+        break;
+      default:
+        setIsMoveable(false);
+        break;
     }
   };
 
