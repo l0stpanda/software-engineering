@@ -97,7 +97,7 @@ const SingleFileUploader = () => {
         } catch (error) {
           alert("Error Loading Nodes into Database");
           console.error(error);
-          setLoadingDialog(true);
+          setLoadingDialog(false);
           return;
         }
         alert("Nodes CSV Loaded");

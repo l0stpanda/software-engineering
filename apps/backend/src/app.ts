@@ -14,6 +14,7 @@ import lostAndFound from "./routes/lostAndFound.ts";
 import medicineRequest from "./routes/medicineRequest.ts";
 import editMap from "./routes/editPage.ts";
 import userStuff from "./routes/userStorage.ts";
+import userAdd from "./routes/userAdd.ts";
 import { auth } from "express-oauth2-jwt-bearer";
 
 const app: Express = express(); // Setup the backend
@@ -42,6 +43,7 @@ app.use("/healthcheck", (req, res) => {
 app.use("/api/import", importRouter);
 app.use("/api/login", loginRequest);
 app.use("/api/read", readRouter);
+app.use("/api/userAdding", userAdd);
 
 // Enable auth0 enforcement
 app.use(

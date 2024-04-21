@@ -28,6 +28,8 @@ import { ArrowBack } from "@mui/icons-material";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import ModeIcon from "@mui/icons-material/Mode";
 import { useAuth0 } from "@auth0/auth0-react";
+import axios from "axios";
+import { userInfo } from "common/src/userInfo.ts";
 
 function Map() {
   const divRef = useRef<HTMLDivElement>(null);
@@ -37,7 +39,7 @@ function Map() {
   const [imgState, setImgState] = useState<string>(floor1);
   const [algorithm, setAlgorithm] = useState<string>("AStar");
 
-  const { user } = useAuth0();
+  const { getAccessTokenSilently, user } = useAuth0();
 
   // Zoom in/out buttons for map viewing
   const Controls = () => {
@@ -77,7 +79,7 @@ function Map() {
   });
   // const [submitValues, setSubmitValues] = useState(["", ""]);
 
-  // Carter 's function code bc idk how to do it
+  // Carter's function code bc idk how to do it
   // function handleFormChanges(event: React.ChangeEvent<HTMLInputElement>) {
   //   const { name, value } = event.target;
   //   setNavigatingNodes({ ...navigatingNodes, [name]: value });
@@ -105,6 +107,32 @@ function Map() {
     }
   }, [divRef]);
 
+  // Since this is the page that all the users are forwared to on login we store the
+  useEffect(() => {
+    async function sendUser() {
+      console.log("STUFF IS HAPPENING");
+      const token = await getAccessTokenSilently();
+      const send: userInfo = {
+        user_id: user?.sub,
+        email: user?.email,
+        username: user?.preferred_username,
+        role: "Random for now",
+      };
+      await axios.post("/api/userAdding", send, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+    }
+    sendUser().then();
+  }, [
+    getAccessTokenSilently,
+    user?.email,
+    user?.preferred_username,
+    user?.sub,
+  ]);
+
   // Updates the graph when it has been received from the database
   useEffect(() => {
     const tempGraph = new Graph();
@@ -125,17 +153,12 @@ function Map() {
   }
 
   function updateStart(val: string) {
-    //val is the long names
     // setResponses({ ...responses, roomNum: val });
-    console.log("start val: ", val);
     setNavigatingNodes({ ...navigatingNodes, start: val });
   }
 
   function updateEnd(val: string) {
-    // val is the long name
-    // navigating nodes must be the long name but we need to pass in the id
     // setResponses({ ...responses, roomNum: val });
-    console.log("end val: ", val);
     setNavigatingNodes({ ...navigatingNodes, end: val });
   }
 
@@ -202,21 +225,23 @@ function Map() {
         border-2"
           >
             <TransformWrapper>
-              <Controls />
-              <TransformComponent>
-                <FloorNode
-                  imageSrc={imgState}
-                  graph={graph}
-                  inputLoc={{
-                    start: graph.idFromName(navigatingNodes.start),
-                    end: graph.idFromName(navigatingNodes.end),
-                  }}
-                  divDim={divDimensions}
-                  algorithm={algorithm}
-                  updateStartAndEnd={updateStartAndEnd}
-                  updateEnd={updateEnd}
-                />
-              </TransformComponent>
+              <div className="border-2 border-primary rounded-xl overflow-clip">
+                <Controls />
+                <TransformComponent>
+                  <FloorNode
+                    imageSrc={imgState}
+                    graph={graph}
+                    inputLoc={{
+                      start: graph.idFromName(navigatingNodes.start),
+                      end: graph.idFromName(navigatingNodes.end),
+                    }}
+                    divDim={divDimensions}
+                    algorithm={algorithm}
+                    updateStartAndEnd={updateStartAndEnd}
+                    updateEnd={updateEnd}
+                  />
+                </TransformComponent>
+              </div>
             </TransformWrapper>
           </div>
           {/*Buttons for displaying floor images*/}
@@ -278,6 +303,7 @@ function Map() {
                     <MenuItem value="BFS">BFS</MenuItem>
                     <MenuItem value="AStar">A-Star</MenuItem>
                     <MenuItem value="DFS">DFS</MenuItem>
+                    <MenuItem value="Dijkstra">Dijkstra</MenuItem>
                   </Select>
                 </FormControl>
               </div>

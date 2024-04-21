@@ -16,6 +16,7 @@ import {
   useControls,
 } from "react-zoom-pan-pinch";
 import EditNodeForm from "../components/EditNodeForm.tsx";
+import CreateEdgeForm from "../components/CreateEdgeForm.tsx";
 // import {ZoomPanPinch} from "react-zoom-pan-pinch/dist/src/core/instance.core";
 // import CanvasMap from "../components/CanvasMap.tsx";
 
@@ -27,6 +28,11 @@ function EditMap() {
   const [clicked, setClicked] = useState<MapNode | undefined>(undefined);
   const [mode, setMode] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [openEdgeCreation, setEdgeCreationOpen] = useState<boolean>(false);
+  const [edgeNodes, setEdgeNodes] = useState<MapNode[]>([
+    new MapNode("", 0, 0, "", "", "", "", ""),
+    new MapNode("", 0, 0, "", "", "", "", ""),
+  ]);
   // const [nodeId, setNodeId] = useState("");
   // const [longName, setLongName] = useState("");
   const [isMoveable, setIsMoveable] = useState(false);
@@ -126,7 +132,25 @@ function EditMap() {
 
   // // Gets the node information from child
   const handleNodeCallback = (childData: string) => {
-    setClicked(graph.getNode(childData));
+    if (openEdgeCreation) {
+      const newNode = graph.getNode(childData);
+      if (newNode) {
+        console.log(
+          "Clicked a node while creating an edge" + newNode.getLongName(),
+        );
+        if (
+          edgeNodes[0].getLongName() != "" &&
+          edgeNodes[1].getLongName() == ""
+        ) {
+          const newEdges = [edgeNodes[0], newNode];
+          setEdgeNodes(newEdges);
+        } else {
+          setEdgeNodes([newNode, new MapNode("", 0, 0, "", "", "", "", "")]);
+        }
+      }
+    } else {
+      setClicked(graph.getNode(childData));
+    }
   };
 
   const handleEditMode = (
@@ -135,13 +159,27 @@ function EditMap() {
   ) => {
     setMode(newMode);
     console.log(mode);
-    if (newMode === "add_node") {
-      setIsMoveable(false);
-    } else if (newMode === "move_node") {
-      setIsOpen(false);
-      setIsMoveable(true);
-    } else if (newMode === "delete_node") {
-      setIsOpen(false);
+    setEdgeCreationOpen(false);
+    setIsOpen(false);
+    setIsMoveable(false);
+    setEdgeNodes([
+      new MapNode("", 0, 0, "", "", "", "", ""),
+      new MapNode("", 0, 0, "", "", "", "", ""),
+    ]);
+    switch (newMode) {
+      case "add_node":
+        break;
+      case "move_node":
+        setIsMoveable(true);
+        break;
+      case "delete_node":
+        break;
+      case "add_edge":
+        setEdgeCreationOpen(true);
+        break;
+      default:
+        setIsMoveable(false);
+        break;
     }
   };
 
@@ -184,23 +222,23 @@ function EditMap() {
             className="
         h-full
         flex-grow
-        ml-1
-        border-primary
-        border-2"
+        ml-1"
           >
             <TransformWrapper disabled={isMoveable}>
-              <Controls />
-              <TransformComponent>
-                <EditMapViewGraph
-                  imageSrc={imgState}
-                  graph={graph}
-                  divDim={divDimensions}
-                  divPos={divPos}
-                  nodeInfoCallback={handleNodeCallback}
-                  popupCallback={handlePopup}
-                  mode={mode}
-                />
-              </TransformComponent>
+              <div className="border-2 border-primary rounded-xl overflow-clip">
+                <Controls />
+                <TransformComponent>
+                  <EditMapViewGraph
+                    imageSrc={imgState}
+                    graph={graph}
+                    divDim={divDimensions}
+                    divPos={divPos}
+                    nodeInfoCallback={handleNodeCallback}
+                    popupCallback={handlePopup}
+                    mode={mode}
+                  />
+                </TransformComponent>
+              </div>
             </TransformWrapper>
           </div>
           {/*Buttons for displaying floor images*/}
@@ -216,6 +254,9 @@ function EditMap() {
             <EditNodeForm node={new MapNode("", 0, 0, "", "", "", "", "")} />
           )}
           {clicked && <EditNodeForm node={clicked} />}
+
+          {/*Form for creating edge*/}
+          {openEdgeCreation && <CreateEdgeForm nodes={edgeNodes} />}
 
           <div
             className="mr-8
