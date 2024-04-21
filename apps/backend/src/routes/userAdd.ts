@@ -43,4 +43,20 @@ router.post("/", async function (req: Request, res: Response) {
   res.sendStatus(200);
 });
 
+router.get("/", async function (req: Request, res: Response) {
+  try {
+    res.send(
+      await PrismaClient.user.findMany({
+        select: {
+          email: true,
+        },
+      }),
+    );
+    return;
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(400);
+    return;
+  }
+});
 export default router;
