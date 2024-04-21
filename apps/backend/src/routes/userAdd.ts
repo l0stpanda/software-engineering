@@ -47,9 +47,9 @@ router.get("/", async function (req: Request, res: Response) {
   try {
     res.send(
       await PrismaClient.user.findMany({
-        select: {
-          email: true,
-        },
+        // select: {
+        //   email: true,
+        // },
       }),
     );
     return;
