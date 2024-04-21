@@ -60,6 +60,8 @@ function FloorNode(props: FloorNodesProps) {
 
   useEffect(() => {
     console.log("In the useeffect: ", props.inputLoc.start);
+    // it is updating but and i set count to 1 when i want to place the end but this puts the count to 1 all teh time
+    // i want to select the end when the start is defined
   }, [props.inputLoc, props]);
 
   useEffect(() => {
@@ -75,14 +77,16 @@ function FloorNode(props: FloorNodesProps) {
     if (res !== undefined) {
       const longName: string = res.getLongName();
 
-      if (props.inputLoc.start !== undefined) {
+      if (props.inputLoc.start !== undefined && count === 0) {
         console.log("In the click: ", props.inputLoc.start);
+        console.log("updating with: ", longName);
         props.updateStartAndEnd(longName, "");
         setCount(1);
       } else if (count === 0) {
         props.updateStartAndEnd(longName, "");
         setCount(1);
       } else if (count === 1) {
+        console.log("update end");
         props.updateEnd(longName);
         setCount(0);
       } else {
