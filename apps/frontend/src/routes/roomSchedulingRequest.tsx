@@ -9,13 +9,13 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  TextField,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import AllyBackground from "../components/allyBackground.tsx";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
+import UserDropdown from "../components/userDropdown.tsx";
 
 export default function RoomSchedulingRequest() {
   type roomReqFields = {
@@ -112,6 +112,9 @@ export default function RoomSchedulingRequest() {
   function updateRoom(val: string) {
     setResponses({ ...responses, roomNum: val });
   }
+  function updateName(val: string) {
+    setResponses({ ...responses, employName: val });
+  }
 
   return (
     <div className="justify-center grid min-h-screen max-h-fit place-items-center mt-6">
@@ -134,15 +137,21 @@ export default function RoomSchedulingRequest() {
         </p>
 
         <form className="flex flex-col gap-4 my-4" onSubmit={handleSubmit}>
-          <TextField
-            label="Employee Name"
-            type="text"
-            name="employName"
-            variant="filled"
-            value={responses.employName}
-            onChange={handleResponseChanges}
-            required
+          {/*<TextField*/}
+          {/*  label="Employee Name"*/}
+          {/*  type="text"*/}
+          {/*  name="employName"*/}
+          {/*  variant="filled"*/}
+          {/*  value={responses.employName}*/}
+          {/*  onChange={handleResponseChanges}*/}
+          {/*  required*/}
+          {/*/>*/}
+          <UserDropdown
+            room={responses.employName}
+            update={updateName}
+            label={"Username"}
           />
+
           <FormControl>
             <InputLabel id="priority-label" variant="filled">
               Priority *

@@ -49,15 +49,13 @@ router.delete(
 router.get("/edgesGet", async function (req: Request, res: Response) {
   try {
     res.send(await PrismaClient.edges.findMany());
+    return;
   } catch (error) {
     //Console log error if the data can't be stored
     console.log(error);
     res.sendStatus(400);
     return;
   }
-  //Console log "Ok" if the database successfully collects the data
-  res.sendStatus(200);
-  return;
 });
 
 //NODES STUFF
@@ -102,14 +100,13 @@ router.delete(
 router.get("/nodesGet", async function (req: Request, res: Response) {
   try {
     res.send(await PrismaClient.nodes.findMany());
+    return;
   } catch (error) {
     console.log(error);
     //Console log error if the data can't be stored
     res.sendStatus(400);
+    return;
   }
-  //Console log "Ok" if the database successfully collects the data
-  res.sendStatus(200);
-  return;
 });
 
 //Will give the list of long names
