@@ -14,7 +14,7 @@ import { DFS } from "../objects/DFS.ts";
 interface FloorNodesProps {
   imageSrc: string;
   graph: Graph;
-  inputLoc: { start: string; end: string };
+  inputLoc: { start: string | undefined; end: string | undefined };
   divDim: { width: number; height: number };
   algorithm: string;
   updateStartAndEnd: (startNode: string, endNode: string) => void;
@@ -41,22 +41,9 @@ function FloorNode(props: FloorNodesProps) {
   // const [clicked, setClicked] = useState<string[]>([]);
   const algo: Pathfinding = new Pathfinding(props.graph);
   const floor: string = getFloorByImage(props.imageSrc);
-  const nodes: MapNode[] = Object.values(props.graph)[0];
+  const nodes: Map<string, MapNode> = Object.values(props.graph)[0];
+  console.log(nodes);
   const [count, setCount] = useState(0);
-  // const [ids, setIds] = useState<{
-  //   startId: string | undefined;
-  //   endId: string | undefined;
-  // }>({
-  //   startId: props.graph.idFromName(props.inputLoc[0]),
-  //   endId: props.graph.idFromName(props.inputLoc[1]),
-  // });
-
-  // useEffect(() => {
-  //   setIds({
-  //     startId: props.graph.idFromName(props.inputLoc[0]),
-  //     endId: props.graph.idFromName(props.inputLoc[1]),
-  //   });
-  // }, [props.graph, props.inputLoc]);
 
   useEffect(() => {
     if (divRef.current) {
@@ -72,6 +59,10 @@ function FloorNode(props: FloorNodesProps) {
   }, [divRef]);
 
   useEffect(() => {
+    console.log("In the useeffect: ", props.inputLoc.start);
+  }, [props.inputLoc, props]);
+
+  useEffect(() => {
     const img = new Image();
     img.src = props.imageSrc;
     img.onload = () => {
@@ -80,44 +71,25 @@ function FloorNode(props: FloorNodesProps) {
   }, [props.imageSrc]);
 
   const handleNodeClick = (nodeid: string) => () => {
-    if (count === 0) {
-      props.updateStartAndEnd(nodeid, "");
-      setCount(1);
-    } else if (count === 1) {
-      props.updateEnd(nodeid);
-      setCount(0);
-    } else {
-      console.log("OH GOD");
-      // props.updateStart("");
-      // props.updateEnd("");
+    const res = nodes.get(nodeid);
+    if (res !== undefined) {
+      const longName: string = res.getLongName();
+
+      if (props.inputLoc.start !== undefined) {
+        console.log("In the click: ", props.inputLoc.start);
+        props.updateStartAndEnd(longName, "");
+        setCount(1);
+      } else if (count === 0) {
+        props.updateStartAndEnd(longName, "");
+        setCount(1);
+      } else if (count === 1) {
+        props.updateEnd(longName);
+        setCount(0);
+      } else {
+        console.log("OH GOD");
+      }
     }
-
-    // if (clicked.length < 2 && !clicked.includes(nodeid)) {
-    //   setClicked((prevClicked) => [...prevClicked, nodeid]);
-    // }
-    // if (clicked.length == 2) {
-    //   setClicked([nodeid]);
-    // }
-    // setIds({ startId: undefined, endId: undefined });
   };
-
-  // const calculateInput = (): string[] => {
-  //   let input: string[] = [];
-  //
-  //   if (
-  //     props.inputLoc.length === 2 &&
-  //     ids.startId !== undefined &&
-  //     ids.endId !== undefined
-  //   ) {
-  //     input = [ids.startId, ids.endId];
-  //   } else if (clicked.length === 2) {
-  //     input = [clicked[0], clicked[1]];
-  //   } else {
-  //     console.log("Invalid IDs.");
-  //   }
-  //
-  //   return input;
-  // };
 
   const renderLines = () => {
     const input = props.inputLoc;

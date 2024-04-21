@@ -77,19 +77,19 @@ function Map() {
   });
   // const [submitValues, setSubmitValues] = useState(["", ""]);
 
-  // Carter's function code bc idk how to do it
+  // Carter 's function code bc idk how to do it
   // function handleFormChanges(event: React.ChangeEvent<HTMLInputElement>) {
   //   const { name, value } = event.target;
   //   setNavigatingNodes({ ...navigatingNodes, [name]: value });
   // }
 
   // Handles changes to the start/end destination boxes
-  // function handleFormSubmit() {
-  //   const cleanStart = navigatingNodes.start.replace("\r", "");
-  //   const cleanEnd = navigatingNodes.end.replace("\r", "");
-  //   console.log(cleanStart, cleanEnd);
-  //   setSubmitValues([cleanStart, cleanEnd]);
-  // }
+  function handleFormSubmit() {
+    const cleanStart = navigatingNodes.start.replace("\r", "");
+    const cleanEnd = navigatingNodes.end.replace("\r", "");
+    console.log(cleanStart, cleanEnd);
+    setNavigatingNodes({ start: cleanStart, end: cleanEnd });
+  }
 
   // Changes the map image
   const changeFloor = (floor: string) => {
@@ -120,24 +120,22 @@ function Map() {
   };
 
   //Needs to be here for navigation dropdown
-  //   function updateStartAndEnd (start: string, end: string){
-  //       updateStart(start);
-  //       console.log(end);
-  //       //If both the fields are full then clear them and call the first function
-  //       updateEnd(end);
-  //   }
-
   function updateStartAndEnd(startNode: string, endNode: string) {
     setNavigatingNodes({ start: startNode, end: endNode });
   }
 
   function updateStart(val: string) {
+    //val is the long names
     // setResponses({ ...responses, roomNum: val });
+    console.log("start val: ", val);
     setNavigatingNodes({ ...navigatingNodes, start: val });
   }
 
   function updateEnd(val: string) {
+    // val is the long name
+    // navigating nodes must be the long name but we need to pass in the id
     // setResponses({ ...responses, roomNum: val });
+    console.log("end val: ", val);
     setNavigatingNodes({ ...navigatingNodes, end: val });
   }
 
@@ -209,7 +207,10 @@ function Map() {
                 <FloorNode
                   imageSrc={imgState}
                   graph={graph}
-                  inputLoc={navigatingNodes}
+                  inputLoc={{
+                    start: graph.idFromName(navigatingNodes.start),
+                    end: graph.idFromName(navigatingNodes.end),
+                  }}
                   divDim={divDimensions}
                   algorithm={algorithm}
                   updateStartAndEnd={updateStartAndEnd}
@@ -281,16 +282,16 @@ function Map() {
                 </FormControl>
               </div>
               <br />
-              {/*<Button*/}
-              {/*  type="button"*/}
-              {/*  variant="contained"*/}
-              {/*  className="submitButton"*/}
-              {/*  size="medium"*/}
-              {/*  onClick={handleFormSubmit}*/}
-              {/*  sx={{ borderRadius: "30px" }}*/}
-              {/*>*/}
-              {/*  Submit*/}
-              {/*</Button>*/}
+              <Button
+                type="button"
+                variant="contained"
+                className="submitButton"
+                size="medium"
+                onClick={handleFormSubmit}
+                sx={{ borderRadius: "30px" }}
+              >
+                Submit
+              </Button>
             </div>
           </div>
           {/*second non-functional box for rn*/}
