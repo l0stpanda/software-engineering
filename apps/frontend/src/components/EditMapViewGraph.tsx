@@ -271,7 +271,11 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
       onMouseUp={handleMouseUp}
     >
       <div ref={drop}>
-        <img src={props.imageSrc} className="object-contain h-full rounded-xl" alt="Map" />
+        <img
+          src={props.imageSrc}
+          className="object-contain h-full rounded-xl"
+          alt="Map"
+        />
         <svg
           style={{
             position: "absolute",
