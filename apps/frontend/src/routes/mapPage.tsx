@@ -29,7 +29,8 @@ import LocationDropdown from "../components/locationDropdown.tsx";
 import ModeIcon from "@mui/icons-material/Mode";
 import { useAuth0 } from "@auth0/auth0-react";
 import * as console from "console";
-import { getDirections } from "../objects/Pathfinding.ts";
+import { directionInfo, getDirections } from "../objects/Pathfinding.ts";
+import { JSX } from "react/jsx-runtime";
 
 function Map() {
   const divRef = useRef<HTMLDivElement>(null);
@@ -38,13 +39,7 @@ function Map() {
   const [update, setUpdate] = useState(0);
   const [imgState, setImgState] = useState<string>(floor1);
   const [algorithm, setAlgorithm] = useState<string>("AStar");
-  const [directions, setDirections] = useState<string[][]>([
-    [],
-    [],
-    [],
-    [],
-    [],
-  ]);
+  const [directions, setDirections] = useState<directionInfo[]>([]);
   const [path, setPath] = useState<string[]>([]);
 
   const { user } = useAuth0();
@@ -120,7 +115,7 @@ function Map() {
     tempGraph.loadGraph().then(() => {
       setGraph(tempGraph);
       setUpdate(1);
-      console.log(update);
+      //console.log(update);
     });
   }, [update]);
 
@@ -131,6 +126,16 @@ function Map() {
   const changeAlgorithm = (event: SelectChangeEvent) => {
     setAlgorithm(event.target.value as string);
   };
+
+  // Test for showing directions
+  function showDirections() {
+    const output: JSX.Element[] = [];
+    directions.forEach((data: directionInfo) => {
+      output.push(<p>{data.directions}</p>);
+      return data;
+    });
+    return output;
+  }
 
   //Needs to be here for navigation dropdown
   function updateStart(val: string) {
@@ -216,7 +221,7 @@ function Map() {
                     pathRef={path}
                     pathSetter={setPath}
                   />
-                  <p>{directions}</p>
+                  {showDirections()}
                 </TransformComponent>
               </div>
             </TransformWrapper>
