@@ -42,10 +42,10 @@ function CustomNavBar() {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const [anchorElAdmin, setAnchorElAdmin] = React.useState<null | HTMLElement>(
-    null,
-  );
-  const openAdmin = Boolean(anchorElAdmin);
+  // const [anchorElAdmin, setAnchorElAdmin] = React.useState<null | HTMLElement>(
+  //   null,
+  // );
+  // const openAdmin = Boolean(anchorElAdmin);
 
   function handleRequestsOpen(e: React.MouseEvent<HTMLElement>) {
     setAnchorEl(e.currentTarget);
@@ -55,13 +55,13 @@ function CustomNavBar() {
     setAnchorEl(null);
   }
 
-  function handleAdminOpen(e: React.MouseEvent<HTMLElement>) {
-    setAnchorElAdmin(e.currentTarget);
-  }
-
-  function handleAdminClosed() {
-    setAnchorElAdmin(null);
-  }
+  // function handleAdminOpen(e: React.MouseEvent<HTMLElement>) {
+  //   setAnchorElAdmin(e.currentTarget);
+  // }
+  //
+  // function handleAdminClosed() {
+  //   setAnchorElAdmin(null);
+  // }
 
   return (
     <AppBar sx={{ bgcolor: "#FBFEFF" }}>
@@ -86,28 +86,31 @@ function CustomNavBar() {
             <Button component="a" href="map">
               Map
             </Button>
+            <Button component="a" href="displayTables">
+              Import/Export
+            </Button>
             {/*<Button component="a" href="imp">*/}
             {/*  Import*/}
             {/*</Button>*/}
-            <Button onClick={handleAdminOpen} endIcon={<ArrowDropDownIcon />}>
-              Admin
-            </Button>
-            <Menu
-              open={openAdmin}
-              onClose={handleAdminClosed}
-              anchorEl={anchorElAdmin}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-            >
-              <MenuItem href="exp" component="a">
-                Import/Export
-              </MenuItem>
-              <MenuItem href="displayTables" component="a">
-                View Tables
-              </MenuItem>
-            </Menu>
+            {/*<Button onClick={handleAdminOpen} endIcon={<ArrowDropDownIcon />}>*/}
+            {/*  Admin*/}
+            {/*</Button>*/}
+            {/*<Menu*/}
+            {/*  open={openAdmin}*/}
+            {/*  onClose={handleAdminClosed}*/}
+            {/*  anchorEl={anchorElAdmin}*/}
+            {/*  transformOrigin={{*/}
+            {/*    vertical: "top",*/}
+            {/*    horizontal: "left",*/}
+            {/*  }}*/}
+            {/*>*/}
+            {/*  <MenuItem href="exp" component="a">*/}
+            {/*    Import/Export*/}
+            {/*  </MenuItem>*/}
+            {/*  <MenuItem href="displayTables" component="a">*/}
+            {/*    View Tables*/}
+            {/*  </MenuItem>*/}
+            {/*</Menu>*/}
             <Button
               onClick={handleRequestsOpen}
               endIcon={<ArrowDropDownIcon />}
@@ -141,6 +144,9 @@ function CustomNavBar() {
               </MenuItem>
               <MenuItem href="lostitemrequest" component="a">
                 Lost Item
+              </MenuItem>
+              <MenuItem href="sanitationRequest" component="a">
+                Sanitation Request
               </MenuItem>
             </Menu>
             <Button component="a" href="todo">
