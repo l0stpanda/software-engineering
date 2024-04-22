@@ -49,4 +49,45 @@ router.post("/editNodeInfo", async function (req: Request, res: Response) {
   }
   res.sendStatus(200);
 });
+//Adds edge based on selected nodes
+router.post("/addEdge", async function (req: Request, res: Response) {
+  const input: { id: string; start_node: string; end_node: string } = req.body;
+  try {
+    await PrismaClient.edges.create({
+      data: {
+        id: input.id,
+        start_node: input.start_node,
+        end_node: input.end_node,
+      },
+    });
+  } catch (e) {
+    res.sendStatus(400);
+    return;
+  }
+  res.sendStatus(200);
+});
+//Delete edge based on selected nodes
+router.post("/deleteEdge", async function (req: Request, res: Response) {
+  const input: { id: string; id2: string } = req.body;
+  try {
+    console.log(input);
+    await PrismaClient.edges.deleteMany({
+      where: {
+        OR: [
+          {
+            id: input.id,
+          },
+          {
+            id: input.id2,
+          },
+        ],
+      },
+    });
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(400);
+    return;
+  }
+  res.sendStatus(200);
+});
 export default router;

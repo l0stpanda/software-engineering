@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { Alert, Snackbar } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import InventoryItem from "../components/inventoryItem.tsx";
@@ -14,15 +16,29 @@ import {
   TextField,
 } from "@mui/material";
 
+//default test
 export default function DisplayInventory() {
-  const { getAccessTokenSilently, user } = useAuth0();
-
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<AlertColor>("success");
   const [inventoryResponse, setinventoryResponse] = useState<inventoryType>({
     id: 0,
     name: "",
     type: "medicine",
     quant: 0,
   });
+  const { getAccessTokenSilently, user } = useAuth0();
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const showSnackbar = (message: string, severity: AlertColor) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
 
   // Use state for records being displayed
   const [records, setRecords] = useState<inventoryType[]>([]);
@@ -63,30 +79,72 @@ export default function DisplayInventory() {
       ...inventoryResponse,
       quant: Number(inventoryResponse.quant),
     };
+    if (updatedInventoryResponse.name == "") {
+      showSnackbar("Name must be filled out", "error");
+      return;
+    }
     const token = await getAccessTokenSilently();
-    console.log(updatedInventoryResponse);
     try {
       await axios.post(`/api/inventory`, updatedInventoryResponse, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+      const received = await axios.get("/api/inventory", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setRecords(received.data);
+
+      showSnackbar("New Item has been created", "success");
     } catch (e) {
-      console.log(e);
-      alert("Problems have occured");
-      return;
+      console.error(e);
+      showSnackbar("Problems have occurred", "error");
     }
 
     setinventoryResponse({
       id: 0,
       name: "",
-      type: "",
+      type: "medicine",
       quant: 0,
     });
-    alert("New Item has been created");
     setOpen(false);
-    window.location.reload();
   }
+  const handleDelete = async (id: number) => {
+    const item = records.find((record) => record.id === id);
+    const itemName = item ? item.name : "Unknown Item"; // Default to "Unknown Item" if not found
+
+    if (
+      !window.confirm(
+        `Are you sure you want to delete the inventory item ${itemName}?`,
+      )
+    ) {
+      return;
+    }
+
+    try {
+      const token = await getAccessTokenSilently();
+      await axios.delete(`/api/inventory/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const received = await axios.get("/api/inventory", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setRecords(received.data);
+      showSnackbar(
+        "Successfully deleted inventory item with ID number " + id,
+        "success",
+      );
+    } catch (e) {
+      console.error(e);
+      showSnackbar("Problem Deleting", "error");
+    }
+  };
 
   function handleOpen() {
     setOpen(true);
@@ -122,9 +180,6 @@ export default function DisplayInventory() {
       <table className="w-full">
         <thead className="bg-secondary border-b-2 border-b-primary">
           <tr>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left max-w-8">
-              ID
-            </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Name
             </th>
@@ -148,6 +203,7 @@ export default function DisplayInventory() {
               name={record.name}
               type={record.type}
               quant={record.quant}
+              onDelete={handleDelete}
             />
           ))}
         </tbody>
@@ -207,6 +263,20 @@ export default function DisplayInventory() {
           </div>
         </form>
       </Dialog>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

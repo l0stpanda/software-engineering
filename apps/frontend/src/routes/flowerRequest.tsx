@@ -21,6 +21,7 @@ import { flowerReqFields } from "common/src/flowerRequest.ts";
 import LocationDropdown from "../components/locationDropdown.tsx";
 //import {SelectChangeEvent} from "@mui/material/Select";
 import { useAuth0 } from "@auth0/auth0-react";
+import UserDropdown from "../components/userDropdown.tsx";
 
 function FlowerRequest() {
   const { getAccessTokenSilently } = useAuth0();
@@ -45,6 +46,10 @@ function FlowerRequest() {
   // Takes in an event object and updates the responses object when a text field is changed
   function handleResponseChanges(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setResponses({ ...responses, [e.target.name]: e.target.value });
+  }
+
+  function updateName(val: string) {
+    setResponses({ ...responses, empName: val });
   }
 
   // Sets state back to initial state
@@ -110,16 +115,22 @@ function FlowerRequest() {
         </h1>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4 my-4">
-            <TextField
-              onChange={handleResponseChanges}
-              value={responses.empName}
-              id="empName"
-              name="empName"
-              variant="filled"
-              label="Employee Name"
-              placeholder="Name"
-              required={true}
+            {/*<TextField*/}
+            {/*  onChange={handleResponseChanges}*/}
+            {/*  value={responses.empName}*/}
+            {/*  id="empName"*/}
+            {/*  name="empName"*/}
+            {/*  variant="filled"*/}
+            {/*  label="Employee Name"*/}
+            {/*  placeholder="Name"*/}
+            {/*  required={true}*/}
+            {/*/>*/}
+            <UserDropdown
+              room={responses.empName}
+              update={updateName}
+              label={"Username"}
             />
+
             <FormControl variant="filled" required>
               <InputLabel id="priority">Priority</InputLabel>
               <Select

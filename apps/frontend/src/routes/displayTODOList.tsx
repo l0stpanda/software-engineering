@@ -16,9 +16,12 @@ import {
 //import LoginDialog from "../components/loginDialog.tsx";
 type toDoNow = {
   id: number;
+  user_id: string | undefined;
   task: string;
   priority: string;
   email: string | undefined;
+  username: string | undefined;
+  role: string | undefined;
   complete: boolean;
 };
 
@@ -27,11 +30,12 @@ export default function DisplayTODOList() {
 
   const [toDoResponse, setToDoResponse] = useState<toDoNow>({
     id: 0,
+    user_id: user?.sub,
     task: "",
     priority: "",
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    email: user.email,
+    email: user?.email,
+    username: user?.preferred_username,
+    role: "admin",
     complete: false,
   });
 
@@ -47,7 +51,7 @@ export default function DisplayTODOList() {
       try {
         const token = await getAccessTokenSilently();
         if (user != undefined) {
-          const response = await axios.get(`/api/todoStuff/${user.email}`, {
+          const response = await axios.get(`api/todoStuff/${user.email}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -93,9 +97,12 @@ export default function DisplayTODOList() {
 
     setToDoResponse({
       id: 0,
+      user_id: user?.sub,
       task: "",
-      email: "",
       priority: "",
+      email: user?.email,
+      username: user?.preferred_username,
+      role: "admin",
       complete: false,
     });
     alert("New Task has been created");
@@ -161,10 +168,13 @@ export default function DisplayTODOList() {
             <TODOListItem
               key={record.id}
               id={record.id}
+              user_id={record.user_id}
               email={record.email}
               priority={record.priority}
               task={record.task}
               complete={record.complete}
+              role={record.role}
+              username={record.username}
             />
           ))}
         </tbody>
