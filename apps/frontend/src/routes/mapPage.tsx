@@ -27,6 +27,10 @@ import { SelectChangeEvent } from "@mui/material/Select";
 import { ArrowBack } from "@mui/icons-material";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import ModeIcon from "@mui/icons-material/Mode";
+import StraightIcon from "@mui/icons-material/Straight";
+import TurnLeftIcon from "@mui/icons-material/TurnLeft";
+import TurnRightIcon from "@mui/icons-material/TurnRight";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useAuth0 } from "@auth0/auth0-react";
 // import * as console from "console";
 import { directionInfo, getDirections } from "../objects/Pathfinding.ts";
@@ -165,14 +169,125 @@ function Map() {
   function showDirections() {
     const output: JSX.Element[] = [];
     directions.forEach((data: directionInfo) => {
+      output.push(
+        <div className="border-primary border-t border-b text-text font-header px-1 py-1">
+          <b>Floor {data.floor}: </b>
+        </div>,
+      );
       for (let i = 0; i < data.directions.length; i++) {
-        output.push(
-          <>
-            <div className="border-primary border-b">
-              {data.directions[i]} {data.nodes[i]}
-            </div>
-          </>,
-        );
+        if (data.directions[i] == "Continue straight at ") {
+          if (i + 1 == data.directions.length) {
+            output.push(
+              <>
+                <div className="flex text-text font-body px-1 py-2">
+                  <div className="float-left content-center">
+                    <StraightIcon sx={{ fontSize: 40 }}></StraightIcon>
+                  </div>
+                  <div className="flex text-center self-center">
+                    {data.directions[i]} {data.nodes[i]}
+                  </div>
+                </div>
+              </>,
+            );
+          } else {
+            output.push(
+              <>
+                <div className="flex border-primary border-b text-text font-body px-1 py-2">
+                  <div className="float-left content-center">
+                    <StraightIcon sx={{ fontSize: 40 }}></StraightIcon>
+                  </div>
+                  <div className="flex text-center self-center">
+                    {data.directions[i]} {data.nodes[i]}
+                  </div>
+                </div>
+              </>,
+            );
+          }
+        } else if (data.directions[i] == "Turn left at ") {
+          if (i + 1 == data.directions.length) {
+            output.push(
+              <>
+                <div className="flex text-text font-body px-1 py-2">
+                  <div className="float-left content-center">
+                    <TurnLeftIcon sx={{ fontSize: 40 }}></TurnLeftIcon>
+                  </div>
+                  <div className="flex text-center self-center">
+                    {data.directions[i]} {data.nodes[i]}
+                  </div>
+                </div>
+              </>,
+            );
+          } else {
+            output.push(
+              <>
+                <div className="flex border-primary border-b text-text font-body px-1 py-2">
+                  <div className="float-left content-center">
+                    <TurnLeftIcon sx={{ fontSize: 40 }}></TurnLeftIcon>
+                  </div>
+                  <div className="flex text-center self-center">
+                    {data.directions[i]} {data.nodes[i]}
+                  </div>
+                </div>
+              </>,
+            );
+          }
+        } else if (data.directions[i] == "Turn right at ") {
+          if (i + 1 == data.directions.length) {
+            output.push(
+              <>
+                <div className="flex text-text font-body px-1 py-2">
+                  <div className="float-left content-center">
+                    <TurnRightIcon sx={{ fontSize: 40 }}></TurnRightIcon>
+                  </div>
+                  <div className="flex text-center self-center">
+                    {data.directions[i]} {data.nodes[i]}
+                  </div>
+                </div>
+              </>,
+            );
+          } else {
+            output.push(
+              <>
+                <div className="flex border-primary border-b text-text font-body px-1 py-2">
+                  <div className="float-left content-center">
+                    <TurnRightIcon sx={{ fontSize: 40 }}></TurnRightIcon>
+                  </div>
+                  <div className="flex text-center self-center">
+                    {data.directions[i]} {data.nodes[i]}
+                  </div>
+                </div>
+              </>,
+            );
+          }
+        } else {
+          if (i + 1 == data.directions.length) {
+            output.push(
+              <>
+                <div className="flex text-text font-body px-1 py-2">
+                  <div className="float-left content-center">
+                    <TrendingUpIcon sx={{ fontSize: 40 }}></TrendingUpIcon>
+                  </div>
+                  <div className="flex text-center self-center">
+                    {data.directions[i]} {data.nodes[i]}
+                  </div>
+                </div>
+              </>,
+            );
+          } else {
+            output.push(
+              <>
+                <div className="flex border-primary border-b text-text font-body px-1 py-2">
+                  <div className="float-left content-center">
+                    <TrendingUpIcon sx={{ fontSize: 40 }}></TrendingUpIcon>
+                  </div>
+                  <div className="flex text-center self-center">
+                    {data.directions[i]} {data.nodes[i]}
+                  </div>
+                </div>
+              </>,
+            );
+          }
+        }
       }
       return data;
     });
@@ -371,19 +486,15 @@ function Map() {
             className="mr-8
                     ml-5
                     my-5
-                    py-5
-                    px-5
-                    flex
-                    flex-col
+                    h-[177px]
                     items-center
                     bg-background
-                    rounded-xl
                     border-primary
-                    border-2"
+                    border-2
+                    overflow-y-auto
+                    "
           >
-            <div className="flex flex-col justify-center">
-              {showDirections()}
-            </div>
+            {showDirections()}
           </div>
         </div>
       </div>

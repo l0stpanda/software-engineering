@@ -88,7 +88,7 @@ export function getDirections(path: string[], graph: Graph) {
         // End floor change
         else if (changeFloors && nextNode.getFloor() == currNode.getFloor()) {
           currDir.push(
-            `Take ${changeFloors.getLongName()} to floor ${currNode.getFloor()}`,
+            ` Take ${changeFloors.getLongName()} to floor ${currNode.getFloor()}`,
           );
           directions.push({
             floor: changeFloors.getFloor(),
