@@ -28,7 +28,8 @@ import { ArrowBack } from "@mui/icons-material";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import ModeIcon from "@mui/icons-material/Mode";
 import { useAuth0 } from "@auth0/auth0-react";
-// import { motion, AnimatePresence } from "framer-motion";
+// @ts-ignore
+import { motion, AnimatePresence } from "framer-motion";
 
 function Map() {
   const divRef = useRef<HTMLDivElement>(null);
@@ -39,128 +40,6 @@ function Map() {
   const [algorithm, setAlgorithm] = useState<string>("AStar");
 
   const { user } = useAuth0();
-  // const Accordion = ({ i, expanded, setExpanded }) => {
-  //     const isOpen = i === expanded;
-  // return (
-  //     <>
-  //         <motion.header
-  //             initial={false}
-  //             animate={{ backgroundColor: isOpen ? "#FF0088" : "#0055FF" }}
-  //             onClick={() => setExpanded(isOpen ? false : i)}
-  //         />
-  //         <AnimatePresence initial={false}>
-  //             {isOpen && (
-  //                 <motion.section
-  //                     key="content"
-  //                     initial="collapsed"
-  //                     animate="open"
-  //                     exit="collapsed"
-  //                     variants={{
-  //                         open: {opacity: 1, height: "auto"},
-  //                         collapsed: {opacity: 0, height: 0}
-  //                     }}
-  //                     transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
-  //                 >
-  //                     <div
-  //                         className="mr-8
-  //                     ml-5
-  //                     py-5
-  //                     px-5
-  //                     flex
-  //                     flex-row
-  //                     items-center
-  //                     bg-background
-  //                     rounded-xl
-  //                     border-primary
-  //                     border-2"
-  //                     >
-  //                         <div className="flex flex-row w-500">
-  //                             <div>
-  //                                 {/*<h2 className="text-primary font-header pb-4">*/}
-  //                                 {/*    Where would you like to go?*/}
-  //                                 {/*</h2>*/}
-  //                             </div>
-  //                             <LocationDropdown
-  //                                 room={navigatingNodes.start}
-  //                                 update={updateStart}
-  //                                 label={"Start"}
-  //                             />
-  //                             <br/>
-  //                             <LocationDropdown
-  //                                 room={navigatingNodes.end}
-  //                                 update={updateEnd}
-  //                                 label={"End"}
-  //                             />
-  //                             <br/>
-  //                             <div className="">
-  //                                 <FormControl fullWidth required>
-  //                                     <InputLabel id="demo-simple-select-label" variant="filled">
-  //                                         Path Algorithm
-  //                                     </InputLabel>
-  //                                     <Select
-  //                                         labelId="demo-simple-select-label"
-  //                                         id="demo-simple-select"
-  //                                         value={algorithm}
-  //                                         label="Algorithm"
-  //                                         onChange={changeAlgorithm}
-  //                                         variant="filled"
-  //                                     >
-  //                                         <MenuItem value="BFS">BFS</MenuItem>
-  //                                         <MenuItem value="AStar">A-Star</MenuItem>
-  //                                         <MenuItem value="DFS">DFS</MenuItem>
-  //                                     </Select>
-  //                                 </FormControl>
-  //                             </div>
-  //                             <br/>
-  //                             <Button
-  //                                 type="button"
-  //                                 variant="contained"
-  //                                 className="submitButton"
-  //                                 size="medium"
-  //                                 onClick={handleFormSubmit}
-  //                             >
-  //                                 Submit
-  //                             </Button>
-  //                         </div>
-  //                     </div>
-  //                 </motion.section>
-  //             )}
-  //         </AnimatePresence>
-  //     </>
-  // );
-  // };
-
-  // Zoom in/out buttons for map viewing
-  // const Controls = () => {
-  //     const {zoomIn, zoomOut} = useControls();
-  //     return (
-  //         <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2">
-  //             <Button
-  //                 onClick={() => zoomIn()}
-  //                 type="button"
-  //                 id="zoomInBut"
-  //                 variant="contained"
-  //                 className="zoomInBut"
-  //                 size="medium"
-  //                 sx={{borderRadius: "30px", fontSize: "22px", font: "header"}}
-  //             >
-  //                 +
-  //             </Button>
-  //
-  //             <Button
-  //                 onClick={() => zoomOut()}
-  //                 type="button"
-  //                 id="zoomOutBut"
-  //                 variant="contained"
-  //                 className="zoomOutBut"
-  //                 size="medium"
-  //                 sx={{borderRadius: "30px", fontSize: "22px", font: "header"}}
-  //             >
-  //                 -
-  //             </Button>
-  //         </div>
-  //     );
-  // };
 
   const Controls = () => {
     const { zoomIn, zoomOut } = useControls();
@@ -254,7 +133,7 @@ function Map() {
 
   function FloorMapButtons() {
     return (
-      <div className="absolute z-10 h-fit my-auto ml-3 bg-secondary bottom-7 right-9">
+      <div className="absolute z-10 h-fit my-auto ml-3 bg-primary bottom-7 right-9">
         <ToggleButtonGroup
           orientation="vertical"
           value={imgState}
@@ -268,106 +147,106 @@ function Map() {
             }
           }}
           size="large"
-          color="secondary"
+          color="standard"
           fullWidth
         >
-          <ToggleButton value={floor3}>
+          <ToggleButton value={floor3} style={{ color: "white" }}>
             <strong>3</strong>
           </ToggleButton>
-          <ToggleButton value={floor2}>
+          <ToggleButton value={floor2} style={{ color: "white" }}>
             <strong>2</strong>
           </ToggleButton>
-          <ToggleButton value={floor1}>
+          <ToggleButton value={floor1} style={{ color: "white" }}>
             <strong>1</strong>
           </ToggleButton>
-          <ToggleButton value={lowerLevel1}>
+          <ToggleButton value={lowerLevel1} style={{ color: "white" }}>
             <strong>L1</strong>
           </ToggleButton>
-          <ToggleButton value={lowerLevel2}>
+          <ToggleButton value={lowerLevel2} style={{ color: "white" }}>
             <strong>L2</strong>
           </ToggleButton>
         </ToggleButtonGroup>
       </div>
     );
   }
-  // const Accordion = ({ expanded, setExpanded }) => {
-  //   const isOpen = expanded !== false;
-  //
-  //   return (
-  //     <>
-  //       <motion.header
-  //         initial={false}
-  //         animate={{ backgroundColor: isOpen ? "#FF0088" : "#0055FF" }}
-  //         onClick={() => setExpanded(isOpen ? false : true)}
-  //       />
-  //       <AnimatePresence initial={false}>
-  //         {isOpen && (
-  //           <motion.section
-  //             key="content"
-  //             initial="collapsed"
-  //             animate="open"
-  //             exit="collapsed"
-  //             variants={{
-  //               open: { opacity: 1, height: "auto" },
-  //               collapsed: { opacity: 0, height: 0 },
-  //             }}
-  //             transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
-  //           >
-  //             <div className="mr-8 ml-5 py-5 px-5 flex flex-row items-center bg-background rounded-xl border-primary border-2">
-  //               <div className="flex flex-row w-500">
-  //                 <LocationDropdown
-  //                   room={navigatingNodes.start}
-  //                   update={updateStart}
-  //                   label={"Start"}
-  //                 />
-  //                 <br />
-  //                 <LocationDropdown
-  //                   room={navigatingNodes.end}
-  //                   update={updateEnd}
-  //                   label={"End"}
-  //                 />
-  //                 <br />
-  //                 <div className="">
-  //                   <FormControl fullWidth required>
-  //                     <InputLabel
-  //                       id="demo-simple-select-label"
-  //                       variant="filled"
-  //                     >
-  //                       Path Algorithm
-  //                     </InputLabel>
-  //                     <Select
-  //                       labelId="demo-simple-select-label"
-  //                       id="demo-simple-select"
-  //                       value={algorithm}
-  //                       label="Algorithm"
-  //                       onChange={changeAlgorithm}
-  //                       variant="filled"
-  //                     >
-  //                       <MenuItem value="BFS">BFS</MenuItem>
-  //                       <MenuItem value="AStar">A-Star</MenuItem>
-  //                       <MenuItem value="DFS">DFS</MenuItem>
-  //                     </Select>
-  //                   </FormControl>
-  //                 </div>
-  //                 <br />
-  //                 <Button
-  //                   type="button"
-  //                   variant="contained"
-  //                   className="submitButton"
-  //                   size="medium"
-  //                   onClick={handleFormSubmit}
-  //                 >
-  //                   Submit
-  //                 </Button>
-  //               </div>
-  //             </div>
-  //           </motion.section>
-  //         )}
-  //       </AnimatePresence>
-  //     </>
-  //   );
-  // };
-  // const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const isOpen = expanded !== false;
+  const Accordion = () => {
+    const handleInnerClick = (e: React.MouseEvent<HTMLElement>) => {
+      e.stopPropagation();
+    };
+    return (
+      <>
+        <motion.header
+          initial={false}
+          // animate={{ backgroundColor: isOpen ? "#FF0088" : "#0055FF" }}
+        />
+        <AnimatePresence initial={false}>
+          {isOpen && (
+            <motion.section
+              key="content"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              variants={{
+                open: { opacity: 1, height: "auto" },
+                collapsed: { opacity: 0, height: 0 },
+              }}
+              transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
+              className="absolute w-full"
+            >
+              <div
+                className="flex flex-col mr-2 ml-0 py-5 px-5 items-center bg-background rounded-xl border-primary border-2 w-full"
+                onClick={handleInnerClick}
+              >
+                <h2>Select Destination</h2>
+                <LocationDropdown
+                  room={navigatingNodes.start}
+                  update={updateStart}
+                  label={"Start"}
+                />
+                <br />
+                <LocationDropdown
+                  room={navigatingNodes.end}
+                  update={updateEnd}
+                  label={"End"}
+                />
+                <br />
+                <FormControl fullWidth required>
+                  <InputLabel id="demo-simple-select-label" variant="filled">
+                    Path Algorithm
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={algorithm}
+                    label="Algorithm"
+                    onChange={changeAlgorithm}
+                    variant="filled"
+                  >
+                    <MenuItem value="BFS">BFS</MenuItem>
+                    <MenuItem value="AStar">A-Star</MenuItem>
+                    <MenuItem value="DFS">DFS</MenuItem>
+                  </Select>
+                </FormControl>
+                <br />
+                <Button
+                  type="button"
+                  variant="contained"
+                  className="submitButton"
+                  size="medium"
+                  onClick={handleFormSubmit}
+                >
+                  Submit
+                </Button>
+              </div>
+            </motion.section>
+          )}
+        </AnimatePresence>
+      </>
+    );
+  };
+
   return (
     <div className="">
       <div className="">
@@ -408,54 +287,17 @@ function Map() {
               Home
             </Button>
           </a>
-          <div className="mr-8 ml-5 py-5 px-5 flex flex-row items-center bg-background rounded-xl border-primary border-2">
-            <div className="flex flex-row w-500">
-              <LocationDropdown
-                room={navigatingNodes.start}
-                update={updateStart}
-                label={"Start"}
-              />
-              <br />
-              <LocationDropdown
-                room={navigatingNodes.end}
-                update={updateEnd}
-                label={"End"}
-              />
-              <br />
-              <div className="">
-                <FormControl fullWidth required>
-                  <InputLabel id="demo-simple-select-label" variant="filled">
-                    Path Algorithm
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={algorithm}
-                    label="Algorithm"
-                    onChange={changeAlgorithm}
-                    variant="filled"
-                  >
-                    <MenuItem value="BFS">BFS</MenuItem>
-                    <MenuItem value="AStar">A-Star</MenuItem>
-                    <MenuItem value="DFS">DFS</MenuItem>
-                  </Select>
-                </FormControl>
-              </div>
-              <br />
-              <Button
-                type="button"
-                variant="contained"
-                className="submitButton"
-                size="medium"
-                onClick={handleFormSubmit}
-              >
-                Submit
-              </Button>
-            </div>
-          </div>
-          {/*<Accordion expanded={expanded} setExpanded={setExpanded} />*/}
         </div>
-        <div className="flex flex-col bottom-0 left-0 z-20">
+        <div
+          className="fixed top-[25%] left-10"
+          onClick={() => setExpanded(isOpen ? false : true)}
+        >
+          <div className="mr-2 ml-0 py-1 px-16 items-center bg-primary rounded-xl border-primary border-2">
+            <h2 style={{ color: "white" }}>Navigation</h2>
+          </div>
+          <Accordion />
+        </div>
+        <div className="fixed bottom-10 left-10">
           {user ? (
             <a href="editMap" className="justify-center my-2">
               <Button
