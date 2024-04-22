@@ -17,6 +17,8 @@ import {
 } from "react-zoom-pan-pinch";
 import EditNodeForm from "../components/EditNodeForm.tsx";
 import CreateEdgeForm from "../components/CreateEdgeForm.tsx";
+import DeleteEdgeForm from "../components/DeleteEdgeForm.tsx";
+
 // import {ZoomPanPinch} from "react-zoom-pan-pinch/dist/src/core/instance.core";
 // import CanvasMap from "../components/CanvasMap.tsx";
 
@@ -29,6 +31,7 @@ function EditMap() {
   const [mode, setMode] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [openEdgeCreation, setEdgeCreationOpen] = useState<boolean>(false);
+  const [openEdgeDeletion, setOpenEdgeDeletion] = useState<boolean>(false);
   const [edgeNodes, setEdgeNodes] = useState<MapNode[]>([
     new MapNode("", 0, 0, "", "", "", "", ""),
     new MapNode("", 0, 0, "", "", "", "", ""),
@@ -148,6 +151,22 @@ function EditMap() {
           setEdgeNodes([newNode, new MapNode("", 0, 0, "", "", "", "", "")]);
         }
       }
+    } else if (openEdgeDeletion) {
+      const newNode = graph.getNode(childData);
+      if (newNode) {
+        console.log(
+          "Clicked a node while deleting an edge" + newNode.getLongName(),
+        );
+        if (
+          edgeNodes[0].getLongName() != "" &&
+          edgeNodes[1].getLongName() == ""
+        ) {
+          const newEdges = [edgeNodes[0], newNode];
+          setEdgeNodes(newEdges);
+        } else {
+          setEdgeNodes([newNode, new MapNode("", 0, 0, "", "", "", "", "")]);
+        }
+      }
     } else {
       setClicked(graph.getNode(childData));
     }
@@ -168,28 +187,32 @@ function EditMap() {
       setIsOpen(false);
     } else {
       setIsMoveable(false);
-    setEdgeCreationOpen(false);
-    setIsOpen(false);
-    setIsMoveable(false);
-    setEdgeNodes([
-      new MapNode("", 0, 0, "", "", "", "", ""),
-      new MapNode("", 0, 0, "", "", "", "", ""),
-    ]);
-    switch (newMode) {
-      case "add_node":
-        break;
-      case "move_node":
-        setIsMoveable(true);
-        break;
-      case "delete_node":
-        break;
-      case "add_edge":
-        setEdgeCreationOpen(true);
-        break;
-      default:
-        setIsMoveable(false);
-        break;
-
+      setEdgeCreationOpen(false);
+      setOpenEdgeDeletion(false);
+      setIsOpen(false);
+      setIsMoveable(false);
+      setEdgeNodes([
+        new MapNode("", 0, 0, "", "", "", "", ""),
+        new MapNode("", 0, 0, "", "", "", "", ""),
+      ]);
+      switch (newMode) {
+        case "add_node":
+          break;
+        case "move_node":
+          setIsMoveable(true);
+          break;
+        case "delete_node":
+          break;
+        case "add_edge":
+          setEdgeCreationOpen(true);
+          break;
+        case "delete_edge":
+          setOpenEdgeDeletion(true);
+          break;
+        default:
+          setIsMoveable(false);
+          break;
+      }
     }
   };
 
@@ -267,6 +290,7 @@ function EditMap() {
 
           {/*Form for creating edge*/}
           {openEdgeCreation && <CreateEdgeForm nodes={edgeNodes} />}
+          {openEdgeDeletion && <DeleteEdgeForm nodes={edgeNodes} />}
 
           <div
             className="mr-8
@@ -320,5 +344,4 @@ function EditMap() {
     </div>
   );
 }
-
 export default EditMap;
