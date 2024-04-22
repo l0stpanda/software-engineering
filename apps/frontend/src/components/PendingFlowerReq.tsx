@@ -20,7 +20,7 @@ type FlowerReqData = {
   flowerID: FlowerArray[];
 };
 
-function PendingRequestItem(props: FlowerReqData) {
+function PendingFlowerReq(props: FlowerReqData) {
   const { getAccessTokenSilently } = useAuth0();
 
   // Formats date string to date format
@@ -114,4 +114,4 @@ function PendingRequestItem(props: FlowerReqData) {
   );
 }
 
-export default PendingRequestItem;
+export default PendingFlowerReq;
