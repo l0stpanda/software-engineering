@@ -7,7 +7,8 @@ export interface IPathfinding {
 
 export type directionInfo = {
   floor: string; // Floor directions are on
-  directions: string[]; // String of directions for user
+  directions: string[]; // Turns/straights, associated with nodes
+  nodes: string[]; // Node names, associated with directions
 };
 
 export class Pathfinding {
@@ -40,7 +41,8 @@ export class Pathfinding {
 
 export function getDirections(path: string[], graph: Graph) {
   const directions: directionInfo[] = [];
-  let currSet: string[] = [];
+  let currDir: string[] = [];
+  let currNodes: string[] = [];
   let changeFloors: MapNode | undefined = undefined;
   for (let i = 0; i < path.length - 1; i++) {
     // Special case for start node
@@ -48,13 +50,13 @@ export function getDirections(path: string[], graph: Graph) {
       const nextNode = graph.getNode(path[1]);
       const currNode = graph.getNode(path[0]);
       if (nextNode && currNode) {
-        currSet.push(`Floor ${currNode.getFloor()}: `);
         // Check for floor change
         if (currNode.getFloor() != nextNode.getFloor()) {
           changeFloors = currNode;
           // We do not know what direction the user is facing
         } else {
-          currSet.push(`Go towards ${nextNode.getLongName()} `);
+          currDir.push(`forward`);
+          currNodes.push(currNode.getLongName());
         }
       }
     } else {
@@ -65,17 +67,19 @@ export function getDirections(path: string[], graph: Graph) {
       if (prevNode && nextNode && currNode) {
         // Standard check
         if (!changeFloors && nextNode.getFloor() == currNode.getFloor()) {
-          switch (getMovement(nextNode, prevNode, currNode)) {
-            case "forward":
-              currSet.push(`Continue straight at ${currNode.getLongName()} `);
-              break;
-            case "right":
-              currSet.push(`Turn right at ${currNode.getLongName()} `);
-              break;
-            case "left":
-              currSet.push(`Turn left at ${currNode.getLongName()} `);
-              break;
-          }
+          // switch (getMovement(nextNode, prevNode, currNode)) {
+          //   case "forward":
+          //     currDir.push(`Continue straight at ${currNode.getLongName()} `);
+          //     break;
+          //   case "right":
+          //     currDir.push(`Turn right at ${currNode.getLongName()} `);
+          //     break;
+          //   case "left":
+          //     currDir.push(`Turn left at ${currNode.getLongName()} `);
+          //     break;
+          // }
+          currDir.push(getMovement(nextNode, prevNode, currNode));
+          currNodes.push(currNode.getLongName());
         }
         // Start floor change
         else if (!changeFloors) {
@@ -83,15 +87,17 @@ export function getDirections(path: string[], graph: Graph) {
         }
         // End floor change
         else if (changeFloors && nextNode.getFloor() == currNode.getFloor()) {
-          currSet.push(
+          currDir.push(
             `Take ${changeFloors.getLongName()} to floor ${currNode.getFloor()}`,
           );
           directions.push({
             floor: changeFloors.getFloor(),
-            directions: currSet,
+            directions: currDir,
+            nodes: currNodes,
           });
           changeFloors = undefined;
-          currSet = [`Floor ${currNode.getFloor()}: `];
+          currNodes = [];
+          currDir = [];
           i--;
         }
       }
@@ -99,7 +105,11 @@ export function getDirections(path: string[], graph: Graph) {
     if (i == path.length - 2) {
       const goal = graph.getNode(path[i + 1]);
       if (!goal) throw new Error("You ain't getting here");
-      directions.push({ floor: goal.getFloor(), directions: currSet });
+      directions.push({
+        floor: goal.getFloor(),
+        directions: currDir,
+        nodes: currNodes,
+      });
     }
   }
 
