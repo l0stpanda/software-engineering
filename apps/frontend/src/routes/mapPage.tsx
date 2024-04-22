@@ -28,7 +28,7 @@ import { ArrowBack } from "@mui/icons-material";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import ModeIcon from "@mui/icons-material/Mode";
 import { useAuth0 } from "@auth0/auth0-react";
-import * as console from "console";
+// import * as console from "console";
 import { directionInfo, getDirections } from "../objects/Pathfinding.ts";
 import { JSX } from "react/jsx-runtime";
 import axios from "axios";
@@ -99,13 +99,13 @@ function Map() {
   function handleFormSubmit() {
     const cleanStart = navigatingNodes.start.replace("\r", "");
     const cleanEnd = navigatingNodes.end.replace("\r", "");
-    console.log(cleanStart, cleanEnd);
+    // console.log(cleanStart, cleanEnd);
     setSubmitValues([cleanStart, cleanEnd]);
   }
 
   // Changes the map image
   const changeFloor = (floor: string) => {
-    console.log(floor);
+    // console.log(floor);
     setImgState(floor);
   };
 
@@ -120,7 +120,7 @@ function Map() {
   // Since this is the page that all the users are forwared to on login we store the
   useEffect(() => {
     async function sendUser() {
-      console.log("STUFF IS HAPPENING");
+      // console.log("STUFF IS HAPPENING");
       const token = await getAccessTokenSilently();
       const send: userInfo = {
         user_id: user?.sub,
@@ -168,7 +168,9 @@ function Map() {
       for (let i = 0; i < data.directions.length; i++) {
         output.push(
           <>
-            <div className="border-primary border-b">{data.directions[i]}</div>
+            <div className="border-primary border-b">
+              {data.directions[i]} {data.nodes[i]}
+            </div>
           </>,
         );
       }

@@ -55,7 +55,7 @@ export function getDirections(path: string[], graph: Graph) {
           changeFloors = currNode;
           // We do not know what direction the user is facing
         } else {
-          currDir.push(`forward`);
+          currDir.push(`Continue straight at `);
           currNodes.push(currNode.getLongName());
         }
       }
@@ -140,11 +140,11 @@ function getMovement(
 
   const diff = angleNext - anglePrev;
 
-  if (forward(diff)) return "forward";
+  if (forward(diff)) return "Continue straight at ";
   else if (left(diff)) {
-    return "left";
+    return "Turn left at ";
   }
-  return "right";
+  return "Turn right at ";
 }
 
 function getEuclidian(node1: MapNode, node2: MapNode): number {
