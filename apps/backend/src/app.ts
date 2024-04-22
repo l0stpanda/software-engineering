@@ -12,6 +12,7 @@ import medicalDeviceDelivery from "./routes/medicalDeviceDelivery.ts";
 import inventory from "./routes/inventory.ts";
 import lostAndFound from "./routes/lostAndFound.ts";
 import medicineRequest from "./routes/medicineRequest.ts";
+import sanitationRequest from "./routes/sanitationRequest.ts";
 import editMap from "./routes/editPage.ts";
 import userStuff from "./routes/userStorage.ts";
 import userAdd from "./routes/userAdd.ts";
@@ -61,6 +62,7 @@ app.use("/api/lostAndFound", lostAndFound);
 app.use("/api/medicineRequest", medicineRequest);
 app.use("/api/editMap", editMap);
 app.use("/api/roomSchedulingRequest", roomScheduler);
+app.use("/api/sanitationRequest", sanitationRequest);
 app.use("/api/todoStuff", userStuff);
 
 /**

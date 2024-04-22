@@ -159,6 +159,15 @@ function EditMap() {
   ) => {
     setMode(newMode);
     console.log(mode);
+    if (newMode === "add_node") {
+      setIsMoveable(false);
+    } else if (newMode === "move_node") {
+      setIsOpen(false);
+      setIsMoveable(true);
+    } else if (newMode === "delete_node") {
+      setIsOpen(false);
+    } else {
+      setIsMoveable(false);
     setEdgeCreationOpen(false);
     setIsOpen(false);
     setIsMoveable(false);
@@ -180,6 +189,7 @@ function EditMap() {
       default:
         setIsMoveable(false);
         break;
+
     }
   };
 
