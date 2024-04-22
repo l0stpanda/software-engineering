@@ -68,4 +68,8 @@ export class MapNode {
   getShortName() {
     return this.shortName;
   }
+
+  getBuilding() {
+    return this.building;
+  }
 }

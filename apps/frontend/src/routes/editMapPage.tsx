@@ -158,23 +158,30 @@ function EditMap() {
     newMode: string | null,
   ) => {
     setMode(newMode);
-    console.log(mode);
     setEdgeCreationOpen(false);
     setIsOpen(false);
     setIsMoveable(false);
+    console.log("old mode: ", mode);
+    console.log("new mod: ", newMode);
     setEdgeNodes([
       new MapNode("", 0, 0, "", "", "", "", ""),
       new MapNode("", 0, 0, "", "", "", "", ""),
     ]);
     switch (newMode) {
       case "add_node":
+        setIsMoveable(false);
+        setClicked(undefined);
+        console.log(isMoveable);
         break;
       case "move_node":
         setIsMoveable(true);
         break;
       case "delete_node":
+        setIsMoveable(false);
+        console.log(isMoveable);
         break;
       case "add_edge":
+        setIsMoveable(false);
         setEdgeCreationOpen(true);
         break;
       default:
@@ -184,9 +191,10 @@ function EditMap() {
   };
 
   const handlePopup = (childData: boolean) => {
+    setIsMoveable(false);
     if (mode === "add_node") {
       setIsOpen(childData);
-      console.log(isOpen);
+      console.log("moveable: ", isMoveable);
     } else {
       setIsOpen(false);
     }
@@ -251,9 +259,14 @@ function EditMap() {
         >
           {/*Form for adding a new node*/}
           {isOpen && (
-            <EditNodeForm node={new MapNode("", 0, 0, "", "", "", "", "")} />
+            <EditNodeForm
+              node={new MapNode("", 0, 0, "", "", "", "", "")}
+              mode={mode}
+            />
           )}
-          {clicked && <EditNodeForm node={clicked} />}
+          {clicked && mode !== "add_node" && (
+            <EditNodeForm node={clicked} mode={mode} />
+          )}
 
           {/*Form for creating edge*/}
           {openEdgeCreation && <CreateEdgeForm nodes={edgeNodes} />}
