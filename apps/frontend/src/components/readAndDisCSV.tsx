@@ -221,51 +221,60 @@ function SingleDisplay() {
     //upload merge ends
 
 
-
   return (
-      <div className="flex flex-col px-6 bg-background">
-          <div className="flex-row">
+      <div className="flex flex-col px-6 bg-background py-1">
+          <div className="grid grid-cols-2">
               {/*download buttonss*/}
-              <div className=" inline-flex bg-background rounded-xl px-4 h-fit justify-center py-5 gap-4">
-                  <h1 className="font-header text-primary font-bold text-3xl text-center">
-                      Download Files
-                  </h1>
+              <div className=" inline-flex bg-background rounded-xl px-6 h-fit justify-left pt-5 gap-4">
+                  <div>
+                      <h1 className="font-header text-primary font-bold text-3xl text-center">
+                          Download Files
+                      </h1>
+                      <p className=" font-body text-primary text-sm text-left pb-5">
+                          Download the node or edge files
+                      </p>
+                  </div>
+
                   {/*<h1 className=" font-body text-primary text-2xl text-center pb-4">*/}
                   {/*    Download node or edge file*/}
                   {/*</h1>*/}
                   {/*Download Node CSV button*/}
-                  <Button
-                      variant="contained"
-                      color="primary"
-                      component="span"
-                      sx={{borderRadius: "30px"}}
-                      className="w-32 self-center text-center"
-                      onClick={() => handleDownload("/api/read/nodes", "Nodes.csv")}
-                  >
-                      Node CSV
-                  </Button>
-                  {/*Download Edge CSV button*/}
-                  <Button
-                      variant="contained"
-                      color="primary"
-                      component="span"
-                      sx={{borderRadius: "30px"}}
-                      className="w-32 self-center text-center"
-                      onClick={() => handleDownload("/api/read/edges", "Edges.csv")}
-                  >
-                      Edge CSV
-                  </Button>
-                  {/*View Table button*/}
+                  <label className="pt-2">
+                      <Button
+                          variant="contained"
+                          color="primary"
+                          component="span"
+                          sx={{borderRadius: "30px"}}
+                          className="w-32 self-center text-center"
+                          onClick={() => handleDownload("/api/read/nodes", "Nodes.csv")}
+                      >
+                          Node CSV
+                      </Button>
+                  </label>
+                      {/*Download Edge CSV button*/}
+                  <label className="pt-2">
+                      <Button
+                          variant="contained"
+                          color="primary"
+                          component="span"
+                          sx={{borderRadius: "30px"}}
+                          className="w-32 self-center text-center"
+                          onClick={() => handleDownload("/api/read/edges", "Edges.csv")}
+                      >
+                          Edge CSV
+                      </Button>
+                  </label>
+                      {/*View Table button*/}
               </div>
               {/*download buttonss*/}
 
               {/*upload buttonss*/}
-              <div className="inline-flex bg-background rounded-xl px-6 h-fit justify-center py-5 gap-4">
-                  <div className="grid-cols-2 ">
+              <div className="inline-flex bg-background rounded-xl px-6 h-fit justify-left pt-5 gap-4">
+                  <div className="grid-cols-2">
                       <h1 className="font-header text-primary font-bold text-3xl text-left">
                           Upload Files
                       </h1>
-                      <p className=" font-body text-primary text-sm text-left pb-4">
+                      <p className=" font-body text-primary text-sm text-left pb-5">
                           Enter a csv file titled "edges" or "nodes"
                       </p>
                   </div>
@@ -279,7 +288,7 @@ function SingleDisplay() {
                       accept=".csv"
                   />
                   {/*Pretty input box for CSV upload*/}
-                  <label className="self-center" htmlFor="contained-button-file">
+                  <label className="pt-2 " htmlFor="contained-button-file">
                       <Button
                           variant="contained"
                           color="primary"
@@ -291,15 +300,17 @@ function SingleDisplay() {
                       </Button>
                   </label>
                   {file && (
-                      <Button
-                          type="button"
-                          className="w-50 self-center"
-                          sx={{borderRadius: "30px"}}
-                          variant="contained"
-                          onClick={handleUpload}
-                      >
-                          Upload " {file.name.toString()} "
-                      </Button>
+                      <label className="pt-2">
+                          <Button
+                              type="button"
+                              className="w-50 self-center"
+                              sx={{borderRadius: "30px"}}
+                              variant="contained"
+                              onClick={handleUpload}
+                          >
+                              Upload " {file.name.toString()} "
+                          </Button>
+                      </label>
                   )}
               </div>
               <Dialog open={loadingDialog}>
@@ -310,14 +321,14 @@ function SingleDisplay() {
 
           <div>
               <hr className=""/>
-              <h1 className="font-header text-primary font-bold text-3xl text-center  px-6 h-fit justify-center pt-5 gap-4">
+              <h1 className="font-header text-primary font-bold text-3xl text-center px-6 h-fit justify-center pt-10 gap-4 -m-5">
                   View Tables
               </h1>
 
               <Tabs
                   value={tableDisplayed}
                   onChange={handleTabChange}
-                  className="my-2"
+                  className=""
               >
                   <Tab label="Edges Table" id="tab-1"/>
                   <Tab label="Nodes Table" id="tab-2"/>
