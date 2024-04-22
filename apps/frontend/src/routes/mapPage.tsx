@@ -131,7 +131,13 @@ function Map() {
   function showDirections() {
     const output: JSX.Element[] = [];
     directions.forEach((data: directionInfo) => {
-      output.push(<p>{data.directions}</p>);
+      for (let i = 0; i < directions[0].directions.length; i++) {
+        output.push(
+          <>
+            <div className="border-primary border-b">{data.directions[i]}</div>
+          </>,
+        );
+      }
       return data;
     });
     return output;
@@ -221,7 +227,6 @@ function Map() {
                     pathRef={path}
                     pathSetter={setPath}
                   />
-                  {showDirections()}
                 </TransformComponent>
               </div>
             </TransformWrapper>
@@ -325,6 +330,24 @@ function Map() {
             ) : (
               <></>
             )}
+          </div>
+          <div
+            className="mr-8
+                    ml-5
+                    my-5
+                    py-5
+                    px-5
+                    flex
+                    flex-col
+                    items-center
+                    bg-background
+                    rounded-xl
+                    border-primary
+                    border-2"
+          >
+            <div className="flex flex-col justify-center">
+              {showDirections()}
+            </div>
           </div>
         </div>
       </div>
