@@ -38,6 +38,7 @@ function Map() {
   const [update, setUpdate] = useState(0);
   const [imgState, setImgState] = useState<string>(floor1);
   const [algorithm, setAlgorithm] = useState<string>("AStar");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const { getAccessTokenSilently, user } = useAuth0();
 
@@ -116,7 +117,7 @@ function Map() {
         user_id: user?.sub,
         email: user?.email,
         username: user?.preferred_username,
-        role: "Random for now",
+        role: "Admin",
       };
       await axios.post("/api/userAdding", send, {
         headers: {
@@ -124,6 +125,16 @@ function Map() {
           "Content-Type": "application/json",
         },
       });
+      axios
+        .get("/api/adminAccess", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(() => {
+          setIsAdmin(true);
+        })
+        .catch();
     }
     sendUser().then();
   }, [
@@ -312,7 +323,7 @@ function Map() {
           {/*second non-functional box for rn*/}
           <br />
           <div className="flex flex-col">
-            {user ? (
+            {isAdmin ? (
               <a href="editMap" className="self-center">
                 <Button
                   type="button"

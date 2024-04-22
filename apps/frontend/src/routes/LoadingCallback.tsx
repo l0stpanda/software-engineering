@@ -30,9 +30,5 @@ export default function LoadingPage(props: {
       <SpinningLoader />
     ),
   });
-  if (props.adminOnly) {
-    return <Component />;
-  } else {
-    return <Component />;
-  }
+  return <Component />;
 }

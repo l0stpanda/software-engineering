@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { AppBar, Button, Menu, MenuItem, Toolbar } from "@mui/material";
 import BWLogo from "/BWLogo.png";
 import { useAuth0 } from "@auth0/auth0-react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import axios from "axios";
 
 function CustomNavBar() {
   const {
@@ -16,7 +17,17 @@ function CustomNavBar() {
   useEffect(() => {
     const getAuthToken = async () => {
       try {
-        await getAccessTokenSilently();
+        const token = await getAccessTokenSilently();
+        axios
+          .get("/api/adminAccess", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then(() => {
+            setIsAdmin(true);
+          })
+          .catch();
       } catch (error) {
         await loginWithRedirect({
           appState: {
@@ -46,6 +57,7 @@ function CustomNavBar() {
     null,
   );
   const openAdmin = Boolean(anchorElAdmin);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   function handleRequestsOpen(e: React.MouseEvent<HTMLElement>) {
     setAnchorEl(e.currentTarget);
@@ -89,9 +101,13 @@ function CustomNavBar() {
             {/*<Button component="a" href="imp">*/}
             {/*  Import*/}
             {/*</Button>*/}
-            <Button onClick={handleAdminOpen} endIcon={<ArrowDropDownIcon />}>
-              Admin
-            </Button>
+            {isAdmin ? (
+              <Button onClick={handleAdminOpen} endIcon={<ArrowDropDownIcon />}>
+                Admin
+              </Button>
+            ) : (
+              <></>
+            )}
             <Menu
               open={openAdmin}
               onClose={handleAdminClosed}

@@ -1,6 +1,7 @@
 import { claimCheck, InsufficientScopeError } from "express-oauth2-jwt-bearer";
 import { Request, Response, NextFunction } from "express";
 
+// Check if user possesses given permissions in Auth0 for an action
 export const checkRequiredPermissions = (requiredPermissions: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     console.log("Checking perms!");

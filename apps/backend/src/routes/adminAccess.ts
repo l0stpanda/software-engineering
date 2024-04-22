@@ -3,6 +3,7 @@ import { checkRequiredPermissions } from "./auth0Perms.ts";
 
 const router: Router = express.Router();
 
+// Returns successful 200 status if user is an admin, otherwise unauthorized
 router.get(
   "/",
   checkRequiredPermissions(["read:admin-pages"]),
