@@ -31,6 +31,13 @@ import { useAuth0 } from "@auth0/auth0-react";
 import * as console from "console";
 import { directionInfo, getDirections } from "../objects/Pathfinding.ts";
 import { JSX } from "react/jsx-runtime";
+import axios from "axios";
+type userInfo = {
+  user_id: string | undefined;
+  email: string | undefined;
+  username: string | undefined;
+  role: string | undefined;
+};
 
 function Map() {
   const divRef = useRef<HTMLDivElement>(null);
@@ -42,7 +49,7 @@ function Map() {
   const [directions, setDirections] = useState<directionInfo[]>([]);
   const [path, setPath] = useState<string[]>([]);
 
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
 
   // Zoom in/out buttons for map viewing
   const Controls = () => {
@@ -98,6 +105,7 @@ function Map() {
 
   // Changes the map image
   const changeFloor = (floor: string) => {
+    console.log(floor);
     setImgState(floor);
   };
 
@@ -108,6 +116,32 @@ function Map() {
       setDivDimensions({ width: clientWidth, height: clientHeight });
     }
   }, [divRef]);
+
+  // Since this is the page that all the users are forwared to on login we store the
+  useEffect(() => {
+    async function sendUser() {
+      console.log("STUFF IS HAPPENING");
+      const token = await getAccessTokenSilently();
+      const send: userInfo = {
+        user_id: user?.sub,
+        email: user?.email,
+        username: user?.preferred_username,
+        role: "Random for now",
+      };
+      await axios.post("/api/userAdding", send, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+    }
+    sendUser().then();
+  }, [
+    getAccessTokenSilently,
+    user?.email,
+    user?.preferred_username,
+    user?.sub,
+  ]);
 
   // Updates the graph when it has been received from the database
   useEffect(() => {
@@ -131,7 +165,7 @@ function Map() {
   function showDirections() {
     const output: JSX.Element[] = [];
     directions.forEach((data: directionInfo) => {
-      for (let i = 0; i < directions[0].directions.length; i++) {
+      for (let i = 0; i < data.directions.length; i++) {
         output.push(
           <>
             <div className="border-primary border-b">{data.directions[i]}</div>
