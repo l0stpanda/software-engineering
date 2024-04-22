@@ -28,6 +28,8 @@ import { ArrowBack } from "@mui/icons-material";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import ModeIcon from "@mui/icons-material/Mode";
 import { useAuth0 } from "@auth0/auth0-react";
+import axios from "axios";
+import { userInfo } from "common/src/userInfo.ts";
 
 function Map() {
   const divRef = useRef<HTMLDivElement>(null);
@@ -37,7 +39,7 @@ function Map() {
   const [imgState, setImgState] = useState<string>(floor1);
   const [algorithm, setAlgorithm] = useState<string>("AStar");
 
-  const { user } = useAuth0();
+  const { getAccessTokenSilently, user } = useAuth0();
 
   // Zoom in/out buttons for map viewing
   const Controls = () => {
@@ -104,6 +106,32 @@ function Map() {
       setDivDimensions({ width: clientWidth, height: clientHeight });
     }
   }, [divRef]);
+
+  // Since this is the page that all the users are forwared to on login we store the
+  useEffect(() => {
+    async function sendUser() {
+      console.log("STUFF IS HAPPENING");
+      const token = await getAccessTokenSilently();
+      const send: userInfo = {
+        user_id: user?.sub,
+        email: user?.email,
+        username: user?.preferred_username,
+        role: "Random for now",
+      };
+      await axios.post("/api/userAdding", send, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+    }
+    sendUser().then();
+  }, [
+    getAccessTokenSilently,
+    user?.email,
+    user?.preferred_username,
+    user?.sub,
+  ]);
 
   // Updates the graph when it has been received from the database
   useEffect(() => {

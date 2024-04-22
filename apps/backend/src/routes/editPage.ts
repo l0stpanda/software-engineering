@@ -49,4 +49,22 @@ router.post("/editNodeInfo", async function (req: Request, res: Response) {
   }
   res.sendStatus(200);
 });
+
+router.post("/addEdge", async function (req: Request, res: Response) {
+  const input: { id: string; start_node: string; end_node: string } = req.body;
+  try {
+    await PrismaClient.edges.create({
+      data: {
+        id: input.id,
+        start_node: input.start_node,
+        end_node: input.end_node,
+      },
+    });
+  } catch (e) {
+    res.sendStatus(400);
+    return;
+  }
+  res.sendStatus(200);
+});
+
 export default router;
