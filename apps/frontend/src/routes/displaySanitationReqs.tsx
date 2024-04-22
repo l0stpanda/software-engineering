@@ -5,18 +5,15 @@ import PendingSanitationRequestComponent from "../components/PendingSanitationRe
 
 // Define database json type
 type SanitationReq = {
-  employeeName: string;
-  roomName: string;
+  room_name: string;
   severity: string;
   hazardous: string;
-  priority: string;
-  status: string;
 };
 type LostFoundData = {
   id: number;
   status: string;
   priority: string;
-  sanitationRequest: SanitationReq[];
+  sanitationID: SanitationReq[];
 };
 
 export default function PendingSanitationRequest() {
@@ -31,7 +28,7 @@ export default function PendingSanitationRequest() {
     const fetchData = async () => {
       try {
         const token = await getAccessTokenSilently();
-        const response = await axios.get("/api/medicalDevice", {
+        const response = await axios.get("/api/sanitationRequest", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -89,7 +86,7 @@ export default function PendingSanitationRequest() {
               id={record.id}
               status={record.status}
               priority={record.priority}
-              sanitationRequest={record.sanitationRequest}
+              sanitationID={record.sanitationID}
             />
           ))}
         </tbody>

@@ -5,22 +5,18 @@ import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 
 type SanitationReq = {
-  employeeName: string;
-  roomName: string;
+  room_name: string;
   severity: string;
   hazardous: string;
-  priority: string;
-  status: string;
 };
-
-type lostAndFound = {
+type LostFoundData = {
   id: number;
   status: string;
   priority: string;
-  sanitationRequest: SanitationReq[];
+  sanitationID: SanitationReq[];
 };
 
-function PendingSanitationRequest(props: lostAndFound) {
+function PendingSanitationRequest(props: LostFoundData) {
   const { getAccessTokenSilently } = useAuth0();
 
   const [status, setStatus] = useState<string>(props.status);
@@ -85,9 +81,9 @@ function PendingSanitationRequest(props: lostAndFound) {
         </Select>
       </td>
       <td className="p-3 text-sm">{props.priority}</td>
-      <td className="p-3 text-sm">{props.sanitationRequest[0].severity}</td>
-      <td className="p-3 text-sm">{props.sanitationRequest[0].roomName}</td>
-      <td className="p-3 text-sm">{props.sanitationRequest[0].hazardous}</td>
+      <td className="p-3 text-sm">{props.sanitationID[0].severity}</td>
+      <td className="p-3 text-sm">{props.sanitationID[0].room_name}</td>
+      <td className="p-3 text-sm">{props.sanitationID[0].hazardous}</td>
       <td className="p-3 text-sm">
         <button>
           <img
