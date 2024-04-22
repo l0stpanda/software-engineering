@@ -59,8 +59,8 @@ router.post("/addNode", async function (req: Request, res: Response) {
     floor: string;
     nodeType: string;
     shortName: string;
-    x: string;
-    y: string;
+    x_c: string;
+    y_c: string;
     building: string;
   } = req.body;
   try {
@@ -71,8 +71,8 @@ router.post("/addNode", async function (req: Request, res: Response) {
         floor: input.floor,
         node_type: input.nodeType,
         short_name: input.shortName,
-        x_c: input.x,
-        y_c: input.y,
+        x_c: input.x_c,
+        y_c: input.y_c,
         building: input.building,
       },
     });

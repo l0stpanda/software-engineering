@@ -44,7 +44,7 @@ app.use("/api/import", importRouter);
 app.use("/api/login", loginRequest);
 app.use("/api/read", readRouter);
 app.use("/api/userAdding", userAdd);
-
+app.use("/api/editMap", editMap);
 // Enable auth0 enforcement
 app.use(
   auth({
@@ -59,7 +59,7 @@ app.use("/api/inventory", inventory);
 app.use("/api/medicalDevice", medicalDeviceDelivery);
 app.use("/api/lostAndFound", lostAndFound);
 app.use("/api/medicineRequest", medicineRequest);
-app.use("/api/editMap", editMap);
+
 app.use("/api/roomSchedulingRequest", roomScheduler);
 app.use("/api/todoStuff", userStuff);
 
