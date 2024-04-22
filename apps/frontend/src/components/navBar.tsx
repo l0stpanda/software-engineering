@@ -145,6 +145,9 @@ function CustomNavBar() {
               <MenuItem href="lostitemrequest" component="a">
                 Lost Item
               </MenuItem>
+              <MenuItem href="sanitationRequest" component="a">
+                Sanitation Request
+              </MenuItem>
             </Menu>
             <Button component="a" href="todo">
               Task Board

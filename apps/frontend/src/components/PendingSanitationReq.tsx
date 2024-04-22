@@ -26,7 +26,7 @@ function PendingSanitationRequest(props: LostFoundData) {
     const token = await getAccessTokenSilently();
     setStatus(e.target.value);
     await axios.post(
-      "/api/sanitationReq/update",
+      "/api/sanitationRequest/update",
       {
         id: props.id,
         status: e.target.value,

@@ -1,6 +1,6 @@
 import React, { FormEvent, useState } from "react";
 import {
-  TextField,
+  //TextField,
   Button,
   FormControl,
   Dialog,
@@ -15,6 +15,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import BackgroundPattern from "../components/allyBackground.tsx";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import axios from "axios";
+import UserDropdown from "../components/userDropdown.tsx";
 
 function SanitationRequest() {
   type SanitationReq = {
@@ -30,7 +31,7 @@ function SanitationRequest() {
     employeeName: "",
     roomName: "",
     severity: "",
-    hazardous: " ",
+    hazardous: "",
     priority: "Medium",
     status: "Unassigned",
   });
@@ -65,9 +66,9 @@ function SanitationRequest() {
   function updateRoom(val: string) {
     setFormData({ ...formData, roomName: val });
   }
-  function handleFormInput(e: React.ChangeEvent<HTMLInputElement>) {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  }
+  // function handleFormInput(e: React.ChangeEvent<HTMLInputElement>) {
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  // }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -101,6 +102,10 @@ function SanitationRequest() {
     setOpen(true); // Open dialog box on successful submission
   }
 
+  function updateName(val: string) {
+    setFormData({ ...formData, employeeName: val });
+  }
+
   function handleSubmitClose() {
     setOpen(false);
     clear();
@@ -115,14 +120,19 @@ function SanitationRequest() {
         </h1>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4 my-4">
-            <TextField
-              onChange={handleFormInput}
-              value={formData.employeeName}
-              name="employeeName"
-              id="employeeName"
-              variant="filled"
-              label="Employee Name"
-              required={true}
+            {/*<TextField*/}
+            {/*  onChange={handleFormInput}*/}
+            {/*  value={formData.employeeName}*/}
+            {/*  name="employeeName"*/}
+            {/*  id="employeeName"*/}
+            {/*  variant="filled"*/}
+            {/*  label="Employee Name"*/}
+            {/*  required={true}*/}
+            {/*/>*/}
+            <UserDropdown
+              room={formData.employeeName}
+              update={updateName}
+              label={"Username"}
             />
 
             {/*Room Field*/}

@@ -106,6 +106,7 @@ router.post("/update", async function (req: Request, res: Response) {
   const status = req.body.status;
 
   try {
+    console.log(id);
     await PrismaClient.generalService.update({
       where: {
         id: id,
