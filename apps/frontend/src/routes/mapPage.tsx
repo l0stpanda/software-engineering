@@ -491,10 +491,11 @@ function Map() {
                     bg-background
                     border-primary
                     border-2
-                    overflow-y-auto
+                    overflow-clip
+                    rounded-lg
                     "
           >
-            {showDirections()}
+            <div className="overflow-y-auto h-full">{showDirections()}</div>
           </div>
         </div>
       </div>
