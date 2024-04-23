@@ -57,6 +57,8 @@ export default function PendingFlowerRequest() {
       }
     };
 
+    //Order by request type
+
     fetchData().catch((error) => {
       console.error("Error from fetchData promise:", error);
     });

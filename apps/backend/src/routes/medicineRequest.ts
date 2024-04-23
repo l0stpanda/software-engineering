@@ -35,6 +35,7 @@ router.post("/", async function (req: Request, res: Response) {
         type: "Medicine Request",
         location: roomStuff[0].node_id,
         status: input.status,
+        long_name_loc: input.location,
         emp_name: input.employeeName,
         priority: input.priority,
       },
