@@ -16,6 +16,7 @@ import sanitationRequest from "./routes/sanitationRequest.ts";
 import editMap from "./routes/editPage.ts";
 import userStuff from "./routes/userStorage.ts";
 import userAdd from "./routes/userAdd.ts";
+import fetchAll from "./routes/allFetching.ts";
 import { auth } from "express-oauth2-jwt-bearer";
 
 const app: Express = express(); // Setup the backend
@@ -46,6 +47,8 @@ app.use("/api/login", loginRequest);
 app.use("/api/read", readRouter);
 app.use("/api/userAdding", userAdd);
 app.use("/api/editMap", editMap);
+app.use("/api/fetchAll", fetchAll);
+
 // Enable auth0 enforcement
 app.use(
   auth({

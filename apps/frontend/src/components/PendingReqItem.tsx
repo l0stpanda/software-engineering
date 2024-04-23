@@ -4,30 +4,23 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 
-type FlowerArray = {
-  sent_by: string;
-  sent_to: string;
-  requestDate: string;
-  note: string;
-  room_name: string;
-};
-
-type FlowerReqData = {
+type GeneralReq = {
   id: number;
-  status: string;
-  priority: string;
+  type: string;
   location: string;
-  flowerID: FlowerArray[];
+  status: string;
+  emp_name: string;
+  priority: string;
 };
 
-function PendingRequestItem(props: FlowerReqData) {
+function PendingFlowerReq(props: GeneralReq) {
   const { getAccessTokenSilently } = useAuth0();
 
   // Formats date string to date format
-  function formatDate(requestDate: string) {
-    const dateToFormat: Date = new Date(requestDate);
-    return dateToFormat.toLocaleDateString();
-  }
+  // function formatDate(requestDate: string) {
+  //   const dateToFormat: Date = new Date(requestDate);
+  //   return dateToFormat.toLocaleDateString();
+  // }
 
   const [status, setStatus] = useState<string>(props.status);
 
@@ -35,7 +28,7 @@ function PendingRequestItem(props: FlowerReqData) {
     const token = await getAccessTokenSilently();
     setStatus(e.target.value);
     await axios.post(
-      "/api/flowerRequest/update",
+      "/api/fetchAll/update",
       {
         id: props.id,
         status: e.target.value,
@@ -50,10 +43,10 @@ function PendingRequestItem(props: FlowerReqData) {
   }
 
   // Formats date string to time format
-  function formatTime(requestDate: string) {
-    const dateToFormat: Date = new Date(requestDate);
-    return dateToFormat.toLocaleTimeString();
-  }
+  // function formatTime(requestDate: string) {
+  //   const dateToFormat: Date = new Date(requestDate);
+  //   return dateToFormat.toLocaleTimeString();
+  // }
 
   //takes in the id of the request to be deleted and deletes in the database
   async function deleteData(idVal: number) {
@@ -61,7 +54,7 @@ function PendingRequestItem(props: FlowerReqData) {
     try {
       const token = await getAccessTokenSilently();
       //call to backend
-      await axios.delete(`api/flowerRequest/${idVal}`, {
+      await axios.delete(`api/fetchAll/${idVal}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -77,7 +70,7 @@ function PendingRequestItem(props: FlowerReqData) {
 
   return (
     <tr className="bg-background border-b-2 border-secondary" key={props.id}>
-      <td className="p-3 text-sm">{props.id}</td>
+      <td className="p-3 text-sm">{props.type}</td>
       <td className="p-3 text-sm">
         <Select
           name="status"
@@ -93,13 +86,9 @@ function PendingRequestItem(props: FlowerReqData) {
           <MenuItem value={"Closed"}>Closed</MenuItem>
         </Select>
       </td>
-      <td className="p-3 text-sm">
-        {formatDate(props.flowerID[0].requestDate)}
-      </td>
-      <td className="p-3 text-sm">
-        {formatTime(props.flowerID[0].requestDate)}
-      </td>
-      <td className="p-3 text-sm">{props.flowerID[0].room_name}</td>
+      <td className="p-3 text-sm">{props.priority}</td>
+      <td className="p-3 text-sm">{props.location}</td>
+      <td className="p-3 text-sm">{props.emp_name}</td>
       <td className="p-3 text-sm">
         <button>
           <img
@@ -114,4 +103,4 @@ function PendingRequestItem(props: FlowerReqData) {
   );
 }
 
-export default PendingRequestItem;
+export default PendingFlowerReq;
