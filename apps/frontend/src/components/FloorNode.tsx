@@ -18,6 +18,8 @@ interface FloorNodesProps {
   inputLoc: { start: string | undefined; end: string | undefined };
   divDim: { width: number; height: number };
   algorithm: string;
+  setPathSize: (a: number[]) => void;
+  pathSize: number[];
   pathRef: string[];
   pathSetter: (a: string[]) => void;
   updateStartAndEnd: (startNode: string, endNode: string) => void;
@@ -44,7 +46,7 @@ function FloorNode(props: FloorNodesProps) {
   const algo: Pathfinding = new Pathfinding(props.graph);
   const floor: string = getFloorByImage(props.imageSrc);
   const nodes: Map<string, MapNode> = Object.values(props.graph)[0];
-  console.log(nodes);
+
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -99,7 +101,7 @@ function FloorNode(props: FloorNodesProps) {
 
   const renderLines = () => {
     const input = props.inputLoc;
-    console.log("the input: ", input);
+    const size = [0, 0, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY];
 
     if (input.start !== undefined && input.end !== undefined) {
       //console.log(ids.startId, ids.endId);
@@ -142,6 +144,11 @@ function FloorNode(props: FloorNodesProps) {
             // Use startPoint.floor for next floor
             // Past
             if (changeStart.floor == floor) {
+              console.log(changeStart.x);
+              if (changeStart.x > size[0]) size[0] = changeStart.x;
+              if (changeStart.y > size[1]) size[1] = changeStart.y;
+              if (changeStart.x < size[2]) size[2] = changeStart.x;
+              if (changeStart.y < size[3]) size[3] = changeStart.y;
               floorChanges.push(
                 <Box
                   className="z-10 bg-primary m-0 text-background text-center text-[5px] flex-auto p-0.5"
@@ -160,6 +167,11 @@ function FloorNode(props: FloorNodesProps) {
             // Use startChange.floor for previous floor
             //Present
             if (endPoint.floor == floor) {
+              console.log(endPoint.x);
+              if (endPoint.x > size[0]) size[0] = endPoint.x;
+              if (endPoint.y > size[1]) size[1] = endPoint.y;
+              if (endPoint.x < size[2]) size[2] = endPoint.x;
+              if (endPoint.y < size[3]) size[3] = endPoint.y;
               if (i == path.length - 2) {
                 floorChanges.push(
                   <Box
@@ -205,11 +217,24 @@ function FloorNode(props: FloorNodesProps) {
                 className="path"
               />,
             );
+            // Gets limits of zoom
+            console.log(startPoint);
+            if (startPoint.x > size[0]) size[0] = startPoint.x;
+            if (startPoint.y > size[1]) size[1] = startPoint.y;
+            if (startPoint.x < size[2]) size[2] = startPoint.x;
+            if (startPoint.y < size[3]) size[3] = startPoint.y;
+            if (endPoint.x > size[0]) size[0] = endPoint.x;
+            if (endPoint.y > size[1]) size[1] = endPoint.y;
+            if (endPoint.x < size[2]) size[2] = endPoint.x;
+            if (endPoint.y < size[3]) size[3] = endPoint.y;
           }
         }
       }
       //console.log(lines);
-      console.log(floorChanges);
+      console.log(size.toString());
+      if (props.pathSize.toString() !== size.toString()) {
+        props.setPathSize(size);
+      }
       return [lines, floorChanges];
     }
     return [];
@@ -317,9 +342,8 @@ function getFloorByImage(imgName: string): string {
     } else {
       return "L2";
     }
-  } else {
-    return numbers as unknown as string;
   }
+  return numbers as unknown as string;
 }
 
 export default FloorNode;
