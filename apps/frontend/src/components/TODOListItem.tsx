@@ -2,8 +2,15 @@ import trashIcon from "../assets/trashicon.png";
 //import React, { useState } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Checkbox } from "@mui/material";
 import { useState } from "react";
+import {
+  Checkbox,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 //import LoginDialog from "./loginDialog.tsx";
 
 // import {
@@ -19,6 +26,7 @@ type toDoNow = {
   username: string | undefined;
   role: string | undefined;
   complete: boolean;
+  subtasks: string[];
 };
 
 function TODOListItem(props: toDoNow) {
@@ -68,26 +76,44 @@ function TODOListItem(props: toDoNow) {
   }
 
   return (
-    <>
-      <tr className="bg-background border-b-2 border-secondary" key={props.id}>
-        <td className="p-3 text-sm">
-          <Checkbox checked={completed} onChange={updateTodo} />
-        </td>
-        <td className="p-3 text-sm">{props.id}</td>
-        <td className="p-3 text-sm">{props.priority}</td>
-        <td className="p-3 text-sm">{props.task}</td>
-        <td className="p-3 text-sm">
-          <button>
-            <img
-              onClick={() => deleteData(props.id)}
-              src={trashIcon}
-              alt="Trash icon"
-              className="px-7 flex justify-center transform h-6 hover:scale-125"
-            />
-          </button>
-        </td>
-      </tr>
-    </>
+    <tr className="bg-background border-b-2 border-secondary">
+      <td className="p-3 text-sm">
+        <Checkbox checked={completed} onChange={updateTodo} />
+      </td>
+      <td className="p-3 text-sm">{props.id}</td>
+      <td className="p-3 text-sm">{props.priority}</td>
+      <td className="p-3 text-sm">
+        {props.subtasks && props.subtasks.length > 0 ? (
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>Subtasks</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <ul>
+                {props.subtasks.map((subtask, index) => (
+                  <li key={index}>{subtask}</li>
+                ))}
+              </ul>
+            </AccordionDetails>
+          </Accordion>
+        ) : (
+          "No Subtasks"
+        )}
+      </td>
+      <td className="p-3 text-sm">
+        <button onClick={() => deleteData(props.id)}>
+          <img
+            src={trashIcon}
+            alt="Delete"
+            className="h-6 hover:scale-125 cursor-pointer"
+          />
+        </button>
+      </td>
+    </tr>
   );
 }
 
