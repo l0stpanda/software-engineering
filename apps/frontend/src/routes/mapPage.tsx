@@ -12,6 +12,7 @@ import {
   TransformWrapper,
   TransformComponent,
   useControls,
+  ReactZoomPanPinchRef,
 } from "react-zoom-pan-pinch";
 import { useState } from "react";
 //import BackgroundPattern from "../components/backgroundPattern.tsx";
@@ -28,18 +29,24 @@ import { ArrowBack } from "@mui/icons-material";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import ModeIcon from "@mui/icons-material/Mode";
 import { useAuth0 } from "@auth0/auth0-react";
-// @ts-ignore
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { userInfo } from "common/src/userInfo.ts";
 
 function Map() {
   const divRef = useRef<HTMLDivElement>(null);
+  const transformRef = useRef<ReactZoomPanPinchRef>(null);
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
   const [graph, setGraph] = useState(new Graph());
   const [update, setUpdate] = useState(0);
   const [imgState, setImgState] = useState<string>(floor1);
   const [algorithm, setAlgorithm] = useState<string>("AStar");
+  const [pathSize, setPathSize] = useState<number[]>([
+    0,
+    0,
+    Number.POSITIVE_INFINITY,
+    Number.POSITIVE_INFINITY,
+  ]);
 
   const { getAccessTokenSilently, user } = useAuth0();
 
@@ -96,7 +103,6 @@ function Map() {
 
   // Changes the map image
   const changeFloor = (floor: string) => {
-    console.log(floor);
     setImgState(floor);
   };
 
@@ -134,6 +140,10 @@ function Map() {
     user?.sub,
   ]);
 
+  function log(data: React.RefObject<ReactZoomPanPinchRef>) {
+    console.log(data);
+  }
+
   // Updates the graph when it has been received from the database
   useEffect(() => {
     const tempGraph = new Graph();
@@ -143,6 +153,31 @@ function Map() {
       console.log(update);
     });
   }, [update]);
+
+  useEffect(() => {
+    if (transformRef.current) {
+      if (
+        pathSize.toString() !==
+        [0, 0, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY].toString()
+      ) {
+        const width = pathSize[0] - pathSize[2];
+        const height = pathSize[1] - pathSize[3];
+        const scale = Math.min(
+          divDimensions.width / width,
+          divDimensions.height / height,
+        );
+        const padding = 0;
+        transformRef.current.setTransform(
+          (pathSize[2] + padding) * scale,
+          (pathSize[3] + padding) * scale,
+          scale,
+        );
+      } else {
+        transformRef.current.setTransform(0, 0, 1);
+      }
+    }
+    log(transformRef);
+  }, [pathSize, divDimensions]);
 
   const changeAlgorithm = (event: SelectChangeEvent) => {
     setAlgorithm(event.target.value as string);
@@ -198,7 +233,7 @@ function Map() {
     );
   }
   const [expanded, setExpanded] = useState(false);
-  const isOpen = expanded !== false;
+  const isOpen = expanded;
   const Accordion = () => {
     const handleInnerClick = (e: React.MouseEvent<HTMLElement>) => {
       e.stopPropagation();
@@ -286,7 +321,7 @@ function Map() {
                     h-screen
                     w-screen"
         >
-          <TransformWrapper disablePadding={true}>
+          <TransformWrapper disablePadding={true} ref={transformRef}>
             <div className="">
               {/*Buttons for displaying floor images*/}
               <FloorMapButtons />
@@ -298,6 +333,8 @@ function Map() {
                   inputLoc={[submitValues[0], submitValues[1]]}
                   divDim={divDimensions}
                   algorithm={algorithm}
+                  setPathSize={setPathSize}
+                  pathSize={pathSize}
                 />
               </TransformComponent>
             </div>
@@ -319,7 +356,7 @@ function Map() {
         </div>
         <div
           className="fixed top-[25%] left-10"
-          onClick={() => setExpanded(isOpen ? false : true)}
+          onClick={() => setExpanded(!isOpen)}
         >
           <div className="mr-2 ml-0 py-1 px-16 items-center bg-primary rounded-xl border-primary border-2">
             <h2 style={{ color: "white" }}>Navigation</h2>

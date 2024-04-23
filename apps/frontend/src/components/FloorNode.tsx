@@ -18,6 +18,8 @@ interface FloorNodesProps {
   inputLoc: string[];
   divDim: { width: number; height: number };
   algorithm: string;
+  setPathSize: (a: number[]) => void;
+  pathSize: number[];
 }
 
 export interface FloorNodeInfo {
@@ -107,6 +109,7 @@ function FloorNode(props: FloorNodesProps) {
 
   const renderLines = () => {
     const input = calculateInput();
+    const size = [0, 0, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY];
     console.log(input);
 
     if (input.length == 2) {
@@ -160,6 +163,11 @@ function FloorNode(props: FloorNodesProps) {
                   To {startPoint.floor}
                 </Box>,
               );
+              console.log(changeStart.x);
+              if (changeStart.x > size[0]) size[0] = changeStart.x;
+              if (changeStart.y > size[1]) size[1] = changeStart.y;
+              if (changeStart.x < size[2]) size[2] = changeStart.x;
+              if (changeStart.y < size[3]) size[3] = changeStart.y;
             }
 
             // Use startChange.floor for previous floor
@@ -194,6 +202,11 @@ function FloorNode(props: FloorNodesProps) {
                   </Box>,
                 );
               }
+              console.log(endPoint.x);
+              if (endPoint.x > size[0]) size[0] = endPoint.x;
+              if (endPoint.y > size[1]) size[1] = endPoint.y;
+              if (endPoint.x < size[2]) size[2] = endPoint.x;
+              if (endPoint.y < size[3]) size[3] = endPoint.y;
             }
             changeStart = undefined;
           }
@@ -214,6 +227,10 @@ function FloorNode(props: FloorNodesProps) {
         }
       }
       //console.log(lines);
+      console.log(size.toString());
+      if (props.pathSize.toString() !== size.toString()) {
+        props.setPathSize(size);
+      }
       console.log(floorChanges);
       return [lines, floorChanges];
     }
