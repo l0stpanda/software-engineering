@@ -28,7 +28,7 @@ function PendingFlowerReq(props: GeneralReq) {
     const token = await getAccessTokenSilently();
     setStatus(e.target.value);
     await axios.post(
-      "/api/flowerRequest/update",
+      "/api/fetchAll/update",
       {
         id: props.id,
         status: e.target.value,
@@ -54,7 +54,7 @@ function PendingFlowerReq(props: GeneralReq) {
     try {
       const token = await getAccessTokenSilently();
       //call to backend
-      await axios.delete(`api/flowerRequest/${idVal}`, {
+      await axios.delete(`api/fetchAll/${idVal}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

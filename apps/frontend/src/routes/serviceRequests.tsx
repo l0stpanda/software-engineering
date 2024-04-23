@@ -26,7 +26,7 @@ function ServiceRequests() {
     const fetchData = async () => {
       try {
         const token = await getAccessTokenSilently();
-        const response = await axios.get("/api/flowerRequest", {
+        const response = await axios.get("/api/fetchAll", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
