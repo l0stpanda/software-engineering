@@ -9,6 +9,7 @@ type GeneralReq = {
   id: number;
   type: string;
   location: string;
+  long_name_loc: string;
   status: string;
   emp_name: string;
   priority: string;
@@ -85,6 +86,7 @@ function ServiceRequests() {
                     id={record.id}
                     status={record.status}
                     priority={record.priority}
+                    long_name_loc={record.long_name_loc}
                     location={record.location}
                     type={record.type}
                     emp_name={record.emp_name}
