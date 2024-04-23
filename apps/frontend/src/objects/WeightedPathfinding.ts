@@ -51,7 +51,6 @@ export abstract class WeightedPathfinding extends Pathfinding {
         );
 
         if (scores[0] < scores[1]) {
-          console.log("Debug");
           cameFrom.set(neighbor, current);
           gScores.set(neighbor, scores[0]);
           fScores.set(neighbor, scores[2]);
@@ -77,7 +76,6 @@ export abstract class WeightedPathfinding extends Pathfinding {
     goal: MapNode,
     cameFrom: Map<MapNode, MapNode>,
   ): string[] {
-    console.log(cameFrom);
     let current: MapNode | undefined = goal;
     const path: string[] = [current.getNodeID()];
 

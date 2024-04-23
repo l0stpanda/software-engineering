@@ -42,7 +42,9 @@ function MedicalDeviceRequest() {
     },
     ref: React.Ref<unknown>,
   ) {
-    return <Slide direction="up" ref={ref} {...props} />;
+    return (
+      <Slide direction="up" ref={ref} {...props} children={props.children} />
+    );
   });
 
   const [open, setOpen] = useState(false);
