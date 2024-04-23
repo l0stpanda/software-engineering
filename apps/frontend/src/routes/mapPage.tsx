@@ -488,9 +488,9 @@ function Map() {
           )}
         </div>
         <div
-          className="mr-8
-                    ml-5
-                    my-5
+          className="
+                    top-10
+                    left-10
                     h-[177px]
                     items-center
                     bg-background
@@ -498,7 +498,7 @@ function Map() {
                     border-2
                     overflow-clip
                     rounded-lg
-                    "
+                    fixed"
         >
           <div className="overflow-y-auto h-full">{showDirections()}</div>
         </div>
