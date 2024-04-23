@@ -139,7 +139,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     props.nodeInfoCallback(nodeid);
     // need to log clicked so it can be used
     console.log(clicked);
-    if (props.mode === "add_mode") {
+    if (props.mode === "add_node") {
       props.popupCallback(true);
     }
   };
@@ -293,9 +293,9 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
             id="tempDiv"
             className="absolute border border-slate-300"
             style={{
-              width: "15px",
-              height: "15px",
-              backgroundColor: "#009BA8",
+              width: "6px",
+              height: "6px",
+              backgroundColor: "orangered",
               borderRadius: "50%",
               transform: "translate(-50%, -50%)",
               zIndex: 999,

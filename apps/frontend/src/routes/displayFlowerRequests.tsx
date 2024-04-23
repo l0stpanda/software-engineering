@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import PendingRequestItem from "../components/PendingRequestItem.tsx";
+import PendingFlowerReq from "../components/PendingFlowerReq.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import PendingLost from "./displayLost.tsx";
 import PendingRoomSched from "./displayRoomSched.tsx";
@@ -57,6 +57,8 @@ export default function PendingFlowerRequest() {
       }
     };
 
+    //Order by request type
+
     fetchData().catch((error) => {
       console.error("Error from fetchData promise:", error);
     });
@@ -109,7 +111,7 @@ export default function PendingFlowerRequest() {
               <tbody>
                 {/* Map through the records and create a row for each record */}
                 {records.map((record) => (
-                  <PendingRequestItem
+                  <PendingFlowerReq
                     key={record.id}
                     id={record.id}
                     status={record.status}

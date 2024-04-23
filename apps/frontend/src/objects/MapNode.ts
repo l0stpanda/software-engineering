@@ -65,6 +65,10 @@ export class MapNode {
     return this.shortName;
   }
 
+  getBuilding() {
+    return this.building;
+  }
+
   getNodeType() {
     return this.nodeType;
   }

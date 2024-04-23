@@ -18,6 +18,7 @@ import {
 import EditNodeForm from "../components/EditNodeForm.tsx";
 import CreateEdgeForm from "../components/CreateEdgeForm.tsx";
 import DeleteEdgeForm from "../components/DeleteEdgeForm.tsx";
+import DeleteNodeForm from "../components/DeleteNodeForm.tsx";
 
 // import {ZoomPanPinch} from "react-zoom-pan-pinch/dist/src/core/instance.core";
 // import CanvasMap from "../components/CanvasMap.tsx";
@@ -30,6 +31,7 @@ function EditMap() {
   const [clicked, setClicked] = useState<MapNode | undefined>(undefined);
   const [mode, setMode] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [openDeleteNode, setOpenDeleteNode] = useState(false);
   const [openEdgeCreation, setEdgeCreationOpen] = useState<boolean>(false);
   const [openEdgeDeletion, setOpenEdgeDeletion] = useState<boolean>(false);
   const [edgeNodes, setEdgeNodes] = useState<MapNode[]>([
@@ -167,6 +169,15 @@ function EditMap() {
           setEdgeNodes([newNode, new MapNode("", 0, 0, "", "", "", "", "")]);
         }
       }
+    } else if (openDeleteNode) {
+      const newNode = graph.getNode(childData);
+      if (newNode) {
+        setClicked(newNode);
+
+        console.log(
+          "Clicked a node while deleting a node" + newNode.getLongName(),
+        );
+      }
     } else {
       setClicked(graph.getNode(childData));
     }
@@ -182,6 +193,7 @@ function EditMap() {
     setOpenEdgeDeletion(false);
     setIsOpen(false);
     setIsMoveable(false);
+    setOpenDeleteNode(false);
     setEdgeNodes([
       new MapNode("", 0, 0, "", "", "", "", ""),
       new MapNode("", 0, 0, "", "", "", "", ""),
@@ -193,6 +205,7 @@ function EditMap() {
         setIsMoveable(true);
         break;
       case "delete_node":
+        setOpenDeleteNode(true);
         break;
       case "add_edge":
         setEdgeCreationOpen(true);
@@ -274,10 +287,17 @@ function EditMap() {
         >
           {/*Form for adding a new node*/}
           {isOpen && (
-            <EditNodeForm node={new MapNode("", 0, 0, "", "", "", "", "")} />
+            <EditNodeForm
+              node={new MapNode("", 0, 0, "", "", "", "", "")}
+              mode={mode}
+            />
           )}
-          {clicked && <EditNodeForm node={clicked} />}
-
+          {clicked && mode !== "add_node" && mode !== "delete_node" && (
+            <EditNodeForm node={clicked} mode={mode} />
+          )}
+          {mode === "delete_node" && openDeleteNode && (
+            <DeleteNodeForm node={clicked} />
+          )}
           {/*Form for creating edge*/}
           {openEdgeCreation && <CreateEdgeForm nodes={edgeNodes} />}
           {openEdgeDeletion && <DeleteEdgeForm nodes={edgeNodes} />}

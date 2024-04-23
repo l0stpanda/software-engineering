@@ -30,7 +30,7 @@ export default function LocationDropdown(prop: locationProps) {
     setRoom(arr);
   }
 
-  //Seperate for the dropdown changes
+  //Separate for the dropdown changes
   function handleDropdown(
     e: SyntheticEvent<Element, Event>,
     value: string | null,

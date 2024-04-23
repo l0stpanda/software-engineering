@@ -12,6 +12,7 @@ import {
   TransformWrapper,
   TransformComponent,
   useControls,
+  ReactZoomPanPinchRef,
 } from "react-zoom-pan-pinch";
 import { useState } from "react";
 //import BackgroundPattern from "../components/backgroundPattern.tsx";
@@ -34,18 +35,24 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useAuth0 } from "@auth0/auth0-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { userInfo } from "common/src/userInfo.ts";
-// import * as console from "console";
 import { directionInfo, getDirections } from "../objects/Pathfinding.ts";
 import { JSX } from "react/jsx-runtime";
 import axios from "axios";
 
 function Map() {
   const divRef = useRef<HTMLDivElement>(null);
+  const transformRef = useRef<ReactZoomPanPinchRef>(null);
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
   const [graph, setGraph] = useState(new Graph());
   const [update, setUpdate] = useState(0);
   const [imgState, setImgState] = useState<string>(floor1);
   const [algorithm, setAlgorithm] = useState<string>("AStar");
+  const [pathSize, setPathSize] = useState<number[]>([
+    0,
+    0,
+    Number.POSITIVE_INFINITY,
+    Number.POSITIVE_INFINITY,
+  ]);
   const [directions, setDirections] = useState<directionInfo[]>([]);
   const [path, setPath] = useState<string[]>([]);
 
@@ -55,7 +62,7 @@ function Map() {
   const Controls = () => {
     const { zoomIn, zoomOut } = useControls();
     return (
-      <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2">
+      <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2 top-10 right-4">
         <Button
           onClick={() => zoomIn()}
           type="button"
@@ -87,7 +94,7 @@ function Map() {
     start: "",
     end: "",
   });
-  const [submitValues, setSubmitValues] = useState(["", ""]);
+  // const [submitValues, setSubmitValues] = useState(["", ""]);
 
   // Carter's function code bc idk how to do it
   // function handleFormChanges(event: React.ChangeEvent<HTMLInputElement>) {
@@ -99,8 +106,8 @@ function Map() {
   function handleFormSubmit() {
     const cleanStart = navigatingNodes.start.replace("\r", "");
     const cleanEnd = navigatingNodes.end.replace("\r", "");
-    // console.log(cleanStart, cleanEnd);
-    setSubmitValues([cleanStart, cleanEnd]);
+    console.log(cleanStart, cleanEnd);
+    setNavigatingNodes({ start: cleanStart, end: cleanEnd });
   }
 
   // Changes the map image
@@ -143,19 +150,50 @@ function Map() {
     user?.sub,
   ]);
 
+  function log(data: React.RefObject<ReactZoomPanPinchRef>) {
+    console.log(data);
+  }
+
   // Updates the graph when it has been received from the database
   useEffect(() => {
     const tempGraph = new Graph();
     tempGraph.loadGraph().then(() => {
       setGraph(tempGraph);
       setUpdate(1);
-      //console.log(update);
+      console.log(update);
     });
   }, [update]);
 
   useEffect(() => {
     setDirections(getDirections(path, graph));
   }, [path, graph]);
+
+  // Zoom to fit
+  useEffect(() => {
+    if (transformRef.current) {
+      if (
+        pathSize.toString() !==
+        [0, 0, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY].toString()
+      ) {
+        const padding = 50;
+        const width = pathSize[0] - pathSize[2] + 2 * padding;
+        const height = pathSize[1] - pathSize[3] + 2 * padding;
+        const scale = Math.min(
+          divDimensions.width / width,
+          divDimensions.height / height,
+        );
+
+        transformRef.current.setTransform(
+          -(pathSize[2] - padding) * scale,
+          -(pathSize[3] - padding) * scale,
+          scale,
+        );
+      } else {
+        transformRef.current.setTransform(0, 0, 1);
+      }
+    }
+    log(transformRef);
+  }, [pathSize, divDimensions, imgState]);
 
   const changeAlgorithm = (event: SelectChangeEvent) => {
     setAlgorithm(event.target.value as string);
@@ -291,6 +329,10 @@ function Map() {
   }
 
   //Needs to be here for navigation dropdown
+  function updateStartAndEnd(startNode: string, endNode: string) {
+    setNavigatingNodes({ start: startNode, end: endNode });
+  }
+
   function updateStart(val: string) {
     // setResponses({ ...responses, roomNum: val });
     setNavigatingNodes({ ...navigatingNodes, start: val });
@@ -303,7 +345,7 @@ function Map() {
 
   function FloorMapButtons() {
     return (
-      <div className="absolute z-10 h-fit my-auto ml-3 bg-primary bottom-7 right-9">
+      <div className="absolute z-10 h-fit my-auto ml-3 bg-primary bottom-7 right-9 rounded-xl">
         <ToggleButtonGroup
           orientation="vertical"
           value={imgState}
@@ -340,7 +382,7 @@ function Map() {
     );
   }
   const [expanded, setExpanded] = useState(false);
-  const isOpen = expanded !== false;
+  const isOpen = expanded;
   const Accordion = () => {
     const handleInnerClick = (e: React.MouseEvent<HTMLElement>) => {
       e.stopPropagation();
@@ -366,7 +408,7 @@ function Map() {
               className="absolute w-full"
             >
               <div
-                className="flex flex-col mr-2 ml-0 py-5 px-5 items-center bg-background rounded-xl border-primary border-2 w-full"
+                className="flex flex-col mr-2 ml-0 py-2 px-3 items-center bg-background rounded-xl border-primary border-2 w-[97%]"
                 onClick={handleInnerClick}
               >
                 <h2>Select Destination</h2>
@@ -428,7 +470,7 @@ function Map() {
                     h-screen
                     w-screen"
         >
-          <TransformWrapper disablePadding={true}>
+          <TransformWrapper disablePadding={true} ref={transformRef}>
             <div className="">
               {/*Buttons for displaying floor images*/}
               <FloorMapButtons />
@@ -437,11 +479,18 @@ function Map() {
                 <FloorNode
                   imageSrc={imgState}
                   graph={graph}
-                  inputLoc={[submitValues[0], submitValues[1]]}
+                  inputLoc={{
+                    start: graph.idFromName(navigatingNodes.start),
+                    end: graph.idFromName(navigatingNodes.end),
+                  }}
                   divDim={divDimensions}
                   algorithm={algorithm}
+                  setPathSize={setPathSize}
+                  pathSize={pathSize}
                   pathRef={path}
                   pathSetter={setPath}
+                  updateStartAndEnd={updateStartAndEnd}
+                  updateEnd={updateEnd}
                 />
               </TransformComponent>
             </div>
@@ -450,7 +499,7 @@ function Map() {
         {/*Location and Destination things*/}
         <div className=""></div>
         {/*boxes.*/}
-        <div className="fixed top-20 left-10">
+        <div className="fixed top-20 left-2">
           <a href="">
             <Button
               sx={{ margin: "0 0 1rem 1rem" }}
@@ -462,15 +511,15 @@ function Map() {
           </a>
         </div>
         <div
-          className="fixed top-[25%] left-10"
-          onClick={() => setExpanded(isOpen ? false : true)}
+          className="fixed top-36 left-10"
+          onClick={() => setExpanded(!isOpen)}
         >
           <div className="mr-2 ml-0 py-1 px-16 items-center bg-primary rounded-xl border-primary border-2">
             <h2 style={{ color: "white" }}>Navigation</h2>
           </div>
           <Accordion />
         </div>
-        <div className="fixed bottom-10 left-10">
+        <div className="fixed top-20 left-36">
           {user ? (
             <a href="editMap" className="justify-center my-2">
               <Button
@@ -489,16 +538,17 @@ function Map() {
         </div>
         <div
           className="
-                    top-10
-                    left-10
-                    h-[177px]
+                    h-[250px]
+                    w-[300px]
                     items-center
                     bg-background
                     border-primary
                     border-2
                     overflow-clip
                     rounded-lg
-                    fixed"
+                    fixed
+                    bottom-7
+                    right-32"
         >
           <div className="overflow-y-auto h-full">{showDirections()}</div>
         </div>
