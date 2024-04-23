@@ -55,7 +55,7 @@ function Map() {
   const Controls = () => {
     const { zoomIn, zoomOut } = useControls();
     return (
-      <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2">
+      <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2 top-10 right-4">
         <Button
           onClick={() => zoomIn()}
           type="button"
@@ -307,7 +307,7 @@ function Map() {
 
   function FloorMapButtons() {
     return (
-      <div className="absolute z-10 h-fit my-auto ml-3 bg-primary bottom-7 right-9">
+      <div className="absolute z-10 h-fit my-auto ml-3 bg-primary bottom-7 right-9 rounded-xl">
         <ToggleButtonGroup
           orientation="vertical"
           value={imgState}
@@ -370,7 +370,7 @@ function Map() {
               className="absolute w-full"
             >
               <div
-                className="flex flex-col mr-2 ml-0 py-5 px-5 items-center bg-background rounded-xl border-primary border-2 w-full"
+                className="flex flex-col mr-2 ml-0 py-2 px-3 items-center bg-background rounded-xl border-primary border-2 w-[97%]"
                 onClick={handleInnerClick}
               >
                 <h2>Select Destination</h2>
@@ -459,7 +459,7 @@ function Map() {
         {/*Location and Destination things*/}
         <div className=""></div>
         {/*boxes.*/}
-        <div className="fixed top-20 left-10">
+        <div className="fixed top-20 left-2">
           <a href="">
             <Button
               sx={{ margin: "0 0 1rem 1rem" }}
@@ -471,7 +471,7 @@ function Map() {
           </a>
         </div>
         <div
-          className="fixed top-[25%] left-10"
+          className="fixed top-36 left-10"
           onClick={() => setExpanded(isOpen ? false : true)}
         >
           <div className="mr-2 ml-0 py-1 px-16 items-center bg-primary rounded-xl border-primary border-2">
@@ -479,7 +479,7 @@ function Map() {
           </div>
           <Accordion />
         </div>
-        <div className="fixed bottom-10 left-10">
+        <div className="fixed top-20 left-36">
           {user ? (
             <a href="editMap" className="justify-center my-2">
               <Button
@@ -498,16 +498,17 @@ function Map() {
         </div>
         <div
           className="
-                    top-10
-                    left-10
-                    h-[177px]
+                    h-[250px]
+                    w-[300px]
                     items-center
                     bg-background
                     border-primary
                     border-2
                     overflow-clip
                     rounded-lg
-                    fixed"
+                    fixed
+                    bottom-7
+                    right-32"
         >
           <div className="overflow-y-auto h-full">{showDirections()}</div>
         </div>
