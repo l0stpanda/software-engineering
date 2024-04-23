@@ -12,8 +12,10 @@ import medicalDeviceDelivery from "./routes/medicalDeviceDelivery.ts";
 import inventory from "./routes/inventory.ts";
 import lostAndFound from "./routes/lostAndFound.ts";
 import medicineRequest from "./routes/medicineRequest.ts";
+import sanitationRequest from "./routes/sanitationRequest.ts";
 import editMap from "./routes/editPage.ts";
 import userStuff from "./routes/userStorage.ts";
+import userAdd from "./routes/userAdd.ts";
 import { auth } from "express-oauth2-jwt-bearer";
 
 const app: Express = express(); // Setup the backend
@@ -42,6 +44,7 @@ app.use("/healthcheck", (req, res) => {
 app.use("/api/import", importRouter);
 app.use("/api/login", loginRequest);
 app.use("/api/read", readRouter);
+app.use("/api/userAdding", userAdd);
 
 // Enable auth0 enforcement
 app.use(
@@ -59,6 +62,7 @@ app.use("/api/lostAndFound", lostAndFound);
 app.use("/api/medicineRequest", medicineRequest);
 app.use("/api/editMap", editMap);
 app.use("/api/roomSchedulingRequest", roomScheduler);
+app.use("/api/sanitationRequest", sanitationRequest);
 app.use("/api/todoStuff", userStuff);
 
 /**

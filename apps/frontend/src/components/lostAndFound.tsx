@@ -21,6 +21,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
 import axios from "axios";
+import UserDropdown from "./userDropdown.tsx";
 
 function LostFound() {
   const { getAccessTokenSilently } = useAuth0();
@@ -90,6 +91,9 @@ function LostFound() {
   function updateLoc(val: string) {
     setResponses({ ...responses, location: val });
   }
+  function updateName(val: string) {
+    setResponses({ ...responses, name: val });
+  }
 
   function handlePriorityInput(e: SelectChangeEvent) {
     setResponses({ ...responses, priority: e.target.value });
@@ -123,15 +127,22 @@ function LostFound() {
         {/*</p>*/}
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4 my-4">
-            <TextField
-              onChange={handleResponseChanges}
-              value={responses.name}
-              name="name"
-              id="name"
-              variant="filled"
-              label="Employee Name"
-              required
+            {/*<TextField*/}
+            {/*  onChange={handleResponseChanges}*/}
+            {/*  value={responses.name}*/}
+            {/*  name="name"*/}
+            {/*  id="name"*/}
+            {/*  variant="filled"*/}
+            {/*  label="Employee Name"*/}
+            {/*  required*/}
+            {/*/>*/}
+
+            <UserDropdown
+              room={responses.name}
+              update={updateName}
+              label={"Username"}
             />
+
             <FormControl variant="filled" required>
               <InputLabel id="priority">Priority</InputLabel>
               <Select

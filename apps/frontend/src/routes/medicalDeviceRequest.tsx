@@ -10,6 +10,8 @@ import {
   InputLabel,
   MenuItem,
 } from "@mui/material";
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
 import { useAuth0 } from "@auth0/auth0-react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -20,6 +22,7 @@ import dayjs, { Dayjs } from "dayjs";
 import BackgroundPattern from "../components/allyBackground.tsx";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import axios from "axios";
+import UserDropdown from "../components/userDropdown.tsx";
 
 function MedicalDeviceRequest() {
   const { getAccessTokenSilently } = useAuth0();
@@ -31,6 +34,17 @@ function MedicalDeviceRequest() {
     priority: "Medium",
     status: "Unassigned",
     deliveryDate: dayjs(),
+  });
+
+  const Transition = React.forwardRef(function Transition(
+    props: TransitionProps & {
+      children: React.ReactElement<string, string>;
+    },
+    ref: React.Ref<unknown>,
+  ) {
+    return (
+      <Slide direction="up" ref={ref} {...props} children={props.children} />
+    );
   });
 
   const [open, setOpen] = useState(false);
@@ -55,6 +69,9 @@ function MedicalDeviceRequest() {
     setFormData({ ...formData, status: e.target.value });
   }
 
+  function updateName(val: string) {
+    setFormData({ ...formData, employeeName: val });
+  }
   function handleDateChange(date: Dayjs | null) {
     setFormData({ ...formData, deliveryDate: date });
   }
@@ -119,7 +136,12 @@ function MedicalDeviceRequest() {
   return (
     <div className="justify-center grid h-screen place-items-center bg-repeat mt-6">
       <BackgroundPattern />
-      <div className="overflow-m-auto shadow-2xl flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-4">
+      <div
+        className="overflow-m-auto shadow-2xl border border-1 flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-4"
+        // style={{
+        //     boxShadow: "1px 1px 0px #999, 2px 2px 0px #999, 3px 3px 0px #999, 4px 4px 0px #999, 5px 5px 0px #999, 6px 6px 0px #999"
+        // }}>
+      >
         <h1 className="m-2 font-header text-primary font-bold text-2xl text-center">
           Medical Device Delivery Form
         </h1>
@@ -136,14 +158,20 @@ function MedicalDeviceRequest() {
         </p>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4 my-4">
-            <TextField
-              onChange={handleFormInput}
-              value={formData.employeeName}
-              name="employeeName"
-              id="employeeName"
-              variant="filled"
-              label="Employee Name"
-              required={true}
+            {/*<TextField*/}
+            {/*  onChange={handleFormInput}*/}
+            {/*  value={formData.employeeName}*/}
+            {/*  name="employeeName"*/}
+            {/*  id="employeeName"*/}
+            {/*  variant="filled"*/}
+            {/*  label="Employee Name"*/}
+            {/*  required={true}*/}
+            {/*/>*/}
+
+            <UserDropdown
+              room={formData.employeeName}
+              update={updateName}
+              label={"Username"}
             />
 
             <FormControl variant="filled" required>
@@ -258,32 +286,40 @@ function MedicalDeviceRequest() {
           </div>
         </form>
       </div>
-      <Dialog open={open} onClose={handleSubmitClose}>
-        <DialogTitle>We received your request!</DialogTitle>
-        <DialogContent>
-          <strong>Here are your responses:</strong>
-          <br />
-          Employee Name: {formData.employeeName}
-          <br />
-          Room Name: {formData.roomName}
-          <br />
-          Medical Device Name: {formData.medicalDeviceName}
-          <br />
-          Quantity: {formData.quantity}
-          <br />
-          Priority: {formData.priority}
-          <br />
-          Status: {formData.status}
-          <br />
-          Date:{formData.deliveryDate?.toString()}
-        </DialogContent>
+      <React.Fragment>
+        <Dialog
+          open={open}
+          onClose={handleSubmitClose}
+          TransitionComponent={Transition}
+          keepMounted
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>We received your request!</DialogTitle>
+          <DialogContent>
+            <strong>Here are your responses:</strong>
+            <br />
+            Employee Name: {formData.employeeName}
+            <br />
+            Room Name: {formData.roomName}
+            <br />
+            Medical Device Name: {formData.medicalDeviceName}
+            <br />
+            Quantity: {formData.quantity}
+            <br />
+            Priority: {formData.priority}
+            <br />
+            Status: {formData.status}
+            <br />
+            Date:{formData.deliveryDate?.toString()}
+          </DialogContent>
 
-        <DialogActions>
-          <Button onClick={handleSubmitClose} autoFocus>
-            Okay
-          </Button>
-        </DialogActions>
-      </Dialog>
+          <DialogActions>
+            <Button onClick={handleSubmitClose} autoFocus>
+              Okay
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </React.Fragment>
     </div>
   );
 }

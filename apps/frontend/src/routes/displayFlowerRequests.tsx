@@ -7,6 +7,8 @@ import PendingRoomSched from "./displayRoomSched.tsx";
 import PendingMedicalDevice from "./displayMedicalDevice.tsx";
 import PendingMedicineDelivery from "./displayMedicineDelivery.tsx";
 import { Tab, Tabs } from "@mui/material";
+import PendingUserItem from "../components/UserItem.tsx";
+import PendingSanitationRequest from "./displaySanitationReqs.tsx";
 
 // Define database json type
 type FlowerArray = {
@@ -69,6 +71,8 @@ export default function PendingFlowerRequest() {
           <Tab label="Room Scheduling" id="tab-2" />
           <Tab label="Medical Device Delivery" id="tab-3" />
           <Tab label="Medicine Delivery" id="tab-4" />
+          <Tab label="Users" id="tab-5" />
+          <Tab label="Sanitation Request" id="tab-6" />
         </Tabs>
       </React.Fragment>
 
@@ -131,6 +135,15 @@ export default function PendingFlowerRequest() {
       <div id="tab-4">
         {currentTabIndex === 4 && (
           <PendingMedicineDelivery></PendingMedicineDelivery>
+        )}{" "}
+      </div>
+      <div id="tab-5">
+        {currentTabIndex === 5 && <PendingUserItem></PendingUserItem>}{" "}
+      </div>
+
+      <div id="tab-6">
+        {currentTabIndex === 6 && (
+          <PendingSanitationRequest></PendingSanitationRequest>
         )}{" "}
       </div>
     </div>
