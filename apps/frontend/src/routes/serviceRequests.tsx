@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from "react";
 import BackgroundPattern from "../components/backgroundPattern.tsx";
-import { Tab, Tabs } from "@mui/material";
+import { Tab, Tabs, Tooltip } from "@mui/material";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import PendingReqItem from "../components/PendingReqItem.tsx";
+import FlowerReqForm from "../components/flowerReq.tsx";
+import LocalFloristIcon from "@mui/icons-material/LocalFlorist";
+import WalletIcon from "@mui/icons-material/Wallet";
+import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
+import MonitorHeartIcon from "@mui/icons-material/MonitorHeart";
+import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
+import PersonIcon from "@mui/icons-material/Person";
+import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
+import LostFound from "../components/lostAndFound.tsx";
+import RoomSchedulingReq from "../components/roomSchedulingReq.tsx";
 
 type GeneralReq = {
   id: number;
@@ -16,6 +26,13 @@ type GeneralReq = {
 
 function ServiceRequests() {
   const { getAccessTokenSilently } = useAuth0();
+
+  const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
+
+  const handleTabChange = (e: React.SyntheticEvent, tabIndex: number) => {
+    console.log(tabIndex);
+    setCurrentTabIndex(tabIndex);
+  };
 
   // Use state for records being displayed
   const [records, setRecords] = useState<GeneralReq[]>([]);
@@ -77,7 +94,7 @@ function ServiceRequests() {
                   {/* Dynamically generate column headers */}
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="overflow-y-auto">
                 {/* Map through the records and create a row for each record */}
                 {records.map((record) => (
                   <PendingReqItem
@@ -95,22 +112,34 @@ function ServiceRequests() {
           </div>
         </div>
         {/*Make new requests*/}
-        <div className="h-full w-1/2">
-          <div className="bg-background rounded-lg overflow-x-auto">
+        <div className="h-full w-1/2 flex flex-col gap-4">
+          <div className="bg-background rounded-lg">
+            {/*<h1 className="my-2 font-header text-primary font-bold text-xl text-center">*/}
+            {/*    Choose a new request*/}
+            {/*</h1>*/}
             <Tabs
-            //value={currentTabIndex} onChange={handleTabChange}
+              variant="scrollable"
+              scrollButtons="auto"
+              value={currentTabIndex}
+              onChange={handleTabChange}
             >
-              <Tab label="Flower Request" id="tab-0" />
-              <Tab label="Lost and Found" id="tab-1" />
-              <Tab label="Room Scheduling" id="tab-2" />
-              <Tab label="Medical Device Delivery" id="tab-3" />
-              <Tab label="Medicine Delivery" id="tab-4" />
-              <Tab label="Users" id="tab-5" />
-              <Tab label="Sanitation Request" id="tab-6" />
+              <Tooltip title="Flower Delivery">
+                <Tab icon={<LocalFloristIcon />} id="tab-0" />
+              </Tooltip>
+              <Tab icon={<WalletIcon />} id="tab-1" />
+              <Tab icon={<MeetingRoomIcon />} id="tab-2" />
+              <Tab icon={<MonitorHeartIcon />} id="tab-3" />
+              <Tab icon={<LocalPharmacyIcon />} id="tab-4" />
+              <Tab icon={<PersonIcon />} id="tab-5" />
+              <Tab icon={<CleaningServicesIcon />} id="tab-6" />
             </Tabs>
           </div>
 
-          <div className="bg-background rounded-lg overflow-y-auto"></div>
+          <div className="bg-background rounded-lg overflow-y-auto h-full">
+            {currentTabIndex === 0 && <FlowerReqForm />}
+            {currentTabIndex === 1 && <LostFound />}
+            {currentTabIndex === 2 && <RoomSchedulingReq />}
+          </div>
         </div>
       </div>
     </div>
