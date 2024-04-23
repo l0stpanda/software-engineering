@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, TextField } from "@mui/material";
 import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 
 interface InventoryItemProps {
   id: number;
@@ -12,13 +13,42 @@ interface InventoryItemProps {
 
 function InventoryItem(props: InventoryItemProps) {
   const [quantity, setQuantity] = useState(props.quant.toString());
+  const { getAccessTokenSilently, user } = useAuth0();
+
+  useEffect(() => {
+    // Fetch data from the API
+    const fetchData = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+        await axios.get("/api/inventory", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      } catch (error) {
+        console.error("Error fetching inventory list", error);
+      }
+    };
+    fetchData().catch((error) => {
+      console.error("Error from fetchData promise:", error);
+    });
+  }, [getAccessTokenSilently, user]);
 
   async function updateQuant(newQuant: number) {
     try {
-      const response = await axios.post(`/api/inventory/update`, {
-        name: props.name,
-        quant: newQuant,
-      });
+      const token = await getAccessTokenSilently();
+      const response = await axios.post(
+        `/api/inventory/update`,
+        {
+          name: props.name,
+          quant: newQuant,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
       console.log("Update successful:", response.data);
     } catch (e) {
       console.error(e);
