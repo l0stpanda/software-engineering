@@ -78,23 +78,32 @@ function ServiceRequests() {
             Pending Requests
           </h1>
 
-          <Select
-            name="Request Type"
-            required={true}
-            onChange={handleStatusDropdown}
-            value={reqType}
-            defaultValue={"All"}
-          >
-            <MenuItem value={"All"}>Select Request Type</MenuItem>
-            <MenuItem value={"Flower Request"}>Flower Request</MenuItem>
-            <MenuItem value={"Lost and Found"}>Lost and Found</MenuItem>
-            <MenuItem value={"Medical Device Delivery"}>
-              Medical Device Delivery
-            </MenuItem>
-            <MenuItem value={"Sanitation Request"}>Sanitation Request</MenuItem>
-            <MenuItem value={"Room Scheduling"}>Room Scheduling</MenuItem>
-          </Select>
-
+          <div className="flex flex-row gap-2 pb-2">
+            <div className="w-20">
+              <Select
+                name="Request Type"
+                required={true}
+                onChange={handleStatusDropdown}
+                value={reqType}
+                defaultValue={"All"}
+                size="small"
+              >
+                <MenuItem value={"All"}>Select Request Type</MenuItem>
+                <MenuItem value={"Flower Request"}>Flower Request</MenuItem>
+                <MenuItem value={"Lost and Found"}>Lost and Found</MenuItem>
+                <MenuItem value={"Medical Device Delivery"}>
+                  Medical Device Delivery
+                </MenuItem>
+                <MenuItem value={"Sanitation Request"}>
+                  Sanitation Request
+                </MenuItem>
+                <MenuItem value={"Room Scheduling"}>Room Scheduling</MenuItem>
+                <MenuItem value={"Medicine Request"}>
+                  Medicine Delivery
+                </MenuItem>
+              </Select>
+            </div>
+          </div>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-secondary border-b-2 border-b-primary">

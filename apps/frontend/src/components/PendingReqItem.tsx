@@ -80,6 +80,7 @@ function PendingFlowerReq(props: GeneralReq) {
           onChange={handleStatusDropdown}
           value={status}
           defaultValue={props.status}
+          size="small"
         >
           <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
           <MenuItem value={"Assigned"}>Assigned</MenuItem>
