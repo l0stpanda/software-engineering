@@ -15,11 +15,13 @@ import { Dijkstra } from "../objects/Dijkstra.ts";
 interface FloorNodesProps {
   imageSrc: string;
   graph: Graph;
-  inputLoc: string[];
+  inputLoc: { start: string | undefined; end: string | undefined };
   divDim: { width: number; height: number };
   algorithm: string;
   pathRef: string[];
   pathSetter: (a: string[]) => void;
+  updateStartAndEnd: (startNode: string, endNode: string) => void;
+  updateEnd: (endNode: string) => void;
 }
 
 export interface FloorNodeInfo {
@@ -39,24 +41,11 @@ function FloorNode(props: FloorNodesProps) {
     width: props.divDim.width,
     height: props.divDim.height,
   });
-  const [clicked, setClicked] = useState<string[]>([]);
   const algo: Pathfinding = new Pathfinding(props.graph);
   const floor: string = getFloorByImage(props.imageSrc);
-  const nodes: MapNode[] = Object.values(props.graph)[0];
-  const [ids, setIds] = useState<{
-    startId: string | undefined;
-    endId: string | undefined;
-  }>({
-    startId: props.graph.idFromName(props.inputLoc[0]),
-    endId: props.graph.idFromName(props.inputLoc[1]),
-  });
-
-  useEffect(() => {
-    setIds({
-      startId: props.graph.idFromName(props.inputLoc[0]),
-      endId: props.graph.idFromName(props.inputLoc[1]),
-    });
-  }, [props.graph, props.inputLoc]);
+  const nodes: Map<string, MapNode> = Object.values(props.graph)[0];
+  console.log(nodes);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     if (divRef.current) {
@@ -72,6 +61,12 @@ function FloorNode(props: FloorNodesProps) {
   }, [divRef]);
 
   useEffect(() => {
+    console.log("In the useeffect: ", props.inputLoc.start);
+    // it is updating but and i set count to 1 when i want to place the end but this puts the count to 1 all teh time
+    // i want to select the end when the start is defined
+  }, [props.inputLoc, props]);
+
+  useEffect(() => {
     const img = new Image();
     img.src = props.imageSrc;
     img.onload = () => {
@@ -80,38 +75,33 @@ function FloorNode(props: FloorNodesProps) {
   }, [props.imageSrc]);
 
   const handleNodeClick = (nodeid: string) => () => {
-    if (clicked.length < 2 && !clicked.includes(nodeid)) {
-      setClicked((prevClicked) => [...prevClicked, nodeid]);
-    }
-    if (clicked.length == 2) {
-      setClicked([nodeid]);
-    }
-    setIds({ startId: undefined, endId: undefined });
-  };
+    const res = nodes.get(nodeid);
+    if (res !== undefined) {
+      const longName: string = res.getLongName();
 
-  const calculateInput = (): string[] => {
-    let input: string[] = [];
-
-    if (
-      props.inputLoc.length === 2 &&
-      ids.startId !== undefined &&
-      ids.endId !== undefined
-    ) {
-      input = [ids.startId, ids.endId];
-    } else if (clicked.length === 2) {
-      input = [clicked[0], clicked[1]];
-    } else {
-      console.log("Invalid IDs.");
+      if (props.inputLoc.start !== undefined && count === 0) {
+        console.log("In the click: ", props.inputLoc.start);
+        console.log("updating with: ", longName);
+        props.updateStartAndEnd(longName, "");
+        setCount(1);
+      } else if (count === 0) {
+        props.updateStartAndEnd(longName, "");
+        setCount(1);
+      } else if (count === 1) {
+        console.log("update end");
+        props.updateEnd(longName);
+        setCount(0);
+      } else {
+        console.log("OH GOD");
+      }
     }
-
-    return input;
   };
 
   const renderLines = () => {
-    const input = calculateInput();
-    console.log(input);
+    const input = props.inputLoc;
+    console.log("the input: ", input);
 
-    if (input.length == 2) {
+    if (input.start !== undefined && input.end !== undefined) {
       //console.log(ids.startId, ids.endId);
       if (props.algorithm == "BFS") {
         algo.setPathAlgo(new BFS(props.graph));
@@ -122,7 +112,7 @@ function FloorNode(props: FloorNodesProps) {
       } else if (props.algorithm == "Dijkstra") {
         algo.setPathAlgo(new Dijkstra(props.graph));
       }
-      const path = algo.findPath(input[0], input[1]);
+      const path = algo.findPath(input.start, input.end);
       //console.log(path);
       const lines = [];
       const floorChanges = [];
@@ -242,16 +232,16 @@ function FloorNode(props: FloorNodesProps) {
       .map((node, id) => {
         let nodeColor: string;
         let animation: string = "border border-slate-300 hover:border-red-400";
-        const input = calculateInput();
+        const input = props.inputLoc;
 
         //console.log(node.key, ids.startId, ids.endId);
         //if start node
-        if (node.key == input[0]) {
+        if (node.key == input.start) {
           nodeColor = "#39FF14";
           animation = animation.concat(" animate-bounce -m-[2.8px]");
         }
         //if end node
-        else if (node.key == input[1]) {
+        else if (node.key == input.end) {
           nodeColor = "red";
           animation = animation.concat(" animate-bounce -m-[2.8px]");
         }

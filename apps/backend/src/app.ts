@@ -48,6 +48,7 @@ app.use("/api/read", readRouter);
 app.use("/api/userAdding", userAdd);
 app.use("/api/fetchAll", fetchAll);
 
+app.use("/api/editMap", editMap);
 // Enable auth0 enforcement
 app.use(
   auth({

@@ -87,7 +87,7 @@ function Map() {
     start: "",
     end: "",
   });
-  const [submitValues, setSubmitValues] = useState(["", ""]);
+  // const [submitValues, setSubmitValues] = useState(["", ""]);
 
   // Carter's function code bc idk how to do it
   // function handleFormChanges(event: React.ChangeEvent<HTMLInputElement>) {
@@ -99,8 +99,8 @@ function Map() {
   function handleFormSubmit() {
     const cleanStart = navigatingNodes.start.replace("\r", "");
     const cleanEnd = navigatingNodes.end.replace("\r", "");
-    // console.log(cleanStart, cleanEnd);
-    setSubmitValues([cleanStart, cleanEnd]);
+    console.log(cleanStart, cleanEnd);
+    setNavigatingNodes({ start: cleanStart, end: cleanEnd });
   }
 
   // Changes the map image
@@ -149,7 +149,7 @@ function Map() {
     tempGraph.loadGraph().then(() => {
       setGraph(tempGraph);
       setUpdate(1);
-      //console.log(update);
+      console.log(update);
     });
   }, [update]);
 
@@ -291,6 +291,10 @@ function Map() {
   }
 
   //Needs to be here for navigation dropdown
+  function updateStartAndEnd(startNode: string, endNode: string) {
+    setNavigatingNodes({ start: startNode, end: endNode });
+  }
+
   function updateStart(val: string) {
     // setResponses({ ...responses, roomNum: val });
     setNavigatingNodes({ ...navigatingNodes, start: val });
@@ -437,11 +441,16 @@ function Map() {
                 <FloorNode
                   imageSrc={imgState}
                   graph={graph}
-                  inputLoc={[submitValues[0], submitValues[1]]}
+                  inputLoc={{
+                    start: graph.idFromName(navigatingNodes.start),
+                    end: graph.idFromName(navigatingNodes.end),
+                  }}
                   divDim={divDimensions}
                   algorithm={algorithm}
                   pathRef={path}
                   pathSetter={setPath}
+                  updateStartAndEnd={updateStartAndEnd}
+                  updateEnd={updateEnd}
                 />
               </TransformComponent>
             </div>
