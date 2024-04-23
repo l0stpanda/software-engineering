@@ -44,7 +44,7 @@ export default function LocationDropdown(prop: locationProps) {
 
   return (
     <>
-      <FormControl>
+      <FormControl fullWidth required>
         <Autocomplete
           disablePortal
           id={"roomNum"}

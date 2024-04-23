@@ -38,7 +38,6 @@ function EditMap() {
     new MapNode("", 0, 0, "", "", "", "", ""),
     new MapNode("", 0, 0, "", "", "", "", ""),
   ]);
-
   // const [nodeId, setNodeId] = useState("");
   // const [longName, setLongName] = useState("");
   const [isMoveable, setIsMoveable] = useState(false);
@@ -190,44 +189,33 @@ function EditMap() {
   ) => {
     setMode(newMode);
     console.log(mode);
-    if (newMode === "add_node") {
-      setIsMoveable(false);
-    } else if (newMode === "move_node") {
-      setIsOpen(false);
-      setIsMoveable(true);
-    } else if (newMode === "delete_node") {
-      setIsOpen(false);
-      setOpenDeleteNode(true);
-    } else {
-      setIsMoveable(false);
-      setEdgeCreationOpen(false);
-      setOpenEdgeDeletion(false);
-      setOpenDeleteNode(false);
-      setIsOpen(false);
-      setIsMoveable(false);
-      setEdgeNodes([
-        new MapNode("", 0, 0, "", "", "", "", ""),
-        new MapNode("", 0, 0, "", "", "", "", ""),
-      ]);
-      switch (newMode) {
-        case "add_node":
-          break;
-        case "move_node":
-          setIsMoveable(true);
-          break;
-        case "delete_node":
-          setOpenDeleteNode(true);
-          break;
-        case "add_edge":
-          setEdgeCreationOpen(true);
-          break;
-        case "delete_edge":
-          setOpenEdgeDeletion(true);
-          break;
-        default:
-          setIsMoveable(false);
-          break;
-      }
+    setEdgeCreationOpen(false);
+    setOpenEdgeDeletion(false);
+    setIsOpen(false);
+    setIsMoveable(false);
+    setOpenDeleteNode(false);
+    setEdgeNodes([
+      new MapNode("", 0, 0, "", "", "", "", ""),
+      new MapNode("", 0, 0, "", "", "", "", ""),
+    ]);
+    switch (newMode) {
+      case "add_node":
+        break;
+      case "move_node":
+        setIsMoveable(true);
+        break;
+      case "delete_node":
+        setOpenDeleteNode(true);
+        break;
+      case "add_edge":
+        setEdgeCreationOpen(true);
+        break;
+      case "delete_edge":
+        setOpenEdgeDeletion(true);
+        break;
+      default:
+        setIsMoveable(false);
+        break;
     }
   };
 
@@ -313,6 +301,7 @@ function EditMap() {
           {/*Form for creating edge*/}
           {openEdgeCreation && <CreateEdgeForm nodes={edgeNodes} />}
           {openEdgeDeletion && <DeleteEdgeForm nodes={edgeNodes} />}
+
           <div
             className="mr-8
                     ml-5
@@ -365,5 +354,4 @@ function EditMap() {
     </div>
   );
 }
-
 export default EditMap;

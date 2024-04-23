@@ -18,6 +18,8 @@ interface FloorNodesProps {
   inputLoc: { start: string | undefined; end: string | undefined };
   divDim: { width: number; height: number };
   algorithm: string;
+  pathRef: string[];
+  pathSetter: (a: string[]) => void;
   updateStartAndEnd: (startNode: string, endNode: string) => void;
   updateEnd: (endNode: string) => void;
 }
@@ -39,7 +41,6 @@ function FloorNode(props: FloorNodesProps) {
     width: props.divDim.width,
     height: props.divDim.height,
   });
-  // const [clicked, setClicked] = useState<string[]>([]);
   const algo: Pathfinding = new Pathfinding(props.graph);
   const floor: string = getFloorByImage(props.imageSrc);
   const nodes: Map<string, MapNode> = Object.values(props.graph)[0];
@@ -120,6 +121,9 @@ function FloorNode(props: FloorNodesProps) {
         console.log("No path found");
         return [];
       }
+
+      if (props.pathRef.toString() !== path.toString()) props.pathSetter(path);
+
       let changeStart: undefined | FloorNodeInfo = undefined;
       for (let i = 0; i < path.length - 1; i++) {
         const startNode = path[i];
@@ -270,7 +274,11 @@ function FloorNode(props: FloorNodesProps) {
 
   return (
     <div ref={divRef} style={{ position: "relative" }}>
-      <img src={props.imageSrc} className="object-contain h-full" alt="Map" />
+      <img
+        src={props.imageSrc}
+        className="object-fit w-screen h-screen"
+        alt="Map"
+      />
       <svg
         style={{
           position: "absolute",
