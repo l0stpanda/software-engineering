@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import BackgroundPattern from "../components/backgroundPattern.tsx";
-import { Tab, Tabs } from "@mui/material";
+import { MenuItem, Select, SelectChangeEvent, Tab, Tabs } from "@mui/material";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import PendingReqItem from "../components/PendingReqItem.tsx";
@@ -20,7 +20,8 @@ function ServiceRequests() {
 
   // Use state for records being displayed
   const [records, setRecords] = useState<GeneralReq[]>([]);
-
+  const [permRecords, setPermRecords] = useState<GeneralReq[]>([]);
+  const [reqType, setReqType] = useState<string>("All");
   // Get records from database, and update useState
   useEffect(() => {
     // Fetch data from the API
@@ -33,6 +34,7 @@ function ServiceRequests() {
           },
         });
         setRecords(response.data); // Assuming the data is an array of flower request data
+        setPermRecords(response.data); // Assuming the data is an array of flower request data
         console.log(response.data);
       } catch (error) {
         console.error("Error fetching flower requests", error);
@@ -44,6 +46,28 @@ function ServiceRequests() {
     });
   }, [getAccessTokenSilently]);
 
+  function handleStatusDropdown(e: SelectChangeEvent) {
+    setReqType(e.target.value);
+    if (e.target.value != "All") {
+      sortAlgo(e.target.value);
+    } else {
+      setRecords(permRecords);
+    }
+  }
+
+  function sortAlgo(value: string) {
+    console.log("VALUE IS " + value);
+    const arr: GeneralReq[] = [];
+    for (let i = 0; i < permRecords.length; i++) {
+      if (permRecords[i].type == value) {
+        arr.push(permRecords[i]);
+      }
+    }
+    console.log(arr);
+    setRecords(arr);
+  }
+  //We want to filter by service request type
+
   return (
     <div className="w-screen h-full">
       <BackgroundPattern />
@@ -53,6 +77,24 @@ function ServiceRequests() {
           <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
             Pending Requests
           </h1>
+
+          <Select
+            name="Request Type"
+            required={true}
+            onChange={handleStatusDropdown}
+            value={reqType}
+            defaultValue={"All"}
+          >
+            <MenuItem value={"All"}>Select Request Type</MenuItem>
+            <MenuItem value={"Flower Request"}>Flower Request</MenuItem>
+            <MenuItem value={"Lost and Found"}>Lost and Found</MenuItem>
+            <MenuItem value={"Medical Device Delivery"}>
+              Medical Device Delivery
+            </MenuItem>
+            <MenuItem value={"Sanitation Request"}>Sanitation Request</MenuItem>
+            <MenuItem value={"Room Scheduling"}>Room Scheduling</MenuItem>
+          </Select>
+
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-secondary border-b-2 border-b-primary">
