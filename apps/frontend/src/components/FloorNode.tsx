@@ -18,6 +18,8 @@ interface FloorNodesProps {
   inputLoc: string[];
   divDim: { width: number; height: number };
   algorithm: string;
+  pathRef: string[];
+  pathSetter: (a: string[]) => void;
 }
 
 export interface FloorNodeInfo {
@@ -129,6 +131,9 @@ function FloorNode(props: FloorNodesProps) {
         console.log("No path found");
         return [];
       }
+
+      if (props.pathRef.toString() !== path.toString()) props.pathSetter(path);
+
       let changeStart: undefined | FloorNodeInfo = undefined;
       for (let i = 0; i < path.length - 1; i++) {
         const startNode = path[i];

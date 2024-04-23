@@ -27,11 +27,17 @@ import { SelectChangeEvent } from "@mui/material/Select";
 import { ArrowBack } from "@mui/icons-material";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import ModeIcon from "@mui/icons-material/Mode";
+import StraightIcon from "@mui/icons-material/Straight";
+import TurnLeftIcon from "@mui/icons-material/TurnLeft";
+import TurnRightIcon from "@mui/icons-material/TurnRight";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useAuth0 } from "@auth0/auth0-react";
-// @ts-ignore
 import { motion, AnimatePresence } from "framer-motion";
-import axios from "axios";
 import { userInfo } from "common/src/userInfo.ts";
+// import * as console from "console";
+import { directionInfo, getDirections } from "../objects/Pathfinding.ts";
+import { JSX } from "react/jsx-runtime";
+import axios from "axios";
 
 function Map() {
   const divRef = useRef<HTMLDivElement>(null);
@@ -40,13 +46,16 @@ function Map() {
   const [update, setUpdate] = useState(0);
   const [imgState, setImgState] = useState<string>(floor1);
   const [algorithm, setAlgorithm] = useState<string>("AStar");
+  const [directions, setDirections] = useState<directionInfo[]>([]);
+  const [path, setPath] = useState<string[]>([]);
 
   const { getAccessTokenSilently, user } = useAuth0();
 
+  // Zoom in/out buttons for map viewing
   const Controls = () => {
     const { zoomIn, zoomOut } = useControls();
     return (
-      <div className="absolute top-20 right-9 z-10 flex flex-col gap-2">
+      <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2">
         <Button
           onClick={() => zoomIn()}
           type="button"
@@ -90,13 +99,13 @@ function Map() {
   function handleFormSubmit() {
     const cleanStart = navigatingNodes.start.replace("\r", "");
     const cleanEnd = navigatingNodes.end.replace("\r", "");
-    console.log(cleanStart, cleanEnd);
+    // console.log(cleanStart, cleanEnd);
     setSubmitValues([cleanStart, cleanEnd]);
   }
 
   // Changes the map image
   const changeFloor = (floor: string) => {
-    console.log(floor);
+    // console.log(floor);
     setImgState(floor);
   };
 
@@ -140,13 +149,146 @@ function Map() {
     tempGraph.loadGraph().then(() => {
       setGraph(tempGraph);
       setUpdate(1);
-      console.log(update);
+      //console.log(update);
     });
   }, [update]);
+
+  useEffect(() => {
+    setDirections(getDirections(path, graph));
+  }, [path, graph]);
 
   const changeAlgorithm = (event: SelectChangeEvent) => {
     setAlgorithm(event.target.value as string);
   };
+
+  // Test for showing directions
+  function showDirections() {
+    const output: JSX.Element[] = [];
+    directions.forEach((data: directionInfo) => {
+      output.push(
+        <div className="border-primary border-t border-b text-text font-header px-1 py-1">
+          <b>Floor {data.floor}: </b>
+        </div>,
+      );
+      for (let i = 0; i < data.directions.length; i++) {
+        if (data.directions[i] == "Continue straight at ") {
+          if (i + 1 == data.directions.length) {
+            output.push(
+              <>
+                <div className="flex text-text font-body px-1 py-2">
+                  <div className="float-left content-center">
+                    <StraightIcon sx={{ fontSize: 40 }}></StraightIcon>
+                  </div>
+                  <div className="flex text-center self-center">
+                    {data.directions[i]} {data.nodes[i]}
+                  </div>
+                </div>
+              </>,
+            );
+          } else {
+            output.push(
+              <>
+                <div className="flex border-primary border-b text-text font-body px-1 py-2">
+                  <div className="float-left content-center">
+                    <StraightIcon sx={{ fontSize: 40 }}></StraightIcon>
+                  </div>
+                  <div className="flex text-center self-center">
+                    {data.directions[i]} {data.nodes[i]}
+                  </div>
+                </div>
+              </>,
+            );
+          }
+        } else if (data.directions[i] == "Turn left at ") {
+          if (i + 1 == data.directions.length) {
+            output.push(
+              <>
+                <div className="flex text-text font-body px-1 py-2">
+                  <div className="float-left content-center">
+                    <TurnLeftIcon sx={{ fontSize: 40 }}></TurnLeftIcon>
+                  </div>
+                  <div className="flex text-center self-center">
+                    {data.directions[i]} {data.nodes[i]}
+                  </div>
+                </div>
+              </>,
+            );
+          } else {
+            output.push(
+              <>
+                <div className="flex border-primary border-b text-text font-body px-1 py-2">
+                  <div className="float-left content-center">
+                    <TurnLeftIcon sx={{ fontSize: 40 }}></TurnLeftIcon>
+                  </div>
+                  <div className="flex text-center self-center">
+                    {data.directions[i]} {data.nodes[i]}
+                  </div>
+                </div>
+              </>,
+            );
+          }
+        } else if (data.directions[i] == "Turn right at ") {
+          if (i + 1 == data.directions.length) {
+            output.push(
+              <>
+                <div className="flex text-text font-body px-1 py-2">
+                  <div className="float-left content-center">
+                    <TurnRightIcon sx={{ fontSize: 40 }}></TurnRightIcon>
+                  </div>
+                  <div className="flex text-center self-center">
+                    {data.directions[i]} {data.nodes[i]}
+                  </div>
+                </div>
+              </>,
+            );
+          } else {
+            output.push(
+              <>
+                <div className="flex border-primary border-b text-text font-body px-1 py-2">
+                  <div className="float-left content-center">
+                    <TurnRightIcon sx={{ fontSize: 40 }}></TurnRightIcon>
+                  </div>
+                  <div className="flex text-center self-center">
+                    {data.directions[i]} {data.nodes[i]}
+                  </div>
+                </div>
+              </>,
+            );
+          }
+        } else {
+          if (i + 1 == data.directions.length) {
+            output.push(
+              <>
+                <div className="flex text-text font-body px-1 py-2">
+                  <div className="float-left content-center">
+                    <TrendingUpIcon sx={{ fontSize: 40 }}></TrendingUpIcon>
+                  </div>
+                  <div className="flex text-center self-center">
+                    {data.directions[i]} {data.nodes[i]}
+                  </div>
+                </div>
+              </>,
+            );
+          } else {
+            output.push(
+              <>
+                <div className="flex border-primary border-b text-text font-body px-1 py-2">
+                  <div className="float-left content-center">
+                    <TrendingUpIcon sx={{ fontSize: 40 }}></TrendingUpIcon>
+                  </div>
+                  <div className="flex text-center self-center">
+                    {data.directions[i]} {data.nodes[i]}
+                  </div>
+                </div>
+              </>,
+            );
+          }
+        }
+      }
+      return data;
+    });
+    return output;
+  }
 
   //Needs to be here for navigation dropdown
   function updateStart(val: string) {
@@ -298,6 +440,8 @@ function Map() {
                   inputLoc={[submitValues[0], submitValues[1]]}
                   divDim={divDimensions}
                   algorithm={algorithm}
+                  pathRef={path}
+                  pathSetter={setPath}
                 />
               </TransformComponent>
             </div>
@@ -342,6 +486,21 @@ function Map() {
           ) : (
             <></>
           )}
+        </div>
+        <div
+          className="
+                    top-10
+                    left-10
+                    h-[177px]
+                    items-center
+                    bg-background
+                    border-primary
+                    border-2
+                    overflow-clip
+                    rounded-lg
+                    fixed"
+        >
+          <div className="overflow-y-auto h-full">{showDirections()}</div>
         </div>
       </div>
     </div>

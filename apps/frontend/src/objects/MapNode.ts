@@ -49,10 +49,6 @@ export class MapNode {
     return this.longName;
   }
 
-  getNodeType() {
-    return this.nodeType;
-  }
-
   getX() {
     return this.xcoord;
   }
@@ -67,5 +63,9 @@ export class MapNode {
 
   getShortName() {
     return this.shortName;
+  }
+
+  getNodeType() {
+    return this.nodeType;
   }
 }
