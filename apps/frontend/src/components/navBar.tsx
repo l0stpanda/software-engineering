@@ -1,9 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { AppBar, Button, Menu, MenuItem, Toolbar } from "@mui/material";
+import React, { useEffect } from "react";
+import {
+  AppBar,
+  IconButton,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Tooltip,
+} from "@mui/material";
+import MapIcon from "@mui/icons-material/Map";
+import StorageIcon from "@mui/icons-material/Storage";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import BackupTableIcon from "@mui/icons-material/BackupTable";
 import BWLogo from "/BWLogo.png";
 import { useAuth0 } from "@auth0/auth0-react";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import axios from "axios";
 
 function CustomNavBar() {
   const {
@@ -17,17 +26,7 @@ function CustomNavBar() {
   useEffect(() => {
     const getAuthToken = async () => {
       try {
-        const token = await getAccessTokenSilently();
-        axios
-          .get("/api/adminAccess", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
-          .then(() => {
-            setIsAdmin(true);
-          })
-          .catch();
+        await getAccessTokenSilently();
       } catch (error) {
         await loginWithRedirect({
           appState: {
@@ -57,7 +56,6 @@ function CustomNavBar() {
   //   null,
   // );
   // const openAdmin = Boolean(anchorElAdmin);
-  const [isAdmin, setIsAdmin] = useState(false);
 
   function handleRequestsOpen(e: React.MouseEvent<HTMLElement>) {
     setAnchorEl(e.currentTarget);
@@ -66,7 +64,6 @@ function CustomNavBar() {
   function handleRequestsClosed() {
     setAnchorEl(null);
   }
-
   // function handleAdminOpen(e: React.MouseEvent<HTMLElement>) {
   //   setAnchorElAdmin(e.currentTarget);
   // }
@@ -74,6 +71,12 @@ function CustomNavBar() {
   // function handleAdminClosed() {
   //   setAnchorElAdmin(null);
   // }
+
+  // const useStyles = makeStyles(() => ({
+  //     customHoverFocus: {
+  //         "&:hover, &.Mui-focusVisible": { color: "primary" }
+  //     }
+  // }));
 
   return (
     <AppBar sx={{ bgcolor: "#FBFEFF" }}>
@@ -90,50 +93,40 @@ function CustomNavBar() {
             </a>
           </div>
         </Toolbar>
-        {user ? (
-          <div className="flex align-middle py-3 px-2 gap-2">
-            <Button component="a" href="">
-              Home
-            </Button>
-            <Button component="a" href="map">
-              Map
-            </Button>
-            {isAdmin ? (
-              <Button component="a" href="displayTables">
-                Import/Export
-              </Button>
-            ) : (
-              <></>
-            )}
-            {/*<Button component="a" href="imp">*/}
-            {/*  Import*/}
-            {/*</Button>*/}
-            {/*<Button onClick={handleAdminOpen} endIcon={<ArrowDropDownIcon />}>*/}
-            {/*  Admin*/}
-            {/*</Button>*/}
-            {/*<Menu*/}
-            {/*  open={openAdmin}*/}
-            {/*  onClose={handleAdminClosed}*/}
-            {/*  anchorEl={anchorElAdmin}*/}
-            {/*  transformOrigin={{*/}
-            {/*    vertical: "top",*/}
-            {/*    horizontal: "left",*/}
-            {/*  }}*/}
-            {/*>*/}
-            {/*  <MenuItem href="exp" component="a">*/}
-            {/*    Import/Export*/}
-            {/*  </MenuItem>*/}
-            {/*  <MenuItem href="displayTables" component="a">*/}
-            {/*    View Tables*/}
-            {/*  </MenuItem>*/}
-            {/*</Menu>*/}
-            <Button
-              onClick={handleRequestsOpen}
-              endIcon={<ArrowDropDownIcon />}
-            >
-              Service Requests
-            </Button>
 
+        {user ? (
+          <div className="flex flex-row py-3 px-2">
+            <Tooltip title={"View Map"}>
+              <IconButton
+                href="map"
+                style={{
+                  marginLeft: "1rem",
+                }}
+              >
+                <MapIcon className="svg_icons" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={"View Tables"}>
+              <IconButton
+                href="displayTables"
+                style={{
+                  marginLeft: "1rem",
+                }}
+              >
+                <BackupTableIcon className="svg_icons" />
+              </IconButton>
+            </Tooltip>
+
+            <Tooltip title={"Service Requests"}>
+              <IconButton
+                onClick={handleRequestsOpen}
+                style={{
+                  marginLeft: "1rem",
+                }}
+              >
+                <StorageIcon className="svg_icons" />
+              </IconButton>
+            </Tooltip>
             <Menu
               open={open}
               onClose={handleRequestsClosed}
@@ -165,19 +158,44 @@ function CustomNavBar() {
                 Sanitation Request
               </MenuItem>
             </Menu>
-            <Button component="a" href="todo">
-              Task Board
-            </Button>
-            <Button component="a" href="credit">
-              Credit
-            </Button>
-            <Button
-              variant="contained"
-              sx={{ margin: "0 0 0 1rem" }}
-              onClick={handleLogout}
+            <Tooltip title={"Todo List"}>
+              <IconButton
+                href="todo"
+                style={{
+                  marginLeft: "1rem",
+                }}
+              >
+                <CheckBoxIcon className="svg_icons" />
+              </IconButton>
+            </Tooltip>
+            <div
+              className="flex flex-row gap-1"
+              style={{
+                marginLeft: "45rem",
+              }}
             >
-              Logout
-            </Button>
+              <div className="flex flex-row gap-3 align-right">
+                <p
+                  className="object-contain text-center"
+                  style={{
+                    color: "#002866",
+                    fontSize: "1 rem",
+                    paddingTop: "0.5rem",
+                    paddingLeft: "8rem",
+                  }}
+                >
+                  <strong>Welcome,</strong> {user.name}
+                </p>
+                <Tooltip title={"Click to Logout"}>
+                  <img
+                    src={user.picture}
+                    alt={user.name}
+                    className="rounded-full h-10 w-10 object-contain"
+                    onClick={handleLogout}
+                  />
+                </Tooltip>
+              </div>
+            </div>
           </div>
         ) : (
           <></>

@@ -105,6 +105,9 @@ html {
   stroke-dashoffset: 1000;
   animation: dash 40s linear reverse infinite;
 }
+.svg_icons {
+  transform: scale(1.8);
+}
 
 @keyframes dash {
   from {
