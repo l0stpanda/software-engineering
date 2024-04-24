@@ -31,6 +31,7 @@ function EditMap() {
   const [clicked, setClicked] = useState<MapNode | undefined>(undefined);
   const [mode, setMode] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [world, setWorld] = useState({ x: -2, y: -2 });
   const [openDeleteNode, setOpenDeleteNode] = useState(false);
   const [openEdgeCreation, setEdgeCreationOpen] = useState<boolean>(false);
   const [openEdgeDeletion, setOpenEdgeDeletion] = useState<boolean>(false);
@@ -38,8 +39,6 @@ function EditMap() {
     new MapNode("", 0, 0, "", "", "", "", ""),
     new MapNode("", 0, 0, "", "", "", "", ""),
   ]);
-  // const [nodeId, setNodeId] = useState("");
-  // const [longName, setLongName] = useState("");
   const [isMoveable, setIsMoveable] = useState(false);
 
   // Zoom in/out buttons for map viewing
@@ -219,20 +218,16 @@ function EditMap() {
     }
   };
 
-  const handlePopup = (childData: boolean) => {
+  const handlePopup = (x_c: number, y_c: number) => {
     if (mode === "add_node") {
-      setIsOpen(childData);
-      console.log(isOpen);
+      setIsOpen(true);
+      setWorld({ x: x_c, y: y_c });
+      // console.log(isOpen);
     } else {
       setIsOpen(false);
+      setWorld({ x: -1, y: -1 });
     }
   };
-
-  // const handleSubmit = (e: { preventDefault: () => void }) => {
-  //   e.preventDefault();
-  //   console.log("Node id: ", nodeId);
-  //   console.log("Long name: ", longName);
-  // };
 
   let divPos: number[] = [];
   if (divRef.current) {
@@ -270,7 +265,7 @@ function EditMap() {
                     divDim={divDimensions}
                     divPos={divPos}
                     nodeInfoCallback={handleNodeCallback}
-                    popupCallback={handlePopup}
+                    mouseCallback={handlePopup}
                     mode={mode}
                   />
                 </TransformComponent>
@@ -288,7 +283,7 @@ function EditMap() {
           {/*Form for adding a new node*/}
           {isOpen && (
             <EditNodeForm
-              node={new MapNode("", 0, 0, "", "", "", "", "")}
+              node={new MapNode("", world.x, world.y, "", "", "", "", "")}
               mode={mode}
             />
           )}
