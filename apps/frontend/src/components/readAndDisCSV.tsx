@@ -330,7 +330,7 @@ function SingleDisplay() {
               component="span"
               sx={{ borderRadius: "30px" }}
               className="w-32 self-center text-center"
-              onClick={() => handleDownload("/api/users", "Users.csv")}
+              onClick={() => handleDownload("/api/read/users", "users.csv")}
             >
               User CSV
             </Button>

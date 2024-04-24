@@ -34,4 +34,18 @@ router.get("/nodes", async (req, res) => {
     return;
   }
 });
+
+router.get("/users", async (req, res) => {
+  try {
+    // Use the Prisma client to query the 'edges' table in the database
+    const nodes = await PrismaClient.user.findMany(); //
+    res.status(200).send(nodes);
+  } catch (error) {
+    res
+      .status(400)
+      .json({ error: "An error occurred while fetching the data." });
+    return;
+  }
+});
+
 export default router;
