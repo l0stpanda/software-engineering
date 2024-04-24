@@ -4,6 +4,7 @@ import { MenuItem, Select, SelectChangeEvent, Tab, Tabs } from "@mui/material";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import PendingReqItem from "../components/PendingReqItem.tsx";
+import * as console from "console";
 
 type GeneralReq = {
   id: number;
@@ -22,6 +23,7 @@ function ServiceRequests() {
   const [records, setRecords] = useState<GeneralReq[]>([]);
   const [permRecords, setPermRecords] = useState<GeneralReq[]>([]);
   const [reqType, setReqType] = useState<string>("All");
+  const [statusType, setStatusType] = useState<string>("All");
   // Get records from database, and update useState
   useEffect(() => {
     // Fetch data from the API
@@ -46,26 +48,48 @@ function ServiceRequests() {
     });
   }, [getAccessTokenSilently]);
 
-  function handleStatusDropdown(e: SelectChangeEvent) {
+  function handleTypeDropdown(e: SelectChangeEvent) {
     setReqType(e.target.value);
-    if (e.target.value != "All") {
-      sortAlgo(e.target.value);
-    } else {
-      setRecords(permRecords);
-    }
+    // if(reqType == undefined && statusType == undefined){
+    //     setRecords(permRecords);
+    // }
   }
 
-  function sortAlgo(value: string) {
-    console.log("VALUE IS " + value);
-    const arr: GeneralReq[] = [];
-    for (let i = 0; i < permRecords.length; i++) {
-      if (permRecords[i].type == value) {
-        arr.push(permRecords[i]);
-      }
-    }
-    console.log(arr);
-    setRecords(arr);
+  function handleStatusTypeDropdown(e: SelectChangeEvent) {
+    setStatusType(e.target.value);
+    // if(reqType == undefined && statusType == undefined){
+    //     setRecords(permRecords);
+    // }
   }
+
+  useEffect(() => {
+    let arr: GeneralReq[] = [];
+    if (reqType !== "All" && statusType !== "All") {
+      for (let i = 0; i < permRecords.length; i++) {
+        if (
+          permRecords[i].type == reqType &&
+          permRecords[i].status == statusType
+        ) {
+          arr.push(permRecords[i]);
+        }
+      }
+    } else if (reqType !== "All") {
+      for (let i = 0; i < permRecords.length; i++) {
+        if (permRecords[i].type == reqType) {
+          arr.push(permRecords[i]);
+        }
+      }
+    } else if (statusType !== "All") {
+      for (let i = 0; i < permRecords.length; i++) {
+        if (permRecords[i].status == statusType) {
+          arr.push(permRecords[i]);
+        }
+      }
+    } else {
+      arr = permRecords;
+    }
+    setRecords(arr);
+  }, [statusType, reqType, permRecords]);
   //We want to filter by service request type
 
   return (
@@ -83,7 +107,7 @@ function ServiceRequests() {
               <Select
                 name="Request Type"
                 required={true}
-                onChange={handleStatusDropdown}
+                onChange={handleTypeDropdown}
                 value={reqType}
                 defaultValue={"All"}
                 size="small"
@@ -101,6 +125,21 @@ function ServiceRequests() {
                 <MenuItem value={"Medicine Request"}>
                   Medicine Delivery
                 </MenuItem>
+              </Select>
+
+              <Select
+                name="Status Type"
+                required={true}
+                onChange={handleStatusTypeDropdown}
+                value={statusType}
+                defaultValue={"No Status"}
+                size="small"
+              >
+                <MenuItem value={"All"}>Select Status Type</MenuItem>
+                <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
+                <MenuItem value={"Assigned"}>Assigned</MenuItem>
+                <MenuItem value={"InProgress"}>In Progress</MenuItem>
+                <MenuItem value={"Closed"}>Closed</MenuItem>
               </Select>
             </div>
           </div>
