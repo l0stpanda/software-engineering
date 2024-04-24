@@ -29,7 +29,7 @@ import DisplayInventory from "./routes/disInventoryList.tsx";
 import PendingSanitationRequest from "./routes/displaySanitationReqs.tsx";
 import AboutPage from "./routes/aboutPage.tsx";
 import ServiceRequests from "./routes/serviceRequests.tsx";
-import CreditPage from "./routes/creditPage.tsx";
+import CreditPage from "./routes/serviceRequests.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -140,8 +140,8 @@ function App() {
         },
         {
           path: "credit",
-          element: <LoadingPage component={CreditPage}/>
-        }
+          element: <LoadingPage component={CreditPage} adminOnly={false} />,
+        },
       ],
     },
   ]);

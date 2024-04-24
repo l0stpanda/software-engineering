@@ -106,7 +106,7 @@ html {
   animation: dash 40s linear reverse infinite;
 }
 .svg_icons {
-  transform: scale(1.8);
+  transform: scale(1.2);
 }
 
 @keyframes dash {

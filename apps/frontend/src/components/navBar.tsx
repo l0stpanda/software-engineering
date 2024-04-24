@@ -81,8 +81,8 @@ function CustomNavBar() {
   return (
     <AppBar sx={{ bgcolor: "#FBFEFF" }}>
       <div className="w-full flex justify-between">
-        <Toolbar disableGutters={true}>
-          <div className="h-12 flex px-2 py-2">
+        <Toolbar disableGutters={true} sx={{ width: "100%" }}>
+          <div className="h-12 flex px-2 py-2 min-w-fit">
             <a href="">
               <img
                 src={BWLogo}
@@ -92,88 +92,86 @@ function CustomNavBar() {
               />
             </a>
           </div>
-        </Toolbar>
 
-        {user ? (
-          <div className="flex flex-row py-3 px-2">
-            <Tooltip title={"View Map"}>
-              <IconButton
-                href="map"
-                style={{
-                  marginLeft: "1rem",
-                }}
-              >
-                <MapIcon className="svg_icons" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title={"View Tables"}>
-              <IconButton
-                href="displayTables"
-                style={{
-                  marginLeft: "1rem",
-                }}
-              >
-                <BackupTableIcon className="svg_icons" />
-              </IconButton>
-            </Tooltip>
+          {user ? (
+            <div className="flex flex-row py-3 px-2 justify-between">
+              <div>
+                <Tooltip title={"View Map"}>
+                  <IconButton
+                    href="map"
+                    style={{
+                      marginLeft: "1rem",
+                    }}
+                  >
+                    <MapIcon className="svg_icons" />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title={"View Tables"}>
+                  <IconButton
+                    href="displayTables"
+                    style={{
+                      marginLeft: "1rem",
+                    }}
+                  >
+                    <BackupTableIcon className="svg_icons" />
+                  </IconButton>
+                </Tooltip>
 
-            <Tooltip title={"Service Requests"}>
-              <IconButton
-                onClick={handleRequestsOpen}
-                style={{
-                  marginLeft: "1rem",
-                }}
-              >
-                <StorageIcon className="svg_icons" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              open={open}
-              onClose={handleRequestsClosed}
-              anchorEl={anchorEl}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-            >
-              <MenuItem href="viewpending" component="a">
-                Pending
-              </MenuItem>
-              <MenuItem href="flowerrequest" component="a">
-                Flower Request
-              </MenuItem>
-              <MenuItem href="medicinerequest" component="a">
-                Medicine Delivery
-              </MenuItem>
-              <MenuItem href="roomrequest" component="a">
-                Room Scheduling
-              </MenuItem>
-              <MenuItem href="medicaldevicerequest" component="a">
-                Medical Device Delivery
-              </MenuItem>
-              <MenuItem href="lostitemrequest" component="a">
-                Lost Item
-              </MenuItem>
-              <MenuItem href="sanitationRequest" component="a">
-                Sanitation Request
-              </MenuItem>
-            </Menu>
-            <Tooltip title={"Todo List"}>
-              <IconButton
-                href="todo"
-                style={{
-                  marginLeft: "1rem",
-                }}
-              >
-                <CheckBoxIcon className="svg_icons" />
-              </IconButton>
-            </Tooltip>
-            <div
-              className="flex flex-row gap-1"
-              style={{
-                marginLeft: "45rem",
-              }}
-            >
+                <Tooltip title={"Service Requests"}>
+                  <IconButton
+                    onClick={handleRequestsOpen}
+                    style={{
+                      marginLeft: "1rem",
+                    }}
+                  >
+                    <StorageIcon className="svg_icons" />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  open={open}
+                  onClose={handleRequestsClosed}
+                  anchorEl={anchorEl}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                >
+                  <MenuItem href="viewpending" component="a">
+                    Pending
+                  </MenuItem>
+                  <MenuItem href="flowerrequest" component="a">
+                    Flower Request
+                  </MenuItem>
+                  <MenuItem href="medicinerequest" component="a">
+                    Medicine Delivery
+                  </MenuItem>
+                  <MenuItem href="roomrequest" component="a">
+                    Room Scheduling
+                  </MenuItem>
+                  <MenuItem href="medicaldevicerequest" component="a">
+                    Medical Device Delivery
+                  </MenuItem>
+                  <MenuItem href="lostitemrequest" component="a">
+                    Lost Item
+                  </MenuItem>
+                  <MenuItem href="sanitationRequest" component="a">
+                    Sanitation Request
+                  </MenuItem>
+                </Menu>
+                <Tooltip title={"Todo List"}>
+                  <IconButton
+                    href="todo"
+                    style={{
+                      marginLeft: "1rem",
+                    }}
+                  >
+                    <CheckBoxIcon className="svg_icons" />
+                  </IconButton>
+                </Tooltip>
+              </div>
+              {/*<div*/}
+              {/*    className="flex flex-row gap-1"*/}
+              {/*>*/}
               <div className="flex flex-row gap-3 align-right">
                 <p
                   className="object-contain text-center"
@@ -181,7 +179,6 @@ function CustomNavBar() {
                     color: "#002866",
                     fontSize: "1 rem",
                     paddingTop: "0.5rem",
-                    paddingLeft: "8rem",
                   }}
                 >
                   <strong>Welcome,</strong> {user.name}
@@ -194,12 +191,13 @@ function CustomNavBar() {
                     onClick={handleLogout}
                   />
                 </Tooltip>
+                {/*</div>*/}
               </div>
             </div>
-          </div>
-        ) : (
-          <></>
-        )}
+          ) : (
+            <></>
+          )}
+        </Toolbar>
       </div>
     </AppBar>
   );
