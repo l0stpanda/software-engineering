@@ -14,6 +14,8 @@ import PersonIcon from "@mui/icons-material/Person";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
 import LostFound from "../components/lostAndFound.tsx";
 import RoomSchedulingReq from "../components/roomSchedulingReq.tsx";
+import MedicalDeviceReq from "../components/medicalDeviceReq.tsx";
+import MedicineDeliveryReq from "../components/MedicineDeliveryReq.tsx";
 
 type GeneralReq = {
   id: number;
@@ -139,6 +141,8 @@ function ServiceRequests() {
             {currentTabIndex === 0 && <FlowerReqForm />}
             {currentTabIndex === 1 && <LostFound />}
             {currentTabIndex === 2 && <RoomSchedulingReq />}
+            {currentTabIndex === 3 && <MedicalDeviceReq />}
+            {currentTabIndex === 4 && <MedicineDeliveryReq />}
           </div>
         </div>
       </div>
