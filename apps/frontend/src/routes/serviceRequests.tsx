@@ -12,6 +12,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import PendingReqItem from "../components/PendingReqItem.tsx";
 import * as console from "console";
+import UserDropdown from "../components/userDropdown.tsx";
 import FlowerReqForm from "../components/flowerReq.tsx";
 import LocalFloristIcon from "@mui/icons-material/LocalFlorist";
 import WalletIcon from "@mui/icons-material/Wallet";
@@ -74,8 +75,8 @@ function ServiceRequests() {
     });
   }, [getAccessTokenSilently]);
 
-  function handleTypeDropdown(e: SelectChangeEvent) {
-    setReqType(e.target.value);
+  function updateName(e: string) {
+    setReqType(e);
     // if(reqType == undefined && statusType == undefined){
     //     setRecords(permRecords);
     // }
@@ -93,7 +94,7 @@ function ServiceRequests() {
     if (reqType !== "All" && statusType !== "All") {
       for (let i = 0; i < permRecords.length; i++) {
         if (
-          permRecords[i].type == reqType &&
+          permRecords[i].emp_name == reqType &&
           permRecords[i].status == statusType
         ) {
           arr.push(permRecords[i]);
@@ -101,7 +102,7 @@ function ServiceRequests() {
       }
     } else if (reqType !== "All") {
       for (let i = 0; i < permRecords.length; i++) {
-        if (permRecords[i].type == reqType) {
+        if (permRecords[i].emp_name == reqType) {
           arr.push(permRecords[i]);
         }
       }
@@ -128,31 +129,31 @@ function ServiceRequests() {
             Pending Requests
           </h1>
 
-          <div className="pb-2">
-            <div className="w-20 flex flex-row gap-2">
-              <Select
-                name="Request Type"
-                required={true}
-                onChange={handleTypeDropdown}
-                value={reqType}
-                defaultValue={"All"}
-                size="small"
-              >
-                <MenuItem value={"All"}>Select Request Type</MenuItem>
-                <MenuItem value={"Flower Request"}>Flower Request</MenuItem>
-                <MenuItem value={"Lost and Found"}>Lost and Found</MenuItem>
-                <MenuItem value={"Medical Device Delivery"}>
-                  Medical Device Delivery
-                </MenuItem>
-                <MenuItem value={"Sanitation Request"}>
-                  Sanitation Request
-                </MenuItem>
-                <MenuItem value={"Room Scheduling"}>Room Scheduling</MenuItem>
-                <MenuItem value={"Medicine Request"}>
-                  Medicine Delivery
-                </MenuItem>
-              </Select>
-
+          <div className="flex flex-row gap-2 pb-2">
+            <div className="w-20">
+              {/*<Select*/}
+              {/*  name="Request Type"*/}
+              {/*  required={true}*/}
+              {/*  onChange={handleTypeDropdown}*/}
+              {/*  value={reqType}*/}
+              {/*  defaultValue={"All"}*/}
+              {/*  size="small"*/}
+              {/*>*/}
+              {/*  <MenuItem value={"All"}>Select Request Type</MenuItem>*/}
+              {/*  <MenuItem value={"Flower Request"}>Flower Request</MenuItem>*/}
+              {/*  <MenuItem value={"Lost and Found"}>Lost and Found</MenuItem>*/}
+              {/*  <MenuItem value={"Medical Device Delivery"}>*/}
+              {/*    Medical Device Delivery*/}
+              {/*  </MenuItem>*/}
+              {/*  <MenuItem value={"Sanitation Request"}>*/}
+              {/*    Sanitation Request*/}
+              {/*  </MenuItem>*/}
+              {/*  <MenuItem value={"Room Scheduling"}>Room Scheduling</MenuItem>*/}
+              {/*  <MenuItem value={"Medicine Request"}>*/}
+              {/*    Medicine Delivery*/}
+              {/*  </MenuItem>*/}
+              {/*</Select>*/}
+              <UserDropdown room={""} update={updateName} label={"Username"} />
               <Select
                 name="Status Type"
                 required={true}
