@@ -4,11 +4,28 @@ import { DeleteAllEdge, PostEdge } from "../objects/DAO_Edges.ts";
 import { nodeType } from "common/src/nodeType.ts";
 import { DeleteAllNode, PostNode } from "../objects/DAO_Nodes.ts";
 import { Button, Dialog, DialogTitle } from "@mui/material";
+import { Alert, Snackbar } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
 //import BackgroundPattern from "./backgroundPattern.tsx";
 
 const SingleFileUploader = () => {
   const [file, setFile] = useState<File | null>(null);
   const [loadingDialog, setLoadingDialog] = useState(false);
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<AlertColor>("success");
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const showSnackbar = (message: string, severity: AlertColor) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setFile(e.target.files[0]);
@@ -58,12 +75,12 @@ const SingleFileUploader = () => {
           PostEdge(arr);
         } catch (error) {
           //Throws error if Edges aren't loaded in correctly
-          alert("Error loading Edges CSV");
+          showSnackbar("Error loading Edges CSV", "error");
           console.error(error);
           setLoadingDialog(false);
           return;
         }
-        alert("Edges CSV loaded successfully");
+        showSnackbar("Edges CSV loaded successfully", "success");
       }
 
       //Same functionality as above, but now for nodes
@@ -95,15 +112,16 @@ const SingleFileUploader = () => {
           }
           await PostNode(arr);
         } catch (error) {
-          alert("Error Loading Nodes into Database");
+          showSnackbar("Error Loading Nodes into Database", "error");
           console.error(error);
           setLoadingDialog(false);
           return;
         }
-        alert("Nodes CSV Loaded");
+        showSnackbar("Nodes CSV Loaded", "success");
       } else {
-        alert(
+        showSnackbar(
           "The imported file has to have 'node' or 'edge' in its title in order for us to know which database you want to upload to.",
+          "error",
         );
       }
       setLoadingDialog(false);
@@ -155,6 +173,19 @@ const SingleFileUploader = () => {
       <Dialog open={loadingDialog}>
         <DialogTitle>Uploading file...</DialogTitle>
       </Dialog>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 };
