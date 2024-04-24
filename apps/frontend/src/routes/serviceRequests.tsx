@@ -129,8 +129,8 @@ function ServiceRequests() {
             Pending Requests
           </h1>
 
-          <div className="flex flex-row gap-2 pb-2">
-            <div className="w-20">
+          <div className="pb-2">
+            <div className="w-20 flex flex-row gap-2 w-full">
               {/*<Select*/}
               {/*  name="Request Type"*/}
               {/*  required={true}*/}
