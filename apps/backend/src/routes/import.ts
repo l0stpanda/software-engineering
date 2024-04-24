@@ -2,7 +2,7 @@ import express, { Router, Request, Response } from "express";
 import PrismaClient from "../bin/database-connection.ts";
 import { edgeType } from "common/src/edgesType.ts";
 import { nodeType } from "common/src/nodeType.ts";
-import { checkRequiredPermissions } from "./auth0Perms.ts";
+//import { checkRequiredPermissions } from "./auth0Perms.ts";
 
 const router: Router = express.Router();
 
@@ -11,7 +11,7 @@ const router: Router = express.Router();
 //POST edges from the frontend to the database
 router.post(
   "/edgesPost",
-  checkRequiredPermissions(["create:edges"]),
+  // checkRequiredPermissions(["create:edges"]),
   async function (req: Request, res: Response) {
     const received: edgeType[] = req.body;
     try {
@@ -30,7 +30,7 @@ router.post(
 //DELETE edges from the database
 router.delete(
   "/edgesDelete",
-  checkRequiredPermissions(["delete:edges"]),
+  // checkRequiredPermissions(["delete:edges"]),
   async function (req: Request, res: Response) {
     try {
       await PrismaClient.edges.deleteMany();
@@ -61,7 +61,7 @@ router.get("/edgesGet", async function (req: Request, res: Response) {
 //NODES STUFF
 router.post(
   "/nodesPost",
-  checkRequiredPermissions(["create:nodes"]),
+  // checkRequiredPermissions(["create:nodes"]),
   async function (req: Request, res: Response) {
     const received: nodeType[] = req.body;
     try {
@@ -80,7 +80,7 @@ router.post(
 //DELETE nodes from the database
 router.delete(
   "/nodesDelete",
-  checkRequiredPermissions(["delete:nodes"]),
+  // checkRequiredPermissions(["delete:nodes"]),
   async function (req: Request, res: Response) {
     try {
       await PrismaClient.nodes.deleteMany();
@@ -99,7 +99,7 @@ router.delete(
 //GET nodes from the database to the frontend as a JSON type
 router.get("/nodesGet", async function (req: Request, res: Response) {
   try {
-    res.send(await PrismaClient.nodes.findMany());
+    // res.send(await PrismaClient.nodes.findMany());
     return;
   } catch (error) {
     console.log(error);

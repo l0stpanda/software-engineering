@@ -1,7 +1,7 @@
 import express, { Router } from "express";
 //import { Prisma } from "database";
 import PrismaClient from "../bin/database-connection.ts";
-import { checkRequiredPermissions } from "./auth0Perms.ts";
+//import { checkRequiredPermissions } from "./auth0Perms.ts";
 
 const router: Router = express.Router();
 
@@ -13,7 +13,7 @@ formula: router.COMMAND(req, res)...
 // API endpoints: Read the edges table in the database and return data
 router.get(
   "/edges",
-  checkRequiredPermissions(["read:csv-data"]),
+  // checkRequiredPermissions(["read:csv-data"]),
   async (req, res) => {
     try {
       // Use the Prisma client to query the 'edges' table in the database
@@ -29,7 +29,7 @@ router.get(
 
 router.get(
   "/nodes",
-  checkRequiredPermissions(["read:csv-data"]),
+  // checkRequiredPermissions(["read:csv-data"]),
   async (req, res) => {
     try {
       // Use the Prisma client to query the 'edges' table in the database

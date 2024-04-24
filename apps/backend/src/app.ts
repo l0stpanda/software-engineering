@@ -47,10 +47,8 @@ app.use("/healthcheck", (req, res) => {
 
 app.use("/api/import", importRouter);
 app.use("/api/login", loginRequest);
-app.use("/api/read", readRouter);
 app.use("/api/userAdding", userAdd);
-app.use("/api/editMap", editMap);
-app.use("/api/fetchAll", fetchAll);
+app.use("/api/read", readRouter);
 
 // Enable auth0 enforcement
 app.use(
@@ -66,11 +64,13 @@ app.use("/api/inventory", inventory);
 app.use("/api/medicalDevice", medicalDeviceDelivery);
 app.use("/api/lostAndFound", lostAndFound);
 app.use("/api/medicineRequest", medicineRequest);
-
 app.use("/api/roomSchedulingRequest", roomScheduler);
 app.use("/api/sanitationRequest", sanitationRequest);
 app.use("/api/todoStuff", userStuff);
 app.use("/api/adminAccess", adminAccess);
+
+app.use("/api/fetchAll", fetchAll);
+app.use("/api/editMap", editMap);
 
 /**
  * Catch all 404 errors, and forward them to the error handler

@@ -77,7 +77,6 @@ const SingleFileUploader = () => {
             .map((row: string): string[] => {
               return row.split(",");
             });
-
           await DeleteAllNode();
           const arr: nodeType[] = [];
           for (let i = 1; i < nodes_array.length - 1; i++) {
