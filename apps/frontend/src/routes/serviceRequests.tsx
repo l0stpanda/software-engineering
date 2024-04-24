@@ -1,10 +1,29 @@
 import React, { useEffect, useState } from "react";
 import BackgroundPattern from "../components/backgroundPattern.tsx";
-import { MenuItem, Select, SelectChangeEvent, Tab, Tabs } from "@mui/material";
+import {
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Tab,
+  Tabs,
+  Tooltip,
+} from "@mui/material";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import PendingReqItem from "../components/PendingReqItem.tsx";
 import * as console from "console";
+import FlowerReqForm from "../components/flowerReq.tsx";
+import LocalFloristIcon from "@mui/icons-material/LocalFlorist";
+import WalletIcon from "@mui/icons-material/Wallet";
+import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
+import MonitorHeartIcon from "@mui/icons-material/MonitorHeart";
+import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
+import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
+import LostFound from "../components/lostAndFound.tsx";
+import RoomSchedulingReq from "../components/roomSchedulingReq.tsx";
+import MedicalDeviceReq from "../components/medicalDeviceReq.tsx";
+import MedicineDeliveryReq from "../components/MedicineDeliveryReq.tsx";
+import SanitationReq from "../components/sanitationReq.tsx";
 
 type GeneralReq = {
   id: number;
@@ -18,6 +37,13 @@ type GeneralReq = {
 
 function ServiceRequests() {
   const { getAccessTokenSilently } = useAuth0();
+
+  const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
+
+  const handleTabChange = (e: React.SyntheticEvent, tabIndex: number) => {
+    //console.log(tabIndex);
+    setCurrentTabIndex(tabIndex);
+  };
 
   // Use state for records being displayed
   const [records, setRecords] = useState<GeneralReq[]>([]);
@@ -102,8 +128,8 @@ function ServiceRequests() {
             Pending Requests
           </h1>
 
-          <div className="flex flex-row gap-2 pb-2">
-            <div className="w-20">
+          <div className="pb-2">
+            <div className="w-20 flex flex-row gap-2">
               <Select
                 name="Request Type"
                 required={true}
@@ -168,7 +194,7 @@ function ServiceRequests() {
                   {/* Dynamically generate column headers */}
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="overflow-y-auto">
                 {/* Map through the records and create a row for each record */}
                 {records.map((record) => (
                   <PendingReqItem
@@ -187,22 +213,46 @@ function ServiceRequests() {
           </div>
         </div>
         {/*Make new requests*/}
-        <div className="h-full w-1/2">
-          <div className="bg-background rounded-lg overflow-x-auto">
+        <div className="h-full w-1/2 flex flex-col gap-4">
+          <div className="bg-background rounded-lg">
+            {/*<h1 className="my-2 font-header text-primary font-bold text-xl text-center">*/}
+            {/*    Choose a new request*/}
+            {/*</h1>*/}
             <Tabs
-            //value={currentTabIndex} onChange={handleTabChange}
+              variant="scrollable"
+              scrollButtons="auto"
+              value={currentTabIndex}
+              onChange={handleTabChange}
             >
-              <Tab label="Flower Request" id="tab-0" />
-              <Tab label="Lost and Found" id="tab-1" />
-              <Tab label="Room Scheduling" id="tab-2" />
-              <Tab label="Medical Device Delivery" id="tab-3" />
-              <Tab label="Medicine Delivery" id="tab-4" />
-              <Tab label="Users" id="tab-5" />
-              <Tab label="Sanitation Request" id="tab-6" />
+              <Tooltip title="Flower Delivery">
+                <Tab icon={<LocalFloristIcon />} id="tab-0" />
+              </Tooltip>
+              <Tooltip title="Lost Item Request">
+                <Tab icon={<WalletIcon />} id="tab-1" />
+              </Tooltip>
+              <Tooltip title="Room Scheduling">
+                <Tab icon={<MeetingRoomIcon />} id="tab-2" />
+              </Tooltip>
+              <Tooltip title="Medical Device Delivery">
+                <Tab icon={<MonitorHeartIcon />} id="tab-3" />
+              </Tooltip>
+              <Tooltip title="Medicine Delivery">
+                <Tab icon={<LocalPharmacyIcon />} id="tab-4" />
+              </Tooltip>
+              <Tooltip title="Sanitation Request">
+                <Tab icon={<CleaningServicesIcon />} id="tab-5" />
+              </Tooltip>
             </Tabs>
           </div>
 
-          <div className="bg-background rounded-lg overflow-y-auto"></div>
+          <div className="bg-background rounded-lg overflow-y-auto h-full">
+            {currentTabIndex === 0 && <FlowerReqForm />}
+            {currentTabIndex === 1 && <LostFound />}
+            {currentTabIndex === 2 && <RoomSchedulingReq />}
+            {currentTabIndex === 3 && <MedicalDeviceReq />}
+            {currentTabIndex === 4 && <MedicineDeliveryReq />}
+            {currentTabIndex === 5 && <SanitationReq />}
+          </div>
         </div>
       </div>
     </div>
