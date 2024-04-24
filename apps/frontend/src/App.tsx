@@ -27,6 +27,7 @@ import TodoList from "./routes/todoList.tsx";
 import SanitationRequest from "./routes/sanitationRequest.tsx";
 import DisplayInventory from "./routes/disInventoryList.tsx";
 import PendingSanitationRequest from "./routes/displaySanitationReqs.tsx";
+import AboutPage from "./routes/aboutPage.tsx";
 import ServiceRequests from "./routes/serviceRequests.tsx";
 
 function App() {
@@ -125,6 +126,10 @@ function App() {
           element: (
             <LoadingPage component={DisplayInventory} adminOnly={false} />
           ),
+        },
+        {
+          path: "aboutPage",
+          element: <LoadingPage component={AboutPage} />,
         },
         {
           path: "requests",
