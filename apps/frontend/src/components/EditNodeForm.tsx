@@ -70,7 +70,7 @@ export default function EditNodeForm(props: editNodeProps) {
         )
         .then(() => {
           alert("Successfully added node " + nodeInfo.ID);
-          // window.location.reload();
+          window.location.reload();
         })
         .catch(() => {
           alert(

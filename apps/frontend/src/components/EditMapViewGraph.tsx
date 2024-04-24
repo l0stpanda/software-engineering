@@ -47,9 +47,6 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [draggable, setDraggable] = useState<boolean>(true);
 
-  // const [worldX, setWorldX] = useState(0);
-  // const [worldY, setWorldY] = useState(0);
-
   useEffect(() => {
     if (divRef.current) {
       const resizeObserver = new ResizeObserver(() => {
@@ -142,13 +139,6 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     props.nodeInfoCallback(nodeid);
     // need to log clicked so it can be used
     console.log(clicked);
-    // if (props.mode === "add_node") {
-    //     if(divRef.current){
-    //         setNewPosX(divRef.current?.offsetLeft * (imgDimensions.width / divDimensions.width));
-    //         setNewPosY(divRef.current?.offsetTop * (imgDimensions.height / divDimensions.height));
-    //         props.mouseCallback(newPosX, newPosY);
-    //     }
-    // }
   };
 
   const renderLines = () => {
@@ -269,20 +259,10 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     }
   };
 
-  // const handleMouseUp = () => {
-  //   props.mouseCallback(newPosX, newPosY);
-  //   const tempDiv = document.getElementById("tempDiv");
-  //   if (tempDiv) {
-  //     tempDiv.style.left = worldX + "px";
-  //     tempDiv.style.top = worldY + "px";
-  //   }
-  // };
-
   return (
     <div
       ref={divRef}
       style={{ position: "relative" }}
-      // onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
     >
       <div ref={drop}>
