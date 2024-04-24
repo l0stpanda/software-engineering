@@ -28,6 +28,7 @@ import SanitationRequest from "./routes/sanitationRequest.tsx";
 import DisplayInventory from "./routes/disInventoryList.tsx";
 import PendingSanitationRequest from "./routes/displaySanitationReqs.tsx";
 import ServiceRequests from "./routes/serviceRequests.tsx";
+import CreditPage from "./routes/creditPage.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -108,6 +109,10 @@ function App() {
           path: "requests",
           element: <LoadingPage component={ServiceRequests} />,
         },
+        {
+          path: "credit",
+          element: <LoadingPage component={CreditPage}/>
+        }
       ],
     },
   ]);
