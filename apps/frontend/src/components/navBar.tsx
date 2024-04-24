@@ -168,6 +168,9 @@ function CustomNavBar() {
             <Button component="a" href="todo">
               Task Board
             </Button>
+            <Button component="a" href="credit">
+              Credit
+            </Button>
             <Button
               variant="contained"
               sx={{ margin: "0 0 0 1rem" }}

@@ -284,7 +284,7 @@ function SingleDisplay() {
     <div className="flex flex-col px-6 bg-background py-1">
       <div className="grid grid-cols-2">
         {/*download buttonss*/}
-        <div className=" inline-flex bg-background rounded-xl px-6 h-fit justify-left pt-5 gap-4">
+        <div className=" inline-flex bg-background rounded-xl px-6 h-fit justify-center pt-5 gap-4">
           <div>
             <h1 className="font-header text-primary font-bold text-3xl text-center">
               Download Files
@@ -340,7 +340,7 @@ function SingleDisplay() {
         {/*download buttonss*/}
 
         {/*upload buttonss*/}
-        <div className="inline-flex bg-background rounded-xl px-6 h-fit justify-left pt-5 gap-4">
+        <div className="inline-flex bg-background rounded-xl px-6 h-fit justify-center pt-5 gap-4">
           <div className="grid-cols-2">
             <h1 className="font-header text-primary font-bold text-3xl text-left">
               Upload Files
