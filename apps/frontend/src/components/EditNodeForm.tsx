@@ -47,6 +47,7 @@ export default function EditNodeForm(props: editNodeProps) {
     console.log(props.node.getX(), props.node.getY(), props.node.getBuilding());
     const token = await getAccessTokenSilently();
     if (editMode === "add_node") {
+      // if we want to add a node
       axios
         .post(
           "/api/editMap/addNode",
@@ -58,7 +59,7 @@ export default function EditNodeForm(props: editNodeProps) {
             shortName: nodeInfo.shortName,
             x_c: props.node.getX().toString(),
             y_c: props.node.getY().toString(),
-            building: "asdhbb",
+            building: props.node.getBuilding(),
           },
           {
             headers: {
@@ -69,7 +70,7 @@ export default function EditNodeForm(props: editNodeProps) {
         )
         .then(() => {
           alert("Successfully added node " + nodeInfo.ID);
-          window.location.reload();
+          // window.location.reload();
         })
         .catch(() => {
           alert(
@@ -77,6 +78,7 @@ export default function EditNodeForm(props: editNodeProps) {
           );
         });
     } else {
+      //otherwise we are just editing the node information
       axios
         .post(
           "/api/editMap/editNodeInfo",
@@ -120,8 +122,10 @@ export default function EditNodeForm(props: editNodeProps) {
               text-center
               "
       >
-        Editing:{" "}
-        {props.mode === "add_node" ? (
+        Editing: {nodeInfo.ID}
+      </h1>
+      <div className="flex flex-col gap-2">
+        {props.mode === "add_node" && (
           <TextField
             value={nodeInfo.ID}
             name="ID"
@@ -129,11 +133,7 @@ export default function EditNodeForm(props: editNodeProps) {
             variant="filled"
             label="Node ID"
           />
-        ) : (
-          nodeInfo.ID
         )}
-      </h1>
-      <div className="flex flex-col gap-2">
         <TextField
           value={nodeInfo.longName}
           name="longName"
