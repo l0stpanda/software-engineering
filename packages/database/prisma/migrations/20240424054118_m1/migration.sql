@@ -121,6 +121,7 @@ CREATE TABLE "Todo" (
     "priority" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "complete" BOOLEAN NOT NULL,
+    "subtasks" TEXT[],
 
     CONSTRAINT "Todo_pkey" PRIMARY KEY ("id")
 );
