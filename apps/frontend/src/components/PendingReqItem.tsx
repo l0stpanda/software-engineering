@@ -8,6 +8,7 @@ type GeneralReq = {
   id: number;
   type: string;
   location: string;
+  long_name_loc: string;
   status: string;
   emp_name: string;
   priority: string;
@@ -79,6 +80,7 @@ function PendingFlowerReq(props: GeneralReq) {
           onChange={handleStatusDropdown}
           value={status}
           defaultValue={props.status}
+          size="small"
         >
           <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
           <MenuItem value={"Assigned"}>Assigned</MenuItem>
@@ -87,7 +89,7 @@ function PendingFlowerReq(props: GeneralReq) {
         </Select>
       </td>
       <td className="p-3 text-sm">{props.priority}</td>
-      <td className="p-3 text-sm">{props.location}</td>
+      <td className="p-3 text-sm">{props.long_name_loc}</td>
       <td className="p-3 text-sm">{props.emp_name}</td>
       <td className="p-3 text-sm">
         <button>

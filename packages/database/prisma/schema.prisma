@@ -81,12 +81,13 @@ model Inventory {
 
 // General Service Request Table
 model GeneralService {
-  id       Int    @id @default(autoincrement())
-  type     String
-  location String
-  status   String
-  emp_name String
-  priority String
+  id            Int    @id @default(autoincrement())
+  type          String
+  location      String
+  long_name_loc String
+  status        String
+  emp_name      String
+  priority      String
 
   location_room      Nodes               @relation("location", fields: [location], references: [node_id], onDelete: Cascade)
   medicalDeviceCheck medicalDevice[]     @relation("idCheck")
@@ -157,13 +158,14 @@ model User {
 }
 
 model Todo {
-  id       Int     @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   task     String
   priority String
   email    String
   complete Boolean
+  subtasks String[]
   // Foreign Key Reference
-  user     User    @relation("UserID", fields: [email], references: [email], onDelete: Cascade)
+  user     User     @relation("UserID", fields: [email], references: [email], onDelete: Cascade)
 }
 
 model Flowers {

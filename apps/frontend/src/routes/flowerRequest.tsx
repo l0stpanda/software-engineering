@@ -107,10 +107,13 @@ function FlowerRequest() {
   }
 
   return (
-    <div className="justify-center flex flex-grow place-items-center">
+    <div className="justify-center flex flex-grow place-items-center overflow-hidden">
       <BackgroundPattern />
-      <div className="m-auto shadow-2xl flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-4">
-        <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
+      <div className="m-auto shadow-2xl flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-10 mt-[100px]">
+        <h1
+          className="my-2 font-header text-primary font-bold text-3xl text-center transition-transform hover:scale-105"
+          style={{ marginBottom: "20px" }}
+        >
           Flower Delivery Request
         </h1>
         <form onSubmit={handleSubmit}>
@@ -205,7 +208,7 @@ function FlowerRequest() {
                 <MenuItem value={"Closed"}>Closed</MenuItem>
               </Select>
             </FormControl>
-            <div className="flex-row self-center">
+            <div className="flex-row self-center" style={{ marginTop: "20px" }}>
               <Button
                 className="w-32 self-center pt-10"
                 onClick={clear}
@@ -223,7 +226,6 @@ function FlowerRequest() {
               >
                 Clear
               </Button>
-
               <Button
                 className="w-32 self-center pt-10"
                 type="submit"

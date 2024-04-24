@@ -49,7 +49,7 @@ export default function PendingRoomSched() {
 
   return (
     <div className="px-8 p5 h-screen bg-background">
-      <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
+      <h1 className="my-2 font-header text-primary font-bold text-3xl text-center transition-transform hover:scale-105">
         Room Scheduling List
       </h1>
       <table className="w-full">
