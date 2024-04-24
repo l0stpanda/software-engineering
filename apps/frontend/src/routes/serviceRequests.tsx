@@ -18,12 +18,12 @@ import WalletIcon from "@mui/icons-material/Wallet";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import MonitorHeartIcon from "@mui/icons-material/MonitorHeart";
 import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
-import PersonIcon from "@mui/icons-material/Person";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
 import LostFound from "../components/lostAndFound.tsx";
 import RoomSchedulingReq from "../components/roomSchedulingReq.tsx";
 import MedicalDeviceReq from "../components/medicalDeviceReq.tsx";
 import MedicineDeliveryReq from "../components/MedicineDeliveryReq.tsx";
+import SanitationReq from "../components/sanitationReq.tsx";
 
 type GeneralReq = {
   id: number;
@@ -41,7 +41,7 @@ function ServiceRequests() {
   const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
 
   const handleTabChange = (e: React.SyntheticEvent, tabIndex: number) => {
-    console.log(tabIndex);
+    //console.log(tabIndex);
     setCurrentTabIndex(tabIndex);
   };
 
@@ -128,8 +128,8 @@ function ServiceRequests() {
             Pending Requests
           </h1>
 
-          <div className="flex flex-row gap-2 pb-2">
-            <div className="w-20">
+          <div className="pb-2">
+            <div className="w-20 flex flex-row gap-2">
               <Select
                 name="Request Type"
                 required={true}
@@ -227,12 +227,21 @@ function ServiceRequests() {
               <Tooltip title="Flower Delivery">
                 <Tab icon={<LocalFloristIcon />} id="tab-0" />
               </Tooltip>
-              <Tab icon={<WalletIcon />} id="tab-1" />
-              <Tab icon={<MeetingRoomIcon />} id="tab-2" />
-              <Tab icon={<MonitorHeartIcon />} id="tab-3" />
-              <Tab icon={<LocalPharmacyIcon />} id="tab-4" />
-              <Tab icon={<PersonIcon />} id="tab-5" />
-              <Tab icon={<CleaningServicesIcon />} id="tab-6" />
+              <Tooltip title="Lost Item Request">
+                <Tab icon={<WalletIcon />} id="tab-1" />
+              </Tooltip>
+              <Tooltip title="Room Scheduling">
+                <Tab icon={<MeetingRoomIcon />} id="tab-2" />
+              </Tooltip>
+              <Tooltip title="Medical Device Delivery">
+                <Tab icon={<MonitorHeartIcon />} id="tab-3" />
+              </Tooltip>
+              <Tooltip title="Medicine Delivery">
+                <Tab icon={<LocalPharmacyIcon />} id="tab-4" />
+              </Tooltip>
+              <Tooltip title="Sanitation Request">
+                <Tab icon={<CleaningServicesIcon />} id="tab-5" />
+              </Tooltip>
             </Tabs>
           </div>
 
@@ -242,6 +251,7 @@ function ServiceRequests() {
             {currentTabIndex === 2 && <RoomSchedulingReq />}
             {currentTabIndex === 3 && <MedicalDeviceReq />}
             {currentTabIndex === 4 && <MedicineDeliveryReq />}
+            {currentTabIndex === 5 && <SanitationReq />}
           </div>
         </div>
       </div>
