@@ -39,8 +39,6 @@ function EditMap() {
     new MapNode("", 0, 0, "", "", "", "", ""),
     new MapNode("", 0, 0, "", "", "", "", ""),
   ]);
-  // const [nodeId, setNodeId] = useState("");
-  // const [longName, setLongName] = useState("");
   const [isMoveable, setIsMoveable] = useState(false);
 
   // Zoom in/out buttons for map viewing
@@ -230,12 +228,6 @@ function EditMap() {
       setWorld({ x: -1, y: -1 });
     }
   };
-
-  // const handleSubmit = (e: { preventDefault: () => void }) => {
-  //   e.preventDefault();
-  //   console.log("Node id: ", nodeId);
-  //   console.log("Long name: ", longName);
-  // };
 
   let divPos: number[] = [];
   if (divRef.current) {
