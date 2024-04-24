@@ -8,7 +8,7 @@ import sean_picture from "../assets/softeng_sean.jpg";
 import sahil_picture from "../assets/softeng_sahil.jpg";
 import quishi_picture from "../assets/softeng_quishi.jpg";
 import vincent_picture from "../assets/softeng_vincent.jpg";
-import mike_picture from "../assets/softeng_mike<3!.png";
+import mike_picture from "../assets/softeng_mike.png";
 import najum_picture from "../assets/softeng_najum.jpg";
 import AboutPageBackground from "../components/allyBackground.tsx";
 

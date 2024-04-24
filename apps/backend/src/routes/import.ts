@@ -48,6 +48,7 @@ router.delete(
 //GET edges from the database to the frontend as a JSON type
 router.get("/edgesGet", async function (req: Request, res: Response) {
   try {
+    console.log("SOFT ENG IS SO MUCH FUN LOL IM LYING");
     res.send(await PrismaClient.edges.findMany());
     return;
   } catch (error) {
@@ -99,7 +100,7 @@ router.delete(
 //GET nodes from the database to the frontend as a JSON type
 router.get("/nodesGet", async function (req: Request, res: Response) {
   try {
-    // res.send(await PrismaClient.nodes.findMany());
+    res.send(await PrismaClient.nodes.findMany());
     return;
   } catch (error) {
     console.log(error);

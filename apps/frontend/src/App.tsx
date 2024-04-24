@@ -129,7 +129,7 @@ function App() {
         },
         {
           path: "aboutPage",
-          element: <LoadingPage component={AboutPage} />,
+          element: <LoadingPage component={AboutPage} adminOnly={false} />,
         },
         {
           path: "requests",
