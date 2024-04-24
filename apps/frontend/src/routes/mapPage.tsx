@@ -345,7 +345,7 @@ function Map() {
 
   function FloorMapButtons() {
     return (
-      <div className="absolute z-10 h-fit my-auto ml-3 bg-primary bottom-7 right-9 rounded-xl">
+      <div className="absolute z-10 h-fit my-auto ml-3 bg-primary bottom-7 right-9 rounded-xl border-0">
         <ToggleButtonGroup
           orientation="vertical"
           value={imgState}
@@ -362,19 +362,89 @@ function Map() {
           color="standard"
           fullWidth
         >
-          <ToggleButton value={floor3} style={{ color: "white" }}>
+          <ToggleButton
+            value={floor3}
+            style={{ color: "white" }}
+            sx={{
+              borderRadius: "0.75rem",
+              "&.Mui-selected": {
+                backgroundColor: "#4497b3",
+              },
+              "&:hover": {
+                backgroundColor: "#4497b3",
+                transition: "background-color 0.3s ease-in-out",
+              },
+            }}
+            disabled={imgState === floor3}
+          >
             <strong>3</strong>
           </ToggleButton>
-          <ToggleButton value={floor2} style={{ color: "white" }}>
+          <ToggleButton
+            value={floor2}
+            style={{ color: "white" }}
+            sx={{
+              borderRadius: "0.75rem",
+              "&.Mui-selected": {
+                backgroundColor: "#4497b3",
+              },
+              "&:hover": {
+                backgroundColor: "#4497b3",
+                transition: "background-color 0.3s ease-in-out",
+              },
+            }}
+            disabled={imgState === floor2}
+          >
             <strong>2</strong>
           </ToggleButton>
-          <ToggleButton value={floor1} style={{ color: "white" }}>
+          <ToggleButton
+            value={floor1}
+            style={{ color: "white" }}
+            sx={{
+              borderRadius: "0.75rem",
+              "&.Mui-selected": {
+                backgroundColor: "#4497b3",
+              },
+              "&:hover": {
+                backgroundColor: "#4497b3",
+                transition: "background-color 0.3s ease-in-out",
+              },
+            }}
+            disabled={imgState === floor1}
+          >
             <strong>1</strong>
           </ToggleButton>
-          <ToggleButton value={lowerLevel1} style={{ color: "white" }}>
+          <ToggleButton
+            value={lowerLevel1}
+            style={{ color: "white" }}
+            sx={{
+              borderRadius: "0.75rem",
+              "&.Mui-selected": {
+                backgroundColor: "#4497b3",
+              },
+              "&:hover": {
+                backgroundColor: "#4497b3",
+                transition: "background-color 0.3s ease-in-out",
+              },
+            }}
+            disabled={imgState === lowerLevel1}
+          >
             <strong>L1</strong>
           </ToggleButton>
-          <ToggleButton value={lowerLevel2} style={{ color: "white" }}>
+          <ToggleButton
+            value={lowerLevel2}
+            style={{ color: "white" }}
+            sx={{
+              borderRadius: "0.75rem",
+              "&.Mui-selected": {
+                backgroundColor: "#4497b3",
+              },
+              "&:hover": {
+                backgroundColor: "#4497b3",
+                transition: "background-color 0.3s ease-in-out",
+              },
+            }}
+            disabled={imgState === lowerLevel2}
+          >
             <strong>L2</strong>
           </ToggleButton>
         </ToggleButtonGroup>
