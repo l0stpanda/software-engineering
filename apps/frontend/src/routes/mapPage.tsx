@@ -12,6 +12,7 @@ import {
   TransformWrapper,
   TransformComponent,
   useControls,
+  ReactZoomPanPinchRef,
 } from "react-zoom-pan-pinch";
 import { useState } from "react";
 //import BackgroundPattern from "../components/backgroundPattern.tsx";
@@ -34,20 +35,27 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useAuth0 } from "@auth0/auth0-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { userInfo } from "common/src/userInfo.ts";
-// import * as console from "console";
 import { directionInfo, getDirections } from "../objects/Pathfinding.ts";
 import { JSX } from "react/jsx-runtime";
 import axios from "axios";
 
 function Map() {
   const divRef = useRef<HTMLDivElement>(null);
+  const transformRef = useRef<ReactZoomPanPinchRef>(null);
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
   const [graph, setGraph] = useState(new Graph());
   const [update, setUpdate] = useState(0);
   const [imgState, setImgState] = useState<string>(floor1);
   const [algorithm, setAlgorithm] = useState<string>("AStar");
+  const [pathSize, setPathSize] = useState<number[]>([
+    0,
+    0,
+    Number.POSITIVE_INFINITY,
+    Number.POSITIVE_INFINITY,
+  ]);
   const [directions, setDirections] = useState<directionInfo[]>([]);
   const [path, setPath] = useState<string[]>([]);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const { getAccessTokenSilently, user } = useAuth0();
 
@@ -126,7 +134,7 @@ function Map() {
         user_id: user?.sub,
         email: user?.email,
         username: user?.preferred_username,
-        role: "Random for now",
+        role: "Admin",
       };
       await axios.post("/api/userAdding", send, {
         headers: {
@@ -134,6 +142,16 @@ function Map() {
           "Content-Type": "application/json",
         },
       });
+      axios
+        .get("/api/adminAccess", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(() => {
+          setIsAdmin(true);
+        })
+        .catch();
     }
     sendUser().then();
   }, [
@@ -142,6 +160,10 @@ function Map() {
     user?.preferred_username,
     user?.sub,
   ]);
+
+  function log(data: React.RefObject<ReactZoomPanPinchRef>) {
+    console.log(data);
+  }
 
   // Updates the graph when it has been received from the database
   useEffect(() => {
@@ -156,6 +178,33 @@ function Map() {
   useEffect(() => {
     setDirections(getDirections(path, graph));
   }, [path, graph]);
+
+  // Zoom to fit
+  useEffect(() => {
+    if (transformRef.current) {
+      if (
+        pathSize.toString() !==
+        [0, 0, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY].toString()
+      ) {
+        const padding = 50;
+        const width = pathSize[0] - pathSize[2] + 2 * padding;
+        const height = pathSize[1] - pathSize[3] + 2 * padding;
+        const scale = Math.min(
+          divDimensions.width / width,
+          divDimensions.height / height,
+        );
+
+        transformRef.current.setTransform(
+          -(pathSize[2] - padding) * scale,
+          -(pathSize[3] - padding) * scale,
+          scale,
+        );
+      } else {
+        transformRef.current.setTransform(0, 0, 1);
+      }
+    }
+    log(transformRef);
+  }, [pathSize, divDimensions, imgState]);
 
   const changeAlgorithm = (event: SelectChangeEvent) => {
     setAlgorithm(event.target.value as string);
@@ -344,7 +393,7 @@ function Map() {
     );
   }
   const [expanded, setExpanded] = useState(false);
-  const isOpen = expanded !== false;
+  const isOpen = expanded;
   const Accordion = () => {
     const handleInnerClick = (e: React.MouseEvent<HTMLElement>) => {
       e.stopPropagation();
@@ -432,7 +481,7 @@ function Map() {
                     h-screen
                     w-screen"
         >
-          <TransformWrapper disablePadding={true}>
+          <TransformWrapper disablePadding={true} ref={transformRef}>
             <div className="">
               {/*Buttons for displaying floor images*/}
               <FloorMapButtons />
@@ -447,6 +496,8 @@ function Map() {
                   }}
                   divDim={divDimensions}
                   algorithm={algorithm}
+                  setPathSize={setPathSize}
+                  pathSize={pathSize}
                   pathRef={path}
                   pathSetter={setPath}
                   updateStartAndEnd={updateStartAndEnd}
@@ -461,7 +512,7 @@ function Map() {
         {/*boxes.*/}
         <div
           className="fixed top-20 left-10"
-          onClick={() => setExpanded(isOpen ? false : true)}
+          onClick={() => setExpanded(!isOpen)}
         >
           <div className="mr-2 ml-0 py-1 px-16 items-center bg-primary rounded-xl border-primary border-2">
             <h2 className="text-body" style={{ color: "white" }}>
@@ -471,7 +522,7 @@ function Map() {
           <Accordion />
         </div>
         <div className="fixed bottom-7 left-10">
-          {user ? (
+          {isAdmin ? (
             <a href="editMap" className="justify-center my-2">
               <Button
                 type="button"

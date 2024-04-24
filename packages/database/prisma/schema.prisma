@@ -81,12 +81,13 @@ model Inventory {
 
 // General Service Request Table
 model GeneralService {
-  id       Int    @id @default(autoincrement())
-  type     String
-  location String
-  status   String
-  emp_name String
-  priority String
+  id            Int    @id @default(autoincrement())
+  type          String
+  location      String
+  long_name_loc String
+  status        String
+  emp_name      String
+  priority      String
 
   location_room      Nodes               @relation("location", fields: [location], references: [node_id], onDelete: Cascade)
   medicalDeviceCheck medicalDevice[]     @relation("idCheck")

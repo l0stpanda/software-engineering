@@ -5,7 +5,9 @@ import { edgeType } from "common/src/edgesType.ts";
 //Function to send edges from the frontend to the database
 export async function PostEdge(curr_data: edgeType[]) {
   const res = await axios.post("/api/import/edgesPost", curr_data, {
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
   if (res.status == 200) {
     //Logs a success is the post is successful and logs the start node
@@ -18,6 +20,8 @@ export async function PostEdge(curr_data: edgeType[]) {
 //Function to delete all edges from the database
 export async function DeleteAllEdge() {
   await axios.delete("/api/import/edgesDelete", {
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
 }
