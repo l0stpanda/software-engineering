@@ -25,7 +25,7 @@ import floor3 from "../assets/03_thethirdfloor.png";
 
 import FloorNode from "../components/FloorNode.tsx";
 import { SelectChangeEvent } from "@mui/material/Select";
-import { ArrowBack } from "@mui/icons-material";
+// import { ArrowBack } from "@mui/icons-material";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import ModeIcon from "@mui/icons-material/Mode";
 import StraightIcon from "@mui/icons-material/Straight";
@@ -55,6 +55,7 @@ function Map() {
   ]);
   const [directions, setDirections] = useState<directionInfo[]>([]);
   const [path, setPath] = useState<string[]>([]);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const { getAccessTokenSilently, user } = useAuth0();
 
@@ -133,7 +134,7 @@ function Map() {
         user_id: user?.sub,
         email: user?.email,
         username: user?.preferred_username,
-        role: "Random for now",
+        role: "Admin",
       };
       await axios.post("/api/userAdding", send, {
         headers: {
@@ -141,6 +142,16 @@ function Map() {
           "Content-Type": "application/json",
         },
       });
+      axios
+        .get("/api/adminAccess", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(() => {
+          setIsAdmin(true);
+        })
+        .catch();
     }
     sendUser().then();
   }, [
@@ -345,7 +356,7 @@ function Map() {
 
   function FloorMapButtons() {
     return (
-      <div className="absolute z-10 h-fit my-auto ml-3 bg-primary bottom-7 right-9 rounded-xl">
+      <div className="absolute z-10 h-fit my-auto ml-3 bg-primary bottom-7 right-9 rounded-xl border-0">
         <ToggleButtonGroup
           orientation="vertical"
           value={imgState}
@@ -362,19 +373,89 @@ function Map() {
           color="standard"
           fullWidth
         >
-          <ToggleButton value={floor3} style={{ color: "white" }}>
+          <ToggleButton
+            value={floor3}
+            style={{ color: "white" }}
+            sx={{
+              borderRadius: "0.75rem",
+              "&.Mui-selected": {
+                backgroundColor: "#4497b3",
+              },
+              "&:hover": {
+                backgroundColor: "#4497b3",
+                transition: "background-color 0.3s ease-in-out",
+              },
+            }}
+            disabled={imgState === floor3}
+          >
             <strong>3</strong>
           </ToggleButton>
-          <ToggleButton value={floor2} style={{ color: "white" }}>
+          <ToggleButton
+            value={floor2}
+            style={{ color: "white" }}
+            sx={{
+              borderRadius: "0.75rem",
+              "&.Mui-selected": {
+                backgroundColor: "#4497b3",
+              },
+              "&:hover": {
+                backgroundColor: "#4497b3",
+                transition: "background-color 0.3s ease-in-out",
+              },
+            }}
+            disabled={imgState === floor2}
+          >
             <strong>2</strong>
           </ToggleButton>
-          <ToggleButton value={floor1} style={{ color: "white" }}>
+          <ToggleButton
+            value={floor1}
+            style={{ color: "white" }}
+            sx={{
+              borderRadius: "0.75rem",
+              "&.Mui-selected": {
+                backgroundColor: "#4497b3",
+              },
+              "&:hover": {
+                backgroundColor: "#4497b3",
+                transition: "background-color 0.3s ease-in-out",
+              },
+            }}
+            disabled={imgState === floor1}
+          >
             <strong>1</strong>
           </ToggleButton>
-          <ToggleButton value={lowerLevel1} style={{ color: "white" }}>
+          <ToggleButton
+            value={lowerLevel1}
+            style={{ color: "white" }}
+            sx={{
+              borderRadius: "0.75rem",
+              "&.Mui-selected": {
+                backgroundColor: "#4497b3",
+              },
+              "&:hover": {
+                backgroundColor: "#4497b3",
+                transition: "background-color 0.3s ease-in-out",
+              },
+            }}
+            disabled={imgState === lowerLevel1}
+          >
             <strong>L1</strong>
           </ToggleButton>
-          <ToggleButton value={lowerLevel2} style={{ color: "white" }}>
+          <ToggleButton
+            value={lowerLevel2}
+            style={{ color: "white" }}
+            sx={{
+              borderRadius: "0.75rem",
+              "&.Mui-selected": {
+                backgroundColor: "#4497b3",
+              },
+              "&:hover": {
+                backgroundColor: "#4497b3",
+                transition: "background-color 0.3s ease-in-out",
+              },
+            }}
+            disabled={imgState === lowerLevel2}
+          >
             <strong>L2</strong>
           </ToggleButton>
         </ToggleButtonGroup>
@@ -393,7 +474,7 @@ function Map() {
           initial={false}
           // animate={{ backgroundColor: isOpen ? "#FF0088" : "#0055FF" }}
         />
-        <AnimatePresence initial={false}>
+        <AnimatePresence initial={true}>
           {isOpen && (
             <motion.section
               key="content"
@@ -475,7 +556,13 @@ function Map() {
               {/*Buttons for displaying floor images*/}
               <FloorMapButtons />
               <Controls />
-              <TransformComponent>
+              <TransformComponent
+                wrapperStyle={{
+                  width: screen.width,
+                  height: "calc(100vh - 55px)",
+                  position: "fixed",
+                }}
+              >
                 <FloorNode
                   imageSrc={imgState}
                   graph={graph}
@@ -499,28 +586,19 @@ function Map() {
         {/*Location and Destination things*/}
         <div className=""></div>
         {/*boxes.*/}
-        <div className="fixed top-20 left-2">
-          <a href="">
-            <Button
-              sx={{ margin: "0 0 1rem 1rem" }}
-              startIcon={<ArrowBack />}
-              variant="contained"
-            >
-              Home
-            </Button>
-          </a>
-        </div>
         <div
-          className="fixed top-36 left-10"
+          className="fixed top-20 left-10"
           onClick={() => setExpanded(!isOpen)}
         >
           <div className="mr-2 ml-0 py-1 px-16 items-center bg-primary rounded-xl border-primary border-2">
-            <h2 style={{ color: "white" }}>Navigation</h2>
+            <h2 className="text-body" style={{ color: "white" }}>
+              Navigation
+            </h2>
           </div>
           <Accordion />
         </div>
-        <div className="fixed top-20 left-36">
-          {user ? (
+        <div className="fixed bottom-7 left-10">
+          {isAdmin ? (
             <a href="editMap" className="justify-center my-2">
               <Button
                 type="button"
@@ -528,6 +606,7 @@ function Map() {
                 startIcon={<ModeIcon />}
                 className="editMapBut"
                 size="medium"
+                sx={{ borderRadius: 4 }}
               >
                 Edit Map
               </Button>
