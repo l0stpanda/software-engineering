@@ -100,6 +100,7 @@ function TODOListItem(props: toDoNow) {
         </td>
         <td className="p-3 text-sm">{props.id}</td>
         <td className="p-3 text-sm">{props.priority}</td>
+        <td className="p-3 text-sm">{props.task}</td>
         <td className="p-3 text-sm">
           {props.subtasks && props.subtasks.length > 0 ? (
             <Accordion>

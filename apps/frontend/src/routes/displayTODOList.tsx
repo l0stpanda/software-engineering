@@ -132,6 +132,8 @@ export default function DisplayTODOList() {
 
     const token = await getAccessTokenSilently();
     const newTaskData = { ...toDoResponse, subtasks };
+    console.log(subtasks);
+    console.log(newTaskData);
 
     try {
       await axios.post(`/api/todoStuff`, newTaskData, {
@@ -160,7 +162,7 @@ export default function DisplayTODOList() {
     setSubtasks([]);
     showSnackbar("New Task has been created", "success");
     setOpen(false);
-    window.location.reload();
+    //window.location.reload();
   }
 
   function handleOpen() {

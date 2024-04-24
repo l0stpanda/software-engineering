@@ -14,6 +14,7 @@ type toDoNow = {
   username: string;
   role: string;
   complete: boolean;
+  subtasks: string[];
 };
 
 //Registering the login details from the front end to the backend to be stored in the database
@@ -44,6 +45,7 @@ router.post("/", async function (req: Request, res: Response) {
           task: input.task,
           priority: input.priority,
           email: input.email,
+          subtasks: input.subtasks,
           complete: input.complete,
         },
       });

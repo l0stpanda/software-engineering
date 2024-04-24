@@ -99,7 +99,7 @@ router.delete(
 //GET nodes from the database to the frontend as a JSON type
 router.get("/nodesGet", async function (req: Request, res: Response) {
   try {
-    // res.send(await PrismaClient.nodes.findMany());
+    res.send(await PrismaClient.nodes.findMany());
     return;
   } catch (error) {
     console.log(error);
