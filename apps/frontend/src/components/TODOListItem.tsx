@@ -20,6 +20,7 @@ type toDoNow = {
   role: string | undefined;
   complete: boolean;
 };
+
 function TODOListItem(props: toDoNow) {
   const { getAccessTokenSilently } = useAuth0();
 

@@ -81,19 +81,30 @@ model Inventory {
 
 // General Service Request Table
 model GeneralService {
-  id       Int    @id @default(autoincrement())
-  type     String
-  location String
-  status   String
-  emp_name String
-  priority String
+  id            Int    @id @default(autoincrement())
+  type          String
+  location      String
+  long_name_loc String
+  status        String
+  emp_name      String
+  priority      String
 
-  location_room      Nodes             @relation("location", fields: [location], references: [node_id], onDelete: Cascade)
-  medicalDeviceCheck medicalDevice[]   @relation("idCheck")
-  lost_location      LostItem[]        @relation("idCheckLost")
-  roomSched          RoomScheduler[]   @relation("roomSchedID")
-  medicineReqID      MedicineRequest[] @relation("medicineReqID")
-  flowerID           Flowers[]         @relation("flowerID")
+  location_room      Nodes               @relation("location", fields: [location], references: [node_id], onDelete: Cascade)
+  medicalDeviceCheck medicalDevice[]     @relation("idCheck")
+  lost_location      LostItem[]          @relation("idCheckLost")
+  roomSched          RoomScheduler[]     @relation("roomSchedID")
+  medicineReqID      MedicineRequest[]   @relation("medicineReqID")
+  flowerID           Flowers[]           @relation("flowerID")
+  sanitationID       SanitationRequest[] @relation("sanitationReq")
+}
+
+model SanitationRequest {
+  id            Int            @id
+  severity      String
+  hazardous     String
+  room_name     String
+  // Foreign Key Reference
+  sanitationReq GeneralService @relation("sanitationReq", fields: [id], references: [id], onDelete: Cascade)
 }
 
 // medical device requests are saved

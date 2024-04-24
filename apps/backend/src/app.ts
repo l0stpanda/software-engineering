@@ -12,9 +12,11 @@ import medicalDeviceDelivery from "./routes/medicalDeviceDelivery.ts";
 import inventory from "./routes/inventory.ts";
 import lostAndFound from "./routes/lostAndFound.ts";
 import medicineRequest from "./routes/medicineRequest.ts";
+import sanitationRequest from "./routes/sanitationRequest.ts";
 import editMap from "./routes/editPage.ts";
 import userStuff from "./routes/userStorage.ts";
 import userAdd from "./routes/userAdd.ts";
+import fetchAll from "./routes/allFetching.ts";
 import { auth } from "express-oauth2-jwt-bearer";
 import adminAccess from "./routes/adminAccess.ts";
 // import readRouterE from "./routes/readE.ts";
@@ -47,6 +49,8 @@ app.use("/api/import", importRouter);
 app.use("/api/login", loginRequest);
 app.use("/api/read", readRouter);
 app.use("/api/userAdding", userAdd);
+app.use("/api/editMap", editMap);
+app.use("/api/fetchAll", fetchAll);
 
 // Enable auth0 enforcement
 app.use(
@@ -62,8 +66,9 @@ app.use("/api/inventory", inventory);
 app.use("/api/medicalDevice", medicalDeviceDelivery);
 app.use("/api/lostAndFound", lostAndFound);
 app.use("/api/medicineRequest", medicineRequest);
-app.use("/api/editMap", editMap);
+
 app.use("/api/roomSchedulingRequest", roomScheduler);
+app.use("/api/sanitationRequest", sanitationRequest);
 app.use("/api/todoStuff", userStuff);
 app.use("/api/adminAccess", adminAccess);
 

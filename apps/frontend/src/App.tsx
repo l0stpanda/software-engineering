@@ -24,7 +24,10 @@ import SpinningLoader from "./components/spinningLoader.tsx";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import TodoList from "./routes/todoList.tsx";
+import SanitationRequest from "./routes/sanitationRequest.tsx";
 import DisplayInventory from "./routes/disInventoryList.tsx";
+import PendingSanitationRequest from "./routes/displaySanitationReqs.tsx";
+import ServiceRequests from "./routes/serviceRequests.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -103,9 +106,30 @@ function App() {
           element: <LoadingPage component={TodoList} adminOnly={false} />,
         },
         {
+          path: "sanitationRequest",
+          element: (
+            <LoadingPage component={SanitationRequest} adminOnly={false} />
+          ),
+        },
+        {
+          path: "PendingSanitationRequest",
+          element: (
+            <LoadingPage
+              component={PendingSanitationRequest}
+              adminOnly={false}
+            />
+          ),
+        },
+        {
           path: "inventory",
           element: (
             <LoadingPage component={DisplayInventory} adminOnly={false} />
+          ),
+        },
+        {
+          path: "requests",
+          element: (
+            <LoadingPage component={ServiceRequests} adminOnly={false} />
           ),
         },
       ],

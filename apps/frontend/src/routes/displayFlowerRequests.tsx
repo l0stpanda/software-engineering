@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import PendingRequestItem from "../components/PendingRequestItem.tsx";
+import PendingFlowerReq from "../components/PendingFlowerReq.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import PendingLost from "./displayLost.tsx";
 import PendingRoomSched from "./displayRoomSched.tsx";
 import PendingMedicalDevice from "./displayMedicalDevice.tsx";
 import PendingMedicineDelivery from "./displayMedicineDelivery.tsx";
 import { Tab, Tabs } from "@mui/material";
+import PendingUserItem from "../components/UserItem.tsx";
+import PendingSanitationRequest from "./displaySanitationReqs.tsx";
 
 // Define database json type
 type FlowerArray = {
@@ -55,6 +57,8 @@ export default function PendingFlowerRequest() {
       }
     };
 
+    //Order by request type
+
     fetchData().catch((error) => {
       console.error("Error from fetchData promise:", error);
     });
@@ -69,6 +73,8 @@ export default function PendingFlowerRequest() {
           <Tab label="Room Scheduling" id="tab-2" />
           <Tab label="Medical Device Delivery" id="tab-3" />
           <Tab label="Medicine Delivery" id="tab-4" />
+          <Tab label="Users" id="tab-5" />
+          <Tab label="Sanitation Request" id="tab-6" />
         </Tabs>
       </React.Fragment>
 
@@ -105,7 +111,7 @@ export default function PendingFlowerRequest() {
               <tbody>
                 {/* Map through the records and create a row for each record */}
                 {records.map((record) => (
-                  <PendingRequestItem
+                  <PendingFlowerReq
                     key={record.id}
                     id={record.id}
                     status={record.status}
@@ -131,6 +137,15 @@ export default function PendingFlowerRequest() {
       <div id="tab-4">
         {currentTabIndex === 4 && (
           <PendingMedicineDelivery></PendingMedicineDelivery>
+        )}{" "}
+      </div>
+      <div id="tab-5">
+        {currentTabIndex === 5 && <PendingUserItem></PendingUserItem>}{" "}
+      </div>
+
+      <div id="tab-6">
+        {currentTabIndex === 6 && (
+          <PendingSanitationRequest></PendingSanitationRequest>
         )}{" "}
       </div>
     </div>
