@@ -108,10 +108,13 @@ function LostFound() {
   }
 
   return (
-    <div className="justify-center grid h-screen place-items-center mt-6">
+    <div className="justify-center grid h-screen place-items-center mt-6 overflow-hidden">
       <BackgroundPattern />
-      <div className="m-auto shadow-2xl flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-4">
-        <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
+      <div
+        className="m-auto shadow-2xl flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-10"
+        style={{ borderRadius: "25px" }}
+      >
+        <h1 className="my-2 font-header text-primary font-bold text-3xl text-center hover:scale-110 transition-transform duration-300">
           Lost and Found Request
         </h1>
         {/*<p*/}
@@ -226,7 +229,7 @@ function LostFound() {
               </Select>
             </FormControl>
 
-            <div className="flex justify-center">
+            <div className="flex justify-center" style={{ marginTop: "20px" }}>
               <Button
                 className="w-32 self-center pt-10"
                 id="clear"

@@ -28,7 +28,7 @@ import { ArrowBack } from "@mui/icons-material";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import ModeIcon from "@mui/icons-material/Mode";
 import { useAuth0 } from "@auth0/auth0-react";
-// @ts-ignore
+
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { userInfo } from "common/src/userInfo.ts";
@@ -170,7 +170,7 @@ function Map() {
             _event: React.MouseEvent<HTMLElement>,
             newFloor: string,
           ) => {
-            if (newFloor != null) {
+            if (newFloor !== null) {
               changeFloor(newFloor);
             }
           }}
@@ -192,6 +192,9 @@ function Map() {
           </ToggleButton>
           <ToggleButton value={lowerLevel2} style={{ color: "white" }}>
             <strong>L2</strong>
+          </ToggleButton>
+          <ToggleButton value="all">
+            <span>All</span>
           </ToggleButton>
         </ToggleButtonGroup>
       </div>
