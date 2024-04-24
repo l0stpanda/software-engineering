@@ -209,7 +209,7 @@ function SingleDisplay() {
             });
 
           const newUsers: User[] = [];
-          for (let i = 1; i < users_array.length - 1; i++) {
+          for (let i = 1; i < users_array.length; i++) {
             const curr_data: User = {
               id: users_array[i][0].toString(),
               email: users_array[i][1].toString(),
