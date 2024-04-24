@@ -393,7 +393,7 @@ function Map() {
           initial={false}
           // animate={{ backgroundColor: isOpen ? "#FF0088" : "#0055FF" }}
         />
-        <AnimatePresence initial={false}>
+        <AnimatePresence initial={true}>
           {isOpen && (
             <motion.section
               key="content"
@@ -475,7 +475,13 @@ function Map() {
               {/*Buttons for displaying floor images*/}
               <FloorMapButtons />
               <Controls />
-              <TransformComponent>
+              <TransformComponent
+                wrapperStyle={{
+                  width: screen.width,
+                  height: "calc(100vh - 55px)",
+                  position: "fixed",
+                }}
+              >
                 <FloorNode
                   imageSrc={imgState}
                   graph={graph}

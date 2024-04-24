@@ -299,11 +299,7 @@ function FloorNode(props: FloorNodesProps) {
 
   return (
     <div ref={divRef} style={{ position: "relative" }}>
-      <img
-        src={props.imageSrc}
-        className="object-fit w-screen h-screen"
-        alt="Map"
-      />
+      <img src={props.imageSrc} className="w-screen" alt="Map" />
       <svg
         style={{
           position: "absolute",
