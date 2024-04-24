@@ -48,6 +48,7 @@ router.delete(
 //GET edges from the database to the frontend as a JSON type
 router.get("/edgesGet", async function (req: Request, res: Response) {
   try {
+    console.log("SOFT ENG IS SO MUCH FUN LOL IM LYING");
     res.send(await PrismaClient.edges.findMany());
     return;
   } catch (error) {
