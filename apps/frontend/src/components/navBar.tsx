@@ -1,5 +1,12 @@
 import React, { useEffect } from "react";
-import { AppBar, IconButton, Toolbar, Tooltip } from "@mui/material";
+import {
+  AppBar,
+  IconButton,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Tooltip,
+} from "@mui/material";
 import MapIcon from "@mui/icons-material/Map";
 import StorageIcon from "@mui/icons-material/Storage";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
@@ -7,6 +14,7 @@ import BackupTableIcon from "@mui/icons-material/BackupTable";
 import BWLogo from "/BWLogo.png";
 import { useAuth0 } from "@auth0/auth0-react";
 import BackpackIcon from "@mui/icons-material/Backpack";
+import { MoreHoriz } from "@mui/icons-material";
 
 function CustomNavBar() {
   const {
@@ -44,20 +52,20 @@ function CustomNavBar() {
     });
   }
 
-  // const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  // const open = Boolean(anchorEl);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
   // const [anchorElAdmin, setAnchorElAdmin] = React.useState<null | HTMLElement>(
   //   null,
   // );
   // const openAdmin = Boolean(anchorElAdmin);
 
-  // function handleRequestsOpen(e: React.MouseEvent<HTMLElement>) {
-  //   setAnchorEl(e.currentTarget);
-  // }
+  function handleRequestsOpen(e: React.MouseEvent<HTMLElement>) {
+    setAnchorEl(e.currentTarget);
+  }
 
-  // function handleRequestsClosed() {
-  //   setAnchorEl(null);
-  // }
+  function handleRequestsClosed() {
+    setAnchorEl(null);
+  }
   // function handleAdminOpen(e: React.MouseEvent<HTMLElement>) {
   //   setAnchorElAdmin(e.currentTarget);
   // }
@@ -122,37 +130,22 @@ function CustomNavBar() {
                     <BackupTableIcon className="svg_icons" />
                   </IconButton>
                 </Tooltip>
-                {/*<Menu*/}
-                {/*  open={open}*/}
-                {/*  onClose={handleRequestsClosed}*/}
-                {/*  anchorEl={anchorEl}*/}
-                {/*  transformOrigin={{*/}
-                {/*    vertical: "top",*/}
-                {/*    horizontal: "left",*/}
-                {/*  }}*/}
-                {/*>*/}
-                {/*  <MenuItem href="viewpending" component="a">*/}
-                {/*    Pending*/}
-                {/*  </MenuItem>*/}
-                {/*  <MenuItem href="flowerrequest" component="a">*/}
-                {/*    Flower Request*/}
-                {/*  </MenuItem>*/}
-                {/*  <MenuItem href="medicinerequest" component="a">*/}
-                {/*    Medicine Delivery*/}
-                {/*  </MenuItem>*/}
-                {/*  <MenuItem href="roomrequest" component="a">*/}
-                {/*    Room Scheduling*/}
-                {/*  </MenuItem>*/}
-                {/*  <MenuItem href="medicaldevicerequest" component="a">*/}
-                {/*    Medical Device Delivery*/}
-                {/*  </MenuItem>*/}
-                {/*  <MenuItem href="lostitemrequest" component="a">*/}
-                {/*    Lost Item*/}
-                {/*  </MenuItem>*/}
-                {/*  <MenuItem href="sanitationRequest" component="a">*/}
-                {/*    Sanitation Request*/}
-                {/*  </MenuItem>*/}
-                {/*</Menu>*/}
+                <Menu
+                  open={open}
+                  onClose={handleRequestsClosed}
+                  anchorEl={anchorEl}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                >
+                  <MenuItem href="aboutPage" component="a">
+                    About
+                  </MenuItem>
+                  <MenuItem href="credit" component="a">
+                    Credits
+                  </MenuItem>
+                </Menu>
                 <Tooltip title={"Todo List"}>
                   <IconButton
                     href="todo"
@@ -171,6 +164,16 @@ function CustomNavBar() {
                     }}
                   >
                     <BackpackIcon className="svg_icons" />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title={"More"}>
+                  <IconButton
+                    onClick={handleRequestsOpen}
+                    style={{
+                      marginLeft: "1rem",
+                    }}
+                  >
+                    <MoreHoriz className="svg_icons" />
                   </IconButton>
                 </Tooltip>
               </div>
