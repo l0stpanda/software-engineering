@@ -18,6 +18,9 @@ import userStuff from "./routes/userStorage.ts";
 import userAdd from "./routes/userAdd.ts";
 import fetchAll from "./routes/allFetching.ts";
 import { auth } from "express-oauth2-jwt-bearer";
+import adminAccess from "./routes/adminAccess.ts";
+// import readRouterE from "./routes/readE.ts";
+// import readRouterN from "./routes/readN.ts";
 
 const app: Express = express(); // Setup the backend
 
@@ -67,6 +70,7 @@ app.use("/api/medicineRequest", medicineRequest);
 app.use("/api/roomSchedulingRequest", roomScheduler);
 app.use("/api/sanitationRequest", sanitationRequest);
 app.use("/api/todoStuff", userStuff);
+app.use("/api/adminAccess", adminAccess);
 
 /**
  * Catch all 404 errors, and forward them to the error handler

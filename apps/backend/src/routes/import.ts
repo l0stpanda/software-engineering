@@ -2,39 +2,48 @@ import express, { Router, Request, Response } from "express";
 import PrismaClient from "../bin/database-connection.ts";
 import { edgeType } from "common/src/edgesType.ts";
 import { nodeType } from "common/src/nodeType.ts";
+import { checkRequiredPermissions } from "./auth0Perms.ts";
 
 const router: Router = express.Router();
 
 //EDGES STUFF
 
 //POST edges from the frontend to the database
-router.post("/edgesPost", async function (req: Request, res: Response) {
-  const received: edgeType[] = req.body;
-  try {
-    await PrismaClient.edges.createMany({ data: received });
-  } catch (e) {
-    //Console log error if the data can't be stored
-    console.log(e);
-    res.sendStatus(400);
-    return;
-  }
-  //Console log "Ok" if the database successfully collects the data
-  res.sendStatus(200);
-});
+router.post(
+  "/edgesPost",
+  checkRequiredPermissions(["create:edges"]),
+  async function (req: Request, res: Response) {
+    const received: edgeType[] = req.body;
+    try {
+      await PrismaClient.edges.createMany({ data: received });
+    } catch (e) {
+      //Console log error if the data can't be stored
+      console.log(e);
+      res.sendStatus(400);
+      return;
+    }
+    //Console log "Ok" if the database successfully collects the data
+    res.sendStatus(200);
+  },
+);
 
 //DELETE edges from the database
-router.delete("/edgesDelete", async function (req: Request, res: Response) {
-  try {
-    await PrismaClient.edges.deleteMany();
-  } catch (error) {
-    //Console log error if the data can't be stored
-    console.log(error);
-    res.sendStatus(400);
-    return;
-  }
-  //Console log "Ok" if the database successfully collects the data
-  res.sendStatus(200);
-});
+router.delete(
+  "/edgesDelete",
+  checkRequiredPermissions(["delete:edges"]),
+  async function (req: Request, res: Response) {
+    try {
+      await PrismaClient.edges.deleteMany();
+    } catch (error) {
+      //Console log error if the data can't be stored
+      console.log(error);
+      res.sendStatus(400);
+      return;
+    }
+    //Console log "Ok" if the database successfully collects the data
+    res.sendStatus(200);
+  },
+);
 
 //GET edges from the database to the frontend as a JSON type
 router.get("/edgesGet", async function (req: Request, res: Response) {
@@ -50,34 +59,42 @@ router.get("/edgesGet", async function (req: Request, res: Response) {
 });
 
 //NODES STUFF
-router.post("/nodesPost", async function (req: Request, res: Response) {
-  const received: nodeType[] = req.body;
-  try {
-    await PrismaClient.nodes.createMany({ data: received });
-  } catch (e) {
-    //Console log error if the data can't be stored
-    console.log(e);
-    res.sendStatus(400);
-    return;
-  }
-  //Console log "Ok" if the database successfully collects the data
-  res.sendStatus(200);
-});
+router.post(
+  "/nodesPost",
+  checkRequiredPermissions(["create:nodes"]),
+  async function (req: Request, res: Response) {
+    const received: nodeType[] = req.body;
+    try {
+      await PrismaClient.nodes.createMany({ data: received });
+    } catch (e) {
+      //Console log error if the data can't be stored
+      console.log(e);
+      res.sendStatus(400);
+      return;
+    }
+    //Console log "Ok" if the database successfully collects the data
+    res.sendStatus(200);
+  },
+);
 
 //DELETE nodes from the database
-router.delete("/nodesDelete", async function (req: Request, res: Response) {
-  try {
-    await PrismaClient.nodes.deleteMany();
-  } catch (error) {
-    console.log(error);
-    //Console log error if the data can't be stored
-    res.sendStatus(400);
+router.delete(
+  "/nodesDelete",
+  checkRequiredPermissions(["delete:nodes"]),
+  async function (req: Request, res: Response) {
+    try {
+      await PrismaClient.nodes.deleteMany();
+    } catch (error) {
+      console.log(error);
+      //Console log error if the data can't be stored
+      res.sendStatus(400);
+      return;
+    }
+    //Console log "Ok" if the database successfully collects the data
+    res.sendStatus(200);
     return;
-  }
-  //Console log "Ok" if the database successfully collects the data
-  res.sendStatus(200);
-  return;
-});
+  },
+);
 
 //GET nodes from the database to the frontend as a JSON type
 router.get("/nodesGet", async function (req: Request, res: Response) {

@@ -55,6 +55,7 @@ function Map() {
   ]);
   const [directions, setDirections] = useState<directionInfo[]>([]);
   const [path, setPath] = useState<string[]>([]);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const { getAccessTokenSilently, user } = useAuth0();
 
@@ -133,7 +134,7 @@ function Map() {
         user_id: user?.sub,
         email: user?.email,
         username: user?.preferred_username,
-        role: "Random for now",
+        role: "Admin",
       };
       await axios.post("/api/userAdding", send, {
         headers: {
@@ -141,6 +142,16 @@ function Map() {
           "Content-Type": "application/json",
         },
       });
+      axios
+        .get("/api/adminAccess", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(() => {
+          setIsAdmin(true);
+        })
+        .catch();
     }
     sendUser().then();
   }, [
@@ -520,7 +531,7 @@ function Map() {
           <Accordion />
         </div>
         <div className="fixed top-20 left-36">
-          {user ? (
+          {isAdmin ? (
             <a href="editMap" className="justify-center my-2">
               <Button
                 type="button"
