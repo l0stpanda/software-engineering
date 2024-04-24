@@ -54,8 +54,11 @@ export default function PendingLost() {
   // }
 
   return (
-    <div className="px-8 p5 h-screen bg-background">
-      <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
+    <div
+      className="px-8 p5 h-screen bg-background"
+      style={{ borderRadius: "25px" }}
+    >
+      <h1 className="my-2 font-header text-primary font-bold text-3xl text-center grow-on-hover">
         Lost and Found State
       </h1>
       <table className="w-full">

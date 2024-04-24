@@ -1,12 +1,11 @@
 import express, { Router, Request, Response } from "express";
 //import { Prisma } from "database";
 import PrismaClient from "../bin/database-connection.ts";
-//import { toDo } from "common/src/toDo.ts";
 
 const router: Router = express.Router();
 
 type nowUser = {
-  user_id: string;
+  id: string;
   email: string;
   username: string;
   role: string;
@@ -27,7 +26,7 @@ router.post("/", async function (req: Request, res: Response) {
       if (users_email.length == 0) {
         await PrismaClient.user.create({
           data: {
-            id: input.user_id,
+            id: input.id,
             email: input.email,
             username: input.username,
             role: input.role,
@@ -60,5 +59,21 @@ router.get("/", async function (req: Request, res: Response) {
     res.sendStatus(400);
     return;
   }
+});
+
+router.post("/uploadUsers", async function (req: Request, res: Response) {
+  const received: nowUser[] = req.body;
+
+  try {
+    await PrismaClient.user.deleteMany({});
+    await PrismaClient.user.createMany({ data: received });
+  } catch (e) {
+    //Console log error if the data can't be stored
+    console.log(e);
+    res.sendStatus(400);
+    return;
+  }
+  //Console log "Ok" if the database successfully collects the data
+  res.sendStatus(200);
 });
 export default router;

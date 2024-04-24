@@ -12,6 +12,8 @@ import { DeleteAllEdge, PostEdge } from "../objects/DAO_Edges.ts";
 import { edgeType } from "common/src/edgesType.ts";
 import { DeleteAllNode, PostNode } from "../objects/DAO_Nodes.ts";
 import { nodeType } from "common/src/nodeType.ts";
+import { useAuth0 } from "@auth0/auth0-react";
+import PendingUser from "./PendingUser.tsx";
 
 //end merge
 
@@ -31,40 +33,63 @@ import { Dialog, DialogTitle } from "@mui/material";
     edges?: Edges[];
     nodes?: Nodes[];
 }*/
-
+type User = {
+  id: string;
+  email: string;
+  username: string;
+  role: string;
+};
 //This handles uploads and downloads on the same page
 function SingleDisplay() {
   const [edges, setEdges] = useState<Edges[]>([]); // Initialize state to hold the edges data
   const [nodes, setNode] = useState<Nodes[]>([]); // Initialize state to hold the nodes data
   const [tableDisplayed, setTableDisplaying] = useState<number>(0);
+  const [users, setUsers] = useState<User[]>([]);
+  const { getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
-    displayEdges().then();
-    displayNodes().then();
-  }, []);
-  async function displayEdges() {
-    console.log("Displaying edges...");
-    try {
-      const data = await ReadEdge(); // Call ReadEdge and wait for the data
-      setEdges(data); // Update state with the received data
-    } catch (error) {
-      console.error("Error fetching edges:", error);
+    async function fetchData() {
+      try {
+        const edgeData = await ReadEdge();
+        const nodeData = await ReadNode();
+        const token = await getAccessTokenSilently();
+        const response = await axios.get("/api/userAdding", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setEdges(edgeData);
+        setNode(nodeData);
+        setUsers(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     }
-  }
 
-  async function displayNodes() {
-    console.log("Displaying nodes...");
-    try {
-      const data = await ReadNode(); // Call ReadEdge and wait for the data
-      setNode(data); // Update state with the received data
-    } catch (error) {
-      console.error("Error fetching nodes:", error);
-    }
-  }
+    fetchData();
+  }, [getAccessTokenSilently]);
+
+  //  async function displayEdges() {
+  //    console.log("Displaying edges...");
+  //    try {
+  //      const data = await ReadEdge(); // Call ReadEdge and wait for the data
+  //      setEdges(data); // Update state with the received data
+  //    } catch (error) {
+  //      console.error("Error fetching edges:", error);
+  //    }
+  //  }
+
+  // async function displayNodes() {
+  //   console.log("Displaying nodes...");
+  //   try {
+  //     const data = await ReadNode(); // Call ReadEdge and wait for the data
+  //     setNode(data); // Update state with the received data
+  //   } catch (error) {
+  //     console.error("Error fetching nodes:", error);
+  //   }
+  // }
 
   // Change tabs by switching between 0 and 1
-  function handleTabChange() {
-    setTableDisplaying(Math.abs(tableDisplayed - 1));
+  function handleTabChange(event: React.SyntheticEvent, newValue: number) {
+    setTableDisplaying(newValue);
   }
 
   // Start merge here
@@ -155,7 +180,7 @@ function SingleDisplay() {
             } = {
               id: edges_array[i][0].toString(),
               start_node: edges_array[i][1].toString(),
-              end_node: edges_array[i][2].toString().replace("/r", ""),
+              end_node: edges_array[i][2].toString().replace(/\r/gm, ""),
             };
             arr.push(curr_data);
           }
@@ -169,6 +194,44 @@ function SingleDisplay() {
           return;
         }
         alert("Edges CSV loaded successfully");
+      }
+
+      //Handles users
+      else if (file.name.toString().toLowerCase().includes("user")) {
+        console.log("USERS UPLOADING");
+        try {
+          const users: string = await file.text();
+          setFile(null);
+          const users_array: string[][] = users
+            .split("\n")
+            .map((row: string): string[] => {
+              return row.split(",");
+            });
+
+          const newUsers: User[] = [];
+          for (let i = 1; i < users_array.length - 1; i++) {
+            const curr_data: User = {
+              id: users_array[i][0].toString(),
+              email: users_array[i][1].toString(),
+              username: users_array[i][2].toString().replace(/\r/gm, ""),
+              role: users_array[i][3].toString(),
+            };
+            newUsers.push(curr_data);
+          }
+
+          await axios.post("/api/userAdding/uploadUsers", newUsers, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+        } catch (error) {
+          //Throws error if Edges aren't loaded in correctly
+          alert("Error loading Edges CSV");
+          console.error(error);
+          setLoadingDialog(false);
+          return;
+        }
+        alert("Users CSV loaded successfully");
       }
 
       //Same functionality as above, but now for nodes
@@ -208,7 +271,7 @@ function SingleDisplay() {
         alert("Nodes CSV Loaded");
       } else {
         alert(
-          "The imported file has to have 'node' or 'edge' in its title in order for us to know which database you want to upload to.",
+          "The imported file has to have 'node' or 'edge' or 'users' in its title in order for us to know which database you want to upload to.",
         );
       }
       setLoadingDialog(false);
@@ -227,7 +290,7 @@ function SingleDisplay() {
               Download Files
             </h1>
             <p className=" font-body text-primary text-sm text-left pb-5">
-              Download the node or edge files
+              Download the node, edge, or user files
             </p>
           </div>
 
@@ -260,6 +323,18 @@ function SingleDisplay() {
               Edge CSV
             </Button>
           </label>
+          <label className="pt-2">
+            <Button
+              variant="contained"
+              color="primary"
+              component="span"
+              sx={{ borderRadius: "30px" }}
+              className="w-32 self-center text-center"
+              onClick={() => handleDownload("/api/read/users", "users.csv")}
+            >
+              User CSV
+            </Button>
+          </label>
           {/*View Table button*/}
         </div>
         {/*download buttonss*/}
@@ -271,7 +346,7 @@ function SingleDisplay() {
               Upload Files
             </h1>
             <p className=" font-body text-primary text-sm text-left pb-5">
-              Enter a csv file titled "edges" or "nodes"
+              Enter a CSV file titled "edges", "nodes", or "users"
             </p>
           </div>
 
@@ -321,9 +396,14 @@ function SingleDisplay() {
           View Tables
         </h1>
 
-        <Tabs value={tableDisplayed} onChange={handleTabChange} className="">
-          <Tab label="Edges Table" id="tab-1" />
-          <Tab label="Nodes Table" id="tab-2" />
+        <Tabs
+          value={tableDisplayed}
+          onChange={(event, newValue) => handleTabChange(event, newValue)}
+          className=""
+        >
+          <Tab label="Edges Table" id="tab-1" value={0} />
+          <Tab label="Nodes Table" id="tab-2" value={1} />
+          <Tab label="Users Table" id="users-tab" value={2} />
         </Tabs>
       </div>
 
@@ -403,6 +483,32 @@ function SingleDisplay() {
             </tbody>
           </table>
         )}
+      </div>
+      <div
+        hidden={tableDisplayed !== 2}
+        id="tab-2"
+        style={{ paddingTop: "30px" }}
+      >
+        <table className="w-full">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Username</th>
+              <th>Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <PendingUser
+                key={user.id}
+                id={user.id}
+                email={user.email}
+                username={user.username}
+                role={user.role}
+              />
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

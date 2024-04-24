@@ -26,8 +26,17 @@ type toDoNow = {
   username: string | undefined;
   role: string | undefined;
   complete: boolean;
+  subtasks: string[];
 };
+import { styled } from "@mui/material/styles";
 
+const CustomTextField = styled(TextField)({
+  "& .MuiInputBase-input": {
+    fontFamily: "inherit",
+    letterSpacing: "inherit",
+    color: "inherit",
+  },
+});
 export default function DisplayTODOList() {
   const { getAccessTokenSilently, user } = useAuth0();
 
@@ -40,12 +49,15 @@ export default function DisplayTODOList() {
     username: user?.preferred_username,
     role: "admin",
     complete: false,
+    subtasks: [], // Initialize subtasks with an empty array
   });
 
   // Use state for records being displayed
   const [records, setRecords] = useState<toDoNow[]>([]);
 
   const [open, setOpen] = useState<boolean>(false);
+
+  const [subtasks, setSubtasks] = useState<string[]>([]);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -89,19 +101,42 @@ export default function DisplayTODOList() {
     });
   }, [getAccessTokenSilently, user]);
 
+  const handleSubtaskInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && e.currentTarget.value.trim() !== "") {
+      setSubtasks([...subtasks, e.currentTarget.value.trim()]);
+      e.currentTarget.value = "";
+    }
+  };
+
+  const CustomInput = styled("input")({
+    fontFamily: "inherit",
+    letterSpacing: "inherit",
+    color: "inherit",
+    padding: "8px 12px",
+    borderRadius: "4px",
+    border: "1px solid #ccc",
+    outline: "none",
+    "&:focus": {
+      borderColor: "#6200ee",
+    },
+  });
   function handleFormUpdate(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setToDoResponse({ ...toDoResponse, [e.target.name]: e.target.value });
   }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (toDoResponse.task == "" || toDoResponse.task == "") {
+    if (toDoResponse.task === "" || toDoResponse.task === "") {
       return;
     }
 
     const token = await getAccessTokenSilently();
+    const newTaskData = { ...toDoResponse, subtasks };
+    console.log(subtasks);
+    console.log(newTaskData);
+
     try {
-      await axios.post(`/api/todoStuff`, toDoResponse, {
+      await axios.post(`/api/todoStuff`, newTaskData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -112,6 +147,7 @@ export default function DisplayTODOList() {
       return;
     }
 
+    // Reset state after successful submission
     setToDoResponse({
       id: 0,
       user_id: user?.sub,
@@ -121,10 +157,12 @@ export default function DisplayTODOList() {
       username: user?.preferred_username,
       role: "admin",
       complete: false,
+      subtasks: [],
     });
+    setSubtasks([]);
     showSnackbar("New Task has been created", "success");
     setOpen(false);
-    window.location.reload();
+    //window.location.reload();
   }
 
   function handleOpen() {
@@ -174,6 +212,9 @@ export default function DisplayTODOList() {
               Task
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              Subtasks
+            </th>
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Delete
             </th>
             {/* Dynamically generate column headers */}
@@ -192,6 +233,7 @@ export default function DisplayTODOList() {
               complete={record.complete}
               role={record.role}
               username={record.username}
+              subtasks={record.subtasks}
             />
           ))}
         </tbody>
@@ -203,7 +245,7 @@ export default function DisplayTODOList() {
               New Task
             </h1>
             <div className="flex flex-col gap-2 my-2">
-              <TextField
+              <CustomTextField
                 onChange={handleFormUpdate}
                 value={toDoResponse.task}
                 variant="filled"
@@ -212,6 +254,19 @@ export default function DisplayTODOList() {
                 label="Task"
                 name="task"
               />
+              <div className="flex flex-col gap-2">
+                {subtasks.map((subtask, index) => (
+                  <div key={index} className="flex gap-2 items-center">
+                    <span className="font-inherit text-inherit">{subtask}</span>
+                  </div>
+                ))}
+                <CustomInput
+                  type="text"
+                  id="subtasks"
+                  placeholder="Add Subtask"
+                  onKeyDown={handleSubtaskInput}
+                />
+              </div>
 
               <FormControl variant="filled" required={true}>
                 <InputLabel id="priority">Priority</InputLabel>
@@ -228,6 +283,7 @@ export default function DisplayTODOList() {
                   <MenuItem value={"Emergency"}>Emergency</MenuItem>
                 </Select>
               </FormControl>
+
               <Button
                 //onClick={handleSubmit}
                 type="submit"
