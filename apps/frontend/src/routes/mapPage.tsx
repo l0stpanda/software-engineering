@@ -25,7 +25,7 @@ import floor3 from "../assets/03_thethirdfloor.png";
 
 import FloorNode from "../components/FloorNode.tsx";
 import { SelectChangeEvent } from "@mui/material/Select";
-import { ArrowBack } from "@mui/icons-material";
+// import { ArrowBack } from "@mui/icons-material";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import ModeIcon from "@mui/icons-material/Mode";
 import StraightIcon from "@mui/icons-material/Straight";
@@ -510,27 +510,18 @@ function Map() {
         {/*Location and Destination things*/}
         <div className=""></div>
         {/*boxes.*/}
-        <div className="fixed top-20 left-2">
-          <a href="">
-            <Button
-              sx={{ margin: "0 0 1rem 1rem" }}
-              startIcon={<ArrowBack />}
-              variant="contained"
-            >
-              Home
-            </Button>
-          </a>
-        </div>
         <div
-          className="fixed top-36 left-10"
+          className="fixed top-20 left-10"
           onClick={() => setExpanded(!isOpen)}
         >
           <div className="mr-2 ml-0 py-1 px-16 items-center bg-primary rounded-xl border-primary border-2">
-            <h2 style={{ color: "white" }}>Navigation</h2>
+            <h2 className="text-body" style={{ color: "white" }}>
+              Navigation
+            </h2>
           </div>
           <Accordion />
         </div>
-        <div className="fixed top-20 left-36">
+        <div className="fixed bottom-7 left-10">
           {isAdmin ? (
             <a href="editMap" className="justify-center my-2">
               <Button
@@ -539,6 +530,7 @@ function Map() {
                 startIcon={<ModeIcon />}
                 className="editMapBut"
                 size="medium"
+                sx={{ borderRadius: 4 }}
               >
                 Edit Map
               </Button>
