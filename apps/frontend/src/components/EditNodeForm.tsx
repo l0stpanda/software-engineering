@@ -7,6 +7,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 interface editNodeProps {
   node: MapNode;
+  mode: string | null;
 }
 
 interface editNodeFormProps {
@@ -26,7 +27,9 @@ export default function EditNodeForm(props: editNodeProps) {
     shortName: props.node.getShortName(),
   });
   const { getAccessTokenSilently } = useAuth0();
+  const [editMode, setEditMode] = useState<string | null>(null);
   useEffect(() => {
+    setEditMode(props.mode);
     setNodeInfo({
       ID: props.node.getNodeID(),
       longName: props.node.getLongName(),
@@ -41,25 +44,60 @@ export default function EditNodeForm(props: editNodeProps) {
   }
 
   async function handleNodeSubmit() {
+    console.log(props.node.getX(), props.node.getY(), props.node.getBuilding());
     const token = await getAccessTokenSilently();
-    axios
-      .post(
-        "/api/editMap/editNodeInfo",
-        {
-          node_id: nodeInfo.ID,
-          longName: nodeInfo.longName,
-          floor: nodeInfo.floor,
-          nodeType: nodeInfo.nodeType,
-          shortName: nodeInfo.shortName,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
+    if (editMode === "add_node") {
+      // if we want to add a node
+      axios
+        .post(
+          "/api/editMap/addNode",
+          {
+            node_id: nodeInfo.ID,
+            longName: nodeInfo.longName,
+            floor: nodeInfo.floor,
+            nodeType: nodeInfo.nodeType,
+            shortName: nodeInfo.shortName,
+            x_c: props.node.getX().toString(),
+            y_c: props.node.getY().toString(),
+            building: props.node.getBuilding(),
           },
-        },
-      )
-      .then();
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          },
+        )
+        .then(() => {
+          alert("Successfully added node " + nodeInfo.ID);
+          window.location.reload();
+        })
+        .catch(() => {
+          alert(
+            "There was a problem creating the node. Make sure the node does not already exist.",
+          );
+        });
+    } else {
+      //otherwise we are just editing the node information
+      axios
+        .post(
+          "/api/editMap/editNodeInfo",
+          {
+            node_id: nodeInfo.ID,
+            longName: nodeInfo.longName,
+            floor: nodeInfo.floor,
+            nodeType: nodeInfo.nodeType,
+            shortName: nodeInfo.shortName,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          },
+        )
+        .then();
+    }
   }
 
   return (
@@ -87,6 +125,15 @@ export default function EditNodeForm(props: editNodeProps) {
         Editing: {nodeInfo.ID}
       </h1>
       <div className="flex flex-col gap-2">
+        {props.mode === "add_node" && (
+          <TextField
+            value={nodeInfo.ID}
+            name="ID"
+            onChange={handleNodeEdits}
+            variant="filled"
+            label="Node ID"
+          />
+        )}
         <TextField
           value={nodeInfo.longName}
           name="longName"

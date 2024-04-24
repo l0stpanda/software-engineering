@@ -13,7 +13,6 @@ import {
   TextField,
 } from "@mui/material";
 import { useAuth0 } from "@auth0/auth0-react";
-import BackgroundPattern from "../components/allyBackground.tsx";
 import { lostAndFound } from "common/src/lostAndFoundType.ts";
 import LocationDropdown from "./locationDropdown.tsx";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -21,6 +20,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
 import axios from "axios";
+import UserDropdown from "./userDropdown.tsx";
 
 function LostFound() {
   const { getAccessTokenSilently } = useAuth0();
@@ -90,6 +90,9 @@ function LostFound() {
   function updateLoc(val: string) {
     setResponses({ ...responses, location: val });
   }
+  function updateName(val: string) {
+    setResponses({ ...responses, name: val });
+  }
 
   function handlePriorityInput(e: SelectChangeEvent) {
     setResponses({ ...responses, priority: e.target.value });
@@ -104,9 +107,8 @@ function LostFound() {
   }
 
   return (
-    <div className="justify-center grid h-screen place-items-center mt-6">
-      <BackgroundPattern />
-      <div className="m-auto shadow-2xl flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-4">
+    <div className="w-full">
+      <div className="m-auto flex flex-col px-10 h-full w-full justify-center py-4">
         <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
           Lost and Found Request
         </h1>
@@ -123,15 +125,22 @@ function LostFound() {
         {/*</p>*/}
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4 my-4">
-            <TextField
-              onChange={handleResponseChanges}
-              value={responses.name}
-              name="name"
-              id="name"
-              variant="filled"
-              label="Employee Name"
-              required
+            {/*<TextField*/}
+            {/*  onChange={handleResponseChanges}*/}
+            {/*  value={responses.name}*/}
+            {/*  name="name"*/}
+            {/*  id="name"*/}
+            {/*  variant="filled"*/}
+            {/*  label="Employee Name"*/}
+            {/*  required*/}
+            {/*/>*/}
+
+            <UserDropdown
+              room={responses.name}
+              update={updateName}
+              label={"Username"}
             />
+
             <FormControl variant="filled" required>
               <InputLabel id="priority">Priority</InputLabel>
               <Select
@@ -254,7 +263,6 @@ function LostFound() {
           </div>
         </form>
       </div>
-
       <Dialog open={open} onClose={handleSubmitClose}>
         <DialogTitle>We received your request!</DialogTitle>
         <DialogContent>
@@ -281,7 +289,6 @@ function LostFound() {
         </DialogActions>
       </Dialog>
     </div>
-    // </div>
   );
 }
 

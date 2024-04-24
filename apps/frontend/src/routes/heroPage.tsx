@@ -1,4 +1,5 @@
 import mapImg from "../assets/00_thelowerlevel1.png";
+import heroImage from "../assets/heroImage.png";
 import React, { useState, useEffect } from "react";
 // import { Dialog } from "@mui/material";
 //import LoginDialog from "../components/loginDialog.tsx";
@@ -51,8 +52,17 @@ function HeroPage() {
       flex-row
       h-full
       w-full
-      bg-[url('/src/assets/heroImage.png')]
-      bg-center"
+      bg-primary"
+      style={{
+        backgroundImage: `url(${heroImage})`,
+        backgroundSize: "100%",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "left",
+        animationName: "parallaxSlide",
+        animationDuration: "70s",
+        animationIterationCount: "infinite",
+        animationTimingFunction: "linear",
+      }}
     >
       <div className="flex flex-col text-left w-4/6 h-full justify-center px-8">
         <h3

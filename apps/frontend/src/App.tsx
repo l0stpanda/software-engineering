@@ -24,7 +24,12 @@ import SpinningLoader from "./components/spinningLoader.tsx";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import TodoList from "./routes/todoList.tsx";
+import SanitationRequest from "./routes/sanitationRequest.tsx";
 import DisplayInventory from "./routes/disInventoryList.tsx";
+import PendingSanitationRequest from "./routes/displaySanitationReqs.tsx";
+import AboutPage from "./routes/aboutPage.tsx";
+import ServiceRequests from "./routes/serviceRequests.tsx";
+import CreditPage from "./routes/creditPage.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -43,11 +48,13 @@ function App() {
         },
         {
           path: "flowerrequest",
-          element: <LoadingPage component={FlowerRequest} />,
+          element: <LoadingPage component={FlowerRequest} adminOnly={false} />,
         },
         {
           path: "viewpending",
-          element: <LoadingPage component={PendingFlowerRequests} />,
+          element: (
+            <LoadingPage component={PendingFlowerRequests} adminOnly={false} />
+          ),
         },
         // {
         //   path: "imp",
@@ -55,43 +62,85 @@ function App() {
         // },
         {
           path: "exp",
-          element: <LoadingPage component={ExportRouteE} />,
+          element: <LoadingPage component={ExportRouteE} adminOnly={true} />,
         },
         {
           path: "displayTables",
-          element: <LoadingPage component={ReadRouteE} />,
+          element: <LoadingPage component={ReadRouteE} adminOnly={false} />,
         },
         {
           path: "lostItemRequest",
-          element: <LoadingPage component={LostItemRequest} />,
+          element: (
+            <LoadingPage component={LostItemRequest} adminOnly={false} />
+          ),
         },
         {
           path: "roomRequest",
-          element: <LoadingPage component={RoomSchedulingRequest} />,
+          element: (
+            <LoadingPage component={RoomSchedulingRequest} adminOnly={false} />
+          ),
         },
         {
           path: "medicineRequest",
-          element: <LoadingPage component={MedicineDeliveryRequest} />,
+          element: (
+            <LoadingPage
+              component={MedicineDeliveryRequest}
+              adminOnly={false}
+            />
+          ),
         },
         {
           path: "medicalDeviceRequest",
-          element: <LoadingPage component={MedicalDeviceRequest} />,
+          element: (
+            <LoadingPage component={MedicalDeviceRequest} adminOnly={false} />
+          ),
         },
         {
           path: "callback",
-          element: <LoadingPage component={SpinningLoader} />,
+          element: <SpinningLoader />,
         },
         {
           path: "editMap",
-          element: <LoadingPage component={EditMap} />,
+          element: <LoadingPage component={EditMap} adminOnly={true} />,
         },
         {
           path: "todo",
-          element: <LoadingPage component={TodoList} />,
+          element: <LoadingPage component={TodoList} adminOnly={false} />,
+        },
+        {
+          path: "sanitationRequest",
+          element: (
+            <LoadingPage component={SanitationRequest} adminOnly={false} />
+          ),
+        },
+        {
+          path: "PendingSanitationRequest",
+          element: (
+            <LoadingPage
+              component={PendingSanitationRequest}
+              adminOnly={false}
+            />
+          ),
         },
         {
           path: "inventory",
-          element: <LoadingPage component={DisplayInventory} />,
+          element: (
+            <LoadingPage component={DisplayInventory} adminOnly={false} />
+          ),
+        },
+        {
+          path: "aboutPage",
+          element: <LoadingPage component={AboutPage} adminOnly={false} />,
+        },
+        {
+          path: "requests",
+          element: (
+            <LoadingPage component={ServiceRequests} adminOnly={false} />
+          ),
+        },
+        {
+          path: "credit",
+          element: <LoadingPage component={CreditPage} adminOnly={false} />,
         },
       ],
     },

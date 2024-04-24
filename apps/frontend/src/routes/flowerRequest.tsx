@@ -21,6 +21,7 @@ import { flowerReqFields } from "common/src/flowerRequest.ts";
 import LocationDropdown from "../components/locationDropdown.tsx";
 //import {SelectChangeEvent} from "@mui/material/Select";
 import { useAuth0 } from "@auth0/auth0-react";
+import UserDropdown from "../components/userDropdown.tsx";
 
 function FlowerRequest() {
   const { getAccessTokenSilently } = useAuth0();
@@ -45,6 +46,10 @@ function FlowerRequest() {
   // Takes in an event object and updates the responses object when a text field is changed
   function handleResponseChanges(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setResponses({ ...responses, [e.target.name]: e.target.value });
+  }
+
+  function updateName(val: string) {
+    setResponses({ ...responses, empName: val });
   }
 
   // Sets state back to initial state
@@ -102,24 +107,33 @@ function FlowerRequest() {
   }
 
   return (
-    <div className="justify-center flex flex-grow place-items-center">
+    <div className="justify-center flex flex-grow place-items-center overflow-hidden">
       <BackgroundPattern />
-      <div className="m-auto shadow-2xl flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-4">
-        <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
+      <div className="m-auto shadow-2xl flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-10 mt-[100px]">
+        <h1
+          className="my-2 font-header text-primary font-bold text-3xl text-center transition-transform hover:scale-105"
+          style={{ marginBottom: "20px" }}
+        >
           Flower Delivery Request
         </h1>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4 my-4">
-            <TextField
-              onChange={handleResponseChanges}
-              value={responses.empName}
-              id="empName"
-              name="empName"
-              variant="filled"
-              label="Employee Name"
-              placeholder="Name"
-              required={true}
+            {/*<TextField*/}
+            {/*  onChange={handleResponseChanges}*/}
+            {/*  value={responses.empName}*/}
+            {/*  id="empName"*/}
+            {/*  name="empName"*/}
+            {/*  variant="filled"*/}
+            {/*  label="Employee Name"*/}
+            {/*  placeholder="Name"*/}
+            {/*  required={true}*/}
+            {/*/>*/}
+            <UserDropdown
+              room={responses.empName}
+              update={updateName}
+              label={"Username"}
             />
+
             <FormControl variant="filled" required>
               <InputLabel id="priority">Priority</InputLabel>
               <Select
@@ -194,7 +208,7 @@ function FlowerRequest() {
                 <MenuItem value={"Closed"}>Closed</MenuItem>
               </Select>
             </FormControl>
-            <div className="flex-row self-center">
+            <div className="flex-row self-center" style={{ marginTop: "20px" }}>
               <Button
                 className="w-32 self-center pt-10"
                 onClick={clear}
@@ -212,7 +226,6 @@ function FlowerRequest() {
               >
                 Clear
               </Button>
-
               <Button
                 className="w-32 self-center pt-10"
                 type="submit"

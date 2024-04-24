@@ -8,20 +8,6 @@ CREATE TABLE "HighScore" (
 );
 
 -- CreateTable
-CREATE TABLE "Flowers" (
-    "id" SERIAL NOT NULL,
-    "room" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "sent_by" VARCHAR(50) NOT NULL,
-    "sent_to" VARCHAR(50) NOT NULL,
-    "requestDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "note" VARCHAR(150),
-    "status" TEXT NOT NULL,
-
-    CONSTRAINT "Flowers_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "Nodes" (
     "node_id" TEXT NOT NULL,
     "node_type" TEXT NOT NULL,
@@ -48,6 +34,7 @@ CREATE TABLE "Edges" (
 CREATE TABLE "Inventory" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
     "quant" INTEGER NOT NULL,
 
     CONSTRAINT "Inventory_pkey" PRIMARY KEY ("id")
@@ -58,11 +45,22 @@ CREATE TABLE "GeneralService" (
     "id" SERIAL NOT NULL,
     "type" TEXT NOT NULL,
     "location" TEXT NOT NULL,
+    "long_name_loc" TEXT NOT NULL,
     "status" TEXT NOT NULL,
     "emp_name" TEXT NOT NULL,
     "priority" TEXT NOT NULL,
 
     CONSTRAINT "GeneralService_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "SanitationRequest" (
+    "id" INTEGER NOT NULL,
+    "severity" TEXT NOT NULL,
+    "hazardous" TEXT NOT NULL,
+    "room_name" TEXT NOT NULL,
+
+    CONSTRAINT "SanitationRequest_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -108,8 +106,10 @@ CREATE TABLE "MedicineRequest" (
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
+    "username" TEXT,
+    "role" TEXT NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -125,6 +125,18 @@ CREATE TABLE "Todo" (
     CONSTRAINT "Todo_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Flowers" (
+    "id" INTEGER NOT NULL,
+    "sent_by" VARCHAR(50) NOT NULL,
+    "sent_to" VARCHAR(50) NOT NULL,
+    "requestDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "note" VARCHAR(150),
+    "room_name" TEXT NOT NULL,
+
+    CONSTRAINT "Flowers_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Inventory_name_key" ON "Inventory"("name");
 
@@ -132,10 +144,10 @@ CREATE UNIQUE INDEX "Inventory_name_key" ON "Inventory"("name");
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- AddForeignKey
-ALTER TABLE "Flowers" ADD CONSTRAINT "Flowers_room_fkey" FOREIGN KEY ("room") REFERENCES "Nodes"("node_id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "GeneralService" ADD CONSTRAINT "GeneralService_location_fkey" FOREIGN KEY ("location") REFERENCES "Nodes"("node_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "GeneralService" ADD CONSTRAINT "GeneralService_location_fkey" FOREIGN KEY ("location") REFERENCES "Nodes"("node_id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "SanitationRequest" ADD CONSTRAINT "SanitationRequest_id_fkey" FOREIGN KEY ("id") REFERENCES "GeneralService"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "medicalDevice" ADD CONSTRAINT "medicalDevice_id_fkey" FOREIGN KEY ("id") REFERENCES "GeneralService"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -151,3 +163,6 @@ ALTER TABLE "MedicineRequest" ADD CONSTRAINT "MedicineRequest_id_fkey" FOREIGN K
 
 -- AddForeignKey
 ALTER TABLE "Todo" ADD CONSTRAINT "Todo_email_fkey" FOREIGN KEY ("email") REFERENCES "User"("email") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Flowers" ADD CONSTRAINT "Flowers_id_fkey" FOREIGN KEY ("id") REFERENCES "GeneralService"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -81,19 +81,30 @@ model Inventory {
 
 // General Service Request Table
 model GeneralService {
-  id       Int    @id @default(autoincrement())
-  type     String
-  location String
-  status   String
-  emp_name String
-  priority String
+  id            Int    @id @default(autoincrement())
+  type          String
+  location      String
+  long_name_loc String
+  status        String
+  emp_name      String
+  priority      String
 
-  location_room      Nodes             @relation("location", fields: [location], references: [node_id], onDelete: Cascade)
-  medicalDeviceCheck medicalDevice[]   @relation("idCheck")
-  lost_location      LostItem[]        @relation("idCheckLost")
-  roomSched          RoomScheduler[]   @relation("roomSchedID")
-  medicineReqID      MedicineRequest[] @relation("medicineReqID")
-  flowerID           Flowers[]         @relation("flowerID")
+  location_room      Nodes               @relation("location", fields: [location], references: [node_id], onDelete: Cascade)
+  medicalDeviceCheck medicalDevice[]     @relation("idCheck")
+  lost_location      LostItem[]          @relation("idCheckLost")
+  roomSched          RoomScheduler[]     @relation("roomSchedID")
+  medicineReqID      MedicineRequest[]   @relation("medicineReqID")
+  flowerID           Flowers[]           @relation("flowerID")
+  sanitationID       SanitationRequest[] @relation("sanitationReq")
+}
+
+model SanitationRequest {
+  id            Int            @id
+  severity      String
+  hazardous     String
+  room_name     String
+  // Foreign Key Reference
+  sanitationReq GeneralService @relation("sanitationReq", fields: [id], references: [id], onDelete: Cascade)
 }
 
 // medical device requests are saved
@@ -137,21 +148,24 @@ model MedicineRequest {
 
 // Tables for To do list
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
+  id       String  @id
+  email    String  @unique
+  username String?
+  role     String
   // Foreign Key Reference
-  todoList Todo[] @relation("UserID")
+  todoList Todo[]  @relation("UserID")
   // So each user will have
 }
 
 model Todo {
-  id       Int     @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   task     String
   priority String
   email    String
   complete Boolean
+  subtasks String[]
   // Foreign Key Reference
-  user     User    @relation("UserID", fields: [email], references: [email], onDelete: Cascade)
+  user     User     @relation("UserID", fields: [email], references: [email], onDelete: Cascade)
 }
 
 model Flowers {
