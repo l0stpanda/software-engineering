@@ -16,7 +16,11 @@ import sanitationRequest from "./routes/sanitationRequest.ts";
 import editMap from "./routes/editPage.ts";
 import userStuff from "./routes/userStorage.ts";
 import userAdd from "./routes/userAdd.ts";
+import fetchAll from "./routes/allFetching.ts";
 import { auth } from "express-oauth2-jwt-bearer";
+import adminAccess from "./routes/adminAccess.ts";
+// import readRouterE from "./routes/readE.ts";
+// import readRouterN from "./routes/readN.ts";
 
 const app: Express = express(); // Setup the backend
 
@@ -43,8 +47,8 @@ app.use("/healthcheck", (req, res) => {
 
 app.use("/api/import", importRouter);
 app.use("/api/login", loginRequest);
-app.use("/api/read", readRouter);
 app.use("/api/userAdding", userAdd);
+app.use("/api/read", readRouter);
 
 // Enable auth0 enforcement
 app.use(
@@ -60,10 +64,13 @@ app.use("/api/inventory", inventory);
 app.use("/api/medicalDevice", medicalDeviceDelivery);
 app.use("/api/lostAndFound", lostAndFound);
 app.use("/api/medicineRequest", medicineRequest);
-app.use("/api/editMap", editMap);
 app.use("/api/roomSchedulingRequest", roomScheduler);
 app.use("/api/sanitationRequest", sanitationRequest);
 app.use("/api/todoStuff", userStuff);
+app.use("/api/adminAccess", adminAccess);
+
+app.use("/api/fetchAll", fetchAll);
+app.use("/api/editMap", editMap);
 
 /**
  * Catch all 404 errors, and forward them to the error handler

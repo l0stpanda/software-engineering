@@ -16,6 +16,8 @@ export async function PostNode(curr_data: nodeType[]) {
 
 export async function DeleteAllNode() {
   await axios.delete("/api/import/nodesDelete", {
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
 }

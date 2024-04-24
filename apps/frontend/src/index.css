@@ -95,6 +95,9 @@ html {
   .bg-ally-background {
     background-image: url("assets/allyBackground.png");
   }
+  .bg-aboutBackground {
+    background-image: url("assets/about_page_background.png");
+  }
 }
 
 .path {

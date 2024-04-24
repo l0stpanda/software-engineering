@@ -16,6 +16,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 // import {
 //     Dialog,
 // } from "@mui/material";
+import { Alert, Snackbar } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
 //import { toDo } from "common/src/toDo.ts";
 type toDoNow = {
   id: number;
@@ -34,6 +36,21 @@ function TODOListItem(props: toDoNow) {
 
   const [completed, setCompleted] = useState(props.complete);
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<AlertColor>("success");
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const showSnackbar = (message: string, severity: AlertColor) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
+
   //takes in the id of the request to be deleted and deletes in the database
   async function deleteData(idVal: number) {
     console.log(idVal);
@@ -47,10 +64,13 @@ function TODOListItem(props: toDoNow) {
       });
     } catch (e) {
       console.log(e);
-      alert("Problem Deleting");
+      showSnackbar("Problem Deleting", "error");
       return;
     }
-    alert("Successfully deleted TODO item with ID number " + idVal);
+    showSnackbar(
+      "Successfully deleted TODO item with ID number " + idVal,
+      "success",
+    );
     //window must be reloaded on delete to show updated results
     window.location.reload();
   }
@@ -67,53 +87,66 @@ function TODOListItem(props: toDoNow) {
       //call to backend
     } catch (e) {
       console.log(e);
-      alert("Problem Checking Off");
+      showSnackbar("Problem Checking Off", "error");
       return;
     }
-    // alert("Successfully updated TODO item with ID number " + props.id);
-    //window must be reloaded on delete to show updated results
-    //window.location.reload();
   }
 
   return (
-    <tr className="bg-background border-b-2 border-secondary">
-      <td className="p-3 text-sm">
-        <Checkbox checked={completed} onChange={updateTodo} />
-      </td>
-      <td className="p-3 text-sm">{props.id}</td>
-      <td className="p-3 text-sm">{props.priority}</td>
-      <td className="p-3 text-sm">
-        {props.subtasks && props.subtasks.length > 0 ? (
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>Subtasks</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ul>
-                {props.subtasks.map((subtask, index) => (
-                  <li key={index}>{subtask}</li>
-                ))}
-              </ul>
-            </AccordionDetails>
-          </Accordion>
-        ) : (
-          "No Subtasks"
-        )}
-      </td>
-      <td className="p-3 text-sm">
-        <button onClick={() => deleteData(props.id)}>
-          <img
-            src={trashIcon}
-            alt="Delete"
-            className="h-6 hover:scale-125 cursor-pointer"
-          />
-        </button>
-      </td>
-    </tr>
+    <>
+      <tr className="bg-background border-b-2 border-secondary">
+        <td className="p-3 text-sm">
+          <Checkbox checked={completed} onChange={updateTodo} />
+        </td>
+        <td className="p-3 text-sm">{props.id}</td>
+        <td className="p-3 text-sm">{props.priority}</td>
+        <td className="p-3 text-sm">
+          {props.subtasks && props.subtasks.length > 0 ? (
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography>Subtasks</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <ul>
+                  {props.subtasks.map((subtask, index) => (
+                    <li key={index}>{subtask}</li>
+                  ))}
+                </ul>
+              </AccordionDetails>
+            </Accordion>
+          ) : (
+            "No Subtasks"
+          )}
+        </td>
+        <td className="p-3 text-sm">
+          <button onClick={() => deleteData(props.id)}>
+            <img
+              src={trashIcon}
+              alt="Delete"
+              className="h-6 hover:scale-125 cursor-pointer"
+            />
+          </button>
+        </td>
+      </tr>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+    </>
   );
 }
 

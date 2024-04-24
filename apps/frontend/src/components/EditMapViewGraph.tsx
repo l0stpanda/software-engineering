@@ -23,7 +23,7 @@ interface EditMapViewGraphProps {
   divDim: { width: number; height: number };
   divPos: number[];
   nodeInfoCallback: (childData: string) => void;
-  popupCallback: (childData: boolean) => void;
+  mouseCallback: (x: number, y: number) => void;
   mode: string | null;
 }
 
@@ -46,9 +46,6 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
   // Will be changed soon
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [draggable, setDraggable] = useState<boolean>(true);
-
-  const [worldX, setWorldX] = useState(0);
-  const [worldY, setWorldY] = useState(0);
 
   useEffect(() => {
     if (divRef.current) {
@@ -133,15 +130,15 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     [moveBox],
   );
 
+  // const [newPosX, setNewPosX] = useState( -1);
+  // const [newPosY, setNewPosY] = useState(-1);
+
   // function triggered when node is clicked
   const handleNodeClick = (nodeid: string) => () => {
     setClicked(nodeid);
     props.nodeInfoCallback(nodeid);
     // need to log clicked so it can be used
     console.log(clicked);
-    if (props.mode === "add_mode") {
-      props.popupCallback(true);
-    }
   };
 
   const renderLines = () => {
@@ -238,28 +235,27 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
       .map((node) => <EditableNode nodeKey={node.key} />);
   };
 
-  const handleMouseDown = (e: { clientX: number; clientY: number }) => {
+  const handleMouseUp = (e: { clientX: number; clientY: number }) => {
     const tempDiv = document.getElementById("tempDiv");
     if (props.mode === "add_node" && tempDiv && context.bounds) {
       console.log(context.transformState);
       console.log(e.clientX, e.clientY);
-      setWorldX(
+      const worldX =
         (e.clientX - props.divPos[1] - context.transformState.positionX) /
-          context.transformState.scale,
-      );
-      setWorldY(
+        context.transformState.scale;
+      const worldY =
         (e.clientY - props.divPos[0] - context.transformState.positionY) /
-          context.transformState.scale,
-      );
-    }
-  };
-
-  const handleMouseUp = () => {
-    props.popupCallback(true);
-    const tempDiv = document.getElementById("tempDiv");
-    if (tempDiv) {
-      tempDiv.style.left = worldX + "px";
-      tempDiv.style.top = worldY + "px";
+        context.transformState.scale;
+      if (divRef.current) {
+        const newPosX = worldX * (imgDimensions.width / divDimensions.width);
+        const newPosY = worldY * (imgDimensions.height / divDimensions.height);
+        props.mouseCallback(newPosX, newPosY);
+      }
+      const tempDiv = document.getElementById("tempDiv");
+      if (tempDiv) {
+        tempDiv.style.left = worldX + "px";
+        tempDiv.style.top = worldY + "px";
+      }
     }
   };
 
@@ -267,7 +263,6 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     <div
       ref={divRef}
       style={{ position: "relative" }}
-      onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
     >
       <div ref={drop}>
@@ -293,9 +288,9 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
             id="tempDiv"
             className="absolute border border-slate-300"
             style={{
-              width: "15px",
-              height: "15px",
-              backgroundColor: "#009BA8",
+              width: "6px",
+              height: "6px",
+              backgroundColor: "orangered",
               borderRadius: "50%",
               transform: "translate(-50%, -50%)",
               zIndex: 999,

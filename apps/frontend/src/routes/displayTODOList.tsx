@@ -13,6 +13,9 @@ import {
   SelectChangeEvent,
   TextField,
 } from "@mui/material";
+import { Alert, Snackbar } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
+
 //import LoginDialog from "../components/loginDialog.tsx";
 type toDoNow = {
   id: number;
@@ -36,6 +39,7 @@ const CustomTextField = styled(TextField)({
 });
 export default function DisplayTODOList() {
   const { getAccessTokenSilently, user } = useAuth0();
+
   const [toDoResponse, setToDoResponse] = useState<toDoNow>({
     id: 0,
     user_id: user?.sub,
@@ -55,6 +59,20 @@ export default function DisplayTODOList() {
 
   const [subtasks, setSubtasks] = useState<string[]>([]);
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<AlertColor>("success");
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const showSnackbar = (message: string, severity: AlertColor) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
   // Get records from database, and update useState
   useEffect(() => {
     // Fetch data from the API
@@ -123,7 +141,7 @@ export default function DisplayTODOList() {
       });
     } catch (e) {
       console.log(e);
-      alert("Problems have occurred");
+      showSnackbar("Problems have occured", "error");
       return;
     }
 
@@ -140,7 +158,7 @@ export default function DisplayTODOList() {
       subtasks: [],
     });
     setSubtasks([]);
-    alert("New Task has been created");
+    showSnackbar("New Task has been created", "success");
     setOpen(false);
     window.location.reload();
   }
@@ -197,9 +215,11 @@ export default function DisplayTODOList() {
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Delete
             </th>
+            {/* Dynamically generate column headers */}
           </tr>
         </thead>
         <tbody>
+          {/* Map through the records and create a row for each record */}
           {records.map((record) => (
             <TODOListItem
               key={record.id}
@@ -275,6 +295,20 @@ export default function DisplayTODOList() {
           </div>
         </form>
       </Dialog>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

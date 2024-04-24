@@ -34,6 +34,7 @@ router.post("/", async function (req: Request, res: Response) {
         type: "Room Scheduling",
         location: roomStuff[0].node_id,
         status: input.reqStatus,
+        long_name_loc: input.roomNum,
         emp_name: input.employName,
         priority: input.priority,
       },
