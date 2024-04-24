@@ -78,10 +78,13 @@ export default function PendingFlowerRequest() {
         </Tabs>
       </React.Fragment>
 
-      <div id="tab-0" className="px-8 p5 bg-background">
+      <div
+        style={{ marginTop: "50px" }}
+        className="px-8 p-5 bg-background w-full"
+      >
         {currentTabIndex === 0 && (
           <div>
-            <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
+            <h1 className="my-2 font-header text-primary font-bold text-3xl text-center mb-7 transition-transform hover:scale-105">
               Pending Flower Deliveries
             </h1>
             <table className="w-full">

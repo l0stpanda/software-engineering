@@ -268,7 +268,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
       <div ref={drop}>
         <img
           src={props.imageSrc}
-          className="object-contain h-full rounded-xl"
+          className="object-contain h-full border-2 border-primary rounded-xl"
           alt="Map"
         />
         <svg

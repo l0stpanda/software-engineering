@@ -19,7 +19,6 @@ import BackgroundPattern from "../components/allyBackground.tsx";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
-import UserDropdown from "../components/userDropdown.tsx";
 function MedicineDeliveryRequest() {
   const { getAccessTokenSilently } = useAuth0();
   const [delivery, setDelivery] = useState<MedicineDelivery>({
@@ -42,13 +41,10 @@ function MedicineDeliveryRequest() {
     });
   }
 
-  // function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
-  //   setDelivery({ ...delivery, employeeName: e.target.value });
-  // }
-
-  function updateName(val: string) {
-    setDelivery({ ...delivery, employeeName: val });
+  function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
+    setDelivery({ ...delivery, employeeName: e.target.value });
   }
+
   function handlePriorityInput(
     e:
       | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -159,25 +155,20 @@ function MedicineDeliveryRequest() {
         <div className="formDiv">
           <div className="inputDiv">
             <form className="flex flex-col gap-4 my-4" onSubmit={handleSubmit}>
-              {/*<TextField*/}
-              {/*  onChange={handleNameInput}*/}
-              {/*  value={delivery.employeeName}*/}
-              {/*  name="employeeName"*/}
-              {/*  id="employeeName"*/}
-              {/*  variant="filled"*/}
-              {/*  label="Employee Name"*/}
-              {/*  placeholder="Name"*/}
-              {/*  required*/}
-              {/*  /*InputProps={{*/}
-              {/*                    classes: {*/}
-              {/*                      root: "transform hover:scale-105 transition-transform duration-300",*/}
-              {/*                    },*/}
-              {/*                  }}*/}
-              {/*/>*/}
-              <UserDropdown
-                room={delivery.employeeName}
-                update={updateName}
-                label={"Username"}
+              <TextField
+                onChange={handleNameInput}
+                value={delivery.employeeName}
+                name="employeeName"
+                id="employeeName"
+                variant="filled"
+                label="Employee Name"
+                placeholder="Name"
+                required
+                /*InputProps={{
+                                  classes: {
+                                    root: "transform hover:scale-105 transition-transform duration-300",
+                                  },
+                                }}*/
               />
               <FormControl variant="filled" fullWidth required>
                 <InputLabel id="priority-label">Priority</InputLabel>
