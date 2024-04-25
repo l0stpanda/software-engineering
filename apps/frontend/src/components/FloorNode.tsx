@@ -63,7 +63,9 @@ function FloorNode(props: FloorNodesProps) {
   }, [divRef]);
 
   useEffect(() => {
-    console.log("In the useeffect: ", props.inputLoc.start);
+    //console.log("In the useeffect: ", props.inputLoc.start);
+    // it is updating but and i set count to 1 when i want to place the end but this puts the count to 1 all teh time
+    // i want to select the end when the start is defined
   }, [props.inputLoc, props]);
 
   useEffect(() => {
@@ -75,24 +77,25 @@ function FloorNode(props: FloorNodesProps) {
   }, [props.imageSrc]);
 
   const handleNodeClick = (nodeid: string) => () => {
+    console.log(nodeid);
     const res = nodes.get(nodeid);
     if (res !== undefined) {
       const longName: string = res.getLongName();
 
       if (props.inputLoc.start !== undefined && count === 0) {
-        console.log("In the click: ", props.inputLoc.start);
-        console.log("updating with: ", longName);
+        //console.log("In the click: ", props.inputLoc.start);
+        //console.log("updating with: ", longName);
         props.updateStartAndEnd(longName, "");
         setCount(1);
       } else if (count === 0) {
         props.updateStartAndEnd(longName, "");
         setCount(1);
       } else if (count === 1) {
-        console.log("update end");
+        //console.log("update end");
         props.updateEnd(longName);
         setCount(0);
       } else {
-        console.log("OH GOD");
+        //console.log("OH GOD");
       }
     }
   };
@@ -118,7 +121,7 @@ function FloorNode(props: FloorNodesProps) {
       const floorChanges = [];
 
       if (!path) {
-        console.log("No path found");
+        //console.log("No path found");
         return [];
       }
 
@@ -142,11 +145,6 @@ function FloorNode(props: FloorNodesProps) {
             // Use startPoint.floor for next floor
             // Past
             if (changeStart.floor == floor) {
-              console.log(changeStart.x);
-              if (changeStart.x > size[0]) size[0] = changeStart.x;
-              if (changeStart.y > size[1]) size[1] = changeStart.y;
-              if (changeStart.x < size[2]) size[2] = changeStart.x;
-              if (changeStart.y < size[3]) size[3] = changeStart.y;
               floorChanges.push(
                 <Box
                   className="z-10 bg-primary m-0 text-background text-center text-[5px] flex-auto p-0.5"
@@ -165,11 +163,6 @@ function FloorNode(props: FloorNodesProps) {
             // Use startChange.floor for previous floor
             //Present
             if (endPoint.floor == floor) {
-              console.log(endPoint.x);
-              if (endPoint.x > size[0]) size[0] = endPoint.x;
-              if (endPoint.y > size[1]) size[1] = endPoint.y;
-              if (endPoint.x < size[2]) size[2] = endPoint.x;
-              if (endPoint.y < size[3]) size[3] = endPoint.y;
               if (i == path.length - 2) {
                 floorChanges.push(
                   <Box
@@ -216,7 +209,7 @@ function FloorNode(props: FloorNodesProps) {
               />,
             );
             // Gets limits of zoom
-            console.log(startPoint);
+            //console.log(startPoint);
             if (startPoint.x > size[0]) size[0] = startPoint.x;
             if (startPoint.y > size[1]) size[1] = startPoint.y;
             if (startPoint.x < size[2]) size[2] = startPoint.x;
@@ -229,7 +222,7 @@ function FloorNode(props: FloorNodesProps) {
         }
       }
       //console.log(lines);
-      console.log(size.toString());
+      //console.log(size.toString());
       if (props.pathSize.toString() !== size.toString()) {
         props.setPathSize(size);
       }

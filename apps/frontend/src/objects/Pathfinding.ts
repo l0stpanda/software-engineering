@@ -112,8 +112,7 @@ export function getDirections(path: string[], graph: Graph) {
       });
     }
   }
-
-  console.log(directions);
+  console.log(graph);
 
   return directions;
 }
