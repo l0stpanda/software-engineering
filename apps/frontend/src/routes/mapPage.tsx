@@ -104,12 +104,12 @@ function Map() {
   // }
 
   // Handles changes to the start/end destination boxes
-  function handleFormSubmit() {
-    const cleanStart = navigatingNodes.start.replace("\r", "");
-    const cleanEnd = navigatingNodes.end.replace("\r", "");
-    //console.log(cleanStart, cleanEnd);
-    setNavigatingNodes({ start: cleanStart, end: cleanEnd });
-  }
+  // function handleFormSubmit() {
+  //   const cleanStart = navigatingNodes.start.replace("\r", "");
+  //   const cleanEnd = navigatingNodes.end.replace("\r", "");
+  //   //console.log(cleanStart, cleanEnd);
+  //   setNavigatingNodes({ start: cleanStart, end: cleanEnd });
+  // }
 
   // Changes the map image
   const changeFloor = (floor: string) => {
