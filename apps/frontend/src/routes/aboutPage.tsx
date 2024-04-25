@@ -7,8 +7,8 @@ import ben_picture from "../assets/softeng_ben.jpg";
 import sean_picture from "../assets/softeng_sean.jpg";
 import sahil_picture from "../assets/softeng_sahil.jpg";
 import quishi_picture from "../assets/softeng_quishi.jpg";
-import vincent_picture from "../assets/softeng_vincent.jpg";
 import mike_picture from "../assets/softeng_mike.png";
+import vincent_picture from "../assets/softeng_vincent.jpg";
 import najum_picture from "../assets/softeng_najum.jpg";
 import AboutPageBackground from "../components/allyBackground.tsx";
 
@@ -31,10 +31,11 @@ function AboutPage() {
           <div className="flex flex-col items-center">
             <div className="flex flex-row mb-2 gap-6">
               <div className="flex flex-col justify-center">
-                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border border-2">
+                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border-2">
                   <img
                     className="w-full object-cover"
                     src={carter_picture}
+                    alt="carter_picture"
                   ></img>
                 </div>
                 <p className="text-center">Carter Moore</p>
@@ -42,18 +43,23 @@ function AboutPage() {
               </div>
 
               <div className="flex flex-col justify-center">
-                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border border-2">
-                  <img className="w-full object-cover" src={ally_picture}></img>
+                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border-2">
+                  <img
+                    className="w-full object-cover"
+                    src={ally_picture}
+                    alt="ally_picture"
+                  ></img>
                 </div>
                 <p className="text-center">Alessandra Giovenco</p>
                 <p className="text-center">Assis. Lead Soft Eng</p>
               </div>
 
               <div className="flex flex-col justify-center">
-                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border border-2">
+                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border-2">
                   <img
                     className="w-full object-cover"
                     src={krishna_picture}
+                    alt="krishna_picture"
                   ></img>
                 </div>
                 <p className="text-center">Krishna Garg</p>
@@ -61,8 +67,12 @@ function AboutPage() {
               </div>
 
               <div className="flex flex-col justify-center">
-                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border border-2">
-                  <img className="w-full object-cover" src={ben_picture}></img>
+                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border-2">
+                  <img
+                    className="w-full object-cover"
+                    src={ben_picture}
+                    alt="ben_picture"
+                  ></img>
                 </div>
                 <p className="text-center">Ben Zeng</p>
                 <p className="text-center">Document Analyst</p>
@@ -71,42 +81,59 @@ function AboutPage() {
 
             <div className="flex flex-row mb-2 gap-6">
               <div className="flex flex-col justify-center">
-                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border border-2">
-                  <img className="w-full object-cover" src={sam_picture}></img>
+                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border-2">
+                  <img
+                    className="w-full object-cover"
+                    src={sam_picture}
+                    alt="sam_picture"
+                  ></img>
                 </div>
                 <p className="text-center">Samruddhi Naik</p>
                 <p className="text-center">Product Owner</p>
               </div>
 
               <div className="flex flex-col justify-center">
-                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border border-2">
-                  <img className="w-full object-cover" src={abe_picture}></img>
+                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border-2">
+                  <img
+                    className="w-full object-cover"
+                    src={abe_picture}
+                    alt="abe_picture"
+                  ></img>
                 </div>
                 <p className="text-center">Abelardo Broche</p>
                 <p className="text-center">Full-Time Soft Eng</p>
               </div>
 
               <div className="flex flex-col justify-center">
-                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border border-2">
-                  <img className="w-full object-cover" src={mike_picture}></img>
+                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border-2">
+                  <img
+                    className="w-full object-cover"
+                    src={mike_picture}
+                    alt="abe_picture"
+                  ></img>
                 </div>
                 <p className="text-center">Mike Wilkinson</p>
                 <p className="text-center">Team Coach</p>
               </div>
 
               <div className="flex flex-col justify-center">
-                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border border-2">
-                  <img className="w-full object-cover" src={sean_picture}></img>
+                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border-2">
+                  <img
+                    className="w-full object-cover"
+                    src={sean_picture}
+                    alt="sean_picture"
+                  ></img>
                 </div>
                 <p className="text-center">Sean Peacock</p>
                 <p className="text-center">Full-Time Soft Eng</p>
               </div>
 
               <div className="flex flex-col justify-center">
-                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border border-2">
+                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border-2">
                   <img
                     className="w-full object-cover"
                     src={sahil_picture}
+                    alt="sahil_picture"
                   ></img>
                 </div>
                 <p className="text-center">Sahil Mirani</p>
@@ -116,10 +143,11 @@ function AboutPage() {
 
             <div className="flex flex-row gap-6">
               <div className="flex flex-col justify-center">
-                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border border-2">
+                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border-2">
                   <img
                     className="w-full object-cover"
                     src={najum_picture}
+                    alt="najum_picture"
                   ></img>
                 </div>
                 <p className="text-center">Najum Soofi</p>
@@ -127,10 +155,11 @@ function AboutPage() {
               </div>
 
               <div className="flex flex-col justify-center">
-                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border border-2">
+                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border-2">
                   <img
                     className="w-full object-cover"
                     src={quishi_picture}
+                    alt="quishi_picture"
                   ></img>
                 </div>
                 <p className="text-center">Qiushi Chen</p>
@@ -138,10 +167,11 @@ function AboutPage() {
               </div>
 
               <div className="flex flex-col justify-center">
-                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border border-2">
+                <div className="w-28 h-28 rounded-full overflow-hidden items-center self-center border-2">
                   <img
                     className="w-full object-cover"
                     src={vincent_picture}
+                    alt="vincent_picture"
                   ></img>
                 </div>
                 <p className="text-center">Vincent Huang</p>
