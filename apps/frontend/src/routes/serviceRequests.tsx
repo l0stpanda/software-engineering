@@ -131,28 +131,6 @@ function ServiceRequests() {
 
           <div className="pb-2">
             <div className="w-20 flex flex-row gap-2 w-full">
-              {/*<Select*/}
-              {/*  name="Request Type"*/}
-              {/*  required={true}*/}
-              {/*  onChange={handleTypeDropdown}*/}
-              {/*  value={reqType}*/}
-              {/*  defaultValue={"All"}*/}
-              {/*  size="small"*/}
-              {/*>*/}
-              {/*  <MenuItem value={"All"}>Select Request Type</MenuItem>*/}
-              {/*  <MenuItem value={"Flower Request"}>Flower Request</MenuItem>*/}
-              {/*  <MenuItem value={"Lost and Found"}>Lost and Found</MenuItem>*/}
-              {/*  <MenuItem value={"Medical Device Delivery"}>*/}
-              {/*    Medical Device Delivery*/}
-              {/*  </MenuItem>*/}
-              {/*  <MenuItem value={"Sanitation Request"}>*/}
-              {/*    Sanitation Request*/}
-              {/*  </MenuItem>*/}
-              {/*  <MenuItem value={"Room Scheduling"}>Room Scheduling</MenuItem>*/}
-              {/*  <MenuItem value={"Medicine Request"}>*/}
-              {/*    Medicine Delivery*/}
-              {/*  </MenuItem>*/}
-              {/*</Select>*/}
               <UserDropdown room={""} update={updateName} label={"Username"} />
               <Select
                 name="Status Type"
