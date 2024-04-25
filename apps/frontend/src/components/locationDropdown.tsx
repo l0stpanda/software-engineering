@@ -6,6 +6,7 @@ type locationProps = {
   room: string;
   update: (a: string) => void;
   label: string;
+  className?: string;
 };
 
 export default function LocationDropdown(prop: locationProps) {
@@ -43,7 +44,7 @@ export default function LocationDropdown(prop: locationProps) {
   }
 
   return (
-    <>
+    <div className={prop.className}>
       <FormControl fullWidth required>
         <Autocomplete
           disablePortal
@@ -63,6 +64,6 @@ export default function LocationDropdown(prop: locationProps) {
           {/*{rooms.map((one: { long_name: string | number | readonly string[] | undefined; }) => <MenuItem value={one.long_name}>one.long_name</MenuItem>)}*/}
         </Autocomplete>
       </FormControl>
-    </>
+    </div>
   );
 }

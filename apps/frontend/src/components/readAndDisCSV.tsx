@@ -15,36 +15,24 @@ import { nodeType } from "common/src/nodeType.ts";
 import { useAuth0 } from "@auth0/auth0-react";
 import PendingUser from "./PendingUser.tsx";
 
-//end merge
-
-//upload start
-// import React, { useState } from "react";
-// import { edgeType } from "common/src/edgesType.ts";
-// import { DeleteAllEdge, PostEdge } from "../objects/DAO_Edges.ts";
-// import { nodeType } from "common/src/nodeType.ts";
-// import { DeleteAllNode, PostNode } from "../objects/DAO_Nodes.ts";
 import { Dialog, DialogTitle } from "@mui/material";
 //upload end
 
-/*interface TabPanelProps {
-    children?: React.ReactNode;
-    index: number;
-    value: number;
-    edges?: Edges[];
-    nodes?: Nodes[];
-}*/
 type User = {
   id: string;
   email: string;
   username: string;
   role: string;
 };
+
+//USERS AND EDGES AND NODES NEED TO
 //This handles uploads and downloads on the same page
 function SingleDisplay() {
   const [edges, setEdges] = useState<Edges[]>([]); // Initialize state to hold the edges data
   const [nodes, setNode] = useState<Nodes[]>([]); // Initialize state to hold the nodes data
   const [tableDisplayed, setTableDisplaying] = useState<number>(0);
   const [users, setUsers] = useState<User[]>([]);
+  const [changed, setChanged] = useState<boolean>(false);
   const { getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
@@ -63,29 +51,8 @@ function SingleDisplay() {
         console.error("Error fetching data:", error);
       }
     }
-
-    fetchData();
-  }, [getAccessTokenSilently]);
-
-  //  async function displayEdges() {
-  //    console.log("Displaying edges...");
-  //    try {
-  //      const data = await ReadEdge(); // Call ReadEdge and wait for the data
-  //      setEdges(data); // Update state with the received data
-  //    } catch (error) {
-  //      console.error("Error fetching edges:", error);
-  //    }
-  //  }
-
-  // async function displayNodes() {
-  //   console.log("Displaying nodes...");
-  //   try {
-  //     const data = await ReadNode(); // Call ReadEdge and wait for the data
-  //     setNode(data); // Update state with the received data
-  //   } catch (error) {
-  //     console.error("Error fetching nodes:", error);
-  //   }
-  // }
+    fetchData().then();
+  }, [getAccessTokenSilently, changed]);
 
   // Change tabs by switching between 0 and 1
   function handleTabChange(event: React.SyntheticEvent, newValue: number) {
@@ -194,6 +161,7 @@ function SingleDisplay() {
           return;
         }
         alert("Edges CSV loaded successfully");
+        setChanged(!changed);
       }
 
       //Handles users
@@ -207,17 +175,26 @@ function SingleDisplay() {
             .map((row: string): string[] => {
               return row.split(",");
             });
-
+          console.log("USERS ARRAY " + users_array);
           const newUsers: User[] = [];
-          for (let i = 1; i < users_array.length - 1; i++) {
+          for (let i = 1; i < users_array.length; i++) {
             const curr_data: User = {
               id: users_array[i][0].toString(),
               email: users_array[i][1].toString(),
               username: users_array[i][2].toString().replace(/\r/gm, ""),
               role: users_array[i][3].toString(),
             };
+            if (
+              curr_data.id == "" ||
+              curr_data.email == "" ||
+              curr_data.username == "" ||
+              curr_data.role == ""
+            ) {
+              break;
+            }
             newUsers.push(curr_data);
           }
+          console.log(newUsers);
 
           await axios.post("/api/userAdding/uploadUsers", newUsers, {
             headers: {
@@ -232,6 +209,7 @@ function SingleDisplay() {
           return;
         }
         alert("Users CSV loaded successfully");
+        setChanged(!changed);
       }
 
       //Same functionality as above, but now for nodes
@@ -269,12 +247,14 @@ function SingleDisplay() {
           return;
         }
         alert("Nodes CSV Loaded");
+        setChanged(!changed);
       } else {
         alert(
           "The imported file has to have 'node' or 'edge' or 'users' in its title in order for us to know which database you want to upload to.",
         );
       }
       setLoadingDialog(false);
+      setChanged(!changed);
     }
   };
 
@@ -284,7 +264,7 @@ function SingleDisplay() {
     <div className="flex flex-col px-6 bg-background py-1">
       <div className="grid grid-cols-2">
         {/*download buttonss*/}
-        <div className=" inline-flex bg-background rounded-xl px-6 h-fit justify-center pt-5 gap-4">
+        <div className=" inline-flex bg-background rounded-xl px-6 h-fit justify-start pt-5 gap-4">
           <div>
             <h1 className="font-header text-primary font-bold text-3xl text-center">
               Download Files
@@ -340,7 +320,7 @@ function SingleDisplay() {
         {/*download buttonss*/}
 
         {/*upload buttonss*/}
-        <div className="inline-flex bg-background rounded-xl px-6 h-fit justify-center pt-5 gap-4">
+        <div className="inline-flex bg-background rounded-xl px-6 h-fit justify-end pt-5 gap-4">
           <div className="grid-cols-2">
             <h1 className="font-header text-primary font-bold text-3xl text-left">
               Upload Files
@@ -484,17 +464,19 @@ function SingleDisplay() {
           </table>
         )}
       </div>
-      <div
-        hidden={tableDisplayed !== 2}
-        id="tab-2"
-        style={{ paddingTop: "30px" }}
-      >
+      <div hidden={tableDisplayed !== 2} id="tab-2">
         <table className="w-full">
           <thead>
-            <tr>
-              <th>Email</th>
-              <th>Username</th>
-              <th>Role</th>
+            <tr className="bg-secondary border-b-2 border-b-primary sticky top-0">
+              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                Email
+              </th>
+              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                Username
+              </th>
+              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                Role
+              </th>
             </tr>
           </thead>
           <tbody>
