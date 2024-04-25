@@ -114,6 +114,7 @@ function MedicineDeliveryReq() {
   function handleSubmitClose() {
     setOpen(false);
     clear();
+    window.location.reload();
   }
   async function handleSubmit() {
     // Catch required fields not being filled out
