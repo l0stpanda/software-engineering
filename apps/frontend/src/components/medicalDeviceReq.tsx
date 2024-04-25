@@ -135,12 +135,12 @@ function MedicalDeviceReq() {
   return (
     <div className="w-full">
       <div
-        className="overflow-m-auto  flex flex-col  px-10 h-full w-full justify-center py-4"
+        className="overflow-m-auto mt-6  flex flex-col  px-10 h-full w-full justify-center py-4"
         // style={{
         //     boxShadow: "1px 1px 0px #999, 2px 2px 0px #999, 3px 3px 0px #999, 4px 4px 0px #999, 5px 5px 0px #999, 6px 6px 0px #999"
         // }}>
       >
-        <h1 className="m-2 font-header text-primary font-bold text-2xl text-center">
+        <h1 className="m-2 font-header text-primary font-extrabold text-3xl text-center transition-transform hover:scale-110 -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
           Medical Device Delivery Form
         </h1>
         <p
@@ -245,7 +245,7 @@ function MedicalDeviceReq() {
                 //renderInput={(params) => <TextField {...params} required/>}
               />
             </LocalizationProvider>
-            <div className="flex justify-center">
+            <div className="flex justify-center mt-3">
               <Button
                 className="w-32 self-center pt-10"
                 onClick={clear}
@@ -254,10 +254,10 @@ function MedicalDeviceReq() {
                 size="large"
                 sx={{
                   borderRadius: "30px",
-                  marginRight: "10px",
+                  marginRight: "20px",
                   transition: "transform 0.3s ease-in-out",
                   "&:hover": {
-                    transform: "scale(1.05)",
+                    transform: "scale(1.1)",
                   },
                 }}
               >
@@ -274,7 +274,7 @@ function MedicalDeviceReq() {
                   borderRadius: "30px",
                   transition: "transform 0.3s ease-in-out",
                   "&:hover": {
-                    transform: "scale(1.05)",
+                    transform: "scale(1.1)",
                   },
                 }}
               >

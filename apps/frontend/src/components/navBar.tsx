@@ -88,7 +88,7 @@ function CustomNavBar() {
             <a href="">
               <img
                 src={BWLogo}
-                className="object-contain"
+                className="object-contain transition-transform duration-300 hover:scale-90"
                 style={{ width: "100%", height: "100%" }}
                 alt="Brigham & Women's Hospital"
               />
@@ -101,6 +101,7 @@ function CustomNavBar() {
                 <Tooltip title={"View Map"}>
                   <IconButton
                     href="map"
+                    className="hover:scale-110 duration-200 transition-transform"
                     style={{
                       marginLeft: "1rem",
                     }}
@@ -111,6 +112,7 @@ function CustomNavBar() {
                 <Tooltip title={"View Tables"}>
                   <IconButton
                     href="displayTables"
+                    className="hover:scale-110 duration-200 transition-transform"
                     style={{
                       marginLeft: "1rem",
                     }}
@@ -123,6 +125,7 @@ function CustomNavBar() {
                   <IconButton
                     href="requests"
                     // onClick={handleRequestsOpen}
+                    className="hover:scale-110 duration-200 transition-transform"
                     style={{
                       marginLeft: "1rem",
                     }}
@@ -149,6 +152,7 @@ function CustomNavBar() {
                 <Tooltip title={"Todo List"}>
                   <IconButton
                     href="todo"
+                    className="hover:scale-110 duration-200 transition-transform"
                     style={{
                       marginLeft: "1rem",
                     }}
@@ -159,6 +163,7 @@ function CustomNavBar() {
                 <Tooltip title={"Inventory"}>
                   <IconButton
                     href="inventory"
+                    className="hover:scale-110 duration-200 transition-transform"
                     style={{
                       marginLeft: "1rem",
                     }}
@@ -169,6 +174,7 @@ function CustomNavBar() {
                 <Tooltip title={"More"}>
                   <IconButton
                     onClick={handleRequestsOpen}
+                    className="hover:scale-110 duration-200 transition-transform"
                     sx={{
                       marginLeft: "1rem",
                       "&:hover": {
@@ -185,10 +191,10 @@ function CustomNavBar() {
               {/*>*/}
               <div className="flex flex-row gap-3 align-right">
                 <p
-                  className="object-contain text-center"
+                  className="object-contain text-center transition-transform duration-500 hover:-translate-x-1"
                   style={{
                     color: "#002866",
-                    fontSize: "1 rem",
+                    fontSize: "1rem",
                     paddingTop: "0.5rem",
                   }}
                 >
@@ -197,8 +203,8 @@ function CustomNavBar() {
                 <Tooltip title={"Click to Logout"}>
                   <img
                     src={user.picture}
+                    className="rounded-full h-10 w-10 object-contain transition-transform duration-200 hover:scale-110"
                     alt={user.nickname}
-                    className="rounded-full h-10 w-10 object-contain"
                     onClick={handleLogout}
                   />
                 </Tooltip>
