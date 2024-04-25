@@ -103,14 +103,6 @@ function Map() {
   //   setNavigatingNodes({ ...navigatingNodes, [name]: value });
   // }
 
-  // Handles changes to the start/end destination boxes
-  function handleFormSubmit() {
-    const cleanStart = navigatingNodes.start.replace("\r", "");
-    const cleanEnd = navigatingNodes.end.replace("\r", "");
-    console.log(cleanStart, cleanEnd);
-    setNavigatingNodes({ start: cleanStart, end: cleanEnd });
-  }
-
   // Changes the map image
   const changeFloor = (floor: string) => {
     // console.log(floor);
@@ -497,7 +489,7 @@ function Map() {
               className="absolute w-full"
             >
               <div
-                className="flex flex-col mr-2 ml-0 py-2 px-3 items-center bg-background rounded-xl border-primary border-2 w-[97%]"
+                className="flex flex-col my-1 mr-2 ml-0 py-2 px-3 items-center bg-background rounded-xl border-primary border-2 w-[97%]"
                 onClick={handleInnerClick}
               >
                 <h2>Select Destination</h2>
@@ -505,14 +497,14 @@ function Map() {
                   room={navigatingNodes.start}
                   update={updateStart}
                   label={"Start"}
+                  className="w-full my-1"
                 />
-                <br />
                 <LocationDropdown
                   room={navigatingNodes.end}
                   update={updateEnd}
                   label={"End"}
+                  className="w-full mb-1"
                 />
-                <br />
                 <FormControl fullWidth required>
                   <InputLabel id="demo-simple-select-label" variant="filled">
                     Path Algorithm
@@ -531,16 +523,6 @@ function Map() {
                     <MenuItem value="Dijkstra">Dijkstra</MenuItem>
                   </Select>
                 </FormControl>
-                <br />
-                <Button
-                  type="button"
-                  variant="contained"
-                  className="submitButton"
-                  size="medium"
-                  onClick={handleFormSubmit}
-                >
-                  Submit
-                </Button>
               </div>
             </motion.section>
           )}
