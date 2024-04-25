@@ -81,6 +81,7 @@ function LostFound() {
   function handleSubmitClose() {
     setOpen(false);
     clear();
+    window.location.reload();
   }
 
   function clear() {

@@ -108,6 +108,7 @@ function SanitationReq() {
   function handleSubmitClose() {
     setOpen(false);
     clear();
+    window.location.reload();
   }
 
   return (

@@ -98,6 +98,7 @@ function FlowerReqForm() {
   function handleSubmitClose() {
     setOpen(false);
     clear();
+    window.location.reload();
   }
   function handleStatusUpdate(e: SelectChangeEvent) {
     setResponses({ ...responses, status: e.target.value });

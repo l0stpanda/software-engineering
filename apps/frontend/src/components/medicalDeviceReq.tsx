@@ -108,7 +108,7 @@ function MedicalDeviceReq() {
       alert("Quantity must be an integer between 0 and 100");
       return;
     }
-
+    setOpen(true); // Open dialog box on successful submission
     try {
       await axios.post("api/medicalDevice", formData, {
         headers: {
@@ -120,16 +120,14 @@ function MedicalDeviceReq() {
       alert(
         "Error storing in the database, make sure nodes/edges are uploaded and you are logged in.",
       );
-      console.error(e);
       return;
     }
-
-    setOpen(true); // Open dialog box on successful submission
   }
 
   function handleSubmitClose() {
     setOpen(false);
     clear();
+    window.location.reload();
   }
 
   return (
@@ -156,16 +154,6 @@ function MedicalDeviceReq() {
         </p>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4 my-4">
-            {/*<TextField*/}
-            {/*  onChange={handleFormInput}*/}
-            {/*  value={formData.employeeName}*/}
-            {/*  name="employeeName"*/}
-            {/*  id="employeeName"*/}
-            {/*  variant="filled"*/}
-            {/*  label="Employee Name"*/}
-            {/*  required={true}*/}
-            {/*/>*/}
-
             <UserDropdown
               room={formData.employeeName}
               update={updateName}
@@ -284,40 +272,38 @@ function MedicalDeviceReq() {
           </div>
         </form>
       </div>
-      <React.Fragment>
-        <Dialog
-          open={open}
-          onClose={handleSubmitClose}
-          TransitionComponent={Transition}
-          keepMounted
-          aria-describedby="alert-dialog-slide-description"
-        >
-          <DialogTitle>We received your request!</DialogTitle>
-          <DialogContent>
-            <strong>Here are your responses:</strong>
-            <br />
-            Employee Name: {formData.employeeName}
-            <br />
-            Room Name: {formData.roomName}
-            <br />
-            Medical Device Name: {formData.medicalDeviceName}
-            <br />
-            Quantity: {formData.quantity}
-            <br />
-            Priority: {formData.priority}
-            <br />
-            Status: {formData.status}
-            <br />
-            Date:{formData.deliveryDate?.toString()}
-          </DialogContent>
+      <Dialog
+        open={open}
+        onClose={handleSubmitClose}
+        TransitionComponent={Transition}
+        keepMounted
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>We received your request!</DialogTitle>
+        <DialogContent>
+          <strong>Here are your responses:</strong>
+          <br />
+          Employee Name: {formData.employeeName}
+          <br />
+          Room Name: {formData.roomName}
+          <br />
+          Medical Device Name: {formData.medicalDeviceName}
+          <br />
+          Quantity: {formData.quantity}
+          <br />
+          Priority: {formData.priority}
+          <br />
+          Status: {formData.status}
+          <br />
+          Date:{formData.deliveryDate?.toString()}
+        </DialogContent>
 
-          <DialogActions>
-            <Button onClick={handleSubmitClose} autoFocus>
-              Okay
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </React.Fragment>
+        <DialogActions>
+          <Button onClick={handleSubmitClose} autoFocus>
+            Okay
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
