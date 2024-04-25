@@ -148,12 +148,12 @@ model MedicineRequest {
 
 // Tables for To do list
 model User {
-  id       String  @id
-  email    String  @unique
-  username String?
+  id       String @id
+  email    String @unique
+  username String @unique
   role     String
   // Foreign Key Reference
-  todoList Todo[]  @relation("UserID")
+  todoList Todo[] @relation("UserID")
   // So each user will have
 }
 

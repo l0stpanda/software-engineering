@@ -207,7 +207,7 @@ function SingleDisplay() {
             .map((row: string): string[] => {
               return row.split(",");
             });
-
+          console.log("USERS ARRAY " + users_array);
           const newUsers: User[] = [];
           for (let i = 1; i < users_array.length; i++) {
             const curr_data: User = {
@@ -216,8 +216,17 @@ function SingleDisplay() {
               username: users_array[i][2].toString().replace(/\r/gm, ""),
               role: users_array[i][3].toString(),
             };
+            if (
+              curr_data.id == "" ||
+              curr_data.email == "" ||
+              curr_data.username == "" ||
+              curr_data.role == ""
+            ) {
+              break;
+            }
             newUsers.push(curr_data);
           }
+          console.log(newUsers);
 
           await axios.post("/api/userAdding/uploadUsers", newUsers, {
             headers: {
