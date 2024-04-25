@@ -125,35 +125,17 @@ function ServiceRequests() {
       <div className="flex flex-row w-full h-full px-4 gap-4 py-4">
         {/*Pending Requests*/}
         <div className="h-full w-1/2 bg-background rounded-lg flex flex-col px-4">
-          <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
+          <h1 className="mt-4 mb-4 ml-2.5 font-header text-primary font-extrabold text-4xl text-center transition-transform hover:translate-y-1 duration-500 antialiased;">
             Pending Requests
           </h1>
-
           <div className="pb-2">
             <div className="w-20 flex flex-row gap-2 w-full">
-              {/*<Select*/}
-              {/*  name="Request Type"*/}
-              {/*  required={true}*/}
-              {/*  onChange={handleTypeDropdown}*/}
-              {/*  value={reqType}*/}
-              {/*  defaultValue={"All"}*/}
-              {/*  size="small"*/}
-              {/*>*/}
-              {/*  <MenuItem value={"All"}>Select Request Type</MenuItem>*/}
-              {/*  <MenuItem value={"Flower Request"}>Flower Request</MenuItem>*/}
-              {/*  <MenuItem value={"Lost and Found"}>Lost and Found</MenuItem>*/}
-              {/*  <MenuItem value={"Medical Device Delivery"}>*/}
-              {/*    Medical Device Delivery*/}
-              {/*  </MenuItem>*/}
-              {/*  <MenuItem value={"Sanitation Request"}>*/}
-              {/*    Sanitation Request*/}
-              {/*  </MenuItem>*/}
-              {/*  <MenuItem value={"Room Scheduling"}>Room Scheduling</MenuItem>*/}
-              {/*  <MenuItem value={"Medicine Request"}>*/}
-              {/*    Medicine Delivery*/}
-              {/*  </MenuItem>*/}
-              {/*</Select>*/}
-              <UserDropdown room={""} update={updateName} label={"Username"} />
+              <UserDropdown
+                room={reqType}
+                update={updateName}
+                label={"Username"}
+              />
+
               <Select
                 name="Status Type"
                 required={true}
@@ -161,6 +143,9 @@ function ServiceRequests() {
                 value={statusType}
                 defaultValue={"No Status"}
                 size="small"
+                sx={{
+                  borderRadius: "10px",
+                }}
               >
                 <MenuItem value={"All"}>Select Status Type</MenuItem>
                 <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
@@ -214,8 +199,16 @@ function ServiceRequests() {
           </div>
         </div>
         {/*Make new requests*/}
-        <div className="h-full w-1/2 flex flex-col gap-4">
-          <div className="bg-background rounded-lg">
+        <div className="h-full w-1/2 flex flex-col gap-4 overflow-hidden">
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              overflow: "hidden",
+              width: "100%",
+            }}
+            className="bg-background rounded-lg"
+          >
             {/*<h1 className="my-2 font-header text-primary font-bold text-xl text-center">*/}
             {/*    Choose a new request*/}
             {/*</h1>*/}
@@ -224,24 +217,93 @@ function ServiceRequests() {
               scrollButtons="auto"
               value={currentTabIndex}
               onChange={handleTabChange}
+              sx={{
+                overflow: "hidden", // Hiding overflow here
+              }}
             >
               <Tooltip title="Flower Delivery">
-                <Tab icon={<LocalFloristIcon />} id="tab-0" />
+                <Tab
+                  icon={<LocalFloristIcon />}
+                  id="tab-0"
+                  sx={{
+                    transition: "transform 0.3s ease-in-out",
+                    "&:hover": {
+                      transform: "scale(1.4)",
+                      position: "relative",
+                      zIndex: 1, // Ensure scaling item is above others
+                    },
+                  }}
+                />
               </Tooltip>
               <Tooltip title="Lost Item Request">
-                <Tab icon={<WalletIcon />} id="tab-1" />
+                <Tab
+                  icon={<WalletIcon />}
+                  id="tab-1"
+                  sx={{
+                    transition: "transform 0.3s ease-in-out",
+                    "&:hover": {
+                      transform: "scale(1.4)",
+                      position: "relative",
+                      zIndex: 1, // Ensure scaling item is above others
+                    },
+                  }}
+                />
               </Tooltip>
               <Tooltip title="Room Scheduling">
-                <Tab icon={<MeetingRoomIcon />} id="tab-2" />
+                <Tab
+                  icon={<MeetingRoomIcon />}
+                  id="tab-2"
+                  sx={{
+                    transition: "transform 0.3s ease-in-out",
+                    "&:hover": {
+                      transform: "scale(1.3)",
+                      position: "relative",
+                      zIndex: 1, // Ensure scaling item is above others
+                    },
+                  }}
+                />
               </Tooltip>
               <Tooltip title="Medical Device Delivery">
-                <Tab icon={<MonitorHeartIcon />} id="tab-3" />
+                <Tab
+                  icon={<MonitorHeartIcon />}
+                  id="tab-3"
+                  sx={{
+                    transition: "transform 0.3s ease-in-out",
+                    "&:hover": {
+                      transform: "scale(1.4)",
+                      position: "relative",
+                      zIndex: 1, // Ensure scaling item is above others
+                    },
+                  }}
+                />
               </Tooltip>
               <Tooltip title="Medicine Delivery">
-                <Tab icon={<LocalPharmacyIcon />} id="tab-4" />
+                <Tab
+                  icon={<LocalPharmacyIcon />}
+                  id="tab-4"
+                  sx={{
+                    transition: "transform 0.3s ease-in-out",
+                    "&:hover": {
+                      transform: "scale(1.4)",
+                      position: "relative",
+                      zIndex: 1, // Ensure scaling item is above others
+                    },
+                  }}
+                />
               </Tooltip>
               <Tooltip title="Sanitation Request">
-                <Tab icon={<CleaningServicesIcon />} id="tab-5" />
+                <Tab
+                  icon={<CleaningServicesIcon />}
+                  id="tab-5"
+                  sx={{
+                    transition: "transform 0.3s ease-in-out",
+                    "&:hover": {
+                      transform: "scale(1.4)",
+                      position: "relative",
+                      zIndex: 1, // Ensure scaling item is above others
+                    },
+                  }}
+                />
               </Tooltip>
             </Tabs>
           </div>

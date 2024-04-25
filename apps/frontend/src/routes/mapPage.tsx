@@ -60,7 +60,7 @@ function Map() {
   const Controls = () => {
     const { zoomIn, zoomOut } = useControls();
     return (
-      <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2 top-10 right-4">
+      <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2 right-4">
         <Button
           onClick={() => zoomIn()}
           type="button"
@@ -100,6 +100,14 @@ function Map() {
   //   setNavigatingNodes({ ...navigatingNodes, [name]: value });
   // }
 
+  // Handles changes to the start/end destination boxes
+  // function handleFormSubmit() {
+  //   const cleanStart = navigatingNodes.start.replace("\r", "");
+  //   const cleanEnd = navigatingNodes.end.replace("\r", "");
+  //   //console.log(cleanStart, cleanEnd);
+  //   setNavigatingNodes({ start: cleanStart, end: cleanEnd });
+  // }
+
   // Changes the map image
   const changeFloor = (floor: string) => {
     // console.log(floor);
@@ -117,7 +125,6 @@ function Map() {
   // Since this is the page that all the users are forwared to on login we store the
   useEffect(() => {
     async function sendUser() {
-      //console.log("STUFF IS HAPPENING");
       const token = await getAccessTokenSilently();
       axios
         .get("/api/adminAccess", {
@@ -158,17 +165,13 @@ function Map() {
     sendUser().then();
   }, [getAccessTokenSilently, user?.email, user?.nickname, user?.sub]);
 
-  function log(data: React.RefObject<ReactZoomPanPinchRef>) {
-    console.log(data);
-  }
-
   // Updates the graph when it has been received from the database
   useEffect(() => {
     const tempGraph = new Graph();
     tempGraph.loadGraph().then(() => {
       setGraph(tempGraph);
       setUpdate(1);
-      console.log(update);
+      //console.log(update);
     });
   }, [update]);
 
@@ -183,25 +186,36 @@ function Map() {
         pathSize.toString() !==
         [0, 0, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY].toString()
       ) {
-        const padding = 50;
-        const width = pathSize[0] - pathSize[2] + 2 * padding;
-        const height = pathSize[1] - pathSize[3] + 2 * padding;
+        const xPadding = divDimensions.width / 20;
+        const yPadding = divDimensions.height / 20;
+        const width = pathSize[0] - pathSize[2] + xPadding;
+        const height = pathSize[1] - pathSize[3] + yPadding;
         const scale = Math.min(
           divDimensions.width / width,
           divDimensions.height / height,
         );
 
+        const xOffset =
+          (divDimensions.width - (pathSize[0] - pathSize[2]) * scale) / 2;
+        const yOffset =
+          (divDimensions.height - (pathSize[1] - pathSize[3]) * scale) / 2;
+
+        log(xOffset);
+
         transformRef.current.setTransform(
-          -(pathSize[2] - padding) * scale,
-          -(pathSize[3] - padding) * scale,
+          -(pathSize[2] * scale) + xOffset,
+          -(pathSize[3] * scale) + yOffset,
           scale,
         );
       } else {
         transformRef.current.setTransform(0, 0, 1);
       }
     }
-    log(transformRef);
   }, [pathSize, divDimensions, imgState]);
+
+  function log(data: number) {
+    console.log(data);
+  }
 
   const changeAlgorithm = (event: SelectChangeEvent) => {
     setAlgorithm(event.target.value as string);
@@ -233,7 +247,7 @@ function Map() {
 
   function FloorMapButtons() {
     return (
-      <div className="absolute z-10 h-fit my-auto ml-3 bg-primary bottom-7 right-9 rounded-xl border-0">
+      <div className="absolute z-10 h-fit ml-3 bg-primary bottom-20 right-9 rounded-xl border-0">
         <ToggleButtonGroup
           orientation="vertical"
           value={imgState}
@@ -414,7 +428,7 @@ function Map() {
         {/*Map Image Box*/}
         <div
           ref={divRef}
-          className="
+          className="fixed
                     h-screen
                     w-screen"
         >
@@ -426,7 +440,7 @@ function Map() {
               <TransformComponent
                 wrapperStyle={{
                   width: screen.width,
-                  height: "calc(100vh - 55px)",
+                  height: "calc(100vh)",
                   position: "fixed",
                 }}
               >

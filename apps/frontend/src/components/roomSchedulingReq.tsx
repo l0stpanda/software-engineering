@@ -117,8 +117,8 @@ export default function RoomSchedulingReq() {
 
   return (
     <div className="w-full">
-      <div className="m-auto flex flex-col px-10 h-full w-full justify-center py-4">
-        <h1 className="my-2 font-header text-primary font-bold text-3xl text-center">
+      <div className="m-auto mt-6 flex flex-col px-10 h-full w-full justify-center py-4">
+        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center transition-transform hover:scale-110 -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
           Room Scheduling Request
         </h1>
 
@@ -255,17 +255,17 @@ export default function RoomSchedulingReq() {
             </Select>
           </FormControl>
 
-          <div className="flex justify-center">
+          <div className="flex justify-center mt-3">
             <Button
               onClick={clear}
               variant="contained"
               className="w-32 self-center pt-10"
               sx={{
                 borderRadius: "30px",
-                marginRight: "10px",
+                marginRight: "20px",
                 transition: "transform 0.3s ease-in-out",
                 "&:hover": {
-                  transform: "scale(1.05)",
+                  transform: "scale(1.1)",
                 },
               }}
             >
@@ -280,7 +280,7 @@ export default function RoomSchedulingReq() {
                 borderRadius: "30px",
                 transition: "transform 0.3s ease-in-out",
                 "&:hover": {
-                  transform: "scale(1.05)",
+                  transform: "scale(1.1)",
                 },
               }}
             >
