@@ -491,10 +491,16 @@ function SingleDisplay() {
       >
         <table className="w-full">
           <thead>
-            <tr>
-              <th>Email</th>
-              <th>Username</th>
-              <th>Role</th>
+            <tr className="bg-secondary border-b-2 border-b-primary sticky top-0">
+              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                Email
+              </th>
+              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                Username
+              </th>
+              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                Role
+              </th>
             </tr>
           </thead>
           <tbody>
