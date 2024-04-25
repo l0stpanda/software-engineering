@@ -108,6 +108,15 @@ html {
 .svg_icons {
   transform: scale(1.2);
 }
+a:hover {
+  color: #002866;
+}
+/*&:focus {*/
+/*    color: #002866;*/
+/*}*/
+/*&:active {*/
+/*    color: #002866;*/
+/*}*/
 
 @keyframes dash {
   from {

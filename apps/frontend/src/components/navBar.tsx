@@ -175,8 +175,11 @@ function CustomNavBar() {
                   <IconButton
                     onClick={handleRequestsOpen}
                     className="hover:scale-110 duration-200 transition-transform"
-                    style={{
+                    sx={{
                       marginLeft: "1rem",
+                      "&:hover": {
+                        color: "#002866",
+                      },
                     }}
                   >
                     <MoreHoriz className="svg_icons" />
@@ -195,13 +198,13 @@ function CustomNavBar() {
                     paddingTop: "0.5rem",
                   }}
                 >
-                  <strong>Welcome,</strong> {user.name}
+                  <strong>Welcome,</strong> {user.nickname}
                 </p>
                 <Tooltip title={"Click to Logout"}>
                   <img
                     src={user.picture}
-                    alt={user.name}
                     className="rounded-full h-10 w-10 object-contain transition-transform duration-200 hover:scale-110"
+                    alt={user.nickname}
                     onClick={handleLogout}
                   />
                 </Tooltip>

@@ -207,7 +207,7 @@ function SingleDisplay() {
             .map((row: string): string[] => {
               return row.split(",");
             });
-
+          console.log("USERS ARRAY " + users_array);
           const newUsers: User[] = [];
           for (let i = 1; i < users_array.length; i++) {
             const curr_data: User = {
@@ -216,8 +216,17 @@ function SingleDisplay() {
               username: users_array[i][2].toString().replace(/\r/gm, ""),
               role: users_array[i][3].toString(),
             };
+            if (
+              curr_data.id == "" ||
+              curr_data.email == "" ||
+              curr_data.username == "" ||
+              curr_data.role == ""
+            ) {
+              break;
+            }
             newUsers.push(curr_data);
           }
+          console.log(newUsers);
 
           await axios.post("/api/userAdding/uploadUsers", newUsers, {
             headers: {
@@ -284,7 +293,7 @@ function SingleDisplay() {
     <div className="flex flex-col px-6 bg-background py-1">
       <div className="grid grid-cols-2">
         {/*download buttonss*/}
-        <div className=" inline-flex bg-background rounded-xl px-6 h-fit justify-center pt-5 gap-4">
+        <div className=" inline-flex bg-background rounded-xl px-6 h-fit justify-start pt-5 gap-4">
           <div>
             <h1 className="font-header text-primary font-bold text-3xl text-center">
               Download Files
@@ -340,7 +349,7 @@ function SingleDisplay() {
         {/*download buttonss*/}
 
         {/*upload buttonss*/}
-        <div className="inline-flex bg-background rounded-xl px-6 h-fit justify-center pt-5 gap-4">
+        <div className="inline-flex bg-background rounded-xl px-6 h-fit justify-end pt-5 gap-4">
           <div className="grid-cols-2">
             <h1 className="font-header text-primary font-bold text-3xl text-left">
               Upload Files
@@ -484,17 +493,19 @@ function SingleDisplay() {
           </table>
         )}
       </div>
-      <div
-        hidden={tableDisplayed !== 2}
-        id="tab-2"
-        style={{ paddingTop: "30px" }}
-      >
+      <div hidden={tableDisplayed !== 2} id="tab-2">
         <table className="w-full">
           <thead>
-            <tr>
-              <th>Email</th>
-              <th>Username</th>
-              <th>Role</th>
+            <tr className="bg-secondary border-b-2 border-b-primary sticky top-0">
+              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                Email
+              </th>
+              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                Username
+              </th>
+              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                Role
+              </th>
             </tr>
           </thead>
           <tbody>

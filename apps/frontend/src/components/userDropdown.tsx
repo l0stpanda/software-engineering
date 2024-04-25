@@ -55,6 +55,7 @@ export default function UserDropdown(prop: locationProps) {
               {...params}
               required
               variant="filled"
+              style={{ minWidth: 275 }}
               label={prop.label}
             />
           )}
