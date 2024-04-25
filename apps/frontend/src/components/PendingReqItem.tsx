@@ -1,8 +1,8 @@
-import trashIcon from "../assets/trashicon.png";
-import { Select, MenuItem, SelectChangeEvent } from "@mui/material";
+import { Select, MenuItem, SelectChangeEvent, IconButton } from "@mui/material";
 import React, { useState } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
+import { DeleteOutline } from "@mui/icons-material";
 
 type GeneralReq = {
   id: number;
@@ -92,14 +92,12 @@ function PendingFlowerReq(props: GeneralReq) {
       <td className="p-3 text-sm">{props.long_name_loc}</td>
       <td className="p-3 text-sm">{props.emp_name}</td>
       <td className="p-3 text-sm">
-        <button>
-          <img
-            onClick={() => deleteData(props.id)}
-            src={trashIcon}
-            alt="Trash icon"
-            className="px-7 flex justify-center transform h-6 hover:scale-125"
-          />
-        </button>
+        <IconButton
+          className="px-7 flex justify-center transform hover:scale-125"
+          onClick={() => deleteData(props.id)}
+        >
+          <DeleteOutline color="error" />
+        </IconButton>
       </td>
     </tr>
   );

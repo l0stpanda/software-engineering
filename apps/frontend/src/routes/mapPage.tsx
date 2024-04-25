@@ -623,8 +623,9 @@ function Map() {
             <></>
           )}
         </div>
-        <div
-          className="
+        {directions.length != 0 ? (
+          <div
+            className="
                     h-[250px]
                     w-[300px]
                     items-center
@@ -636,9 +637,12 @@ function Map() {
                     fixed
                     bottom-7
                     right-32"
-        >
-          <div className="overflow-y-auto h-full">{showDirections()}</div>
-        </div>
+          >
+            <div className="overflow-y-auto h-full">{showDirections()}</div>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );
