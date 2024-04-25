@@ -133,7 +133,7 @@ function MedicineDeliveryReq() {
     <div className="w-full">
       <div className="m-auto mt-6 flex flex-col px-10 h-full w-full justify-center py-4">
         <h1
-          className="text-2xl font-bold mb-4 text-center transform hover:-translate-y-2 transition-transform duration-300"
+          className="font-extrabold text-3xl text-center transition-transform hover:scale-110 -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;"
           style={{
             color: "rgb(0 40 102 / 1)",
             fontFamily: "Nunito, sans-serif",
