@@ -61,65 +61,62 @@ export default function CreditPage() {
             <div hidden={tabDisplayed !== 0} id={`tab-${0}`}>
                 {tabDisplayed === 0 && (
                     <div className="grid grid-cols-2">
-                        <div className="flex flex-col justify-center px-5 py-5">
-                            <a href="https://www.jetbrains.com/webstorm/">
-                                <div>
-                                    <img src={webstormImg} className="object-contain"
-                                         style={{width: "20%", height: "20%"}}
+
+                        <a href="https://www.jetbrains.com/webstorm/">
+                            <div className="flex flex-col px-5 py-5">
+                                <div className="h-10 w-10 self-center">
+                                    <img src={webstormImg} className="object-contain h-full w-full"
                                          alt="Webstorm Logo"/>
                                 </div>
                                 <div>
-                                    <h3>
+                                    <h3 className="text-center">
                                         Webstorm
                                     </h3>
                                 </div>
-                            </a>
-                        </div>
+                            </div>
+                        </a>
 
-                        <div className="flex flex-col justify-center px-5 py-5">
-                            <a href="https://github.com/">
-                                <div>
-                                    <img src={githubImg} className="object-contain"
-                                         style={{width: "20%", height: "20%"}}
+                        <a href="https://github.com/">
+                            <div className="flex flex-col px-5 py-5">
+                                <div className="h-10 w-10 self-center">
+                                    <img src={githubImg} className="object-contain h-full w-full"
                                          alt="Github Logo"/>
                                 </div>
                                 <div>
-                                    <h3>
+                                    <h3 className="text-center">
                                         Github
                                     </h3>
                                 </div>
-                            </a>
-                        </div>
+                            </div>
+                        </a>
 
-
-                        <div className="flex flex-col justify-center px-5 py-5">
-                            <a href="https://taiga.io/">
-                                <div>
-                                    <img src={taigaImg} className="object-contain"
-                                         style={{width: "20%", height: "20%"}}
+                        <a href="https://taiga.io/">
+                            <div className="flex flex-col px-5 py-5">
+                                <div className="h-10 w-10 self-center">
+                                    <img src={taigaImg} className="object-contain h-full w-full"
                                          alt="Taiga Logo"/>
                                 </div>
                                 <div>
-                                    <h3>
+                                    <h3 className="text-center">
                                         Taiga
                                     </h3>
                                 </div>
-                            </a>
-                        </div>
-                        <div className="flex flex-col justify-center px-5 py-5">
-                            <a href="https://discord.com/">
-                                <div>
-                                    <img src={discordImg} className="object-contain"
-                                         style={{width: "20%", height: "20%"}}
+                            </div>
+                        </a>
+
+                        <a href="https://discord.com/">
+                            <div className="flex flex-col px-5 py-5">
+                                <div className="h-10 w-10 self-center">
+                                    <img src={discordImg} className="object-contain h-full w-full"
                                          alt="Discord Logo"/>
                                 </div>
                                 <div>
-                                    <h3>
+                                    <h3 className="text-center">
                                         Discord
                                     </h3>
                                 </div>
-                            </a>
-                        </div>
+                            </div>
+                        </a>
 
                     </div>
 
@@ -130,126 +127,117 @@ export default function CreditPage() {
                 {tabDisplayed === 1 && (
                     <div className="grid grid-cols-4 justify-evenly">
 
-                        <div className="flex flex-col justify-center px-5 py-5">
-                            <a href="https://auth0.com/">
-                                <div>
-                                    <img src={auth0Img} className="object-contain"
-                                         style={{width: "20%", height: "20%"}}
+                        <a href="https://auth0.com/">
+                            <div className="flex flex-col px-5 py-5">
+                                <div className="h-10 w-10 self-center">
+                                    <img src={auth0Img} className="object-contain h-full w-full"
                                          alt="Auth0 Logo"/>
                                 </div>
                                 <div>
-                                    <h3>
+                                    <h3 className="text-center">
                                         Auth0
                                     </h3>
                                 </div>
-                            </a>
-                        </div>
+                            </div>
+                        </a>
 
-                        <div className="flex flex-col justify-center px-5 py-5">
-                            <a href="https://mui.com/material-ui/">
-                                <div>
-                                    <img src={materialUI} className="object-contain"
-                                         style={{width: "20%", height: "20%"}}
-                                         alt="Material IU Logo"/>
+                        <a href="https://mui.com/material-ui/">
+                            <div className="flex flex-col px-5 py-5">
+                                <div className="h-10 w-10 self-center">
+                                    <img src={materialUI} className="object-contain h-full w-full"
+                                         alt="Material UI Logo"/>
                                 </div>
                                 <div>
-                                    <h3>
-                                        Material IU
+                                    <h3 className="text-center">
+                                        Material UI
                                     </h3>
                                 </div>
-                            </a>
-                        </div>
+                            </div>
+                        </a>
 
-                        <div className="flex flex-col justify-center px-5 py-5">
-                            <a href="https://www.axios.com/">
-                                <div>
-                                    <img src={axiosImg} className="object-contain"
-                                         style={{width: "20%", height: "20%"}}
+                        <a href="https://www.axios.com/">
+                            <div className="flex flex-col px-5 py-5">
+                                <div className="h-10 w-10 self-center">
+                                    <img src={axiosImg} className="object-contain h-full w-full"
                                          alt="Axios Logo"/>
                                 </div>
                                 <div>
-                                    <h3>
+                                    <h3 className="text-center">
                                         Axios
                                     </h3>
                                 </div>
-                            </a>
-                        </div>
+                            </div>
+                        </a>
 
-                        <div className="flex flex-col justify-center px-5 py-5">
-                            <a href="https://getbootstrap.com/">
-                                <div>
-                                    <img src={bootstrapImg} className="object-contain"
-                                         style={{width: "20%", height: "20%"}}
+                        <a href="https://getbootstrap.com/">
+                            <div className="flex flex-col px-5 py-5">
+                                <div className="h-10 w-10 self-center">
+                                    <img src={bootstrapImg} className="object-contain h-full w-full"
                                          alt="Bootstrap Logo"/>
                                 </div>
                                 <div>
-                                    <h3>
+                                    <h3 className="text-center">
                                         Bootstrap
                                     </h3>
                                 </div>
-                            </a>
-                        </div>
+                            </div>
+                        </a>
 
-                        <div className="flex flex-col justify-center px-5 py-5">
-                            <a href="https://day.js.org/">
-                                <div>
-                                    <img src={dayjsImg} className="object-contain"
-                                         style={{width: "20%", height: "20%"}}
+                        <a href="https://day.js.org/">
+                            <div className="flex flex-col px-5 py-5">
+                                <div className="h-10 w-10 self-center">
+                                    <img src={dayjsImg} className="object-contain h-full w-full"
                                          alt="DayJS Logo"/>
                                 </div>
                                 <div>
-                                    <h3>
+                                    <h3 className="text-center">
                                         DayJS
                                     </h3>
                                 </div>
-                            </a>
-                        </div>
+                            </div>
+                        </a>
 
-                        <div className="flex flex-col justify-center px-5 py-5">
-                            <a href="https://tailwindcss.com/">
-                                <div>
-                                    <img src={tailwindImg} className="object-contain"
-                                         style={{width: "20%", height: "20%"}}
-                                         alt="Tailwind CSS Logo"/>
+                        <a href="https://tailwindcss.com/">
+                            <div className="flex flex-col px-5 py-5">
+                                <div className="h-10 w-10 self-center">
+                                    <img src={tailwindImg} className="object-contain h-full w-full"
+                                         alt="Tailwind Logo"/>
                                 </div>
                                 <div>
-                                    <h3>
-                                        Tailwind CSS
+                                    <h3 className="text-center">
+                                        Tailwind
                                     </h3>
                                 </div>
-                            </a>
-                        </div>
+                            </div>
+                        </a>
 
-                        <div className="flex flex-col justify-center px-5 py-5">
-                            <a href="https://prettier.io/">
-                                <div>
-                                    <img src={prettierImg} className="object-contain"
-                                         style={{width: "20%", height: "20%"}}
+                        <a href="https://prettier.io/">
+                            <div className="flex flex-col px-5 py-5">
+                                <div className="h-10 w-10 self-center">
+                                    <img src={prettierImg} className="object-contain h-full w-full"
                                          alt="Prettier Logo"/>
                                 </div>
                                 <div>
-                                    <h3>
+                                    <h3 className="text-center">
                                         Prettier
                                     </h3>
                                 </div>
-                            </a>
-                        </div>
+                            </div>
+                        </a>
 
-                        <div className="flex flex-col justify-center px-5 py-5">
-                            <a href="https://sass-lang.com/">
-                                <div>
-                                    <img src={sassImg} className="object-contain"
-                                         style={{width: "20%", height: "20%"}}
+                        <a href="https://sass-lang.com/">
+                            <div className="flex flex-col px-5 py-5">
+                                <div className="h-10 w-10 self-center">
+                                    <img src={sassImg} className="object-contain h-full w-full"
                                          alt="Sass Logo"/>
                                 </div>
                                 <div>
-                                    <h3>
+                                    <h3 className="text-center">
                                         Sass
                                     </h3>
                                 </div>
-                            </a>
-                        </div>
-
+                            </div>
+                        </a>
 
                     </div>
                 )}
@@ -258,68 +246,91 @@ export default function CreditPage() {
             <div hidden={tabDisplayed !== 2} id={`tab-${2}`}>
                 {tabDisplayed === 2 && (
 
-
                     <div className="grid grid-cols-3 justify-evenly">
-                        <div className="flex flex-col justify-center px-5 py-5">
-                            <a href="https://vitejs.dev/">
-                                <img src={viteImg} style={{width: "20%", height: "20%"}}
-                                     alt="Vite Logo"/>
-                                <h3>
-                                    Vite
-                                </h3>
-                            </a>
 
-                        </div>
-                        <div className="flex flex-col justify-center px-5 py-5">
-                            <a href="https://yarnpkg.com/">
-                                <img src={yarnImg} className="object-contain" style={{width: "20%", height: "20%"}}
-                                     alt="Yarn Logo"/>
-                                <h3>
-                                    Yarn
-                                </h3>
-                            </a>
+                        <a href="https://vitejs.dev/">
+                            <div className="flex flex-col px-5 py-5">
+                                <div className="h-10 w-10 self-center">
+                                    <img src={viteImg} className="object-contain h-full w-full"
+                                         alt="Vite Logo"/>
+                                </div>
+                                <div>
+                                    <h3 className="text-center">
+                                        Vite
+                                    </h3>
+                                </div>
+                            </div>
+                        </a>
 
-                        </div>
-                        <div className="flex flex-col justify-center px-5 py-5">
-                            <a href="https://react.dev/">
-                                <img src={reactImg} className="object-contain" style={{width: "20%", height: "20%"}}
-                                     alt="React Logo"/>
-                                <h3>
-                                    React
-                                </h3>
-                            </a>
+                        <a href="https://yarnpkg.com/">
+                            <div className="flex flex-col px-5 py-5">
+                                <div className="h-10 w-10 self-center">
+                                    <img src={yarnImg} className="object-contain h-full w-full"
+                                         alt="Yarn Logo"/>
+                                </div>
+                                <div>
+                                    <h3 className="text-center">
+                                        Yarn
+                                    </h3>
+                                </div>
+                            </div>
+                        </a>
 
-                        </div>
-                        <div className="flex flex-col justify-center px-5 py-5">
-                            <a href="https://www.prisma.io/">
-                                <img src={prismaImg} className="object-contain" style={{width: "20%", height: "20%"}}
-                                     alt="Prisma Logo"/>
-                                <h3 >
-                                    Prisma
-                                </h3>
-                            </a>
+                        <a href="https://react.dev/">
+                            <div className="flex flex-col px-5 py-5">
+                                <div className="h-10 w-10 self-center">
+                                    <img src={reactImg} className="object-contain h-full w-full"
+                                         alt="React Logo"/>
+                                </div>
+                                <div>
+                                    <h3 className="text-center">
+                                        React
+                                    </h3>
+                                </div>
+                            </div>
+                        </a>
 
-                        </div>
-                        <div className="flex flex-col justify-center px-5 py-5">
-                            <a href="https://www.postgresql.org/">
-                                <img src={postgresImg} className="object-contain" style={{width: "20%", height: "20%"}}
-                                     alt="PostgresSQL Logo"/>
-                                <h3>
-                                    PostgresSQL
-                                </h3>
-                            </a>
+                        <a href="https://www.prisma.io/">
+                            <div className="flex flex-col px-5 py-5">
+                                <div className="h-10 w-10 self-center">
+                                    <img src={prismaImg} className="object-contain h-full w-full"
+                                         alt="Prisma Logo"/>
+                                </div>
+                                <div>
+                                    <h3 className="text-center">
+                                        Prisma
+                                    </h3>
+                                </div>
+                            </div>
+                        </a>
 
-                        </div>
-                        <div className="flex flex-col justify-center px-5 py-5">
-                            <a href="https://expressjs.com/">
-                                <img src={expressImg} className="object-contain" style={{width: "20%", height: "20%"}}
-                                     alt="Express Logo"/>
-                                <h3>
-                                    Express
-                                </h3>
-                            </a>
+                        <a href="https://www.postgresql.org/">
+                            <div className="flex flex-col px-5 py-5">
+                                <div className="h-10 w-10 self-center">
+                                    <img src={postgresImg} className="object-contain h-full w-full"
+                                         alt="PostgresSQL Logo"/>
+                                </div>
+                                <div>
+                                    <h3 className="text-center">
+                                        PostgresSQL
+                                    </h3>
+                                </div>
+                            </div>
+                        </a>
 
-                        </div>
+                        <a href="https://expressjs.com/">
+                            <div className="flex flex-col px-5 py-5">
+                                <div className="h-10 w-10 self-center">
+                                    <img src={expressImg} className="object-contain h-full w-full"
+                                         alt="Express Logo"/>
+                                </div>
+                                <div>
+                                    <h3 className="text-center">
+                                        Express
+                                    </h3>
+                                </div>
+                            </div>
+                        </a>
 
                     </div>
                 )}
