@@ -493,11 +493,7 @@ function SingleDisplay() {
           </table>
         )}
       </div>
-      <div
-        hidden={tableDisplayed !== 2}
-        id="tab-2"
-        style={{ paddingTop: "30px" }}
-      >
+      <div hidden={tableDisplayed !== 2} id="tab-2">
         <table className="w-full">
           <thead>
             <tr className="bg-secondary border-b-2 border-b-primary sticky top-0">
