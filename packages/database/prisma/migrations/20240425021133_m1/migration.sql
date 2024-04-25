@@ -108,7 +108,7 @@ CREATE TABLE "MedicineRequest" (
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "username" TEXT,
+    "username" TEXT NOT NULL,
     "role" TEXT NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
@@ -143,6 +143,9 @@ CREATE UNIQUE INDEX "Inventory_name_key" ON "Inventory"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- AddForeignKey
 ALTER TABLE "GeneralService" ADD CONSTRAINT "GeneralService_location_fkey" FOREIGN KEY ("location") REFERENCES "Nodes"("node_id") ON DELETE CASCADE ON UPDATE CASCADE;
