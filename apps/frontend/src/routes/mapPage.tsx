@@ -129,36 +129,44 @@ function Map() {
   useEffect(() => {
     async function sendUser() {
       const token = await getAccessTokenSilently();
-      const send: userInfo = {
-        user_id: user?.sub,
-        email: user?.email,
-        username: user?.preferred_username,
-        role: "Admin",
-      };
-      await axios.post("/api/userAdding", send, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
       axios
         .get("/api/adminAccess", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         })
-        .then(() => {
+        .then(async () => {
           setIsAdmin(true);
+          const send: userInfo = {
+            id: user?.sub,
+            email: user?.email,
+            username: user?.nickname,
+            role: "Admin",
+          };
+          await axios.post("/api/userAdding", send, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          });
         })
-        .catch();
+        .catch(async () => {
+          const send: userInfo = {
+            id: user?.sub,
+            email: user?.email,
+            username: user?.nickname,
+            role: "Employee",
+          };
+          await axios.post("/api/userAdding", send, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          });
+        });
     }
     sendUser().then();
-  }, [
-    getAccessTokenSilently,
-    user?.email,
-    user?.preferred_username,
-    user?.sub,
-  ]);
+  }, [getAccessTokenSilently, user?.email, user?.nickname, user?.sub]);
 
   // Updates the graph when it has been received from the database
   useEffect(() => {
@@ -495,7 +503,7 @@ function Map() {
               className="absolute w-full"
             >
               <div
-                className="flex flex-col mr-2 ml-0 py-2 px-3 items-center bg-background rounded-xl border-primary border-2 w-[97%]"
+                className="flex flex-col my-1 mr-2 ml-0 py-2 px-3 items-center bg-background rounded-xl border-primary border-2 w-[97%]"
                 onClick={handleInnerClick}
               >
                 <h2>Select Destination</h2>
@@ -503,14 +511,14 @@ function Map() {
                   room={navigatingNodes.start}
                   update={updateStart}
                   label={"Start"}
+                  className="w-full my-1"
                 />
-                <br />
                 <LocationDropdown
                   room={navigatingNodes.end}
                   update={updateEnd}
                   label={"End"}
+                  className="w-full mb-1"
                 />
-                <br />
                 <FormControl fullWidth required>
                   <InputLabel id="demo-simple-select-label" variant="filled">
                     Path Algorithm
@@ -529,16 +537,6 @@ function Map() {
                     <MenuItem value="Dijkstra">Dijkstra</MenuItem>
                   </Select>
                 </FormControl>
-                <br />
-                <Button
-                  type="button"
-                  variant="contained"
-                  className="submitButton"
-                  size="medium"
-                  onClick={handleFormSubmit}
-                >
-                  Submit
-                </Button>
               </div>
             </motion.section>
           )}
@@ -621,8 +619,9 @@ function Map() {
             <></>
           )}
         </div>
-        <div
-          className="
+        {directions.length != 0 ? (
+          <div
+            className="
                     h-[250px]
                     w-[300px]
                     items-center
@@ -634,9 +633,12 @@ function Map() {
                     fixed
                     bottom-7
                     right-32"
-        >
-          <div className="overflow-y-auto h-full">{showDirections()}</div>
-        </div>
+          >
+            <div className="overflow-y-auto h-full">{showDirections()}</div>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

@@ -244,7 +244,10 @@ function FloorNode(props: FloorNodesProps) {
 
   const renderNodes = () => {
     return Object.values(scaledNodes)
-      .filter((node) => node.floor == floor)
+      .filter(
+        (node) =>
+          node.floor == floor && !node.key.toUpperCase().includes("HALL"),
+      )
       .map((node, id) => {
         let nodeColor: string;
         let animation: string = "border border-slate-300 hover:border-red-400";
