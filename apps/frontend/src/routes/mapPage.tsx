@@ -128,38 +128,46 @@ function Map() {
   // Since this is the page that all the users are forwared to on login we store the
   useEffect(() => {
     async function sendUser() {
-      console.log("STUFF IS HAPPENING");
+      //console.log("STUFF IS HAPPENING");
       const token = await getAccessTokenSilently();
-      const send: userInfo = {
-        user_id: user?.sub,
-        email: user?.email,
-        username: user?.preferred_username,
-        role: "Admin",
-      };
-      await axios.post("/api/userAdding", send, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
       axios
         .get("/api/adminAccess", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         })
-        .then(() => {
+        .then(async () => {
           setIsAdmin(true);
+          const send: userInfo = {
+            id: user?.sub,
+            email: user?.email,
+            username: user?.nickname,
+            role: "Admin",
+          };
+          await axios.post("/api/userAdding", send, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          });
         })
-        .catch();
+        .catch(async () => {
+          const send: userInfo = {
+            id: user?.sub,
+            email: user?.email,
+            username: user?.nickname,
+            role: "Employee",
+          };
+          await axios.post("/api/userAdding", send, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          });
+        });
     }
     sendUser().then();
-  }, [
-    getAccessTokenSilently,
-    user?.email,
-    user?.preferred_username,
-    user?.sub,
-  ]);
+  }, [getAccessTokenSilently, user?.email, user?.nickname, user?.sub]);
 
   function log(data: React.RefObject<ReactZoomPanPinchRef>) {
     console.log(data);

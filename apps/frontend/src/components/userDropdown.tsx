@@ -16,13 +16,13 @@ export default function UserDropdown(prop: locationProps) {
   }, []);
 
   async function handleDropDown() {
-    const res: AxiosResponse<{ email: string }[]> =
-      await axios.get<{ email: string }[]>("/api/userAdding");
+    const res: AxiosResponse<{ username: string }[]> =
+      await axios.get<{ username: string }[]>("/api/userAdding");
     const arr: string[] = [];
     // console.log(res.data.length);
     for (let i = 0; res.data.length > i; i++) {
       console.log("here");
-      arr.push(res.data[i].email);
+      arr.push(res.data[i].username);
     }
 
     console.log("THIS IS USER THE ARRAY: " + arr);
