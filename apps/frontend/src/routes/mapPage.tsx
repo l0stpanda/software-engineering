@@ -63,7 +63,7 @@ function Map() {
   const Controls = () => {
     const { zoomIn, zoomOut } = useControls();
     return (
-      <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2 top-10 right-4">
+      <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2 right-4">
         <Button
           onClick={() => zoomIn()}
           type="button"
@@ -370,7 +370,7 @@ function Map() {
 
   function FloorMapButtons() {
     return (
-      <div className="absolute z-10 h-fit my-auto ml-3 bg-primary bottom-7 right-9 rounded-xl border-0">
+      <div className="absolute z-10 h-fit ml-3 bg-primary bottom-20 right-9 rounded-xl border-0">
         <ToggleButtonGroup
           orientation="vertical"
           value={imgState}
@@ -551,7 +551,7 @@ function Map() {
         {/*Map Image Box*/}
         <div
           ref={divRef}
-          className="
+          className="fixed
                     h-screen
                     w-screen"
         >
@@ -563,7 +563,7 @@ function Map() {
               <TransformComponent
                 wrapperStyle={{
                   width: screen.width,
-                  height: "calc(100vh - 55px)",
+                  height: "calc(100vh)",
                   position: "fixed",
                 }}
               >
