@@ -130,7 +130,12 @@ function ServiceRequests() {
           </h1>
           <div className="pb-2">
             <div className="w-20 flex flex-row gap-2 w-full">
-              <UserDropdown room={""} update={updateName} label={"Username"} />
+              <UserDropdown
+                room={reqType}
+                update={updateName}
+                label={"Username"}
+              />
+
               <Select
                 name="Status Type"
                 required={true}
