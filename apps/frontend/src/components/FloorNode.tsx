@@ -64,8 +64,6 @@ function FloorNode(props: FloorNodesProps) {
 
   useEffect(() => {
     console.log("In the useeffect: ", props.inputLoc.start);
-    // it is updating but and i set count to 1 when i want to place the end but this puts the count to 1 all teh time
-    // i want to select the end when the start is defined
   }, [props.inputLoc, props]);
 
   useEffect(() => {
@@ -253,7 +251,10 @@ function FloorNode(props: FloorNodesProps) {
 
   const renderNodes = () => {
     return Object.values(scaledNodes)
-      .filter((node) => node.floor == floor)
+      .filter(
+        (node) =>
+          node.floor == floor && !node.key.toUpperCase().includes("HALL"),
+      )
       .map((node, id) => {
         let nodeColor: string;
         let animation: string = "border border-slate-300 hover:border-red-400";
