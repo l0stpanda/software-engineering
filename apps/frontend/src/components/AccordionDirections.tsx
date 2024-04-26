@@ -18,7 +18,6 @@ interface AccordionDirectionsProps {
 
 function AccordionDirections(props: AccordionDirectionsProps) {
   function onChange(event: React.SyntheticEvent, expanded: boolean) {
-    console.log("Accordian update");
     if (expanded) {
       switch (props.data.floor) {
         case "L2":
