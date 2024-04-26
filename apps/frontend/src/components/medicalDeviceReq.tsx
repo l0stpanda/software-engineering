@@ -10,8 +10,8 @@ import {
   InputLabel,
   MenuItem,
 } from "@mui/material";
-import Slide from "@mui/material/Slide";
-import { TransitionProps } from "@mui/material/transitions";
+//import Slide from "@mui/material/Slide";
+//import { TransitionProps } from "@mui/material/transitions";
 import { useAuth0 } from "@auth0/auth0-react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -22,6 +22,7 @@ import dayjs, { Dayjs } from "dayjs";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import axios from "axios";
 import UserDropdown from "../components/userDropdown.tsx";
+import DeviceDropdown from "./DeviceDropdown.tsx";
 
 function MedicalDeviceReq() {
   const { getAccessTokenSilently } = useAuth0();
@@ -35,16 +36,16 @@ function MedicalDeviceReq() {
     deliveryDate: dayjs(),
   });
 
-  const Transition = React.forwardRef(function Transition(
-    props: TransitionProps & {
-      children: React.ReactElement<string, string>;
-    },
-    ref: React.Ref<unknown>,
-  ) {
-    return (
-      <Slide direction="up" ref={ref} {...props} children={props.children} />
-    );
-  });
+  // const Transition = React.forwardRef(function Transition(
+  //   props: TransitionProps & {
+  //     children: React.ReactElement<string, string>;
+  //   },
+  //   ref: React.Ref<unknown>,
+  // ) {
+  //   return (
+  //     <Slide direction="up" ref={ref} {...props} children={props.children} />
+  //   );
+  // });
 
   const [open, setOpen] = useState(false);
 
@@ -86,6 +87,10 @@ function MedicalDeviceReq() {
     setFormData({ ...formData, roomName: val });
   }
 
+  function updateItem(val: string) {
+    setFormData({ ...formData, medicalDeviceName: val });
+  }
+
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const token = await getAccessTokenSilently();
@@ -108,7 +113,6 @@ function MedicalDeviceReq() {
       alert("Quantity must be an integer between 0 and 100");
       return;
     }
-    setOpen(true); // Open dialog box on successful submission
     try {
       await axios.post("api/medicalDevice", formData, {
         headers: {
@@ -116,6 +120,7 @@ function MedicalDeviceReq() {
           "Content-Type": "application/json",
         },
       });
+      setOpen(true); // Open dialog box on successful submission
     } catch (e) {
       alert(
         "Error storing in the database, make sure nodes/edges are uploaded and you are logged in.",
@@ -183,14 +188,19 @@ function MedicalDeviceReq() {
               update={updateRoom}
               label={"Room"}
             />
-            <TextField
-              onChange={handleFormInput}
-              value={formData.medicalDeviceName}
-              name="medicalDeviceName"
-              id="medicalDeviceName"
-              variant="filled"
-              label="Medical Device Name"
-              required={true}
+            {/*<TextField*/}
+            {/*  onChange={handleFormInput}*/}
+            {/*  value={formData.medicalDeviceName}*/}
+            {/*  name="medicalDeviceName"*/}
+            {/*  id="medicalDeviceName"*/}
+            {/*  variant="filled"*/}
+            {/*  label="Medical Device Name"*/}
+            {/*  required={true}*/}
+            {/*/>*/}
+            <DeviceDropdown
+              room={formData.medicalDeviceName}
+              update={updateItem}
+              label={"Device Name"}
             />
             <TextField
               onChange={handleFormInput}
@@ -275,7 +285,7 @@ function MedicalDeviceReq() {
       <Dialog
         open={open}
         onClose={handleSubmitClose}
-        TransitionComponent={Transition}
+        //TransitionComponent={Transition}
         keepMounted
         aria-describedby="alert-dialog-slide-description"
       >

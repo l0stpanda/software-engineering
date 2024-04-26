@@ -49,7 +49,7 @@ app.use("/api/import", importRouter);
 app.use("/api/login", loginRequest);
 app.use("/api/userAdding", userAdd);
 app.use("/api/read", readRouter);
-
+app.use("/api/inventory", inventory);
 // Enable auth0 enforcement
 app.use(
   auth({
@@ -60,7 +60,7 @@ app.use(
 );
 //app.use("/api/import", importRouter);
 app.use("/api/flowerRequest", flowerRequest);
-app.use("/api/inventory", inventory);
+
 app.use("/api/medicalDevice", medicalDeviceDelivery);
 app.use("/api/lostAndFound", lostAndFound);
 app.use("/api/medicineRequest", medicineRequest);
