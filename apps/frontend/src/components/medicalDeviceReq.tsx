@@ -10,8 +10,8 @@ import {
   InputLabel,
   MenuItem,
 } from "@mui/material";
-import Slide from "@mui/material/Slide";
-import { TransitionProps } from "@mui/material/transitions";
+//import Slide from "@mui/material/Slide";
+//import { TransitionProps } from "@mui/material/transitions";
 import { useAuth0 } from "@auth0/auth0-react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -36,16 +36,16 @@ function MedicalDeviceReq() {
     deliveryDate: dayjs(),
   });
 
-  const Transition = React.forwardRef(function Transition(
-    props: TransitionProps & {
-      children: React.ReactElement<string, string>;
-    },
-    ref: React.Ref<unknown>,
-  ) {
-    return (
-      <Slide direction="up" ref={ref} {...props} children={props.children} />
-    );
-  });
+  // const Transition = React.forwardRef(function Transition(
+  //   props: TransitionProps & {
+  //     children: React.ReactElement<string, string>;
+  //   },
+  //   ref: React.Ref<unknown>,
+  // ) {
+  //   return (
+  //     <Slide direction="up" ref={ref} {...props} children={props.children} />
+  //   );
+  // });
 
   const [open, setOpen] = useState(false);
 
@@ -285,7 +285,7 @@ function MedicalDeviceReq() {
       <Dialog
         open={open}
         onClose={handleSubmitClose}
-        TransitionComponent={Transition}
+        //TransitionComponent={Transition}
         keepMounted
         aria-describedby="alert-dialog-slide-description"
       >
