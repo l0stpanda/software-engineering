@@ -16,7 +16,12 @@ import {
 import { Alert, Snackbar } from "@mui/material";
 import { AlertColor } from "@mui/material/Alert";
 
-//import LoginDialog from "../components/loginDialog.tsx";
+type subTodo = {
+  id_relation: number;
+  task: string;
+  complete: boolean;
+};
+
 type toDoNow = {
   id: number;
   user_id: string | undefined;
@@ -26,8 +31,9 @@ type toDoNow = {
   username: string | undefined;
   role: string | undefined;
   complete: boolean;
-  subtasks: string[];
+  subtasks: subTodo[];
 };
+
 import { styled } from "@mui/material/styles";
 
 const CustomTextField = styled(TextField)({
@@ -58,7 +64,7 @@ export default function DisplayTODOList() {
 
   const [open, setOpen] = useState<boolean>(false);
 
-  const [subtasks, setSubtasks] = useState<string[]>([]);
+  const [subtasks, setSubtasks] = useState<subTodo[]>([]);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -104,7 +110,14 @@ export default function DisplayTODOList() {
 
   const handleSubtaskInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && e.currentTarget.value.trim() !== "") {
-      setSubtasks([...subtasks, e.currentTarget.value.trim()]);
+      setSubtasks([
+        ...subtasks,
+        {
+          task: e.currentTarget.value.trim(),
+          id_relation: 0,
+          complete: false,
+        },
+      ]);
       e.currentTarget.value = "";
     }
   };
@@ -256,7 +269,9 @@ export default function DisplayTODOList() {
               <div className="flex flex-col gap-2">
                 {subtasks.map((subtask, index) => (
                   <div key={index} className="flex gap-2 items-center">
-                    <span className="font-inherit text-inherit">{subtask}</span>
+                    <span className="font-inherit text-inherit">
+                      {subtask.task}
+                    </span>
                   </div>
                 ))}
                 <CustomInput

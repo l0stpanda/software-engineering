@@ -23,6 +23,13 @@ import { AlertColor } from "@mui/material/Alert";
 import AddIcon from "@mui/icons-material/Add";
 import { DeleteOutline } from "@mui/icons-material";
 //import { toDo } from "common/src/toDo.ts";
+
+type subTodo = {
+  id_relation: number;
+  task: string;
+  complete: boolean;
+};
+
 type toDoNow = {
   id: number;
   user_id: string | undefined;
@@ -32,7 +39,7 @@ type toDoNow = {
   username: string | undefined;
   role: string | undefined;
   complete: boolean;
-  subtasks: string[];
+  subtasks: subTodo[];
 };
 
 function TODOListItem(props: toDoNow) {
@@ -105,11 +112,19 @@ function TODOListItem(props: toDoNow) {
     }
     try {
       const token = await getAccessTokenSilently();
-      const newSubtasks = props.subtasks;
-      newSubtasks.push(newSubtask);
+      const newSubtasks = props.subtasks ? props.subtasks : [];
+      newSubtasks.push({
+        id_relation: props.id,
+        task: newSubtask,
+        complete: false,
+      });
       await axios.post(
         `/api/todoStuff/${props.id}`,
-        { subtasks: newSubtasks },
+        {
+          id_relation: props.id,
+          task: newSubtask,
+          complete: false,
+        },
         { headers: { Authorization: `Bearer ${token}` } },
       );
       //call to backend
@@ -152,7 +167,7 @@ function TODOListItem(props: toDoNow) {
                     <div className="flex flex-row gap-2">
                       <Checkbox size="small" />
                       <div className="my-auto" key={index}>
-                        {subtask}
+                        {subtask.task}
                       </div>
                     </div>
                   ))}
