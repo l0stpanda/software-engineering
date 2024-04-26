@@ -1,4 +1,3 @@
-import trashIcon from "../assets/trashicon.png";
 //import React, { useState } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -22,6 +21,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Alert, Snackbar } from "@mui/material";
 import { AlertColor } from "@mui/material/Alert";
 import AddIcon from "@mui/icons-material/Add";
+import { DeleteOutline } from "@mui/icons-material";
 //import { toDo } from "common/src/toDo.ts";
 type toDoNow = {
   id: number;
@@ -147,11 +147,16 @@ function TODOListItem(props: toDoNow) {
             <Divider />
             <AccordionDetails>
               {props.subtasks && props.subtasks.length > 0 ? (
-                <ul>
+                <div className="mb-2">
                   {props.subtasks.map((subtask, index) => (
-                    <li key={index}>{subtask}</li>
+                    <div className="flex flex-row gap-2">
+                      <Checkbox size="small" />
+                      <div className="my-auto" key={index}>
+                        {subtask}
+                      </div>
+                    </div>
                   ))}
-                </ul>
+                </div>
               ) : (
                 <></>
               )}
@@ -173,13 +178,12 @@ function TODOListItem(props: toDoNow) {
           </Accordion>
         </td>
         <td className="p-3 text-sm">
-          <button onClick={() => deleteData(props.id)}>
-            <img
-              src={trashIcon}
-              alt="Delete"
-              className="h-6 hover:scale-125 cursor-pointer"
-            />
-          </button>
+          <IconButton
+            className="px-7 flex justify-center transform hover:scale-125"
+            onClick={() => deleteData(props.id)}
+          >
+            <DeleteOutline color="error" />
+          </IconButton>
         </td>
       </tr>
 

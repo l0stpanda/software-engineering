@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Button, TextField } from "@mui/material";
+import { IconButton, TextField } from "@mui/material";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
+import { DeleteOutline } from "@mui/icons-material";
 
 interface InventoryItemProps {
   id: number;
@@ -90,16 +91,12 @@ function InventoryItem(props: InventoryItemProps) {
           />
         </td>
         <td className="p-3 text-sm">
-          <Button
-            variant="contained"
-            color="primary"
-            component="span"
-            sx={{ borderRadius: "30px", margin: "auto 0" }}
-            className="w-50 text-center self-end"
+          <IconButton
+            className="px-7 flex justify-center transform hover:scale-125"
             onClick={() => props.onDelete(props.id)}
           >
-            Delete
-          </Button>
+            <DeleteOutline color="error" />
+          </IconButton>
         </td>
       </tr>
     </>
