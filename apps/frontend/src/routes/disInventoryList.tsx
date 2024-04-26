@@ -236,8 +236,8 @@ export default function DisplayInventory() {
                   value={inventoryResponse.type}
                   onChange={handleDropdownChange}
                 >
-                  <MenuItem value={"medicine"}>medicine</MenuItem>
-                  <MenuItem value={"medical device"}>medical device</MenuItem>
+                  <MenuItem value={"medicine"}>Medicine</MenuItem>
+                  <MenuItem value={"medical device"}>Medical Device</MenuItem>
                 </Select>
               </FormControl>
 

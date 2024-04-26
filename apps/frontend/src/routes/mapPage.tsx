@@ -27,11 +27,8 @@ import FloorNode from "../components/FloorNode.tsx";
 import { SelectChangeEvent } from "@mui/material/Select";
 // import { ArrowBack } from "@mui/icons-material";
 import LocationDropdown from "../components/locationDropdown.tsx";
+import AccordionDirections from "../components/AccordionDirections.tsx";
 import ModeIcon from "@mui/icons-material/Mode";
-import StraightIcon from "@mui/icons-material/Straight";
-import TurnLeftIcon from "@mui/icons-material/TurnLeft";
-import TurnRightIcon from "@mui/icons-material/TurnRight";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useAuth0 } from "@auth0/auth0-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { userInfo } from "common/src/userInfo.ts";
@@ -63,7 +60,7 @@ function Map() {
   const Controls = () => {
     const { zoomIn, zoomOut } = useControls();
     return (
-      <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2 top-10 right-4">
+      <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2 right-4">
         <Button
           onClick={() => zoomIn()}
           type="button"
@@ -104,12 +101,12 @@ function Map() {
   // }
 
   // Handles changes to the start/end destination boxes
-  function handleFormSubmit() {
-    const cleanStart = navigatingNodes.start.replace("\r", "");
-    const cleanEnd = navigatingNodes.end.replace("\r", "");
-    console.log(cleanStart, cleanEnd);
-    setNavigatingNodes({ start: cleanStart, end: cleanEnd });
-  }
+  // function handleFormSubmit() {
+  //   const cleanStart = navigatingNodes.start.replace("\r", "");
+  //   const cleanEnd = navigatingNodes.end.replace("\r", "");
+  //   //console.log(cleanStart, cleanEnd);
+  //   setNavigatingNodes({ start: cleanStart, end: cleanEnd });
+  // }
 
   // Changes the map image
   const changeFloor = (floor: string) => {
@@ -128,7 +125,6 @@ function Map() {
   // Since this is the page that all the users are forwared to on login we store the
   useEffect(() => {
     async function sendUser() {
-      //console.log("STUFF IS HAPPENING");
       const token = await getAccessTokenSilently();
       axios
         .get("/api/adminAccess", {
@@ -169,17 +165,13 @@ function Map() {
     sendUser().then();
   }, [getAccessTokenSilently, user?.email, user?.nickname, user?.sub]);
 
-  function log(data: React.RefObject<ReactZoomPanPinchRef>) {
-    console.log(data);
-  }
-
   // Updates the graph when it has been received from the database
   useEffect(() => {
     const tempGraph = new Graph();
     tempGraph.loadGraph().then(() => {
       setGraph(tempGraph);
       setUpdate(1);
-      console.log(update);
+      //console.log(update);
     });
   }, [update]);
 
@@ -194,25 +186,36 @@ function Map() {
         pathSize.toString() !==
         [0, 0, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY].toString()
       ) {
-        const padding = 50;
-        const width = pathSize[0] - pathSize[2] + 2 * padding;
-        const height = pathSize[1] - pathSize[3] + 2 * padding;
+        const xPadding = divDimensions.width / 20;
+        const yPadding = divDimensions.height / 20;
+        const width = pathSize[0] - pathSize[2] + xPadding;
+        const height = pathSize[1] - pathSize[3] + yPadding;
         const scale = Math.min(
           divDimensions.width / width,
           divDimensions.height / height,
         );
 
+        const xOffset =
+          (divDimensions.width - (pathSize[0] - pathSize[2]) * scale) / 2;
+        const yOffset =
+          (divDimensions.height - (pathSize[1] - pathSize[3]) * scale) / 2;
+
+        log(xOffset);
+
         transformRef.current.setTransform(
-          -(pathSize[2] - padding) * scale,
-          -(pathSize[3] - padding) * scale,
+          -(pathSize[2] * scale) + xOffset,
+          -(pathSize[3] * scale) + yOffset,
           scale,
         );
       } else {
         transformRef.current.setTransform(0, 0, 1);
       }
     }
-    log(transformRef);
   }, [pathSize, divDimensions, imgState]);
+
+  function log(data: number) {
+    console.log(data);
+  }
 
   const changeAlgorithm = (event: SelectChangeEvent) => {
     setAlgorithm(event.target.value as string);
@@ -222,127 +225,7 @@ function Map() {
   function showDirections() {
     const output: JSX.Element[] = [];
     directions.forEach((data: directionInfo) => {
-      output.push(
-        <div className="border-primary border-t border-b text-text font-header px-1 py-1">
-          <b>Floor {data.floor}: </b>
-        </div>,
-      );
-      for (let i = 0; i < data.directions.length; i++) {
-        if (data.directions[i] == "Continue straight at ") {
-          if (i + 1 == data.directions.length) {
-            output.push(
-              <>
-                <div className="flex text-text font-body px-1 py-2">
-                  <div className="float-left content-center">
-                    <StraightIcon sx={{ fontSize: 40 }}></StraightIcon>
-                  </div>
-                  <div className="flex text-center self-center">
-                    {data.directions[i]} {data.nodes[i]}
-                  </div>
-                </div>
-              </>,
-            );
-          } else {
-            output.push(
-              <>
-                <div className="flex border-primary border-b text-text font-body px-1 py-2">
-                  <div className="float-left content-center">
-                    <StraightIcon sx={{ fontSize: 40 }}></StraightIcon>
-                  </div>
-                  <div className="flex text-center self-center">
-                    {data.directions[i]} {data.nodes[i]}
-                  </div>
-                </div>
-              </>,
-            );
-          }
-        } else if (data.directions[i] == "Turn left at ") {
-          if (i + 1 == data.directions.length) {
-            output.push(
-              <>
-                <div className="flex text-text font-body px-1 py-2">
-                  <div className="float-left content-center">
-                    <TurnLeftIcon sx={{ fontSize: 40 }}></TurnLeftIcon>
-                  </div>
-                  <div className="flex text-center self-center">
-                    {data.directions[i]} {data.nodes[i]}
-                  </div>
-                </div>
-              </>,
-            );
-          } else {
-            output.push(
-              <>
-                <div className="flex border-primary border-b text-text font-body px-1 py-2">
-                  <div className="float-left content-center">
-                    <TurnLeftIcon sx={{ fontSize: 40 }}></TurnLeftIcon>
-                  </div>
-                  <div className="flex text-center self-center">
-                    {data.directions[i]} {data.nodes[i]}
-                  </div>
-                </div>
-              </>,
-            );
-          }
-        } else if (data.directions[i] == "Turn right at ") {
-          if (i + 1 == data.directions.length) {
-            output.push(
-              <>
-                <div className="flex text-text font-body px-1 py-2">
-                  <div className="float-left content-center">
-                    <TurnRightIcon sx={{ fontSize: 40 }}></TurnRightIcon>
-                  </div>
-                  <div className="flex text-center self-center">
-                    {data.directions[i]} {data.nodes[i]}
-                  </div>
-                </div>
-              </>,
-            );
-          } else {
-            output.push(
-              <>
-                <div className="flex border-primary border-b text-text font-body px-1 py-2">
-                  <div className="float-left content-center">
-                    <TurnRightIcon sx={{ fontSize: 40 }}></TurnRightIcon>
-                  </div>
-                  <div className="flex text-center self-center">
-                    {data.directions[i]} {data.nodes[i]}
-                  </div>
-                </div>
-              </>,
-            );
-          }
-        } else {
-          if (i + 1 == data.directions.length) {
-            output.push(
-              <>
-                <div className="flex text-text font-body px-1 py-2">
-                  <div className="float-left content-center">
-                    <TrendingUpIcon sx={{ fontSize: 40 }}></TrendingUpIcon>
-                  </div>
-                  <div className="flex text-center self-center">
-                    {data.directions[i]} {data.nodes[i]}
-                  </div>
-                </div>
-              </>,
-            );
-          } else {
-            output.push(
-              <>
-                <div className="flex border-primary border-b text-text font-body px-1 py-2">
-                  <div className="float-left content-center">
-                    <TrendingUpIcon sx={{ fontSize: 40 }}></TrendingUpIcon>
-                  </div>
-                  <div className="flex text-center self-center">
-                    {data.directions[i]} {data.nodes[i]}
-                  </div>
-                </div>
-              </>,
-            );
-          }
-        }
-      }
-      return data;
+      output.push(<AccordionDirections data={data} />);
     });
     return output;
   }
@@ -364,7 +247,7 @@ function Map() {
 
   function FloorMapButtons() {
     return (
-      <div className="absolute z-10 h-fit my-auto ml-3 bg-primary bottom-7 right-9 rounded-xl border-0">
+      <div className="absolute z-10 h-fit ml-3 bg-primary bottom-20 right-9 rounded-xl border-0">
         <ToggleButtonGroup
           orientation="vertical"
           value={imgState}
@@ -472,7 +355,7 @@ function Map() {
   }
   const [expanded, setExpanded] = useState(false);
   const isOpen = expanded;
-  const Accordion = () => {
+  const AccordionFrame = () => {
     const handleInnerClick = (e: React.MouseEvent<HTMLElement>) => {
       e.stopPropagation();
     };
@@ -497,7 +380,7 @@ function Map() {
               className="absolute w-full"
             >
               <div
-                className="flex flex-col mr-2 ml-0 py-2 px-3 items-center bg-background rounded-xl border-primary border-2 w-[97%]"
+                className="flex flex-col my-1 mr-2 ml-0 py-2 px-3 items-center bg-background rounded-xl border-primary border-2 w-[97%]"
                 onClick={handleInnerClick}
               >
                 <h2>Select Destination</h2>
@@ -505,14 +388,14 @@ function Map() {
                   room={navigatingNodes.start}
                   update={updateStart}
                   label={"Start"}
+                  className="w-full my-1"
                 />
-                <br />
                 <LocationDropdown
                   room={navigatingNodes.end}
                   update={updateEnd}
                   label={"End"}
+                  className="w-full mb-1"
                 />
-                <br />
                 <FormControl fullWidth required>
                   <InputLabel id="demo-simple-select-label" variant="filled">
                     Path Algorithm
@@ -531,16 +414,6 @@ function Map() {
                     <MenuItem value="Dijkstra">Dijkstra</MenuItem>
                   </Select>
                 </FormControl>
-                <br />
-                <Button
-                  type="button"
-                  variant="contained"
-                  className="submitButton"
-                  size="medium"
-                  onClick={handleFormSubmit}
-                >
-                  Submit
-                </Button>
               </div>
             </motion.section>
           )}
@@ -555,7 +428,7 @@ function Map() {
         {/*Map Image Box*/}
         <div
           ref={divRef}
-          className="
+          className="fixed
                     h-screen
                     w-screen"
         >
@@ -567,7 +440,7 @@ function Map() {
               <TransformComponent
                 wrapperStyle={{
                   width: screen.width,
-                  height: "calc(100vh - 55px)",
+                  height: "calc(100vh)",
                   position: "fixed",
                 }}
               >
@@ -603,7 +476,7 @@ function Map() {
               Navigation
             </h2>
           </div>
-          <Accordion />
+          <AccordionFrame />
         </div>
         <div className="fixed bottom-7 left-10">
           {isAdmin ? (
@@ -623,8 +496,9 @@ function Map() {
             <></>
           )}
         </div>
-        <div
-          className="
+        {directions.length != 0 ? (
+          <div
+            className="
                     h-[250px]
                     w-[300px]
                     items-center
@@ -636,9 +510,12 @@ function Map() {
                     fixed
                     bottom-7
                     right-32"
-        >
-          <div className="overflow-y-auto h-full">{showDirections()}</div>
-        </div>
+          >
+            <div className="overflow-y-auto h-full">{showDirections()}</div>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

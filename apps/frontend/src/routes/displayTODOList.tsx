@@ -52,6 +52,7 @@ export default function DisplayTODOList() {
     subtasks: [], // Initialize subtasks with an empty array
   });
 
+  const [change, setChange] = useState<boolean>(true);
   // Use state for records being displayed
   const [records, setRecords] = useState<toDoNow[]>([]);
 
@@ -99,7 +100,7 @@ export default function DisplayTODOList() {
     fetchData().catch((error) => {
       console.error("Error from fetchData promise:", error);
     });
-  }, [getAccessTokenSilently, user]);
+  }, [getAccessTokenSilently, user, change]);
 
   const handleSubtaskInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && e.currentTarget.value.trim() !== "") {
@@ -141,6 +142,7 @@ export default function DisplayTODOList() {
           Authorization: `Bearer ${token}`,
         },
       });
+      setChange(!change);
     } catch (e) {
       console.log(e);
       showSnackbar("Problems have occured", "error");
@@ -210,9 +212,6 @@ export default function DisplayTODOList() {
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Task
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Subtasks
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Delete
