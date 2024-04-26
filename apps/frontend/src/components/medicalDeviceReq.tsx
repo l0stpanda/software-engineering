@@ -113,7 +113,6 @@ function MedicalDeviceReq() {
       alert("Quantity must be an integer between 0 and 100");
       return;
     }
-    setOpen(true); // Open dialog box on successful submission
     try {
       await axios.post("api/medicalDevice", formData, {
         headers: {
@@ -121,6 +120,7 @@ function MedicalDeviceReq() {
           "Content-Type": "application/json",
         },
       });
+      setOpen(true); // Open dialog box on successful submission
     } catch (e) {
       alert(
         "Error storing in the database, make sure nodes/edges are uploaded and you are logged in.",
