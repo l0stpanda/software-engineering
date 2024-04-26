@@ -19,6 +19,7 @@ import LocationDropdown from "../components/locationDropdown.tsx";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import UserDropdown from "../components/userDropdown.tsx";
+import MedicineDropdown from "./MedicineDropdown.tsx";
 function MedicineDeliveryReq() {
   const { getAccessTokenSilently } = useAuth0();
   const [delivery, setDelivery] = useState<MedicineDelivery>({
@@ -62,8 +63,8 @@ function MedicineDeliveryReq() {
     setDelivery({ ...delivery, location: val });
   }
 
-  function handleMedicineInput(e: ChangeEvent<HTMLInputElement>) {
-    setDelivery({ ...delivery, medicineName: e.target.value });
+  function handleMedicineInput(val: string) {
+    setDelivery({ ...delivery, medicineName: val });
   }
 
   function handleQuantityInput(e: ChangeEvent<HTMLInputElement>) {
@@ -158,21 +159,6 @@ function MedicineDeliveryReq() {
         <div className="formDiv">
           <div className="inputDiv">
             <form className="flex flex-col gap-4 my-4" onSubmit={handleSubmit}>
-              {/*<TextField*/}
-              {/*  onChange={handleNameInput}*/}
-              {/*  value={delivery.employeeName}*/}
-              {/*  name="employeeName"*/}
-              {/*  id="employeeName"*/}
-              {/*  variant="filled"*/}
-              {/*  label="Employee Name"*/}
-              {/*  placeholder="Name"*/}
-              {/*  required*/}
-              {/*  /*InputProps={{*/}
-              {/*                    classes: {*/}
-              {/*                      root: "transform hover:scale-105 transition-transform duration-300",*/}
-              {/*                    },*/}
-              {/*                  }}*/}
-              {/*/>*/}
               <UserDropdown
                 room={delivery.employeeName}
                 update={updateName}
@@ -187,18 +173,6 @@ function MedicineDeliveryReq() {
                   onChange={handlePriorityInput}
                   name="priority"
                   required
-                  /*inputProps={{
-                                      classes: {
-                                        root: "transform hover:scale-105 transition-transform duration-300",
-                                      },
-                                    }}
-                                    MenuProps={{
-                                      PaperProps: {
-                                        style: {
-                                          transform: "translateZ(0)",
-                                        },
-                                      },
-                                    }}*/
                 >
                   <MenuItem value="">None</MenuItem>
                   <MenuItem value="Low">Low</MenuItem>
@@ -207,39 +181,17 @@ function MedicineDeliveryReq() {
                   <MenuItem value="Emergency">Emergency</MenuItem>
                 </Select>
               </FormControl>
-              {/*<TextField*/}
-              {/*    onChange={handleLocationInput}*/}
-              {/*    value={delivery.location}*/}
-              {/*    name="location"*/}
-              {/*    id="location"*/}
-              {/*    variant="filled"*/}
-              {/*    label="Location Name"*/}
-              {/*    placeholder="Location"*/}
-              {/*    /*InputProps={{*/}
-              {/*      classes: {*/}
-              {/*        root: "transform hover:scale-105 transition-transform duration-300",*/}
-              {/*      },*/}
-              {/*    }}*/}
-              {/*/>*/}
+
+              <MedicineDropdown
+                room={delivery.medicineName}
+                update={handleMedicineInput}
+                label={"Medicine Name"}
+              />
+
               <LocationDropdown
                 room={delivery.location}
                 update={handleLocationInput}
                 label={"Room"}
-              />
-              <TextField
-                onChange={handleMedicineInput}
-                value={delivery.medicineName}
-                name="medicineName"
-                id="medicineName"
-                variant="filled"
-                label="Medicine Name"
-                placeholder="Medicine Name"
-                required
-                /*InputProps={{
-                                  classes: {
-                                    root: "transform hover:scale-105 transition-transform duration-300",
-                                  },
-                                }}*/
               />
               <TextField
                 onChange={handleQuantityInput}
@@ -262,18 +214,6 @@ function MedicineDeliveryReq() {
                   onChange={handleStatusInput}
                   name="status"
                   required
-                  /*inputProps={{
-                                      classes: {
-                                        root: "transform hover:scale-105 transition-transform duration-300",
-                                      },
-                                    }}
-                                    MenuProps={{
-                                      PaperProps: {
-                                        style: {
-                                          transform: "translateZ(0)",
-                                        },
-                                      },
-                                    }}*/
                 >
                   <MenuItem value="">None</MenuItem>
                   <MenuItem value="Unassigned">Unassigned</MenuItem>

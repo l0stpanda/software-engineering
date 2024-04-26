@@ -22,6 +22,7 @@ import dayjs, { Dayjs } from "dayjs";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import axios from "axios";
 import UserDropdown from "../components/userDropdown.tsx";
+import DeviceDropdown from "./DeviceDropdown.tsx";
 
 function MedicalDeviceReq() {
   const { getAccessTokenSilently } = useAuth0();
@@ -84,6 +85,10 @@ function MedicalDeviceReq() {
 
   function updateRoom(val: string) {
     setFormData({ ...formData, roomName: val });
+  }
+
+  function updateItem(val: string) {
+    setFormData({ ...formData, medicalDeviceName: val });
   }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -183,14 +188,19 @@ function MedicalDeviceReq() {
               update={updateRoom}
               label={"Room"}
             />
-            <TextField
-              onChange={handleFormInput}
-              value={formData.medicalDeviceName}
-              name="medicalDeviceName"
-              id="medicalDeviceName"
-              variant="filled"
-              label="Medical Device Name"
-              required={true}
+            {/*<TextField*/}
+            {/*  onChange={handleFormInput}*/}
+            {/*  value={formData.medicalDeviceName}*/}
+            {/*  name="medicalDeviceName"*/}
+            {/*  id="medicalDeviceName"*/}
+            {/*  variant="filled"*/}
+            {/*  label="Medical Device Name"*/}
+            {/*  required={true}*/}
+            {/*/>*/}
+            <DeviceDropdown
+              room={formData.medicalDeviceName}
+              update={updateItem}
+              label={"Device Name"}
             />
             <TextField
               onChange={handleFormInput}
