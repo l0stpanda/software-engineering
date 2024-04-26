@@ -5,6 +5,7 @@ import TurnLeftIcon from "@mui/icons-material/TurnLeft";
 import TurnRightIcon from "@mui/icons-material/TurnRight";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import Accordion from "@mui/material/Accordion";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 interface AccordionDirectionsProps {
   data: directionInfo;
@@ -131,7 +132,9 @@ function AccordionDirections(props: AccordionDirectionsProps) {
   return (
     <>
       <Accordion>
-        <AccordionSummary>{data.floor}</AccordionSummary>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <b>Floor: {data.floor}</b>
+        </AccordionSummary>
         <AccordionDetails>{output}</AccordionDetails>
       </Accordion>
     </>
