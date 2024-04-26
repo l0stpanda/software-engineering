@@ -92,16 +92,12 @@ router.delete("/:id", async function (req: Request, res: Response) {
 
 router.post("/:id", async function (req: Request, res: Response) {
   const id = parseInt(req.params.id);
-  const input: { bool: boolean } = req.body;
-  console.log("BOOL BACKEND IS " + input.bool);
   try {
     await PrismaClient.todo.update({
       where: {
         id: id,
       },
-      data: {
-        complete: input.bool,
-      },
+      data: req.body,
     });
   } catch (e) {
     console.log(e);
