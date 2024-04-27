@@ -143,12 +143,6 @@ function App() {
           path: "credit",
           element: <LoadingPage component={CreditPage} adminOnly={false} />,
         },
-          {
-              path: "maintenance",
-              element: (
-                  <LoadingPage component={Maintenance} adminOnly={false} />
-              ),
-          },
       ],
     },
   ]);
