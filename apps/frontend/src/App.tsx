@@ -30,7 +30,6 @@ import PendingSanitationRequest from "./routes/displaySanitationReqs.tsx";
 import AboutPage from "./routes/aboutPage.tsx";
 import ServiceRequests from "./routes/serviceRequests.tsx";
 import CreditPage from "./routes/creditPage.tsx";
-import Maintenance from "../src/components/maintenanceReq.tsx";
 
 function App() {
   const router = createBrowserRouter([

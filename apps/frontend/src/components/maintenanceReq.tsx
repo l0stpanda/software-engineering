@@ -33,7 +33,7 @@ function MaintenanceReq() {
         date: dayjs(),
         priority: "Medium",
         status: "Unassigned",
-        type: "",
+        maintainType: "",
         location: "",
     });
 
@@ -60,7 +60,7 @@ function MaintenanceReq() {
     }
 
     function handleTypeInput(e: SelectChangeEvent) {
-        setFormData({ ...formData, type: e.target.value});
+        setFormData({ ...formData, maintainType: e.target.value});
     }
 
     function clear() {
@@ -69,7 +69,7 @@ function MaintenanceReq() {
             date: dayjs(),
             priority: "Medium",
             status: "Unassigned",
-            type: "",
+            maintainType: "",
             location: "",
         });
     }
@@ -89,19 +89,19 @@ function MaintenanceReq() {
             formData.date == null ||
             formData.priority == "" ||
             formData.status == "" ||
-            formData.type == ""
+            formData.maintainType == ""
         ) {
             return;
         }
 
         try {
-            await axios.post("api/maintenanceReq", formData, {
+            await axios.post("api/maint", formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
                 },
             });
-        } catch (e) {
+      } catch (e) {
             alert(
                 "Error storing in the database, make sure nodes/edges are uploaded and you are logged in.",
             );
@@ -172,7 +172,7 @@ function MaintenanceReq() {
                                 name="Type"
                                 labelId="type"
                                 id="type"
-                                value={formData.type}
+                                value={formData.maintainType}
                                 onChange={handleTypeInput}
                             >
                                 <MenuItem value={"Electrician"}>Electrician</MenuItem>
@@ -237,7 +237,7 @@ function MaintenanceReq() {
                     <br />
                     Status: {formData.status}
                     <br />
-                    Type: {formData.type}
+                    Type: {formData.maintainType}
                 </DialogContent>
 
                 <DialogActions>

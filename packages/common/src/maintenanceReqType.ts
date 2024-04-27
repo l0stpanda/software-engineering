@@ -5,6 +5,6 @@ export interface maintenanceReqType {
         date: Dayjs | null;
         priority: string;
         status: string;
-        type: string;
+        maintainType: string;
         location: string;
 }
