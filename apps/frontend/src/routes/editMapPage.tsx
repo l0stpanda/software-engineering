@@ -45,7 +45,7 @@ function EditMap() {
   const Controls = () => {
     const { zoomIn, zoomOut } = useControls();
     return (
-      <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2">
+      <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2 right-4">
         <Button
           onClick={() => zoomIn()}
           type="button"
@@ -97,7 +97,7 @@ function EditMap() {
 
   function FloorMapButtons() {
     return (
-      <div className="h-fit my-auto ml-3 bg-secondary">
+      <div className="absolute z-10 h-fit ml-3 bg-primary bottom-5 right-9 rounded-xl border-0">
         <ToggleButtonGroup
           orientation="vertical"
           value={imgState}
@@ -111,22 +111,92 @@ function EditMap() {
             }
           }}
           size="large"
-          color="secondary"
+          color="standard"
           fullWidth
         >
-          <ToggleButton value={floor3}>
+          <ToggleButton
+            value={floor3}
+            style={{ color: "white" }}
+            sx={{
+              borderRadius: "0.75rem",
+              "&.Mui-selected": {
+                backgroundColor: "#4497b3",
+              },
+              "&:hover": {
+                backgroundColor: "#4497b3",
+                transition: "background-color 0.3s ease-in-out",
+              },
+            }}
+            disabled={imgState === floor3}
+          >
             <strong>3</strong>
           </ToggleButton>
-          <ToggleButton value={floor2}>
+          <ToggleButton
+            value={floor2}
+            style={{ color: "white" }}
+            sx={{
+              borderRadius: "0.75rem",
+              "&.Mui-selected": {
+                backgroundColor: "#4497b3",
+              },
+              "&:hover": {
+                backgroundColor: "#4497b3",
+                transition: "background-color 0.3s ease-in-out",
+              },
+            }}
+            disabled={imgState === floor2}
+          >
             <strong>2</strong>
           </ToggleButton>
-          <ToggleButton value={floor1}>
+          <ToggleButton
+            value={floor1}
+            style={{ color: "white" }}
+            sx={{
+              borderRadius: "0.75rem",
+              "&.Mui-selected": {
+                backgroundColor: "#4497b3",
+              },
+              "&:hover": {
+                backgroundColor: "#4497b3",
+                transition: "background-color 0.3s ease-in-out",
+              },
+            }}
+            disabled={imgState === floor1}
+          >
             <strong>1</strong>
           </ToggleButton>
-          <ToggleButton value={lowerLevel1}>
+          <ToggleButton
+            value={lowerLevel1}
+            style={{ color: "white" }}
+            sx={{
+              borderRadius: "0.75rem",
+              "&.Mui-selected": {
+                backgroundColor: "#4497b3",
+              },
+              "&:hover": {
+                backgroundColor: "#4497b3",
+                transition: "background-color 0.3s ease-in-out",
+              },
+            }}
+            disabled={imgState === lowerLevel1}
+          >
             <strong>L1</strong>
           </ToggleButton>
-          <ToggleButton value={lowerLevel2}>
+          <ToggleButton
+            value={lowerLevel2}
+            style={{ color: "white" }}
+            sx={{
+              borderRadius: "0.75rem",
+              "&.Mui-selected": {
+                backgroundColor: "#4497b3",
+              },
+              "&:hover": {
+                backgroundColor: "#4497b3",
+                transition: "background-color 0.3s ease-in-out",
+              },
+            }}
+            disabled={imgState === lowerLevel2}
+          >
             <strong>L2</strong>
           </ToggleButton>
         </ToggleButtonGroup>
@@ -235,30 +305,76 @@ function EditMap() {
   }
 
   return (
-    <div className="flex justify-center">
+    <div className="">
       <BackgroundPattern />
 
       {/*Map and Edit Buttons*/}
-      <div
-        className="my-8
-                   justify-center
-                   flex
-                   flex-row-reverse
-                   max-w-screen-2xl"
-      >
-        <div className="flex flex-row w-2/3">
+      <div className="flex flex-row">
+        <div className="flex flex-col items-center bg-background border-primary border-e-2 w-1/3 h-screen">
+          <div className="mb-20 mt-20 px-10 w-full items-center">
+            <h1 className="text-primary font-header font-bold text-2xl text-center">
+              Node Editing
+            </h1>
+            <div className="">
+              <ToggleButtonGroup
+                value={mode}
+                exclusive
+                onChange={handleEditMode}
+                orientation="vertical"
+                fullWidth
+                color="primary"
+              >
+                <ToggleButton value="add_node">Add Node</ToggleButton>
+                <ToggleButton value="delete_node">Delete Node</ToggleButton>
+                <ToggleButton value="move_node">Move Node</ToggleButton>
+              </ToggleButtonGroup>
+            </div>
+          </div>
+          <div className="px-10 w-full items-center">
+            <ToggleButtonGroup
+              value={mode}
+              exclusive
+              onChange={handleEditMode}
+              orientation="vertical"
+              fullWidth
+              color="primary"
+            >
+              <h1 className="text-primary font-header font-bold text-2xl pt-5 text-center">
+                Edge Editing
+              </h1>
+              <ToggleButton value="add_edge">Add Edge</ToggleButton>
+              <ToggleButton value="delete_edge">Delete Edge</ToggleButton>
+            </ToggleButtonGroup>
+          </div>
+        </div>
+        <div className="flex h-screen">
           {/*Map Image Box*/}
-          <div
-            ref={divRef}
-            className="
-        h-full
-        flex-grow
-        ml-1"
-          >
-            <TransformWrapper disabled={isMoveable}>
-              <div className="border-2 border-primary rounded-xl overflow-clip">
+          <div ref={divRef} className="object-center">
+            <TransformWrapper disabled={isMoveable} disablePadding={true}>
+              <div className="">
+                <FloorMapButtons />
                 <Controls />
-                <TransformComponent>
+                <div className="absolute z-10">
+                  {/*Form for adding a new node*/}
+                  {isOpen && (
+                    <EditNodeForm
+                      node={
+                        new MapNode("", world.x, world.y, "", "", "", "", "")
+                      }
+                      mode={mode}
+                    />
+                  )}
+                  {clicked && mode !== "add_node" && mode !== "delete_node" && (
+                    <EditNodeForm node={clicked} mode={mode} />
+                  )}
+                  {mode === "delete_node" && openDeleteNode && (
+                    <DeleteNodeForm node={clicked} />
+                  )}
+                  {/*Form for creating edge*/}
+                  {openEdgeCreation && <CreateEdgeForm nodes={edgeNodes} />}
+                  {openEdgeDeletion && <DeleteEdgeForm nodes={edgeNodes} />}
+                </div>
+                <TransformComponent wrapperStyle={{ objectFit: "contain" }}>
                   <EditMapViewGraph
                     imageSrc={imgState}
                     graph={graph}
@@ -273,80 +389,11 @@ function EditMap() {
             </TransformWrapper>
           </div>
           {/*Buttons for displaying floor images*/}
-          <FloorMapButtons />
         </div>
         {/*boxes.*/}
-        <div
-          className="flex flex-col
-                w-1/4"
-        >
-          {/*Form for adding a new node*/}
-          {isOpen && (
-            <EditNodeForm
-              node={new MapNode("", world.x, world.y, "", "", "", "", "")}
-              mode={mode}
-            />
-          )}
-          {clicked && mode !== "add_node" && mode !== "delete_node" && (
-            <EditNodeForm node={clicked} mode={mode} />
-          )}
-          {mode === "delete_node" && openDeleteNode && (
-            <DeleteNodeForm node={clicked} />
-          )}
-          {/*Form for creating edge*/}
-          {openEdgeCreation && <CreateEdgeForm nodes={edgeNodes} />}
-          {openEdgeDeletion && <DeleteEdgeForm nodes={edgeNodes} />}
-
-          <div
-            className="mr-8
-                    ml-5
-                    py-5
-                    px-0
-                    flex
-                    flex-col
-                    items-center
-                    bg-background
-                    rounded-xl
-                    border-primary
-                    border-2"
-          >
-            <h1
-              className="text-primary
-              font-header
-              font-bold
-              text-2xl"
-            >
-              Node Editing
-            </h1>
-            <div className="px-10 w-full">
-              <ToggleButtonGroup
-                value={mode}
-                exclusive
-                onChange={handleEditMode}
-                orientation="vertical"
-                fullWidth
-                color="primary"
-              >
-                <ToggleButton value="add_node">Add Node</ToggleButton>
-                <ToggleButton value="delete_node">Delete Node</ToggleButton>
-                <ToggleButton value="move_node">Move Node</ToggleButton>
-                <h1
-                  className="text-primary
-              font-header
-              font-bold
-              text-2xl
-              pt-5"
-                >
-                  Edge Editing
-                </h1>
-                <ToggleButton value="add_edge">Add Edge</ToggleButton>
-                <ToggleButton value="delete_edge">Delete Edge</ToggleButton>
-              </ToggleButtonGroup>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
 }
+
 export default EditMap;
