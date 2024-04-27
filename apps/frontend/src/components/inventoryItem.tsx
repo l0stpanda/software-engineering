@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Button, TextField } from "@mui/material";
+import { IconButton, TextField } from "@mui/material";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
+import { DeleteOutline } from "@mui/icons-material";
 
 interface InventoryItemProps {
   id: number;
@@ -56,17 +57,31 @@ function InventoryItem(props: InventoryItemProps) {
     }
   }
 
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+  async function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const input = event.target.value;
+    const token = await getAccessTokenSilently();
+    let prevNumber: number = 0;
+    let send: number;
     if (input.trim() === "") {
-      // If input is empty, set quantity to "0" and update the server with 0
-      setQuantity("0");
-      updateQuant(0);
+      setQuantity("");
     } else {
-      const newQuant = parseInt(input, 10);
-      if (!isNaN(newQuant)) {
+      send = parseInt(input, 10);
+      if (!isNaN(send)) {
         setQuantity(input);
-        updateQuant(newQuant);
+      }
+      const values = await axios.get("/api/inventory", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(values.data);
+      for (let i = 0; i < values.data.length; i++) {
+        if (values.data[i].name == props.name) {
+          prevNumber = values.data[i].quant;
+        }
+      }
+      if (prevNumber != undefined && prevNumber < send) {
+        updateQuant(send).then();
       }
     }
   }
@@ -90,16 +105,12 @@ function InventoryItem(props: InventoryItemProps) {
           />
         </td>
         <td className="p-3 text-sm">
-          <Button
-            variant="contained"
-            color="primary"
-            component="span"
-            sx={{ borderRadius: "30px", margin: "auto 0" }}
-            className="w-50 text-center self-end"
+          <IconButton
+            className="px-7 flex justify-center transform hover:scale-125"
             onClick={() => props.onDelete(props.id)}
           >
-            Delete
-          </Button>
+            <DeleteOutline color="error" />
+          </IconButton>
         </td>
       </tr>
     </>

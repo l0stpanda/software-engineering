@@ -56,60 +56,52 @@ export default function CreditPage() {
           <div className="grid grid-cols-2">
             <a href="https://www.jetbrains.com/webstorm/">
               <div className="flex flex-col px-5 py-5">
-                <div className="h-10 w-10 self-center">
+                <div className="h-32 w-32 self-center box-content bg-background p-5 pb-11 rounded-lg drop-shadow-lg opacity-80">
                   <img
                     src={webstormImg}
                     className="object-contain h-full w-full"
                     alt="Webstorm Logo"
                   />
-                </div>
-                <div>
-                  <h3 className="text-center">Webstorm</h3>
+                  <h3 className="text-center pt-3">Webstorm</h3>
                 </div>
               </div>
             </a>
 
             <a href="https://github.com/">
               <div className="flex flex-col px-5 py-5">
-                <div className="h-10 w-10 self-center">
+                <div className="h-32 w-32 self-center box-content bg-background p-5 pb-11 rounded-lg drop-shadow-lg opacity-80">
                   <img
                     src={githubImg}
                     className="object-contain h-full w-full"
                     alt="Github Logo"
                   />
-                </div>
-                <div>
-                  <h3 className="text-center">Github</h3>
+                  <h3 className="text-center pt-3">Github</h3>
                 </div>
               </div>
             </a>
 
             <a href="https://taiga.io/">
               <div className="flex flex-col px-5 py-5">
-                <div className="h-10 w-10 self-center">
+                <div className="h-32 w-32 self-center box-content bg-background p-5 pb-11 rounded-lg drop-shadow-lg opacity-80">
                   <img
                     src={taigaImg}
                     className="object-contain h-full w-full"
                     alt="Taiga Logo"
                   />
-                </div>
-                <div>
-                  <h3 className="text-center">Taiga</h3>
+                  <h3 className="text-center pt-3">Taiga</h3>
                 </div>
               </div>
             </a>
 
             <a href="https://discord.com/">
               <div className="flex flex-col px-5 py-5">
-                <div className="h-10 w-10 self-center">
+                <div className="h-32 w-32 self-center box-content bg-background p-5 pb-11 rounded-lg drop-shadow-lg opacity-80">
                   <img
                     src={discordImg}
                     className="object-contain h-full w-full"
                     alt="Discord Logo"
                   />
-                </div>
-                <div>
-                  <h3 className="text-center">Discord</h3>
+                  <h3 className="text-center pt-3">Discord</h3>
                 </div>
               </div>
             </a>
@@ -122,120 +114,104 @@ export default function CreditPage() {
           <div className="grid grid-cols-4 justify-evenly">
             <a href="https://auth0.com/">
               <div className="flex flex-col px-5 py-5">
-                <div className="h-10 w-10 self-center">
+                <div className="h-32 w-32 self-center box-content bg-background p-5 pb-11 rounded-lg drop-shadow-lg opacity-80">
                   <img
                     src={auth0Img}
                     className="object-contain h-full w-full"
                     alt="Auth0 Logo"
                   />
-                </div>
-                <div>
-                  <h3 className="text-center">Auth0</h3>
+                  <h3 className="text-center pt-3">Auth0</h3>
                 </div>
               </div>
             </a>
 
             <a href="https://mui.com/material-ui/">
               <div className="flex flex-col px-5 py-5">
-                <div className="h-10 w-10 self-center">
+                <div className="h-32 w-32 self-center box-content bg-background p-5 pb-11 rounded-lg drop-shadow-lg opacity-80">
                   <img
                     src={materialUI}
                     className="object-contain h-full w-full"
                     alt="Material UI Logo"
                   />
-                </div>
-                <div>
-                  <h3 className="text-center">Material UI</h3>
+                  <h3 className="text-center pt-3">Material UI</h3>
                 </div>
               </div>
             </a>
 
             <a href="https://www.axios.com/">
               <div className="flex flex-col px-5 py-5">
-                <div className="h-10 w-10 self-center">
+                <div className="h-32 w-32 self-center box-content bg-background p-5 pb-11 rounded-lg drop-shadow-lg opacity-80">
                   <img
                     src={axiosImg}
                     className="object-contain h-full w-full"
                     alt="Axios Logo"
                   />
-                </div>
-                <div>
-                  <h3 className="text-center">Axios</h3>
+                  <h3 className="text-center pt-3">Axios</h3>
                 </div>
               </div>
             </a>
 
             <a href="https://getbootstrap.com/">
               <div className="flex flex-col px-5 py-5">
-                <div className="h-10 w-10 self-center">
+                <div className="h-32 w-32 self-center box-content bg-background p-5 pb-11 rounded-lg drop-shadow-lg opacity-80">
                   <img
                     src={bootstrapImg}
                     className="object-contain h-full w-full"
                     alt="Bootstrap Logo"
                   />
-                </div>
-                <div>
-                  <h3 className="text-center">Bootstrap</h3>
+                  <h3 className="text-center pt-3">Bootstrap</h3>
                 </div>
               </div>
             </a>
 
             <a href="https://day.js.org/">
               <div className="flex flex-col px-5 py-5">
-                <div className="h-10 w-10 self-center">
+                <div className="h-32 w-32 self-center box-content bg-background p-5 pb-11 rounded-lg drop-shadow-lg opacity-80">
                   <img
                     src={dayjsImg}
                     className="object-contain h-full w-full"
                     alt="DayJS Logo"
                   />
-                </div>
-                <div>
-                  <h3 className="text-center">DayJS</h3>
+                  <h3 className="text-center pt-3">DayJS</h3>
                 </div>
               </div>
             </a>
 
             <a href="https://tailwindcss.com/">
               <div className="flex flex-col px-5 py-5">
-                <div className="h-10 w-10 self-center">
+                <div className="h-32 w-32 self-center box-content bg-background p-5 pb-11 rounded-lg drop-shadow-lg opacity-80">
                   <img
                     src={tailwindImg}
                     className="object-contain h-full w-full"
                     alt="Tailwind Logo"
                   />
-                </div>
-                <div>
-                  <h3 className="text-center">Tailwind</h3>
+                  <h3 className="text-center pt-3">Tailwind</h3>
                 </div>
               </div>
             </a>
 
             <a href="https://prettier.io/">
               <div className="flex flex-col px-5 py-5">
-                <div className="h-10 w-10 self-center">
+                <div className="h-32 w-32 self-center box-content bg-background p-5 pb-11 rounded-lg drop-shadow-lg opacity-80">
                   <img
                     src={prettierImg}
                     className="object-contain h-full w-full"
                     alt="Prettier Logo"
                   />
-                </div>
-                <div>
-                  <h3 className="text-center">Prettier</h3>
+                  <h3 className="text-center pt-3">Prettier</h3>
                 </div>
               </div>
             </a>
 
             <a href="https://sass-lang.com/">
               <div className="flex flex-col px-5 py-5">
-                <div className="h-10 w-10 self-center">
+                <div className="h-32 w-32 self-center box-content bg-background p-5 pb-11 rounded-lg drop-shadow-lg opacity-80">
                   <img
                     src={sassImg}
                     className="object-contain h-full w-full"
                     alt="Sass Logo"
                   />
-                </div>
-                <div>
-                  <h3 className="text-center">Sass</h3>
+                  <h3 className="text-center pt-3">Sass</h3>
                 </div>
               </div>
             </a>
@@ -248,90 +224,78 @@ export default function CreditPage() {
           <div className="grid grid-cols-3 justify-evenly">
             <a href="https://vitejs.dev/">
               <div className="flex flex-col px-5 py-5">
-                <div className="h-10 w-10 self-center">
+                <div className="h-32 w-32 self-center box-content bg-background p-5 pb-11 rounded-lg drop-shadow-lg opacity-80">
                   <img
                     src={viteImg}
                     className="object-contain h-full w-full"
                     alt="Vite Logo"
                   />
-                </div>
-                <div>
-                  <h3 className="text-center">Vite</h3>
+                  <h3 className="text-center pt-3">Vite</h3>
                 </div>
               </div>
             </a>
 
             <a href="https://yarnpkg.com/">
               <div className="flex flex-col px-5 py-5">
-                <div className="h-10 w-10 self-center">
+                <div className="h-32 w-32 self-center box-content bg-background p-5 pb-11 rounded-lg drop-shadow-lg opacity-80">
                   <img
                     src={yarnImg}
                     className="object-contain h-full w-full"
                     alt="Yarn Logo"
                   />
-                </div>
-                <div>
-                  <h3 className="text-center">Yarn</h3>
+                  <h3 className="text-center pt-3">Yarn</h3>
                 </div>
               </div>
             </a>
 
             <a href="https://react.dev/">
               <div className="flex flex-col px-5 py-5">
-                <div className="h-10 w-10 self-center">
+                <div className="h-32 w-32 self-center box-content bg-background p-5 pb-11 rounded-lg drop-shadow-lg opacity-80">
                   <img
                     src={reactImg}
                     className="object-contain h-full w-full"
                     alt="React Logo"
                   />
-                </div>
-                <div>
-                  <h3 className="text-center">React</h3>
+                  <h3 className="text-center pt-3">React</h3>
                 </div>
               </div>
             </a>
 
             <a href="https://www.prisma.io/">
               <div className="flex flex-col px-5 py-5">
-                <div className="h-10 w-10 self-center">
+                <div className="h-32 w-32 self-center box-content bg-background p-5 pb-11 rounded-lg drop-shadow-lg opacity-80">
                   <img
                     src={prismaImg}
                     className="object-contain h-full w-full"
                     alt="Prisma Logo"
                   />
-                </div>
-                <div>
-                  <h3 className="text-center">Prisma</h3>
+                  <h3 className="text-center pt-3">Prisma</h3>
                 </div>
               </div>
             </a>
 
             <a href="https://www.postgresql.org/">
               <div className="flex flex-col px-5 py-5">
-                <div className="h-10 w-10 self-center">
+                <div className="h-32 w-32 self-center box-content bg-background p-5 pb-11 rounded-lg drop-shadow-lg opacity-80">
                   <img
                     src={postgresImg}
                     className="object-contain h-full w-full"
                     alt="PostgresSQL Logo"
                   />
-                </div>
-                <div>
-                  <h3 className="text-center">PostgresSQL</h3>
+                  <h3 className="text-center pt-3">PostgresSQL</h3>
                 </div>
               </div>
             </a>
 
             <a href="https://expressjs.com/">
               <div className="flex flex-col px-5 py-5">
-                <div className="h-10 w-10 self-center">
+                <div className="h-32 w-32 self-center box-content bg-background p-5 pb-11 rounded-lg drop-shadow-lg opacity-80">
                   <img
                     src={expressImg}
                     className="object-contain h-full w-full"
                     alt="Express Logo"
                   />
-                </div>
-                <div>
-                  <h3 className="text-center">Express</h3>
+                  <h3 className="text-center pt-3">Express</h3>
                 </div>
               </div>
             </a>

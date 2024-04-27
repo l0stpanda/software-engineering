@@ -214,9 +214,6 @@ export default function DisplayTODOList() {
               Task
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Subtasks
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Delete
             </th>
             {/* Dynamically generate column headers */}

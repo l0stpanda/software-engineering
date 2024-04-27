@@ -31,6 +31,7 @@ export interface FloorNodeInfo {
   x: number;
   y: number;
   floor: string;
+  type: string;
 }
 
 function FloorNode(props: FloorNodesProps) {
@@ -239,6 +240,7 @@ function FloorNode(props: FloorNodesProps) {
       x: node.getX() * (divDimensions.width / imgDimensions.width),
       y: node.getY() * (divDimensions.height / imgDimensions.height),
       floor: node.getFloor(),
+      type: node.getNodeType(),
     };
   });
 
@@ -246,7 +248,7 @@ function FloorNode(props: FloorNodesProps) {
     return Object.values(scaledNodes)
       .filter(
         (node) =>
-          node.floor == floor && !node.key.toUpperCase().includes("HALL"),
+          node.floor == floor && !node.type.toUpperCase().includes("HALL"),
       )
       .map((node, id) => {
         let nodeColor: string;
