@@ -25,6 +25,7 @@ import { DeleteOutline } from "@mui/icons-material";
 //import { toDo } from "common/src/toDo.ts";
 
 type subTodo = {
+  id: number;
   id_relation: number;
   task: string;
   complete: boolean;
@@ -114,6 +115,7 @@ function TODOListItem(props: toDoNow) {
       const token = await getAccessTokenSilently();
       const newSubtasks = props.subtasks ? props.subtasks : [];
       newSubtasks.push({
+        id: 0,
         id_relation: props.id,
         task: newSubtask,
         complete: false,
@@ -138,6 +140,25 @@ function TODOListItem(props: toDoNow) {
 
   function handleSubtaskChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setNewSubtask(e.target.value);
+  }
+
+  async function handleCheckedSubtask(e: React.ChangeEvent<HTMLInputElement>) {
+    try {
+      const token = await getAccessTokenSilently();
+      console.log("editing subtask: " + e.target.name);
+      await axios.post(
+        `/api/subTodo/${parseInt(e.target.name)}`,
+        {
+          complete: !e.target.checked,
+        },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      //call to backend
+    } catch (e) {
+      console.log(e);
+      showSnackbar("Could not add new subtask", "error");
+      return;
+    }
   }
 
   return (
@@ -165,7 +186,12 @@ function TODOListItem(props: toDoNow) {
                 <div className="mb-2">
                   {props.subtasks.map((subtask, index) => (
                     <div className="flex flex-row gap-2">
-                      <Checkbox size="small" />
+                      <Checkbox
+                        size="small"
+                        checked={subtask.complete}
+                        name={subtask.id.toString()}
+                        onChange={handleCheckedSubtask}
+                      />
                       <div className="my-auto" key={index}>
                         {subtask.task}
                       </div>

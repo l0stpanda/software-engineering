@@ -17,6 +17,7 @@ import { Alert, Snackbar } from "@mui/material";
 import { AlertColor } from "@mui/material/Alert";
 
 type subTodo = {
+  id: number;
   id_relation: number;
   task: string;
   complete: boolean;
@@ -114,6 +115,7 @@ export default function DisplayTODOList() {
       setSubtasks([
         ...subtasks,
         {
+          id: 0,
           task: e.currentTarget.value.trim(),
           id_relation: 0,
           complete: false,
