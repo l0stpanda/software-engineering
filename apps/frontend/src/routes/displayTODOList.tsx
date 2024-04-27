@@ -92,7 +92,8 @@ export default function DisplayTODOList() {
               Authorization: `Bearer ${token}`,
             },
           });
-          console.log(response.data);
+          const dataStuff: toDoNow = response.data;
+          console.log(dataStuff);
           setRecords(response.data); // Assuming the data is an array of lost and found request data
         } else {
           alert("You need to login");

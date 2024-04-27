@@ -88,6 +88,9 @@ router.get("/:email", async function (req: Request, res: Response) {
         where: {
           email: email_identifier,
         },
+        include: {
+          subtasks: true,
+        },
       }),
     );
   } catch (e) {
