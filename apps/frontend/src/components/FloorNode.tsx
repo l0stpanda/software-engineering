@@ -24,6 +24,9 @@ interface FloorNodesProps {
   pathSetter: (a: string[]) => void;
   updateStartAndEnd: (startNode: string, endNode: string) => void;
   updateEnd: (endNode: string) => void;
+  mode: string;
+  getBookings: (longName: string) => string[];
+  setBookings: (a: string[]) => void;
 }
 
 export interface FloorNodeInfo {
@@ -83,20 +86,22 @@ function FloorNode(props: FloorNodesProps) {
     if (res !== undefined) {
       const longName: string = res.getLongName();
 
-      if (props.inputLoc.start !== undefined && count === 0) {
-        //console.log("In the click: ", props.inputLoc.start);
-        //console.log("updating with: ", longName);
-        props.updateStartAndEnd(longName, "");
-        setCount(1);
-      } else if (count === 0) {
-        props.updateStartAndEnd(longName, "");
-        setCount(1);
-      } else if (count === 1) {
-        //console.log("update end");
-        props.updateEnd(longName);
-        setCount(0);
+      if (props.mode === "pathfinding") {
+        if (props.inputLoc.start !== undefined && count === 0) {
+          //console.log("In the click: ", props.inputLoc.start);
+          //console.log("updating with: ", longName);
+          props.updateStartAndEnd(longName, "");
+          setCount(1);
+        } else if (count === 0) {
+          props.updateStartAndEnd(longName, "");
+          setCount(1);
+        } else if (count === 1) {
+          //console.log("update end");
+          props.updateEnd(longName);
+          setCount(0);
+        }
       } else {
-        //console.log("OH GOD");
+        props.getBookings(longName);
       }
     }
   };

@@ -36,6 +36,19 @@ import { directionInfo, getDirections } from "../objects/Pathfinding.ts";
 import { JSX } from "react/jsx-runtime";
 import axios from "axios";
 
+type roomSched = {
+  id: number;
+  startTime: string;
+  lengthRes: string;
+  room_name: string;
+};
+type serviceRequestData = {
+  id: number;
+  status: string;
+  priority: string;
+  roomSched: roomSched[];
+};
+
 function Map() {
   const divRef = useRef<HTMLDivElement>(null);
   const transformRef = useRef<ReactZoomPanPinchRef>(null);
@@ -53,6 +66,9 @@ function Map() {
   const [directions, setDirections] = useState<directionInfo[]>([]);
   const [path, setPath] = useState<string[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [schedules, setSchedules] = useState<serviceRequestData[]>([]);
+  const [mode, setMode] = useState("bookings");
+  const [bookings, setBookings] = useState<string[]>([]);
 
   const { getAccessTokenSilently, user } = useAuth0();
 
@@ -176,6 +192,29 @@ function Map() {
   }, [update]);
 
   useEffect(() => {
+    // Fetch data from the API
+    const fetchData = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+        const response = await axios.get("/api/roomSchedulingRequest", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        console.log(response.data);
+        setSchedules(response.data); // Assuming the data is an array of room booking data
+      } catch (error) {
+        console.error("Error fetching room schedules", error);
+      }
+    };
+
+    fetchData().catch((error) => {
+      console.error("Error from fetchData promise:", error);
+    });
+  }, [getAccessTokenSilently]);
+
+  useEffect(() => {
     setDirections(getDirections(path, graph));
   }, [path, graph]);
 
@@ -228,6 +267,31 @@ function Map() {
       output.push(<AccordionDirections data={data} />);
     });
     return output;
+  }
+
+  function getBookings(nodeID: string) {
+    const nodeBookings: string[] = [];
+    schedules.forEach((data: serviceRequestData) => {
+      console.log(data.roomSched[0].startTime);
+      //const [date, timeZ] = data.roomSched[0].startTime.split('T');
+      //const time = timeZ.split('Z')[0];
+
+      let time: number;
+      switch (data.roomSched[0].startTime.includes("PM")) {
+        case true:
+          time = parseInt(data.roomSched[0].startTime) + 12;
+          break;
+        case false:
+          time = parseInt(data.roomSched[0].startTime);
+          break;
+      }
+      const current = new Date();
+
+      console.log(current.getHours(), time, nodeID, bookings);
+      setMode("bookings");
+    });
+    setBookings(nodeBookings);
+    return nodeBookings;
   }
 
   //Needs to be here for navigation dropdown
@@ -459,6 +523,9 @@ function Map() {
                   pathSetter={setPath}
                   updateStartAndEnd={updateStartAndEnd}
                   updateEnd={updateEnd}
+                  mode={mode}
+                  getBookings={getBookings}
+                  setBookings={setBookings}
                 />
               </TransformComponent>
             </div>
