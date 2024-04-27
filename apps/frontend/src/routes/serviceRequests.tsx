@@ -125,7 +125,7 @@ function ServiceRequests() {
       <div className="flex flex-row w-full h-full px-4 gap-4 py-4">
         {/*Pending Requests*/}
         <div className="h-full w-1/2 bg-background rounded-lg flex flex-col px-4">
-          <h1 className="mt-4 mb-4 ml-2.5 font-header text-primary font-extrabold text-4xl text-center transition-transform hover:translate-y-1 duration-500 antialiased;">
+          <h1 className="mt-4 mb-4 ml-2.5 font-header text-primary font-extrabold text-4xl text-center">
             Pending Requests
           </h1>
           <div className="pb-2">
@@ -157,24 +157,24 @@ function ServiceRequests() {
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-secondary border-b-2 border-b-primary">
+              <thead className="bg-primary border-b-2 border-b-[#F6BD38]">
                 <tr>
-                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
                     Type
                   </th>
-                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
                     Status
                   </th>
-                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
                     Priority
                   </th>
-                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
                     Location
                   </th>
-                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
                     Employee Name
                   </th>
-                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
                     Delete
                   </th>
                   {/* Dynamically generate column headers */}
@@ -207,7 +207,7 @@ function ServiceRequests() {
               overflow: "hidden",
               width: "100%",
             }}
-            className="bg-background rounded-lg"
+            className="bg-primary rounded-lg"
           >
             {/*<h1 className="my-2 font-header text-primary font-bold text-xl text-center">*/}
             {/*    Choose a new request*/}
@@ -227,10 +227,12 @@ function ServiceRequests() {
                   id="tab-0"
                   sx={{
                     transition: "transform 0.3s ease-in-out",
-                    "&:hover": {
+                    color: "#FFFFFF",
+                    "&:hover, &:focus": {
                       transform: "scale(1.4)",
                       position: "relative",
-                      zIndex: 1, // Ensure scaling item is above others
+                      zIndex: 1,
+                      color: "#F6BD38",
                     },
                   }}
                 />
@@ -241,10 +243,12 @@ function ServiceRequests() {
                   id="tab-1"
                   sx={{
                     transition: "transform 0.3s ease-in-out",
-                    "&:hover": {
+                    color: "#FFFFFF",
+                    "&:hover, &:focus": {
                       transform: "scale(1.4)",
                       position: "relative",
-                      zIndex: 1, // Ensure scaling item is above others
+                      zIndex: 1,
+                      color: "#F6BD38",
                     },
                   }}
                 />
@@ -255,10 +259,12 @@ function ServiceRequests() {
                   id="tab-2"
                   sx={{
                     transition: "transform 0.3s ease-in-out",
-                    "&:hover": {
+                    color: "#FFFFFF",
+                    "&:hover, &:focus": {
                       transform: "scale(1.3)",
                       position: "relative",
-                      zIndex: 1, // Ensure scaling item is above others
+                      zIndex: 1,
+                      color: "#F6BD38",
                     },
                   }}
                 />
@@ -269,10 +275,12 @@ function ServiceRequests() {
                   id="tab-3"
                   sx={{
                     transition: "transform 0.3s ease-in-out",
-                    "&:hover": {
+                    color: "#FFFFFF",
+                    "&:hover, &:focus": {
                       transform: "scale(1.4)",
                       position: "relative",
-                      zIndex: 1, // Ensure scaling item is above others
+                      zIndex: 1,
+                      color: "#F6BD38",
                     },
                   }}
                 />
@@ -283,10 +291,12 @@ function ServiceRequests() {
                   id="tab-4"
                   sx={{
                     transition: "transform 0.3s ease-in-out",
-                    "&:hover": {
+                    color: "#FFFFFF",
+                    "&:hover, &:focus": {
                       transform: "scale(1.4)",
                       position: "relative",
-                      zIndex: 1, // Ensure scaling item is above others
+                      zIndex: 1,
+                      color: "#F6BD38",
                     },
                   }}
                 />
@@ -297,10 +307,12 @@ function ServiceRequests() {
                   id="tab-5"
                   sx={{
                     transition: "transform 0.3s ease-in-out",
-                    "&:hover": {
+                    color: "#FFFFFF",
+                    "&:hover, &:focus": {
                       transform: "scale(1.4)",
                       position: "relative",
-                      zIndex: 1, // Ensure scaling item is above others
+                      zIndex: 1,
+                      color: "#F6BD38",
                     },
                   }}
                 />

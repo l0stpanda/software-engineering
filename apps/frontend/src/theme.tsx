@@ -28,6 +28,9 @@ const theme = createTheme({
     text: {
       primary: "#050315",
     },
+    action: {
+      active: "#d8d8d8",
+    },
   },
 });
 
