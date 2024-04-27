@@ -85,7 +85,7 @@ router.post("/", async function (req: Request, res: Response) {
       });
     }
 
-    if (input.status == "Closed" && newQuant >= 0) {
+    if (newQuant >= 0) {
       await PrismaClient.inventory.update({
         where: {
           name: input.medicalDeviceName,
