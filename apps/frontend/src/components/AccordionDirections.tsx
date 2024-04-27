@@ -6,12 +6,40 @@ import TurnRightIcon from "@mui/icons-material/TurnRight";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import Accordion from "@mui/material/Accordion";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import lowerLevel1 from "../assets/00_thelowerlevel1.png";
+import lowerLevel2 from "../assets/00_thelowerlevel2.png";
+import floor1 from "../assets/01_thefirstfloor.png";
+import floor2 from "../assets/02_thesecondfloor.png";
+import floor3 from "../assets/03_thethirdfloor.png";
 
 interface AccordionDirectionsProps {
   data: directionInfo;
+  setImgState: (imgState: string) => void;
 }
 
 function AccordionDirections(props: AccordionDirectionsProps) {
+  function onChange(event: React.SyntheticEvent, expanded: boolean) {
+    if (expanded) {
+      switch (props.data.floor) {
+        case "L2":
+          props.setImgState(lowerLevel2);
+          break;
+        case "L1":
+          props.setImgState(lowerLevel1);
+          break;
+        case "1":
+          props.setImgState(floor1);
+          break;
+        case "2":
+          props.setImgState(floor2);
+          break;
+        case "3":
+          props.setImgState(floor3);
+          break;
+      }
+    }
+  }
+
   const output: JSX.Element[] = [];
   const data = props.data;
 
@@ -131,7 +159,7 @@ function AccordionDirections(props: AccordionDirectionsProps) {
 
   return (
     <>
-      <Accordion disableGutters={true}>
+      <Accordion onChange={onChange} disableGutters={true}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <b>Floor: {data.floor}</b>
         </AccordionSummary>
