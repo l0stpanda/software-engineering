@@ -131,7 +131,7 @@ function AccordionDirections(props: AccordionDirectionsProps) {
 
   return (
     <>
-      <Accordion>
+      <Accordion disableGutters={true}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <b>Floor: {data.floor}</b>
         </AccordionSummary>
