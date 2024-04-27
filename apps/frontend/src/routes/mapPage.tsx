@@ -35,8 +35,10 @@ import { userInfo } from "common/src/userInfo.ts";
 import { directionInfo, getDirections } from "../objects/Pathfinding.ts";
 import { JSX } from "react/jsx-runtime";
 import axios from "axios";
+import console from "console";
+// import {GeneralReq} from "./serviceRequests.tsx";
 
-function Map() {
+function MapPage() {
   const divRef = useRef<HTMLDivElement>(null);
   const transformRef = useRef<ReactZoomPanPinchRef>(null);
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
@@ -53,7 +55,10 @@ function Map() {
   const [directions, setDirections] = useState<directionInfo[]>([]);
   const [path, setPath] = useState<string[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
-
+  const [navigatingNodes, setNavigatingNodes] = useState({
+    start: "",
+    end: "",
+  });
   const { getAccessTokenSilently, user } = useAuth0();
 
   // Zoom in/out buttons for map viewing
@@ -87,26 +92,6 @@ function Map() {
       </div>
     );
   };
-
-  const [navigatingNodes, setNavigatingNodes] = useState({
-    start: "",
-    end: "",
-  });
-  // const [submitValues, setSubmitValues] = useState(["", ""]);
-
-  // Carter's function code bc idk how to do it
-  // function handleFormChanges(event: React.ChangeEvent<HTMLInputElement>) {
-  //   const { name, value } = event.target;
-  //   setNavigatingNodes({ ...navigatingNodes, [name]: value });
-  // }
-
-  // Handles changes to the start/end destination boxes
-  // function handleFormSubmit() {
-  //   const cleanStart = navigatingNodes.start.replace("\r", "");
-  //   const cleanEnd = navigatingNodes.end.replace("\r", "");
-  //   //console.log(cleanStart, cleanEnd);
-  //   setNavigatingNodes({ start: cleanStart, end: cleanEnd });
-  // }
 
   // Changes the map image
   const changeFloor = (floor: string) => {
@@ -164,6 +149,41 @@ function Map() {
     }
     sendUser().then();
   }, [getAccessTokenSilently, user?.email, user?.nickname, user?.sub]);
+
+  // const [records, setRecords] = useState<GeneralReq[]>([]);
+  // // get the general service requests from the db
+  // //
+  // // want all the sq and make a map of where the loc == nodeid.
+  // // let nodeServReqMap: Map<string, GeneralReq> = new Map<string, GeneralReq>();
+  // useEffect(() => {
+  //     // Fetch data from the API
+  //     const fetchData = async () => {
+  //         try {
+  //             const token = await getAccessTokenSilently();
+  //             const response = await axios.get("/api/fetchAll", {
+  //                 headers: {
+  //                     Authorization: `Bearer ${token}`,
+  //                 },
+  //             });
+  //             /*
+  //             array of request data
+  //             each data in the array get the loc and set is as the key
+  //              */
+  //             // for (let i =0; i < response.data.length; i++) {
+  //             //     nodeServReqMap.set(response.data[i])
+  //             // }
+  //             setRecords(response.data); // Assuming the data is an array of request data
+  //             console.log("RESPONSE DATA: ", response.data);
+  //         } catch (error) {
+  //             console.error("Error fetching requests", error);
+  //         }
+  //     };
+  //
+  //     fetchData().catch((error) => {
+  //         console.error("Error from fetchData promise:", error);
+  //     });
+  // }, [getAccessTokenSilently]);
+  //
 
   // Updates the graph when it has been received from the database
   useEffect(() => {
@@ -523,4 +543,4 @@ function Map() {
   );
 }
 
-export default Map;
+export default MapPage;
