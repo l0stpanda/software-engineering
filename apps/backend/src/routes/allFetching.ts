@@ -109,69 +109,69 @@ router.post("/update", async function (req: Request, res: Response) {
     });
 
     //Medicine and Medical Device Request Things
+    //
+    // const findType = await PrismaClient.generalService.findMany({
+    //   where: {
+    //     id: id,
+    //   },
+    // });
 
-    const findType = await PrismaClient.generalService.findMany({
-      where: {
-        id: id,
-      },
-    });
-
-    if (findType[0].type == "Medicine Request") {
-      const findServiceStuff = await PrismaClient.medicineRequest.findMany({
-        where: {
-          id: id,
-        },
-      });
-      const num = await PrismaClient.inventory.findMany({
-        where: {
-          name: findServiceStuff[0].medicine_name,
-          type: "medicine",
-        },
-      });
-      const newQuant = num[0].quant - findServiceStuff[0].quantity;
-      if (newQuant >= 0) {
-        await PrismaClient.inventory.update({
-          where: {
-            name: findServiceStuff[0].medicine_name,
-          },
-          data: {
-            quant: newQuant,
-          },
-        });
-      }
-
-      if (newQuant < 0) {
-        console.log("Asking for too much");
-        res.sendStatus(700);
-      }
-    } else if (findType[0].type == "Medical Device Delivery") {
-      const findServiceStuff = await PrismaClient.medicalDevice.findMany({
-        where: {
-          id: id,
-        },
-      });
-      const num = await PrismaClient.inventory.findMany({
-        where: {
-          name: findServiceStuff[0].device,
-          type: "medical device",
-        },
-      });
-      const newQuant = num[0].quant - findServiceStuff[0].quantity;
-      if (newQuant >= 0) {
-        await PrismaClient.inventory.update({
-          where: {
-            name: findServiceStuff[0].device,
-          },
-          data: {
-            quant: newQuant,
-          },
-        });
-      }
-      if (newQuant < 0) {
-        console.log("Asking for too much");
-        res.sendStatus(700);
-      }
-    }
+    // if (findType[0].type == "Medicine Request") {
+    //   const findServiceStuff = await PrismaClient.medicineRequest.findMany({
+    //     where: {
+    //       id: id,
+    //     },
+    //   });
+    //   const num = await PrismaClient.inventory.findMany({
+    //     where: {
+    //       name: findServiceStuff[0].medicine_name,
+    //       type: "medicine",
+    //     },
+    //   });
+    //   const newQuant = num[0].quant - findServiceStuff[0].quantity;
+    //   if (newQuant >= 0) {
+    //     await PrismaClient.inventory.update({
+    //       where: {
+    //         name: findServiceStuff[0].medicine_name,
+    //       },
+    //       data: {
+    //         quant: newQuant,
+    //       },
+    //     });
+    //   }
+    //
+    //   if (newQuant < 0) {
+    //     console.log("Asking for too much");
+    //     res.sendStatus(700);
+    //   }
+    // } else if (findType[0].type == "Medical Device Delivery") {
+    //   const findServiceStuff = await PrismaClient.medicalDevice.findMany({
+    //     where: {
+    //       id: id,
+    //     },
+    //   });
+    //   const num = await PrismaClient.inventory.findMany({
+    //     where: {
+    //       name: findServiceStuff[0].device,
+    //       type: "medical device",
+    //     },
+    //   });
+    //   const newQuant = num[0].quant - findServiceStuff[0].quantity;
+    //   if (newQuant >= 0) {
+    //     await PrismaClient.inventory.update({
+    //       where: {
+    //         name: findServiceStuff[0].device,
+    //       },
+    //       data: {
+    //         quant: newQuant,
+    //       },
+    //     });
+    //   }
+    //   if (newQuant < 0) {
+    //     console.log("Asking for too much");
+    //     res.sendStatus(700);
+    //   }
+    // }
   } catch (e) {
     console.log(e);
     res.sendStatus(400);
