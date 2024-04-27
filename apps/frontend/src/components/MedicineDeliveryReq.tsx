@@ -11,6 +11,8 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { MedicineDelivery } from "../common/MedicineDelivery.ts";
 import MedicineRequestButtons from "../components/MedicineRequestButtons.tsx";
@@ -45,6 +47,17 @@ function MedicineDeliveryReq() {
   // function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
   //   setDelivery({ ...delivery, employeeName: e.target.value });
   // }
+
+  const Transition = React.forwardRef(function Transition(
+    props: TransitionProps & {
+      children: React.ReactElement<string, string>;
+    },
+    ref: React.Ref<unknown>,
+  ) {
+    return (
+      <Slide direction="up" ref={ref} {...props} children={props.children} />
+    );
+  });
 
   function updateName(val: string) {
     setDelivery({ ...delivery, employeeName: val });
@@ -235,29 +248,37 @@ function MedicineDeliveryReq() {
       </div>
 
       <div className="flex justify-center items-center"></div>
-      <Dialog open={open} onClose={handleSubmitClose}>
-        <DialogTitle>We received your request!</DialogTitle>
-        <DialogContent>
-          <strong>Here are your responses:</strong>
-          <br />
-          Employee Name: {delivery.employeeName}
-          <br />
-          Priority: {delivery.priority}
-          <br />
-          Location: {delivery.location}
-          <br />
-          Medicine Name: {delivery.medicineName}
-          <br />
-          Quantity: {delivery.quantity}
-          <br />
-          Status: {delivery.status}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleSubmitClose} autoFocus>
-            Okay
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <React.Fragment>
+        <Dialog
+          open={open}
+          onClose={handleSubmitClose}
+          TransitionComponent={Transition}
+          keepMounted
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>We received your request!</DialogTitle>
+          <DialogContent>
+            <strong>Here are your responses:</strong>
+            <br />
+            Employee Name: {delivery.employeeName}
+            <br />
+            Priority: {delivery.priority}
+            <br />
+            Location: {delivery.location}
+            <br />
+            Medicine Name: {delivery.medicineName}
+            <br />
+            Quantity: {delivery.quantity}
+            <br />
+            Status: {delivery.status}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleSubmitClose} autoFocus>
+              Okay
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </React.Fragment>
     </div>
   );
 }
