@@ -6,9 +6,9 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "skipLibCheck": true,
+    "skipLibCheck": true
   },
   "ts-node": {
-    "swc": true,
-  },
+    "swc": true
+  }
 }

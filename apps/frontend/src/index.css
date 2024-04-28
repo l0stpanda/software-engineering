@@ -108,6 +108,31 @@ html {
 .svg_icons {
   transform: scale(1.2);
 }
+.team-member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.team-member-image img {
+  width: 100%;
+  border-radius: 50%;
+  transition: transform 0.3s ease-in-out;
+}
+
+.team-member-image:hover img {
+  transform: scale(1.1); /* Scales image on hover */
+  opacity: 0.7; /* Makes image transparent on hover */
+}
+
+.team-member-info {
+  text-align: center;
+  display: none; /* Initially hides info */
+}
+
+.team-member-image:hover + .team-member-info {
+  display: block; /* Shows info on image hover */
+}
 
 @keyframes dash {
   from {
