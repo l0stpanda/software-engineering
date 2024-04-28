@@ -14,7 +14,7 @@ router.post("/", async function (req: Request, res: Response) {
 
         const id1 = await PrismaClient.generalService.findMany({
             where: {
-                type: "Sanitation Request",
+                type: "Maintenance Request",
                 location: roomStuff[0].node_id,
                 status: input.status,
                 emp_name: input.name,
@@ -30,7 +30,7 @@ router.post("/", async function (req: Request, res: Response) {
 
         await PrismaClient.generalService.create({
             data: {
-                type: "Sanitation Request",
+                type: "Maintenance Request",
                 location: roomStuff[0].node_id,
                 status: input.status,
                 long_name_loc: input.location,
@@ -41,7 +41,7 @@ router.post("/", async function (req: Request, res: Response) {
 
         const id = await PrismaClient.generalService.findMany({
             where: {
-                type: "Sanitation Request",
+                type: "Maintenance Request",
                 location: roomStuff[0].node_id,
                 status: input.status,
                 emp_name: input.name,
@@ -50,7 +50,7 @@ router.post("/", async function (req: Request, res: Response) {
         });
         console.log(input);
         if (input.date != undefined) {
-            await PrismaClient.MaintenanceRequest.create({
+            await PrismaClient.maintenanceRequest.create({
                 data: {
                     id: id[0].id,
                     date: input.date.toString(),
