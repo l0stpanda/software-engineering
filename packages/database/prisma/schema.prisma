@@ -96,6 +96,7 @@ model GeneralService {
   medicineReqID      MedicineRequest[]   @relation("medicineReqID")
   flowerID           Flowers[]           @relation("flowerID")
   sanitationID       SanitationRequest[] @relation("sanitationReq")
+  securityRequest    SecurityRequest?    @relation("securityRequest")
 }
 
 model SanitationRequest {
@@ -186,4 +187,12 @@ model Flowers {
   room_name   String
   // Foreign Key References
   flowerID    GeneralService @relation("flowerID", fields: [id], references: [id], onDelete: Cascade) // Maybe need to change reference to short_name/long_name later
+}
+
+model SecurityRequest {
+  id                  Int            @id
+  incidentDescription String
+  incidentTime        String?
+  actionTaken         String?
+  generalService      GeneralService @relation("securityRequest", fields: [id], references: [id], onDelete: Cascade)
 }
