@@ -35,8 +35,10 @@ import { userInfo } from "common/src/userInfo.ts";
 import { directionInfo, getDirections } from "../objects/Pathfinding.ts";
 import { JSX } from "react/jsx-runtime";
 import axios from "axios";
-import console from "console";
+// import console from "console";
 import { GeneralReq } from "./serviceRequests.tsx";
+import ModeDisplay from "../components/ModeDisplay.tsx";
+import AccordionServiceRequests from "../components/AccordionServiceRequests.tsx";
 
 function MapPage() {
   const divRef = useRef<HTMLDivElement>(null);
@@ -162,17 +164,14 @@ function MapPage() {
         // setPermRecords(response.data); // Assuming the data is an array of request data
         // console.log(response.data);
       } catch (error) {
-        log(400);
+        // log(400);
         // console.error("Error fetching requests", error);
       }
     };
 
-    fetchData()
-      .then()
-      .catch((error) => {
-        log(error);
-        // console.error("Error from fetchData promise:", error);
-      });
+    fetchData().then().catch();
+    // log(error);
+    // console.error("Error from fetchData promise:", error);
   }, [getAccessTokenSilently, user?.email, user?.nickname, user?.sub]);
 
   // Updates the graph when it has been received from the database
@@ -210,7 +209,7 @@ function MapPage() {
         const yOffset =
           (divDimensions.height - (pathSize[1] - pathSize[3]) * scale) / 2;
 
-        log(xOffset);
+        // log(xOffset);
 
         transformRef.current.setTransform(
           -(pathSize[2] * scale) + xOffset,
@@ -223,9 +222,9 @@ function MapPage() {
     }
   }, [pathSize, divDimensions, imgState]);
 
-  function log(data: number) {
-    console.log(data);
-  }
+  // function log(data: number) {
+  //   console.log(data);
+  // }
 
   const changeAlgorithm = (event: SelectChangeEvent) => {
     setAlgorithm(event.target.value as string);
@@ -234,11 +233,17 @@ function MapPage() {
   // Test for showing directions
   function showDirections() {
     const output: JSX.Element[] = [];
-    directions.forEach((data: directionInfo) => {
-      output.push(
-        <AccordionDirections data={data} setImgState={changeFloor} />,
-      );
-    });
+
+    if (mode === "path") {
+      directions.forEach((data: directionInfo) => {
+        output.push(
+          <AccordionDirections data={data} setImgState={changeFloor} />,
+        );
+      });
+    } else if (mode === "info") {
+      //empty the nodes
+      setNavigatingNodes({ start: "", end: "" });
+    }
     return output;
   }
 
@@ -447,7 +452,6 @@ function MapPage() {
                     <MenuItem value="Dijkstra">Dijkstra</MenuItem>
                   </Select>
                 </FormControl>
-                <button onClick={handleMode}>Change Mode</button>
               </div>
             </motion.section>
           )}
@@ -503,7 +507,10 @@ function MapPage() {
         </div>
         {/*Location and Destination things*/}
         <div className=""></div>
+
         {/*boxes.*/}
+        <ModeDisplay handleMode={handleMode} mode={mode} />
+
         <div
           className="fixed top-20 left-10"
           onClick={() => setExpanded(!isOpen)}
@@ -533,20 +540,7 @@ function MapPage() {
             <></>
           )}
         </div>
-        {clicked && showInfo && (
-          <div
-            className="bg-red"
-            style={{
-              zIndex: 999,
-              backgroundColor: "red",
-            }}
-          >
-            {clicked.key}
-            {clicked.requests.entries()}
-          </div>
-        )}
-
-        {directions.length != 0 ? (
+        {directions.length != 0 && mode === "path" ? (
           <div
             className="
                     h-[250px]
@@ -564,7 +558,28 @@ function MapPage() {
             <div className="overflow-y-auto h-full">{showDirections()}</div>
           </div>
         ) : (
-          <></>
+          <>
+            {clicked && showInfo && (
+              <div
+                className="
+                    h-[250px]
+                    w-[300px]
+                    items-center
+                    bg-background
+                    border-primary
+                    border-2
+                    overflow-clip
+                    rounded-lg
+                    fixed
+                    bottom-7
+                    right-32"
+              >
+                {clicked.requests.map((req) => {
+                  return <AccordionServiceRequests data={req} />;
+                })}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

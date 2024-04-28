@@ -87,24 +87,18 @@ function FloorNode(props: FloorNodesProps) {
   // }, [props.mode]);
 
   const handleNodeClick = (nodeid: string) => () => {
-    console.log(nodeid);
     const res = nodes.get(nodeid);
     if (props.mode === "path") {
-      console.log("Mode is path");
-
       if (res !== undefined) {
         const longName: string = res.getLongName();
 
         if (props.inputLoc.start !== undefined && count === 0) {
-          //console.log("In the click: ", props.inputLoc.start);
-          //console.log("updating with: ", longName);
           props.updateStartAndEnd(longName, "");
           setCount(1);
         } else if (count === 0) {
           props.updateStartAndEnd(longName, "");
           setCount(1);
         } else if (count === 1) {
-          //console.log("update end");
           props.updateEnd(longName);
           setCount(0);
         } else {
@@ -118,7 +112,6 @@ function FloorNode(props: FloorNodesProps) {
       props.nodeInfoCallback(scaledNodes[nodeid]);
       // need to log so it can be used
       console.log(clicked);
-      console.log("Mode is info and nodeID: ", nodeid);
     }
   };
 
@@ -127,7 +120,6 @@ function FloorNode(props: FloorNodesProps) {
     const size = [0, 0, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY];
 
     if (input.start !== undefined && input.end !== undefined) {
-      //console.log(ids.startId, ids.endId);
       if (props.algorithm == "BFS") {
         algo.setPathAlgo(new BFS(props.graph));
       } else if (props.algorithm == "AStar") {
@@ -138,12 +130,10 @@ function FloorNode(props: FloorNodesProps) {
         algo.setPathAlgo(new Dijkstra(props.graph));
       }
       const path = algo.findPath(input.start, input.end);
-      //console.log(path);
       const lines = [];
       const floorChanges = [];
 
       if (!path) {
-        //console.log("No path found");
         return [];
       }
 
@@ -177,7 +167,7 @@ function FloorNode(props: FloorNodesProps) {
                     position: "absolute",
                   }}
                 >
-                  To {startPoint.floor}
+                  To {endPoint.floor}
                 </Box>,
               );
             }
@@ -277,7 +267,6 @@ function FloorNode(props: FloorNodesProps) {
   });
 
   const renderNodes = () => {
-    console.log(scaledNodes);
     return Object.values(scaledNodes)
       .filter(
         (node) =>
@@ -288,7 +277,6 @@ function FloorNode(props: FloorNodesProps) {
         let animation: string = "border border-slate-300 hover:border-red-400";
         const input = props.inputLoc;
 
-        //console.log(node.key, ids.startId, ids.endId);
         //if start node
         if (node.key == input.start) {
           nodeColor = "#39FF14";
