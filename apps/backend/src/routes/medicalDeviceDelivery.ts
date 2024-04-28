@@ -122,6 +122,7 @@ router.get("/", async function (req: Request, res: Response) {
     res.sendStatus(400);
     return;
   }
+  res.sendStatus(200);
 });
 
 router.delete("/:id", async function (req: Request, res: Response) {

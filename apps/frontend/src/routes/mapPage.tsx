@@ -374,6 +374,10 @@ function MapPage() {
   const [expanded, setExpanded] = useState(false);
   const isOpen = expanded;
 
+  const handleClearPath = () => {
+    setNavigatingNodes({ start: "", end: "" });
+  };
+
   const [mode, setMode] = useState<string>("path");
   const [clicked, setClicked] = useState<FloorNodeInfo | undefined>(undefined);
   const [showInfo, setShowInfo] = useState<boolean>(false);
@@ -452,6 +456,7 @@ function MapPage() {
                     <MenuItem value="Dijkstra">Dijkstra</MenuItem>
                   </Select>
                 </FormControl>
+                <button onClick={handleClearPath}>Clear Path</button>
               </div>
             </motion.section>
           )}
@@ -461,8 +466,8 @@ function MapPage() {
   };
 
   return (
-    <div className="">
-      <div className="">
+    <div>
+      <div>
         {/*Map Image Box*/}
         <div
           ref={divRef}
