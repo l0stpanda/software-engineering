@@ -82,6 +82,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
         y: node.getY() * (divDimensions.height / imgDimensions.height),
         floor: node.getFloor(),
         type: node.getNodeType(),
+        requests: [],
       };
     });
     setScaledNodes(tempNodePosList);

@@ -23,7 +23,7 @@ import floor1 from "../assets/01_thefirstfloor.png";
 import floor2 from "../assets/02_thesecondfloor.png";
 import floor3 from "../assets/03_thethirdfloor.png";
 
-import FloorNode from "../components/FloorNode.tsx";
+import FloorNode, { FloorNodeInfo } from "../components/FloorNode.tsx";
 import { SelectChangeEvent } from "@mui/material/Select";
 // import { ArrowBack } from "@mui/icons-material";
 import LocationDropdown from "../components/locationDropdown.tsx";
@@ -36,7 +36,7 @@ import { directionInfo, getDirections } from "../objects/Pathfinding.ts";
 import { JSX } from "react/jsx-runtime";
 import axios from "axios";
 import console from "console";
-// import {GeneralReq} from "./serviceRequests.tsx";
+import { GeneralReq } from "./serviceRequests.tsx";
 
 function MapPage() {
   const divRef = useRef<HTMLDivElement>(null);
@@ -60,6 +60,7 @@ function MapPage() {
     end: "",
   });
   const { getAccessTokenSilently, user } = useAuth0();
+  const [records, setRecords] = useState<GeneralReq[]>([]);
 
   // Zoom in/out buttons for map viewing
   const Controls = () => {
@@ -148,42 +149,31 @@ function MapPage() {
         });
     }
     sendUser().then();
-  }, [getAccessTokenSilently, user?.email, user?.nickname, user?.sub]);
 
-  // const [records, setRecords] = useState<GeneralReq[]>([]);
-  // // get the general service requests from the db
-  // //
-  // // want all the sq and make a map of where the loc == nodeid.
-  // // let nodeServReqMap: Map<string, GeneralReq> = new Map<string, GeneralReq>();
-  // useEffect(() => {
-  //     // Fetch data from the API
-  //     const fetchData = async () => {
-  //         try {
-  //             const token = await getAccessTokenSilently();
-  //             const response = await axios.get("/api/fetchAll", {
-  //                 headers: {
-  //                     Authorization: `Bearer ${token}`,
-  //                 },
-  //             });
-  //             /*
-  //             array of request data
-  //             each data in the array get the loc and set is as the key
-  //              */
-  //             // for (let i =0; i < response.data.length; i++) {
-  //             //     nodeServReqMap.set(response.data[i])
-  //             // }
-  //             setRecords(response.data); // Assuming the data is an array of request data
-  //             console.log("RESPONSE DATA: ", response.data);
-  //         } catch (error) {
-  //             console.error("Error fetching requests", error);
-  //         }
-  //     };
-  //
-  //     fetchData().catch((error) => {
-  //         console.error("Error from fetchData promise:", error);
-  //     });
-  // }, [getAccessTokenSilently]);
-  //
+    const fetchData = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+        const response = await axios.get("/api/fetchAll", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setRecords(response.data); // Assuming the data is an array of request data
+        // setPermRecords(response.data); // Assuming the data is an array of request data
+        // console.log(response.data);
+      } catch (error) {
+        log(400);
+        // console.error("Error fetching requests", error);
+      }
+    };
+
+    fetchData()
+      .then()
+      .catch((error) => {
+        log(error);
+        // console.error("Error from fetchData promise:", error);
+      });
+  }, [getAccessTokenSilently, user?.email, user?.nickname, user?.sub]);
 
   // Updates the graph when it has been received from the database
   useEffect(() => {
@@ -375,8 +365,29 @@ function MapPage() {
       </div>
     );
   }
+
   const [expanded, setExpanded] = useState(false);
   const isOpen = expanded;
+
+  const [mode, setMode] = useState<string>("path");
+  const [clicked, setClicked] = useState<FloorNodeInfo | undefined>(undefined);
+  const [showInfo, setShowInfo] = useState<boolean>(false);
+
+  const handleMode = () => {
+    if (mode === "path") {
+      setMode("info");
+    } else if (mode === "info") {
+      setMode("path");
+    }
+  };
+
+  const handleNodeCallback = (node: FloorNodeInfo) => {
+    setClicked(node);
+    if (mode === "info") {
+      setShowInfo(true);
+    }
+  };
+
   const AccordionFrame = () => {
     const handleInnerClick = (e: React.MouseEvent<HTMLElement>) => {
       e.stopPropagation();
@@ -436,6 +447,7 @@ function MapPage() {
                     <MenuItem value="Dijkstra">Dijkstra</MenuItem>
                   </Select>
                 </FormControl>
+                <button onClick={handleMode}>Change Mode</button>
               </div>
             </motion.section>
           )}
@@ -481,6 +493,9 @@ function MapPage() {
                   pathSetter={setPath}
                   updateStartAndEnd={updateStartAndEnd}
                   updateEnd={updateEnd}
+                  reqs={records}
+                  mode={mode}
+                  nodeInfoCallback={handleNodeCallback}
                 />
               </TransformComponent>
             </div>
@@ -518,6 +533,19 @@ function MapPage() {
             <></>
           )}
         </div>
+        {clicked && showInfo && (
+          <div
+            className="bg-red"
+            style={{
+              zIndex: 999,
+              backgroundColor: "red",
+            }}
+          >
+            {clicked.key}
+            {clicked.requests.entries()}
+          </div>
+        )}
+
         {directions.length != 0 ? (
           <div
             className="

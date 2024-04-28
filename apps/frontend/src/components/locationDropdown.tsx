@@ -27,7 +27,7 @@ export default function LocationDropdown(prop: locationProps) {
       arr.push(res.data[i].long_name);
     }
 
-    console.log("THIS IS THE ARRAY: " + arr);
+    // console.log("THIS IS THE ARRAY: " + arr);
     setRoom(arr);
   }
 
