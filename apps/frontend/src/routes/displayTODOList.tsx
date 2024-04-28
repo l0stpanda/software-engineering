@@ -17,6 +17,12 @@ import { Alert, Snackbar } from "@mui/material";
 import { AlertColor } from "@mui/material/Alert";
 
 type subTodo = {
+  id_relation: number;
+  task: string;
+  complete: boolean;
+};
+
+type subTodoWithID = {
   id: number;
   id_relation: number;
   task: string;
@@ -32,7 +38,7 @@ type toDoNow = {
   username: string | undefined;
   role: string | undefined;
   complete: boolean;
-  subtasks: subTodo[];
+  subtasks: subTodoWithID[];
 };
 
 import { styled } from "@mui/material/styles";
@@ -115,7 +121,6 @@ export default function DisplayTODOList() {
       setSubtasks([
         ...subtasks,
         {
-          id: 0,
           task: e.currentTarget.value.trim(),
           id_relation: 0,
           complete: false,

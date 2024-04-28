@@ -114,13 +114,6 @@ function TODOListItem(props: toDoNow) {
     }
     try {
       const token = await getAccessTokenSilently();
-      const newSubtasks = props.subtasks ? props.subtasks : [];
-      newSubtasks.push({
-        id: 0,
-        id_relation: props.id,
-        task: newSubtask,
-        complete: false,
-      });
       await axios.post(
         `/api/todoStuff/${props.id}`,
         {
@@ -130,6 +123,7 @@ function TODOListItem(props: toDoNow) {
         },
         { headers: { Authorization: `Bearer ${token}` } },
       );
+
       //call to backend
     } catch (e) {
       console.log(e);

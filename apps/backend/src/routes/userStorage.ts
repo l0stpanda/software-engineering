@@ -46,7 +46,7 @@ router.post("/", async function (req: Request, res: Response) {
         });
       }
       //then no matter what create the todo element with the same email
-      await PrismaClient.todo.create({
+      const newTodo = await PrismaClient.todo.create({
         data: {
           task: input.task,
           priority: input.priority,
@@ -55,18 +55,15 @@ router.post("/", async function (req: Request, res: Response) {
         },
       });
 
-      const findID = await PrismaClient.todo.findMany({
-        where: {
-          task: input.task,
-          priority: input.priority,
-          email: input.email,
-          complete: input.complete,
-        },
-      });
+      const findID = newTodo.id;
 
       for (let i = 0; i < input.subtasks.length; i++) {
-        input.subtasks[i].id_relation = findID[0].id;
+        input.subtasks[i].id_relation = findID;
+        // await PrismaClient.subTodo.create({
+        //   data: input.subtasks[i],
+        // });
       }
+      console.log(input.subtasks);
 
       await PrismaClient.subTodo.createMany({
         data: input.subtasks,
@@ -134,13 +131,14 @@ router.post("/:id", async function (req: Request, res: Response) {
     res.sendStatus(200);
   } else {
     try {
-      await PrismaClient.subTodo.create({ data: req.body });
+      const newSubTodo = await PrismaClient.subTodo.create({ data: req.body });
+      res.send(newSubTodo);
+      return;
     } catch (e) {
       console.log(e);
       res.sendStatus(400);
       return;
     }
-    res.sendStatus(200);
   }
 });
 export default router;
