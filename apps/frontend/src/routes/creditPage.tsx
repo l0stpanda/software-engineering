@@ -2,28 +2,28 @@ import { Tabs, Tab } from "@mui/material";
 import { useState } from "react";
 
 // frameworks
-import viteImg from "../assets/vite.svg";
-import yarnImg from "../assets/yarn.png";
-import reactImg from "../assets/react.svg";
-import postgresImg from "../assets/pgAdmin4.png";
-import prismaImg from "../assets/prisma.png";
-import expressImg from "../assets/express.png";
+import viteImg from "../../public/vite.svg";
+import yarnImg from "../../public/yarn.png";
+import reactImg from "../../public/react.svg";
+import postgresImg from "../../public/pgAdmin4.png";
+import prismaImg from "../../public/prisma.png";
+import expressImg from "../../public/express.png";
 
 // libraries
-import tailwindImg from "../assets/tailwind.png";
-import auth0Img from "../assets/auth0.png";
-import axiosImg from "../assets/axios.png";
-import bootstrapImg from "../assets/bootstrap.png";
-import dayjsImg from "../assets/dayjs.png";
-import prettierImg from "../assets/Prettier.png";
-import sassImg from "../assets/sass.png";
-import materialUI from "../assets/materialui.png";
+import tailwindImg from "../../public/tailwind.png";
+import auth0Img from "../../public/auth0.png";
+import axiosImg from "../../public/axios.png";
+import bootstrapImg from "../../public/bootstrap.png";
+import dayjsImg from "../../public/dayjs.png";
+import prettierImg from "../../public/Prettier.png";
+import sassImg from "../../public/sass.png";
+import materialUI from "../../public/materialui.png";
 
 // tools
-import webstormImg from "../assets/webstorm.png";
-import githubImg from "../assets/github.png";
-import taigaImg from "../assets/taiga.png";
-import discordImg from "../assets/discord.png";
+import webstormImg from "../../public/webstorm.png";
+import githubImg from "../../public/github.png";
+import taigaImg from "../../public/taiga.png";
+import discordImg from "../../public/discord.png";
 
 import Background from "../components/allyBackground.tsx";
 
