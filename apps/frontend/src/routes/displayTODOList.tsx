@@ -15,7 +15,8 @@ import {
 } from "@mui/material";
 import { Alert, Snackbar } from "@mui/material";
 import { AlertColor } from "@mui/material/Alert";
-import dayjs, { Dayjs } from "dayjs";
+// import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
@@ -38,6 +39,7 @@ type toDoNow = {
   user_id: string | undefined;
   task: string;
   notes: string;
+  // dueDate: Dayjs | null | string;
   dueDate: Dayjs | null;
   priority: string;
   email: string | undefined;
@@ -64,7 +66,8 @@ export default function DisplayTODOList() {
     user_id: user?.sub,
     task: "",
     notes: "",
-    dueDate: dayjs(),
+    dueDate: null,
+    //dueDate: "",
     priority: "",
     email: user?.email,
     username: user?.preferred_username,
@@ -156,7 +159,7 @@ export default function DisplayTODOList() {
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (toDoResponse.task === "" || toDoResponse.notes === "") {
+    if (toDoResponse.task === "" || toDoResponse.task === "") {
       return;
     }
 
@@ -184,6 +187,7 @@ export default function DisplayTODOList() {
       user_id: user?.sub,
       task: "",
       notes: "",
+      // dueDate: "",
       dueDate: null,
       priority: "",
       email: user?.email,
@@ -301,19 +305,9 @@ export default function DisplayTODOList() {
                 value={toDoResponse.notes}
                 variant="filled"
                 fullWidth={true}
-                required={true}
                 label="Notes"
                 name="notes"
               />
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker
-                  sx={{ bgcolor: "#eceff0" }}
-                  label="Due Date*"
-                  value={toDoResponse.dueDate}
-                  disablePast
-                  onChange={handleDateChange}
-                />
-              </LocalizationProvider>
               <div className="flex flex-col gap-2">
                 {subtasks.map((subtask, index) => (
                   <div key={index} className="flex gap-2 items-center">
@@ -329,6 +323,16 @@ export default function DisplayTODOList() {
                   onKeyDown={handleSubtaskInput}
                 />
               </div>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateTimePicker
+                  sx={{ bgcolor: "#eceff0" }}
+                  label="Due Date"
+                  value={toDoResponse.dueDate}
+                  // value={dayjs(toDoResponse.dueDate)}
+                  disablePast
+                  onChange={handleDateChange}
+                />
+              </LocalizationProvider>
 
               <FormControl variant="filled" required={true}>
                 <InputLabel id="priority">Priority</InputLabel>
