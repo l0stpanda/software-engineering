@@ -1,6 +1,7 @@
 import express, { Router, Request, Response } from "express";
 //import { Prisma } from "database";
 import PrismaClient from "../bin/database-connection.ts";
+import { Dayjs } from "dayjs";
 //import { toDo } from "common/src/toDo.ts";
 
 const router: Router = express.Router();
@@ -15,6 +16,8 @@ type toDoNow = {
   id: number;
   user_id: string;
   task: string;
+  notes: string;
+  dueDate: Dayjs | null;
   priority: string;
   email: string;
   username: string;
@@ -49,6 +52,8 @@ router.post("/", async function (req: Request, res: Response) {
       const newTodo = await PrismaClient.todo.create({
         data: {
           task: input.task,
+          notes: input.notes,
+          dueDate: String(input.dueDate?.toString()),
           priority: input.priority,
           email: input.email,
           complete: input.complete,

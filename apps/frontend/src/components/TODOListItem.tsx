@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 //import LoginDialog from "./loginDialog.tsx";
+import { Dayjs } from "dayjs";
 
 // import {
 //     Dialog,
@@ -36,6 +37,8 @@ type toDoNow = {
   id: number;
   user_id: string | undefined;
   task: string;
+  notes: string;
+  dueDate: Dayjs | null;
   priority: string;
   email: string | undefined;
   username: string | undefined;
