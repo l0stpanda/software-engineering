@@ -10,12 +10,13 @@ import {
   InputLabel,
   MenuItem,
 } from "@mui/material";
-//import Slide from "@mui/material/Slide";
-//import { TransitionProps } from "@mui/material/transitions";
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
 import { useAuth0 } from "@auth0/auth0-react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { medicalDeviceDelivery } from "common/src/medicalDeviceDelivery.ts";
 import dayjs, { Dayjs } from "dayjs";
@@ -36,16 +37,16 @@ function MedicalDeviceReq() {
     deliveryDate: dayjs(),
   });
 
-  // const Transition = React.forwardRef(function Transition(
-  //   props: TransitionProps & {
-  //     children: React.ReactElement<string, string>;
-  //   },
-  //   ref: React.Ref<unknown>,
-  // ) {
-  //   return (
-  //     <Slide direction="up" ref={ref} {...props} children={props.children} />
-  //   );
-  // });
+  const Transition = React.forwardRef(function Transition(
+    props: TransitionProps & {
+      children: React.ReactElement<string, string>;
+    },
+    ref: React.Ref<unknown>,
+  ) {
+    return (
+      <Slide direction="up" ref={ref} {...props} children={props.children} />
+    );
+  });
 
   const [open, setOpen] = useState(false);
 
@@ -234,7 +235,7 @@ function MedicalDeviceReq() {
             </FormControl>
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
+              <DateTimePicker
                 sx={{ bgcolor: "#eceff0" }}
                 label="Delivery Date*"
                 value={formData.deliveryDate}
@@ -282,38 +283,40 @@ function MedicalDeviceReq() {
           </div>
         </form>
       </div>
-      <Dialog
-        open={open}
-        onClose={handleSubmitClose}
-        //TransitionComponent={Transition}
-        keepMounted
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle>We received your request!</DialogTitle>
-        <DialogContent>
-          <strong>Here are your responses:</strong>
-          <br />
-          Employee Name: {formData.employeeName}
-          <br />
-          Room Name: {formData.roomName}
-          <br />
-          Medical Device Name: {formData.medicalDeviceName}
-          <br />
-          Quantity: {formData.quantity}
-          <br />
-          Priority: {formData.priority}
-          <br />
-          Status: {formData.status}
-          <br />
-          Date:{formData.deliveryDate?.toString()}
-        </DialogContent>
+      <React.Fragment>
+        <Dialog
+          open={open}
+          onClose={handleSubmitClose}
+          TransitionComponent={Transition}
+          keepMounted
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>We received your request!</DialogTitle>
+          <DialogContent>
+            <strong>Here are your responses:</strong>
+            <br />
+            Employee Name: {formData.employeeName}
+            <br />
+            Room Name: {formData.roomName}
+            <br />
+            Medical Device Name: {formData.medicalDeviceName}
+            <br />
+            Quantity: {formData.quantity}
+            <br />
+            Priority: {formData.priority}
+            <br />
+            Status: {formData.status}
+            <br />
+            Date:{formData.deliveryDate?.toString()}
+          </DialogContent>
 
-        <DialogActions>
-          <Button onClick={handleSubmitClose} autoFocus>
-            Okay
-          </Button>
-        </DialogActions>
-      </Dialog>
+          <DialogActions>
+            <Button onClick={handleSubmitClose} autoFocus>
+              Okay
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </React.Fragment>
     </div>
   );
 }

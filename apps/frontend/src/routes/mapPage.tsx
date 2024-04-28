@@ -264,7 +264,9 @@ function Map() {
   function showDirections() {
     const output: JSX.Element[] = [];
     directions.forEach((data: directionInfo) => {
-      output.push(<AccordionDirections data={data} />);
+      output.push(
+        <AccordionDirections data={data} setImgState={changeFloor} />,
+      );
     });
     return output;
   }
@@ -487,8 +489,8 @@ function Map() {
   };
 
   return (
-    <div className="">
-      <div className="">
+    <div>
+      <div>
         {/*Map Image Box*/}
         <div
           ref={divRef}

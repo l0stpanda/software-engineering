@@ -114,7 +114,7 @@ export default function DisplayInventory() {
   const handleDelete = async (id: number) => {
     const item = records.find((record) => record.id === id);
     const itemName = item ? item.name : "Unknown Item"; // Default to "Unknown Item" if not found
-
+    const itemID = item ? item.id : -1;
     if (
       !window.confirm(
         `Are you sure you want to delete the inventory item ${itemName}?`,
@@ -125,11 +125,15 @@ export default function DisplayInventory() {
 
     try {
       const token = await getAccessTokenSilently();
-      await axios.delete(`/api/inventory/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      await axios.post(
+        `/api/inventory/delete/${id}`,
+        { id: itemID, name: itemName },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       const received = await axios.get("/api/inventory", {
         headers: {
           Authorization: `Bearer ${token}`,
