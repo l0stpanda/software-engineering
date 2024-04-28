@@ -25,7 +25,7 @@ interface FloorNodesProps {
   updateStartAndEnd: (startNode: string, endNode: string) => void;
   updateEnd: (endNode: string) => void;
   mode: string;
-  getBookings: (longName: string) => string[];
+  getBookings: (longName: string) => void;
   setBookings: (a: string[]) => void;
 }
 

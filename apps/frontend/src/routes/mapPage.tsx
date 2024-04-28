@@ -271,29 +271,48 @@ function Map() {
     return output;
   }
 
-  function getBookings(nodeID: string) {
+  // Gets a variety of info about bookings at a given node and checks if the booking is today
+  // Still needs a useEffect to visualize changes on screen
+  function getBookings(longName: string) {
     const nodeBookings: string[] = [];
     schedules.forEach((data: serviceRequestData) => {
-      console.log(data.roomSched[0].startTime);
-      //const [date, timeZ] = data.roomSched[0].startTime.split('T');
-      //const time = timeZ.split('Z')[0];
+      const booking = data.roomSched[0];
+      if (booking.room_name === longName) {
+        const duration = parseInt(booking.lengthRes);
+        const [date, time] = booking.startTime.split("T"); // Splits date and time
+        // Gets the separate time values
+        const [startHour, startMinute] = time
+          .split(":")
+          .map((value: string) => parseInt(value));
+        const endHour = startHour + Math.floor(duration / 60);
+        const endMinute = (startMinute + duration) % 60;
+        // Gets the separate date values
+        const [year, month, day] = date
+          .split("-")
+          .map((value: string) => parseInt(value));
+        // Gets current date Object
+        const current = new Date();
+        console.log(endHour, endMinute, bookings, booking);
 
-      let time: number;
-      switch (data.roomSched[0].startTime.includes("PM")) {
-        case true:
-          time = parseInt(data.roomSched[0].startTime) + 12;
-          break;
-        case false:
-          time = parseInt(data.roomSched[0].startTime);
-          break;
+        if (
+          current.getUTCDate() == day &&
+          current.getUTCMonth() == month - 1 &&
+          current.getUTCFullYear() == year
+        ) {
+          let startString = startMinute.toString();
+          let endString = endMinute.toString();
+          if (startString.length == 1) startString = "0".concat(startString);
+          if (endString.length == 1) endString = "0".concat(endString);
+          // Design nodeBookings however you want,  it currently stores a string but it can store an html element maybe.
+          nodeBookings.push(
+            `${startHour}:${startString} - ${endHour}:${endString}`,
+          );
+        }
+        setMode("bookings");
       }
-      const current = new Date();
-
-      console.log(current.getHours(), time, nodeID, bookings);
-      setMode("bookings");
     });
+    console.log(nodeBookings);
     setBookings(nodeBookings);
-    return nodeBookings;
   }
 
   //Needs to be here for navigation dropdown
