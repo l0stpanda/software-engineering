@@ -425,8 +425,8 @@ function Map() {
   };
 
   return (
-    <div className="">
-      <div className="">
+    <div>
+      <div>
         {/*Map Image Box*/}
         <div
           ref={divRef}
