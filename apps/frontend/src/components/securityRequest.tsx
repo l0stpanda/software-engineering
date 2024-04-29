@@ -23,7 +23,6 @@ interface securityRequest {
   name: string;
   location: string;
   status: string;
-  emp_name: string;
   priority: string;
   incidentDescription: string;
   incidentTime: Dayjs | null;
@@ -36,7 +35,6 @@ function SecurityRequest() {
     name: "",
     location: "",
     status: "Pending",
-    emp_name: "",
     priority: "Medium",
     incidentDescription: "",
     incidentTime: null,
@@ -147,7 +145,7 @@ function SecurityRequest() {
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4 my-4">
             <UserDropdown
-              room={responses.emp_name}
+              room={responses.name}
               update={updateName}
               label={"Username"}
             />
@@ -173,7 +171,14 @@ function SecurityRequest() {
                 <MenuItem value={"Emergency"}>Emergency</MenuItem>
               </Select>
             </FormControl>
-
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateTimePicker
+                sx={{ bgcolor: "#eceff0" }}
+                label="Incident Time"
+                value={responses.incidentTime}
+                onChange={handleDateChange}
+              />
+            </LocalizationProvider>
             <TextField
               onChange={handleResponseChanges}
               value={responses.incidentDescription}
@@ -184,15 +189,6 @@ function SecurityRequest() {
               placeholder=""
               required
             />
-
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker
-                sx={{ bgcolor: "#eceff0" }}
-                label="Incident Time"
-                value={responses.incidentTime}
-                onChange={handleDateChange}
-              />
-            </LocalizationProvider>
 
             <FormControl variant="filled" required>
               <InputLabel id="actionTaken">Action Taken</InputLabel>
@@ -223,25 +219,6 @@ function SecurityRequest() {
                 <MenuItem value={"Pending"}>Pending</MenuItem>
                 <MenuItem value={"In Progress"}>In Progress</MenuItem>
                 <MenuItem value={"Resolved"}>Resolved</MenuItem>
-              </Select>
-            </FormControl>
-
-            <FormControl variant="filled" required>
-              <InputLabel id="status">Status</InputLabel>
-              <Select
-                name="status"
-                labelId="status"
-                id="status"
-                value={responses.status}
-                onChange={handleStatusUpdate}
-              >
-                {/*<MenuItem value="">*/}
-                {/*  <em>None</em>*/}
-                {/*</MenuItem>*/}
-                <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
-                <MenuItem value={"Assigned"}>Assigned</MenuItem>
-                <MenuItem value={"InProgress"}>In Progress</MenuItem>
-                <MenuItem value={"Closed"}>Closed</MenuItem>
               </Select>
             </FormControl>
 
@@ -296,7 +273,7 @@ function SecurityRequest() {
           <DialogContent>
             <strong>Here are your responses:</strong>
             <br />
-            Username: {responses.emp_name}
+            Username: {responses.name}
             <br />
             Location: {responses.location}
             <br />
