@@ -189,7 +189,11 @@ function TODOListItem(props: toDoNow) {
           </Accordion>
         </td>
         <td className="p-3 text-sm">{props.notes}</td>
-        <td className="p-3 text-sm">{props.dueDate?.toString()}</td>
+        <td className="p-3 text-sm">
+          {props.dueDate?.toString() != "undefined"
+            ? props.dueDate?.toString()
+            : ""}
+        </td>
         <td className="p-3 text-sm">
           <IconButton
             className="px-7 flex justify-center transform hover:scale-125"
