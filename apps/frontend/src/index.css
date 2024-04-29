@@ -95,9 +95,6 @@ html {
   .bg-ally-background {
     background-image: url("assets/allyBackground.png");
   }
-  .bg-aboutBackground {
-    background-image: url("assets/about_page_background.png");
-  }
 }
 
 .path {
@@ -105,8 +102,80 @@ html {
   stroke-dashoffset: 1000;
   animation: dash 40s linear reverse infinite;
 }
+
 .svg_icons {
   transform: scale(1.2);
+}
+
+/*Arrows and little dots on about AND credit page!*/
+.slick-prev {
+  left: 2% !important;
+  z-index: 1;
+  color: #ffffff;
+  scale: 1.5;
+}
+.slick-next {
+  right: 2% !important;
+  z-index: 1;
+  color: #ffffff;
+  scale: 1.5;
+}
+.slick-dots {
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  scale: 1.2;
+}
+/*about page stuffs*/
+.aboutPageContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0px;
+  background-color: transparent;
+}
+.teamHeader {
+  margin-top: 1rem;
+  margin-bottom: 2px;
+  color: #002866;
+  font-size: 42px;
+}
+.teamSlide .slick-slide {
+  margin-right: 0px;
+}
+.teamMemImgCont {
+  position: relative;
+  width: 300px;
+  margin-bottom: 0;
+}
+.teamMemImg {
+  width: 100%;
+  height: 545px;
+  margin-bottom: 0;
+  object-fit: cover;
+}
+.infoOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Overlay color */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  opacity: 0; /* Hide by default */
+  transition: opacity 0.5s ease;
+}
+.teamMemImgCont:hover .infoOverlay {
+  opacity: 1;
+}
+.slick-slide {
+  margin: 0;
 }
 
 @keyframes dash {
@@ -116,4 +185,25 @@ html {
   to {
     stroke-dashoffset: 1000;
   }
+}
+
+/*tab animation about page*/
+@keyframes swipe-right {
+  from {
+    left: 0;
+    width: 0%;
+  }
+  to {
+    left: 0;
+    width: 100%;
+  }
+}
+.tab-highlight {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background-color: currentColor;
+  width: 0;
+  animation: swipe-right 0.3s forwards; /*play that animation!!!!*/
 }

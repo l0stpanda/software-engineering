@@ -10,8 +10,8 @@ import {
   InputLabel,
   MenuItem,
 } from "@mui/material";
-import Slide from "@mui/material/Slide";
-import { TransitionProps } from "@mui/material/transitions";
+// import Slide from "@mui/material/Slide";
+// import { TransitionProps } from "@mui/material/transitions";
 import { useAuth0 } from "@auth0/auth0-react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -37,16 +37,16 @@ function MedicalDeviceRequest() {
     deliveryDate: dayjs(),
   });
 
-  const Transition = React.forwardRef(function Transition(
-    props: TransitionProps & {
-      children: React.ReactElement<string, string>;
-    },
-    ref: React.Ref<unknown>,
-  ) {
-    return (
-      <Slide direction="up" ref={ref} {...props} children={props.children} />
-    );
-  });
+  // const Transition = React.forwardRef(function Transition(
+  //   props: TransitionProps & {
+  //     children: React.ReactElement<string, string>;
+  //   },
+  //   ref: React.Ref<unknown>,
+  // ) {
+  //   return (
+  //     <Slide direction="up" ref={ref} {...props} children={props.children} />
+  //   );
+  // });
 
   const [open, setOpen] = useState(false);
 
@@ -239,10 +239,6 @@ function MedicalDeviceRequest() {
             </FormControl>
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker label="Delivery Date" />
-            </LocalizationProvider>
-
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateTimePicker
                 sx={{ bgcolor: "#eceff0" }}
                 label="Delivery Date*"
@@ -291,40 +287,43 @@ function MedicalDeviceRequest() {
           </div>
         </form>
       </div>
-      <React.Fragment>
-        <Dialog
-          open={open}
-          onClose={handleSubmitClose}
-          TransitionComponent={Transition}
-          keepMounted
-          aria-describedby="alert-dialog-slide-description"
-        >
-          <DialogTitle>We received your request!</DialogTitle>
-          <DialogContent>
-            <strong>Here are your responses:</strong>
-            <br />
-            Employee Name: {formData.employeeName}
-            <br />
-            Room Name: {formData.roomName}
-            <br />
-            Medical Device Name: {formData.medicalDeviceName}
-            <br />
-            Quantity: {formData.quantity}
-            <br />
-            Priority: {formData.priority}
-            <br />
-            Status: {formData.status}
-            <br />
-            Date:{formData.deliveryDate?.toString()}
-          </DialogContent>
+      {/*<React.Fragment>*/}
+      <Dialog
+        open={open}
+        onClose={handleSubmitClose}
+        // TransitionComponent={Transition}
+        // keepMounted
+        // aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>We received your request!</DialogTitle>
+        <DialogContent>
+          <strong>Here are your responses:</strong>
+          <br />
+          Employee Name: {formData.employeeName}
+          <br />
+          Room Name: {formData.roomName}
+          <br />
+          Medical Device Name: {formData.medicalDeviceName}
+          <br />
+          Quantity: {formData.quantity}
+          <br />
+          Priority: {formData.priority}
+          <br />
+          Status: {formData.status}
+          <br />
+          Date:{formData.deliveryDate?.toString()}
+        </DialogContent>
 
-          <DialogActions>
-            <Button onClick={handleSubmitClose} autoFocus>
-              Okay
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </React.Fragment>
+        <DialogActions>
+          <Button onClick={handleSubmitClose} autoFocus>
+            Okay
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/*</React.Fragment>*/}
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DateTimePicker label="Delivery Date" />
+      </LocalizationProvider>
     </div>
   );
 }
