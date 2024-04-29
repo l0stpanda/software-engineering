@@ -11,6 +11,8 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { MedicineDelivery } from "../common/MedicineDelivery.ts";
 import MedicineRequestButtons from "../components/MedicineRequestButtons.tsx";
@@ -20,6 +22,9 @@ import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import UserDropdown from "../components/userDropdown.tsx";
 import MedicineDropdown from "./MedicineDropdown.tsx";
+import { Alert, Snackbar } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
+
 function MedicineDeliveryReq() {
   const { getAccessTokenSilently } = useAuth0();
   const [delivery, setDelivery] = useState<MedicineDelivery>({
@@ -30,6 +35,21 @@ function MedicineDeliveryReq() {
     quantity: "1",
     status: "Unassigned",
   });
+  const LOW_QUANTITY_THRESHOLD = 10;
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<AlertColor>("success");
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const showSnackbar = (message: string, severity: AlertColor) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
 
   function clear() {
     setDelivery({
@@ -45,6 +65,17 @@ function MedicineDeliveryReq() {
   // function handleNameInput(e: ChangeEvent<HTMLInputElement>) {
   //   setDelivery({ ...delivery, employeeName: e.target.value });
   // }
+
+  const Transition = React.forwardRef(function Transition(
+    props: TransitionProps & {
+      children: React.ReactElement<string, string>;
+    },
+    ref: React.Ref<unknown>,
+  ) {
+    return (
+      <Slide direction="up" ref={ref} {...props} children={props.children} />
+    );
+  });
 
   function updateName(val: string) {
     setDelivery({ ...delivery, employeeName: val });
@@ -63,8 +94,23 @@ function MedicineDeliveryReq() {
     setDelivery({ ...delivery, location: val });
   }
 
-  function handleMedicineInput(val: string) {
+  async function handleMedicineInput(val: string) {
+    const token = await getAccessTokenSilently();
     setDelivery({ ...delivery, medicineName: val });
+    try {
+      const item = await axios.get("/api/inventory/getNum", {
+        params: { name: val },
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log(item.data);
+      // Check if the quantity is below a threshold
+      if (item.data.quant <= LOW_QUANTITY_THRESHOLD) {
+        showSnackbar(`Low stock for ${val}`, "warning"); // Change severity to "warning" or another appropriate level
+      }
+    } catch (e) {
+      console.error(e);
+      showSnackbar("Can find the Medicine", "error");
+    }
   }
 
   function handleQuantityInput(e: ChangeEvent<HTMLInputElement>) {
@@ -133,9 +179,9 @@ function MedicineDeliveryReq() {
 
   return (
     <div className="w-full">
-      <div className="m-auto mt-6 flex flex-col px-10 h-full w-full justify-center py-4">
+      <div className="m-auto mt-3 flex flex-col px-10 h-full w-full justify-center py-1">
         <h1
-          className="font-extrabold text-3xl text-center transition-transform hover:scale-110 -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;"
+          className="font-extrabold text-3xl text-center"
           style={{
             color: "rgb(0 40 102 / 1)",
             fontFamily: "Nunito, sans-serif",
@@ -145,17 +191,6 @@ function MedicineDeliveryReq() {
         >
           Medicine Delivery Form
         </h1>
-        <p
-          className="text-2xl font-bold mb-4 text-center"
-          style={{
-            color: "black",
-            fontFamily: "PTSans, sans-serif",
-            fontSize: "20px",
-            margin: "5px",
-          }}
-        >
-          Qiushi and Vincent
-        </p>
         <div className="formDiv">
           <div className="inputDiv">
             <form className="flex flex-col gap-4 my-4" onSubmit={handleSubmit}>
@@ -235,29 +270,53 @@ function MedicineDeliveryReq() {
       </div>
 
       <div className="flex justify-center items-center"></div>
-      <Dialog open={open} onClose={handleSubmitClose}>
-        <DialogTitle>We received your request!</DialogTitle>
-        <DialogContent>
-          <strong>Here are your responses:</strong>
-          <br />
-          Employee Name: {delivery.employeeName}
-          <br />
-          Priority: {delivery.priority}
-          <br />
-          Location: {delivery.location}
-          <br />
-          Medicine Name: {delivery.medicineName}
-          <br />
-          Quantity: {delivery.quantity}
-          <br />
-          Status: {delivery.status}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleSubmitClose} autoFocus>
-            Okay
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <React.Fragment>
+        <Dialog
+          open={open}
+          onClose={handleSubmitClose}
+          TransitionComponent={Transition}
+          keepMounted
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>We received your request!</DialogTitle>
+          <DialogContent>
+            <strong>Here are your responses:</strong>
+            <br />
+            Employee Name: {delivery.employeeName}
+            <br />
+            Priority: {delivery.priority}
+            <br />
+            Location: {delivery.location}
+            <br />
+            Medicine Name: {delivery.medicineName}
+            <br />
+            Quantity: {delivery.quantity}
+            <br />
+            Status: {delivery.status}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleSubmitClose} autoFocus>
+              Okay
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <div className="text-text mt-[4.9rem] ml-2 font-header place-self-right">
+          Credits: Qiushi and Vincent
+        </div>
+      </React.Fragment>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={10000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

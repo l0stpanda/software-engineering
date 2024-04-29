@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Alert, Snackbar } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
 
 interface editNodeProps {
   node: MapNode;
@@ -28,6 +30,20 @@ export default function EditNodeForm(props: editNodeProps) {
   });
   const { getAccessTokenSilently } = useAuth0();
   const [editMode, setEditMode] = useState<string | null>(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<AlertColor>("success");
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const showSnackbar = (message: string, severity: AlertColor) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
   useEffect(() => {
     setEditMode(props.mode);
     setNodeInfo({
@@ -69,12 +85,13 @@ export default function EditNodeForm(props: editNodeProps) {
           },
         )
         .then(() => {
-          alert("Successfully added node " + nodeInfo.ID);
+          showSnackbar("Successfully added node " + nodeInfo.ID, "success");
           window.location.reload();
         })
         .catch(() => {
-          alert(
+          showSnackbar(
             "There was a problem creating the node. Make sure the node does not already exist.",
+            "error",
           );
         });
     } else {
@@ -175,6 +192,19 @@ export default function EditNodeForm(props: editNodeProps) {
           Submit
         </Button>
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

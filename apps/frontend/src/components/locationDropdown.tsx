@@ -13,13 +13,15 @@ export default function LocationDropdown(prop: locationProps) {
   const [rooms, setRoom] = useState<string[]>([]);
 
   useEffect(() => {
-    handleDropDown().then();
+    handleDropDown().then(() => {
+      console.log("updated dropdown");
+    });
   }, []);
 
   async function handleDropDown() {
     const res: AxiosResponse<{ long_name: string }[]> = await axios.get<
       { long_name: string }[]
-    >("api/import/nodeLongNames");
+    >("/api/import/nodeLongNames");
     const arr: string[] = [];
     // console.log(res.data.length);
     for (let i = 0; res.data.length > i; i++) {
@@ -27,7 +29,7 @@ export default function LocationDropdown(prop: locationProps) {
       arr.push(res.data[i].long_name);
     }
 
-    console.log("THIS IS THE ARRAY: " + arr);
+    // console.log("THIS IS THE ARRAY: " + arr);
     setRoom(arr);
   }
 
@@ -43,6 +45,11 @@ export default function LocationDropdown(prop: locationProps) {
     }
   }
 
+  // function handleInputBlur() {
+  //     console.log("What is this here for?");
+  //   prop.update("");
+  // }
+
   return (
     <div className={prop.className}>
       <FormControl fullWidth required>
@@ -52,6 +59,7 @@ export default function LocationDropdown(prop: locationProps) {
           value={prop.room}
           options={rooms}
           onChange={handleDropdown}
+          //onBlur={handleInputBlur} // Call handleInputBlur when the input field loses focus
           renderInput={(params) => (
             <TextField
               {...params}

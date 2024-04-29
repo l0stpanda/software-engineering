@@ -1,40 +1,23 @@
 import express, { Router, Request, Response } from "express";
 import PrismaClient from "../bin/database-connection.ts";
 const router: Router = express.Router();
-import { medicalDeviceDelivery } from "common/src/medicalDeviceDelivery.ts";
-//Creates record in the general db and the specific db for medical device service requests
+import { maintenanceReqType } from "common/src/maintenanceReqType.ts";
+
 router.post("/", async function (req: Request, res: Response) {
-  const input: medicalDeviceDelivery = req.body;
+  const input: maintenanceReqType = req.body;
   try {
-    //Subtraction set value
-    const num = await PrismaClient.inventory.findMany({
-      where: {
-        name: input.medicalDeviceName,
-        type: "medical device",
-      },
-    });
-    // console.log(input);
-    // console.log(num);
-    const newQuant = num[0].quant - input.quantity;
-
-    if (newQuant < 0) {
-      console.log("Asking for too much");
-      res.sendStatus(416);
-      return;
-    }
-
     const roomStuff = await PrismaClient.nodes.findMany({
       where: {
-        long_name: input.roomName,
+        long_name: input.location,
       },
     });
 
     const id1 = await PrismaClient.generalService.findMany({
       where: {
-        type: "Medical Device Delivery",
+        type: "Maintenance Request",
         location: roomStuff[0].node_id,
         status: input.status,
-        emp_name: input.employeeName,
+        emp_name: input.name,
         priority: input.priority,
       },
     });
@@ -47,61 +30,39 @@ router.post("/", async function (req: Request, res: Response) {
 
     await PrismaClient.generalService.create({
       data: {
-        type: "Medical Device Delivery",
+        type: "Maintenance Request",
         location: roomStuff[0].node_id,
         status: input.status,
-        long_name_loc: input.roomName,
-        emp_name: input.employeeName,
+        long_name_loc: input.location,
+        emp_name: input.name,
         priority: input.priority,
       },
     });
 
     const id = await PrismaClient.generalService.findMany({
       where: {
-        type: "Medical Device Delivery",
+        type: "Maintenance Request",
         location: roomStuff[0].node_id,
         status: input.status,
-        emp_name: input.employeeName,
+        emp_name: input.name,
         priority: input.priority,
       },
     });
-
-    if (id.length > 1) {
-      res.sendStatus(400);
-      return;
-    }
-
-    if (input.deliveryDate != undefined) {
-      //This willa always be the case so don't worry about it being here.
-      console.log("ID I AM FINDING IS " + id[0].id);
-      await PrismaClient.medicalDevice.create({
+    console.log(input);
+    if (input.date != undefined) {
+      await PrismaClient.maintenanceRequest.create({
         data: {
           id: id[0].id,
-          device: input.medicalDeviceName,
-          quantity: Number(input.quantity),
-          date: input.deliveryDate?.toString(),
-          room_name: input.roomName,
-        },
-      });
-    }
-
-    if (newQuant >= 0) {
-      await PrismaClient.inventory.update({
-        where: {
-          name: input.medicalDeviceName,
-        },
-        data: {
-          quant: newQuant,
+          date: input.date.toString(),
+          maintainType: input.maintainType,
         },
       });
     }
   } catch (e) {
-    //Console log error if the data can't be stored
     console.log(e);
     res.sendStatus(400);
     return;
   }
-  //Console log "Ok" if the database successfully collects the data
   res.sendStatus(200);
 });
 
@@ -110,10 +71,10 @@ router.get("/", async function (req: Request, res: Response) {
     res.send(
       await PrismaClient.generalService.findMany({
         where: {
-          type: "Medical Device Delivery",
+          type: "Maintenance Request",
         },
         include: {
-          medicalDeviceCheck: true,
+          maintainID: true,
         },
       }),
     );
@@ -122,7 +83,6 @@ router.get("/", async function (req: Request, res: Response) {
     res.sendStatus(400);
     return;
   }
-  res.sendStatus(200);
 });
 
 router.delete("/:id", async function (req: Request, res: Response) {
@@ -146,6 +106,7 @@ router.post("/update", async function (req: Request, res: Response) {
   const status = req.body.status;
 
   try {
+    console.log(id);
     await PrismaClient.generalService.update({
       where: {
         id: id,
