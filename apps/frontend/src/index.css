@@ -95,9 +95,6 @@ html {
   .bg-ally-background {
     background-image: url("assets/allyBackground.png");
   }
-  .bg-aboutBackground {
-    background-image: url("assets/about_page_background.png");
-  }
 }
 
 .path {
@@ -110,14 +107,26 @@ html {
   transform: scale(1.2);
 }
 
+/*Arrows and little dots on about AND credit page!*/
 .slick-prev {
-  left: 3% !important;
+  left: 2% !important;
   z-index: 1;
+  color: #ffffff;
+  scale: 1.5;
 }
 .slick-next {
-  right: 3% !important;
+  right: 2% !important;
   z-index: 1;
+  color: #ffffff;
+  scale: 1.5;
 }
+.slick-dots {
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  scale: 1.2;
+}
+/*about page stuffs*/
 .aboutPageContainer {
   position: absolute;
   bottom: 0;
@@ -132,7 +141,6 @@ html {
   color: #002866;
   font-size: 42px;
 }
-
 .teamSlide .slick-slide {
   margin-right: 0px;
 }
@@ -177,4 +185,25 @@ html {
   to {
     stroke-dashoffset: 1000;
   }
+}
+
+/*tab animation about page*/
+@keyframes swipe-right {
+  from {
+    left: 0;
+    width: 0%;
+  }
+  to {
+    left: 0;
+    width: 100%;
+  }
+}
+.tab-highlight {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background-color: currentColor;
+  width: 0;
+  animation: swipe-right 0.3s forwards; /*play that animation!!!!*/
 }

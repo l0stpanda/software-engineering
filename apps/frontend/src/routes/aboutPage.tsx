@@ -102,7 +102,7 @@ function AboutPage() {
   //settings for the carousel. this is making me SAD DUDE.
   const sliderSettings = {
     dots: false,
-    infinite: false,
+    infinite: true,
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 4,
@@ -139,11 +139,11 @@ function AboutPage() {
     // container!!
     <div
       className="h-full
-                        w-screen"
+                 w-screen"
       style={{
         backgroundImage: `url(${blueBG})`,
         backgroundSize: "100%",
-        backgroundRepeat: "no-repeat",
+        backgroundRepeat: "repeat",
         backgroundPosition: "center",
       }}
     >
