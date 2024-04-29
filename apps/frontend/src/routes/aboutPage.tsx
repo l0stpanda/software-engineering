@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -12,136 +12,209 @@ import sean_picture from "../assets/softeng_sean.jpg";
 import sahil_picture from "../assets/softeng_sahil.jpg";
 import quishi_picture from "../assets/softeng_quishi.jpg";
 import mike_picture from "../assets/softeng_mike.png";
-import vincent_picture from "../assets/softeng_vincent.jpg";
+import vincent_picture from "../assets/softeng_vincent.png";
 import najum_picture from "../assets/softeng_najum.jpg";
 import blueBG from "../assets/bluehexa.png";
 
 const teamMembers = [
-  { name: "Carter Moore", role: "Lead Software Engineer, Full Stack", img: carter_picture, quote: "" },
-  { name: "Krishna Garg", role: "Assistant Lead Software Engineer, Full Stack", img: krishna_picture, quote: "\"I have been finding god throughout this class\" - Krishna Garg" },
-  { name: "Alessandra Giovenco", role: "Assistant Lead Software Engineer, Full Stack", img: ally_picture, quote: "\"Life is tough and I am not, but the least I could do is take care of myself\" - Lexi aka NewlyNova"},
-  { name: "Ben Zeng", role: "Document Analyst, Full Stack", img: ben_picture, quote: "\"Who put the seeds in my apple?\" - Isaac Newton"},
-  { name: "Samruddhi Naik", role: "Product Owner, Full Stack", img: sam_picture, quote: "" },
-  { name: "Sean Peacock", role: "Scrum Master, Full Stack", img: sean_picture, quote: "\"One must be sane to think clearly, but one can think deeply and be quite insane\" - Nikola Tesla"},
-  { name: "Najum Soofi", role: "Project Manager, Full Stack", img: najum_picture, quote: ""},
-  { name: "Mike Wilkinson", role: "Team Coach", img: mike_picture, quote: "\"The first step to failure is trying.\" - Homer Simpson"},
-  { name: "Abelardo Broche", role: "Full-Time Software Engineer, Full Stack", img: abe_picture, quote: "ben: \"Why are you hugging the pillar?\"" +
-          "\n abe: \"Because I want Krishna to show me his drop downs, Krishna can you please show me your drop downs\"" },
-  { name: "Sahil Mirani", role: "Full-Time Software Engineer, Full Stack", img: sahil_picture, quote: " \"I think Abe has a different kind of ball game in mind\" - Sahil Mirani" },
-  { name: "Qiushi Chen", role: "Full-Time Software Engineer, Full Stack", img: quishi_picture, quote: "" },
-  { name: "Vincent Huang", role: "Full-Time Software Engineer, Full Stack", img: vincent_picture, quote: "" },
+  {
+    name: "Carter Moore",
+    role: "Lead Software Engineer, Full Stack",
+    img: carter_picture,
+    quote: "",
+  },
+  {
+    name: "Krishna Garg",
+    role: "Assistant Lead Software Engineer, Full Stack",
+    img: krishna_picture,
+    quote: '"I have been finding god throughout this class" - Krishna Garg',
+  },
+  {
+    name: "Alessandra Giovenco",
+    role: "Assistant Lead Software Engineer, Full Stack",
+    img: ally_picture,
+    quote:
+      '"Life is tough and I am not, but the least I could do is take care of myself" - Lexi aka NewlyNova',
+  },
+  {
+    name: "Ben Zeng",
+    role: "Document Analyst, Full Stack",
+    img: ben_picture,
+    quote: '"Who put the seeds in my apple?" - Isaac Newton',
+  },
+  {
+    name: "Samruddhi Naik",
+    role: "Product Owner, Full Stack",
+    img: sam_picture,
+    quote: "",
+  },
+  {
+    name: "Sean Peacock",
+    role: "Scrum Master, Full Stack",
+    img: sean_picture,
+    quote:
+      '"One must be sane to think clearly, but one can think deeply and be quite insane" - Nikola Tesla',
+  },
+  {
+    name: "Najum Soofi",
+    role: "Project Manager, Full Stack",
+    img: najum_picture,
+    quote: "",
+  },
+  {
+    name: "Mike Wilkinson",
+    role: "Team Coach",
+    img: mike_picture,
+    quote: '"The first step to failure is trying." - Homer Simpson',
+  },
+  {
+    name: "Abelardo Broche",
+    role: "Full-Time Software Engineer, Full Stack",
+    img: abe_picture,
+    quote:
+      'Ben: "Why are you hugging the pillar?"' +
+      '\n Abe: "Because I want Krishna to show me his drop downs, Krishna can you please show me your drop downs"',
+  },
+  {
+    name: "Sahil Mirani",
+    role: "Full-Time Software Engineer, Full Stack",
+    img: sahil_picture,
+    quote:
+      ' "I think Abe has a different kind of ball game in mind" - Sahil Mirani',
+  },
+  {
+    name: "Qiushi Chen",
+    role: "Full-Time Software Engineer, Full Stack",
+    img: quishi_picture,
+    quote: "",
+  },
+  {
+    name: "Vincent Huang",
+    role: "Full-Time Software Engineer, Full Stack",
+    img: vincent_picture,
+    quote: "",
+  },
 ];
 
 function AboutPage() {
-    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-    //settings for the carousel. this is making me SAD DUDE.
-    const sliderSettings = {
-        dots: false,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 4,
-        slidesToScroll: 4,
-        initialSlide: 0,
-        responsive: [
-            {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 3,
-                    slidesToScroll: 3,
-                    infinite: true,
-                    dots: true
-                }
-            },
-            {
-                breakpoint: 600,
-                settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 2,
-                    initialSlide: 2
-                }
-            },
-            {
-                breakpoint: 480,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1
-                }
-            }
-        ]
-    };
+  //settings for the carousel. this is making me SAD DUDE.
+  const sliderSettings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
 
-    return (
-        // container!!
-        <div className="h-full
+  return (
+    // container!!
+    <div
+      className="h-full
                         w-screen"
-             style={{
-                 backgroundImage: `url(${blueBG})`,
-                 backgroundSize: "100%",
-                 backgroundRepeat: "no-repeat",
-                 backgroundPosition: "center",
-             }}>
-            <div className="text-center font-header items-center"
-            style = {{
-                padding: "5px",
-                borderRadius: "40px",
-                margin: "1.5rem auto",
-                alignItems: "center",
-                maxWidth: "45%",
-                backgroundColor: "rgba(255, 255, 255, 0.7)"
-            }}>
-                {/*words. we love words*/}
-                <h2 className="teamHeader font-bold">
-                    Meet the Team!</h2>
-                <div className="text-lg">
-                <h1>WPI Computer Science Department</h1>
-                <h1>CS3733-D24 Software Engineering</h1>
-                <h1>Professor Wilson Wong</h1>
-                <p>Thank You Brigham and Women’s Hospital and especially Andrew Shinn</p>
-                <p className="text-xs text-center mb-5" style = {{color: "#FF0000"}}>
-                    Disclaimer: The Brigham & Women’s Hospital maps and data used in this
-                    application are
-                    <p>
-                    copyrighted and provided for the sole use of
-                    educational purposes
-                </p>
-                </p>
-                </div>
-            </div>
-
-            {/*carousel yay (cry)*/}
-            <div className = "aboutPageContainer"
-            style={{
-                borderColor: "transparent",
-                borderRadius: "40px",
-            }}>
-            <Slider {...sliderSettings}>
-                {teamMembers.map((member, index) => (
-                    <div key={index} className="teamMemImgCont">
-                        <div
-                            className="text-center"
-                            onMouseEnter={() => setHoveredIndex(index)}
-                            onMouseLeave={() => setHoveredIndex(null)}
-                        >
-                            <img src={member.img}
-                                 alt={member.name}
-                            className="teamMemImg"/>
-                            <div className={`infoOverlay ${hoveredIndex === index ? 'flex' : "hidden"}`}>
-                                <div className="text-container">
-                                    <h3>{member.name}</h3>
-                                    <p>{member.role}</p>
-                                    <p>{member.quote}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </Slider>
-            </div>
+      style={{
+        backgroundImage: `url(${blueBG})`,
+        backgroundSize: "100%",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+      }}
+    >
+      <div
+        className="text-center font-header items-center"
+        style={{
+          padding: "5px",
+          borderRadius: "40px",
+          margin: "1.5rem auto",
+          alignItems: "center",
+          maxWidth: "45%",
+          backgroundColor: "rgba(255, 255, 255, 0.7)",
+        }}
+      >
+        {/*words. we love words*/}
+        <h2 className="teamHeader font-bold">Meet the Team!</h2>
+        <div className="text-lg">
+          <h1>WPI Computer Science Department</h1>
+          <h1>CS3733-D24 Software Engineering</h1>
+          <h1>Professor Wilson Wong</h1>
+          <p>
+            Thank You Brigham and Women’s Hospital and especially Andrew Shinn
+          </p>
+          <p className="text-xs text-center mb-5" style={{ color: "#FF0000" }}>
+            Disclaimer: The Brigham & Women’s Hospital maps and data used in
+            this application are
+            <p>
+              copyrighted and provided for the sole use of educational purposes
+            </p>
+          </p>
         </div>
-    );
-}
+      </div>
 
+      {/*carousel yay (cry)*/}
+      <div
+        className="aboutPageContainer"
+        style={{
+          borderColor: "transparent",
+          borderRadius: "40px",
+        }}
+      >
+        <Slider {...sliderSettings}>
+          {teamMembers.map((member, index) => (
+            <div key={index} className="teamMemImgCont">
+              <div
+                className="text-center"
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+              >
+                <img
+                  src={member.img}
+                  alt={member.name}
+                  className="teamMemImg"
+                />
+                <div
+                  className={`infoOverlay ${hoveredIndex === index ? "flex" : "hidden"}`}
+                >
+                  <div className="text-container">
+                    <h3>{member.name}</h3>
+                    <p>{member.role}</p>
+                    <p>{member.quote}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </Slider>
+      </div>
+    </div>
+  );
+}
 
 export default AboutPage;
 

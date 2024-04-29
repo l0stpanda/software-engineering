@@ -111,67 +111,64 @@ html {
 }
 
 .slick-prev {
-    left: 3% !important;
-    z-index: 1;
+  left: 3% !important;
+  z-index: 1;
 }
 .slick-next {
-    right: 3% !important;
-    z-index: 1;
+  right: 3% !important;
+  z-index: 1;
 }
 .aboutPageContainer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 0px;
-    background-color: transparent;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0px;
+  background-color: transparent;
 }
 .teamHeader {
-    margin-top: 1rem;
-    margin-bottom: 2px;
-    color: #002866;
-    font-size: 42px
+  margin-top: 1rem;
+  margin-bottom: 2px;
+  color: #002866;
+  font-size: 42px;
 }
 
-.teamSlide .slick-slide{
-    margin-right: 0px;
+.teamSlide .slick-slide {
+  margin-right: 0px;
 }
 .teamMemImgCont {
-    position: relative;
-    width: 300px;
-    margin-bottom: 0;
+  position: relative;
+  width: 300px;
+  margin-bottom: 0;
 }
 .teamMemImg {
-    width: 100%;
-    height: 545px;
-    margin-bottom: 0;
-    object-fit: cover;
+  width: 100%;
+  height: 545px;
+  margin-bottom: 0;
+  object-fit: cover;
 }
 .infoOverlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Overlay color */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    opacity: 0; /* Hide by default */
-    transition: opacity 0.5s ease;
-
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Overlay color */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  opacity: 0; /* Hide by default */
+  transition: opacity 0.5s ease;
 }
 .teamMemImgCont:hover .infoOverlay {
-    opacity: 1;
+  opacity: 1;
 }
 .slick-slide {
-    margin: 0;
+  margin: 0;
 }
-
-
 
 @keyframes dash {
   from {

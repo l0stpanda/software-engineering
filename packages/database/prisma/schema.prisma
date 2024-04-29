@@ -89,14 +89,14 @@ model GeneralService {
   emp_name      String
   priority      String
 
-  location_room      Nodes               @relation("location", fields: [location], references: [node_id], onDelete: Cascade)
-  medicalDeviceCheck medicalDevice[]     @relation("idCheck")
-  lost_location      LostItem[]          @relation("idCheckLost")
-  roomSched          RoomScheduler[]     @relation("roomSchedID")
-  medicineReqID      MedicineRequest[]   @relation("medicineReqID")
-  flowerID           Flowers[]           @relation("flowerID")
-  sanitationID       SanitationRequest[] @relation("sanitationReq")
-  maintainID         MaintenanceRequest[]       @relation("idCheckMaintain")
+  location_room      Nodes                @relation("location", fields: [location], references: [node_id], onDelete: Cascade)
+  medicalDeviceCheck medicalDevice[]      @relation("idCheck")
+  lost_location      LostItem[]           @relation("idCheckLost")
+  roomSched          RoomScheduler[]      @relation("roomSchedID")
+  medicineReqID      MedicineRequest[]    @relation("medicineReqID")
+  flowerID           Flowers[]            @relation("flowerID")
+  sanitationID       SanitationRequest[]  @relation("sanitationReq")
+  maintainID         MaintenanceRequest[] @relation("idCheckMaintain")
 }
 
 model SanitationRequest {
@@ -110,9 +110,9 @@ model SanitationRequest {
 
 // maintenance requests are saved
 model MaintenanceRequest {
-  id            Int    @id
-  date          String
-  maintainType  String
+  id           Int    @id
+  date         String
+  maintainType String
 
   // Foreign Key References
   maintainReq GeneralService @relation("idCheckMaintain", fields: [id], references: [id], onDelete: Cascade)
