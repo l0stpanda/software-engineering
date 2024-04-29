@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Slider from "react-slick";
+import Slider from "react-slick"; //new toy to use! little library for carousels. I could use mui, but this is already done w this
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import abe_picture from "../assets/softeng_abe.jpg";
@@ -14,8 +14,9 @@ import quishi_picture from "../assets/softeng_quishi.jpg";
 import mike_picture from "../assets/softeng_mike.png";
 import vincent_picture from "../assets/softeng_vincent.png";
 import najum_picture from "../assets/softeng_najum.jpg";
-import blueBG from "../assets/bluehexa.png";
+import blueBG from "../assets/bluehexa.png"; //background image :D
 
+// array of team members and their info
 const teamMembers = [
   {
     name: "Carter Moore",
@@ -99,7 +100,7 @@ const teamMembers = [
 function AboutPage() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  //settings for the carousel. this is making me SAD DUDE.
+  //settings for the carousel. 4 slides at a time, responsive to screen size, goes continuously (infinite)
   const sliderSettings = {
     dots: false,
     infinite: true,
@@ -114,7 +115,7 @@ function AboutPage() {
           slidesToShow: 3,
           slidesToScroll: 3,
           infinite: true,
-          dots: true,
+          dots: false,
         },
       },
       {
@@ -136,27 +137,28 @@ function AboutPage() {
   };
 
   return (
-    // container!!
+    //container!!
     <div
       className="h-full
-                 w-screen"
+                 w-screen
+                 bg-cover"
       style={{
         backgroundImage: `url(${blueBG})`,
-        backgroundSize: "100%",
         backgroundRepeat: "repeat",
         backgroundPosition: "center",
       }}
     >
       <div
-        className="text-center font-header items-center"
-        style={{
-          padding: "5px",
-          borderRadius: "40px",
-          margin: "1.5rem auto",
-          alignItems: "center",
-          maxWidth: "45%",
-          backgroundColor: "rgba(255, 255, 255, 0.7)",
-        }}
+        className="mx-auto
+        rounded-2xl
+        max-w-2xl
+        p-0.5
+        m-8
+        text-center
+        font-header
+        items-center
+        bg-background
+        bg-opacity-65 bg-position-center bg-cover"
       >
         {/*words. we love words*/}
         <h2 className="teamHeader font-bold">Meet the Team!</h2>
@@ -164,9 +166,6 @@ function AboutPage() {
           <h1>WPI Computer Science Department</h1>
           <h1>CS3733-D24 Software Engineering</h1>
           <h1>Professor Wilson Wong</h1>
-          <p>
-            Thank You Brigham and Women’s Hospital and especially Andrew Shinn
-          </p>
           <p className="text-xs text-center mb-5" style={{ color: "#FF0000" }}>
             Disclaimer: The Brigham & Women’s Hospital maps and data used in
             this application are
@@ -211,6 +210,22 @@ function AboutPage() {
             </div>
           ))}
         </Slider>
+        <p
+          className="
+           text-sm
+           mx-auto
+           rounded-2xl
+           max-w-2xl
+           p-0.5
+           mb-1.5
+           text-center
+           font-header
+           items-center
+           bg-background
+           bg-opacity-65 bg-position-center bg-cover"
+        >
+          Thank You Brigham and Women’s Hospital and especially Andrew Shinn
+        </p>
       </div>
     </div>
   );

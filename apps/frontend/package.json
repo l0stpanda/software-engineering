@@ -41,6 +41,7 @@
     "react-router-dom": "^6.11.2",
     "react-slick": "^0.30.2",
     "react-zoom-pan-pinch": "^3.1.0",
+    "recharts": "^2.12.6",
     "serve": "^14.2.0",
     "slick-carousel": "^1.8.1",
     "sort-by": "^1.2.0",
