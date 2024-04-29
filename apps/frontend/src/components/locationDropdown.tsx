@@ -19,7 +19,7 @@ export default function LocationDropdown(prop: locationProps) {
   async function handleDropDown() {
     const res: AxiosResponse<{ long_name: string }[]> = await axios.get<
       { long_name: string }[]
-    >("api/import/nodeLongNames");
+    >("/api/import/nodeLongNames");
     const arr: string[] = [];
     // console.log(res.data.length);
     for (let i = 0; res.data.length > i; i++) {
