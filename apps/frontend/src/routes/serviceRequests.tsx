@@ -73,7 +73,7 @@ function ServiceRequests() {
     };
 
     fetchData().catch((error) => {
-      console.error("Error from fetchData promise:", error);
+      console.log("Error from fetchData promise:", error);
     });
   }, [getAccessTokenSilently]);
 
@@ -319,20 +319,20 @@ function ServiceRequests() {
                   }}
                 />
               </Tooltip>
-                <Tooltip title="Maintenance Request">
-                    <Tab
-                        icon={<ToolIcon />}
-                        id="tab-6"
-                        sx={{
-                            transition: "transform 0.3s ease-in-out",
-                            "&:hover": {
-                                transform: "scale(1.4)",
-                                position: "relative",
-                                zIndex: 1, // Ensure scaling item is above others
-                            },
-                        }}
-                    />
-                </Tooltip>
+              <Tooltip title="Maintenance Request">
+                <Tab
+                  icon={<ToolIcon />}
+                  id="tab-6"
+                  sx={{
+                    transition: "transform 0.3s ease-in-out",
+                    "&:hover": {
+                      transform: "scale(1.4)",
+                      position: "relative",
+                      zIndex: 1, // Ensure scaling item is above others
+                    },
+                  }}
+                />
+              </Tooltip>
             </Tabs>
           </div>
 
