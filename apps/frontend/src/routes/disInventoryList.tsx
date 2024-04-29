@@ -25,7 +25,7 @@ export default function DisplayInventory() {
   const [inventoryResponse, setinventoryResponse] = useState<inventoryType>({
     id: 0,
     name: "",
-    type: "medicine",
+    type: "Medicine",
     quant: 0,
   });
   const { getAccessTokenSilently, user } = useAuth0();
@@ -106,7 +106,7 @@ export default function DisplayInventory() {
     setinventoryResponse({
       id: 0,
       name: "",
-      type: "medicine",
+      type: "Medicine",
       quant: 0,
     });
     setOpen(false);
@@ -141,7 +141,7 @@ export default function DisplayInventory() {
       });
       setRecords(received.data);
       showSnackbar(
-        "Successfully deleted inventory item with ID number " + id,
+        `Successfully deleted inventory item with ID number ${itemName}`,
         "success",
       );
     } catch (e) {
@@ -240,8 +240,8 @@ export default function DisplayInventory() {
                   value={inventoryResponse.type}
                   onChange={handleDropdownChange}
                 >
-                  <MenuItem value={"medicine"}>Medicine</MenuItem>
-                  <MenuItem value={"medical device"}>Medical Device</MenuItem>
+                  <MenuItem value={"Medicine"}>Medicine</MenuItem>
+                  <MenuItem value={"Medical Device"}>Medical Device</MenuItem>
                 </Select>
               </FormControl>
 

@@ -28,6 +28,7 @@ interface FloorNodesProps {
   reqs: GeneralReq[];
   mode: string;
   nodeInfoCallback: (node: FloorNodeInfo) => void;
+  getBookings: (longName: string) => void;
 }
 
 export interface FloorNodeInfo {
@@ -88,10 +89,9 @@ function FloorNode(props: FloorNodesProps) {
 
   const handleNodeClick = (nodeid: string) => () => {
     const res = nodes.get(nodeid);
-    if (props.mode === "path") {
-      if (res !== undefined) {
-        const longName: string = res.getLongName();
-
+    if (res !== undefined) {
+      const longName: string = res.getLongName();
+      if (props.mode === "path") {
         if (props.inputLoc.start !== undefined && count === 0) {
           props.updateStartAndEnd(longName, "");
           setCount(1);
@@ -101,17 +101,16 @@ function FloorNode(props: FloorNodesProps) {
         } else if (count === 1) {
           props.updateEnd(longName);
           setCount(0);
-        } else {
-          //console.log("OH GOD");
         }
-      }
-    } else if (props.mode === "info") {
-      console.log("Mode is info");
+      } else {
+        console.log("Mode is info");
 
-      setClicked(scaledNodes[nodeid]);
-      props.nodeInfoCallback(scaledNodes[nodeid]);
-      // need to log so it can be used
-      console.log(clicked);
+        setClicked(scaledNodes[nodeid]);
+        props.nodeInfoCallback(scaledNodes[nodeid]);
+        // need to log so it can be used
+        console.log(clicked);
+        props.getBookings(longName);
+      }
     }
   };
 
