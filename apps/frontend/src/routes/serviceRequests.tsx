@@ -221,6 +221,7 @@ function ServiceRequests() {
               onChange={handleTabChange}
               sx={{
                 overflow: "hidden", // Hiding overflow here
+                color: "#FFFFFF",
               }}
             >
               <Tooltip title="Flower Delivery">
@@ -230,10 +231,13 @@ function ServiceRequests() {
                   sx={{
                     transition: "transform 0.3s ease-in-out",
                     color: "#FFFFFF",
-                    "&:hover, &:focus": {
+                    "&:hover": {
                       transform: "scale(1.4)",
                       position: "relative",
                       zIndex: 1,
+                      color: "#F6BD38",
+                    },
+                    "&:focus": {
                       color: "#F6BD38",
                     },
                   }}
@@ -246,7 +250,7 @@ function ServiceRequests() {
                   sx={{
                     transition: "transform 0.3s ease-in-out",
                     color: "#FFFFFF",
-                    "&:hover, &:focus": {
+                    "&:hover, &:focus ": {
                       transform: "scale(1.4)",
                       position: "relative",
                       zIndex: 1,
@@ -325,10 +329,12 @@ function ServiceRequests() {
                   id="tab-6"
                   sx={{
                     transition: "transform 0.3s ease-in-out",
-                    "&:hover": {
+                    color: "#FFFFFF",
+                    "&:hover, &:focus": {
                       transform: "scale(1.4)",
                       position: "relative",
                       zIndex: 1, // Ensure scaling item is above others
+                      color: "#F6BD38",
                     },
                   }}
                 />
