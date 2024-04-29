@@ -25,8 +25,10 @@ import RoomSchedulingReq from "../components/roomSchedulingReq.tsx";
 import MedicalDeviceReq from "../components/medicalDeviceReq.tsx";
 import MedicineDeliveryReq from "../components/MedicineDeliveryReq.tsx";
 import SanitationReq from "../components/sanitationReq.tsx";
+import MaintenanceReq from "../components/maintenanceReq.tsx";
+import ToolIcon from "@mui/icons-material/Build";
 
-type GeneralReq = {
+export type GeneralReq = {
   id: number;
   type: string;
   location: string;
@@ -62,16 +64,16 @@ function ServiceRequests() {
             Authorization: `Bearer ${token}`,
           },
         });
-        setRecords(response.data); // Assuming the data is an array of flower request data
-        setPermRecords(response.data); // Assuming the data is an array of flower request data
+        setRecords(response.data); // Assuming the data is an array of request data
+        setPermRecords(response.data); // Assuming the data is an array of request data
         console.log(response.data);
       } catch (error) {
-        console.error("Error fetching flower requests", error);
+        console.error("Error fetching requests", error);
       }
     };
 
     fetchData().catch((error) => {
-      console.error("Error from fetchData promise:", error);
+      console.log("Error from fetchData promise:", error);
     });
   }, [getAccessTokenSilently]);
 
@@ -317,6 +319,20 @@ function ServiceRequests() {
                   }}
                 />
               </Tooltip>
+              <Tooltip title="Maintenance Request">
+                <Tab
+                  icon={<ToolIcon />}
+                  id="tab-6"
+                  sx={{
+                    transition: "transform 0.3s ease-in-out",
+                    "&:hover": {
+                      transform: "scale(1.4)",
+                      position: "relative",
+                      zIndex: 1, // Ensure scaling item is above others
+                    },
+                  }}
+                />
+              </Tooltip>
             </Tabs>
           </div>
 
@@ -327,6 +343,7 @@ function ServiceRequests() {
             {currentTabIndex === 3 && <MedicalDeviceReq />}
             {currentTabIndex === 4 && <MedicineDeliveryReq />}
             {currentTabIndex === 5 && <SanitationReq />}
+            {currentTabIndex === 6 && <MaintenanceReq />}
           </div>
         </div>
       </div>

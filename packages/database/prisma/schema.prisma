@@ -96,6 +96,7 @@ model GeneralService {
   medicineReqID      MedicineRequest[]   @relation("medicineReqID")
   flowerID           Flowers[]           @relation("flowerID")
   sanitationID       SanitationRequest[] @relation("sanitationReq")
+  maintainID         MaintenanceRequest[]       @relation("idCheckMaintain")
 }
 
 model SanitationRequest {
@@ -105,6 +106,16 @@ model SanitationRequest {
   room_name     String
   // Foreign Key Reference
   sanitationReq GeneralService @relation("sanitationReq", fields: [id], references: [id], onDelete: Cascade)
+}
+
+// maintenance requests are saved
+model MaintenanceRequest {
+  id            Int    @id
+  date          String
+  maintainType  String
+
+  // Foreign Key References
+  maintainReq GeneralService @relation("idCheckMaintain", fields: [id], references: [id], onDelete: Cascade)
 }
 
 // medical device requests are saved
@@ -158,14 +169,23 @@ model User {
 }
 
 model Todo {
-  id       Int      @id @default(autoincrement())
+  id       Int       @id @default(autoincrement())
   task     String
   priority String
   email    String
   complete Boolean
-  subtasks String[]
+  subtasks subTodo[] @relation("idSubtasks")
   // Foreign Key Reference
-  user     User     @relation("UserID", fields: [email], references: [email], onDelete: Cascade)
+  user     User      @relation("UserID", fields: [email], references: [email], onDelete: Cascade)
+}
+
+model subTodo {
+  id          Int     @id @default(autoincrement())
+  id_relation Int
+  task        String
+  complete    Boolean
+  // Foreign Key Reference
+  parentTask  Todo    @relation("idSubtasks", fields: [id_relation], references: [id], onDelete: Cascade)
 }
 
 model Flowers {
