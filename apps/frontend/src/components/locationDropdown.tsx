@@ -13,7 +13,9 @@ export default function LocationDropdown(prop: locationProps) {
   const [rooms, setRoom] = useState<string[]>([]);
 
   useEffect(() => {
-    handleDropDown().then();
+    handleDropDown().then(() => {
+      console.log("updated dropdown");
+    });
   }, []);
 
   async function handleDropDown() {
@@ -43,9 +45,10 @@ export default function LocationDropdown(prop: locationProps) {
     }
   }
 
-  function handleInputBlur() {
-    prop.update("");
-  }
+  // function handleInputBlur() {
+  //     console.log("What is this here for?");
+  //   prop.update("");
+  // }
 
   return (
     <div className={prop.className}>
@@ -56,7 +59,7 @@ export default function LocationDropdown(prop: locationProps) {
           value={prop.room}
           options={rooms}
           onChange={handleDropdown}
-          onBlur={handleInputBlur} // Call handleInputBlur when the input field loses focus
+          //onBlur={handleInputBlur} // Call handleInputBlur when the input field loses focus
           renderInput={(params) => (
             <TextField
               {...params}

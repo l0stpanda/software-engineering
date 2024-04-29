@@ -72,8 +72,8 @@ function ServiceRequests() {
       }
     };
 
-    fetchData().catch((error) => {
-      console.log("Error from fetchData promise:", error);
+    fetchData().catch(() => {
+      // console.log("Error from fetchData promise:", error);
     });
   }, [getAccessTokenSilently]);
 
