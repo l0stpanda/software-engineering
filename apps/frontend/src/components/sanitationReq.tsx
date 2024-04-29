@@ -10,24 +10,11 @@ import {
   InputLabel,
   MenuItem,
 } from "@mui/material";
-import Slide from "@mui/material/Slide";
-import { TransitionProps } from "@mui/material/transitions";
 import { useAuth0 } from "@auth0/auth0-react";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import axios from "axios";
 import UserDropdown from "../components/userDropdown.tsx";
-
-const Transition = React.forwardRef(function Transition(
-  props: TransitionProps & {
-    children: React.ReactElement<string, string>;
-  },
-  ref: React.Ref<unknown>,
-) {
-  return (
-    <Slide direction="up" ref={ref} {...props} children={props.children} />
-  );
-});
 
 function SanitationReq() {
   type SanitationReq = {
@@ -258,38 +245,30 @@ function SanitationReq() {
           </div>
         </form>
       </div>
-      <React.Fragment>
-        <Dialog
-          open={open}
-          onClose={handleSubmitClose}
-          TransitionComponent={Transition}
-          keepMounted
-          aria-describedby="alert-dialog-slide-description"
-        >
-          <DialogTitle>We received your request!</DialogTitle>
-          <DialogContent>
-            <strong>Here are your responses:</strong>
-            <br />
-            Employee Name: {formData.employeeName}
-            <br />
-            Room Name: {formData.roomName}
-            <br />
-            Severity: {formData.severity}
-            <br />
-            Hazardous?: {formData.hazardous}
-            <br />
-            Priority: {formData.priority}
-            <br />
-            Status: {formData.status}
-          </DialogContent>
+      <Dialog open={open} onClose={handleSubmitClose}>
+        <DialogTitle>We received your request!</DialogTitle>
+        <DialogContent>
+          <strong>Here are your responses:</strong>
+          <br />
+          Employee Name: {formData.employeeName}
+          <br />
+          Room Name: {formData.roomName}
+          <br />
+          Severity: {formData.severity}
+          <br />
+          Hazardous?: {formData.hazardous}
+          <br />
+          Priority: {formData.priority}
+          <br />
+          Status: {formData.status}
+        </DialogContent>
 
-          <DialogActions>
-            <Button onClick={handleSubmitClose} autoFocus>
-              Okay
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </React.Fragment>
+        <DialogActions>
+          <Button onClick={handleSubmitClose} autoFocus>
+            Okay
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
