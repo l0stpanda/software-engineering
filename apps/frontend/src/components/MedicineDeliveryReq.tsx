@@ -22,6 +22,9 @@ import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import UserDropdown from "../components/userDropdown.tsx";
 import MedicineDropdown from "./MedicineDropdown.tsx";
+import { Alert, Snackbar } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
+
 function MedicineDeliveryReq() {
   const { getAccessTokenSilently } = useAuth0();
   const [delivery, setDelivery] = useState<MedicineDelivery>({
@@ -32,6 +35,21 @@ function MedicineDeliveryReq() {
     quantity: "1",
     status: "Unassigned",
   });
+  const LOW_QUANTITY_THRESHOLD = 10;
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<AlertColor>("success");
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const showSnackbar = (message: string, severity: AlertColor) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
 
   function clear() {
     setDelivery({
@@ -76,8 +94,23 @@ function MedicineDeliveryReq() {
     setDelivery({ ...delivery, location: val });
   }
 
-  function handleMedicineInput(val: string) {
+  async function handleMedicineInput(val: string) {
+    const token = await getAccessTokenSilently();
     setDelivery({ ...delivery, medicineName: val });
+    try {
+      const item = await axios.get("/api/inventory/getNum", {
+        params: { name: val },
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log(item.data);
+      // Check if the quantity is below a threshold
+      if (item.data.quant <= LOW_QUANTITY_THRESHOLD) {
+        showSnackbar(`Low stock for ${val}`, "warning"); // Change severity to "warning" or another appropriate level
+      }
+    } catch (e) {
+      console.error(e);
+      showSnackbar("Can find the Medicine", "error");
+    }
   }
 
   function handleQuantityInput(e: ChangeEvent<HTMLInputElement>) {
@@ -279,6 +312,19 @@ function MedicineDeliveryReq() {
           </DialogActions>
         </Dialog>
       </React.Fragment>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={10000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

@@ -24,7 +24,8 @@ import LocationDropdown from "../components/locationDropdown.tsx";
 import axios from "axios";
 import UserDropdown from "../components/userDropdown.tsx";
 import DeviceDropdown from "./DeviceDropdown.tsx";
-
+import { Alert, Snackbar } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
 function MedicalDeviceReq() {
   const { getAccessTokenSilently } = useAuth0();
   const [formData, setFormData] = useState<medicalDeviceDelivery>({
@@ -47,8 +48,22 @@ function MedicalDeviceReq() {
       <Slide direction="up" ref={ref} {...props} children={props.children} />
     );
   });
-
+  const LOW_QUANTITY_THRESHOLD = 10;
   const [open, setOpen] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<AlertColor>("success");
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const showSnackbar = (message: string, severity: AlertColor) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
 
   function clear() {
     setFormData({
@@ -88,10 +103,26 @@ function MedicalDeviceReq() {
     setFormData({ ...formData, roomName: val });
   }
 
-  function updateItem(val: string) {
+  async function updateItem(val: string) {
+    const token = await getAccessTokenSilently();
     setFormData({ ...formData, medicalDeviceName: val });
+    try {
+      const item = await axios.get("/api/inventory/getNum", {
+        params: { name: val },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(item.data);
+      // Check if the quantity is below a threshold
+      if (item.data.quant <= LOW_QUANTITY_THRESHOLD) {
+        showSnackbar(`Low stock for ${val}`, "warning"); // Change severity to "warning" or another appropriate level
+      }
+    } catch (e) {
+      console.error(e);
+      showSnackbar("Can find the Medical", "error");
+    }
   }
-
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const token = await getAccessTokenSilently();
@@ -317,6 +348,19 @@ function MedicalDeviceReq() {
           </DialogActions>
         </Dialog>
       </React.Fragment>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={10000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

@@ -23,7 +23,7 @@ import floor1 from "../assets/01_thefirstfloor.png";
 import floor2 from "../assets/02_thesecondfloor.png";
 import floor3 from "../assets/03_thethirdfloor.png";
 
-import FloorNode from "../components/FloorNode.tsx";
+import FloorNode, { FloorNodeInfo } from "../components/FloorNode.tsx";
 import { SelectChangeEvent } from "@mui/material/Select";
 // import { ArrowBack } from "@mui/icons-material";
 import LocationDropdown from "../components/locationDropdown.tsx";
@@ -35,6 +35,10 @@ import { userInfo } from "common/src/userInfo.ts";
 import { directionInfo, getDirections } from "../objects/Pathfinding.ts";
 import { JSX } from "react/jsx-runtime";
 import axios from "axios";
+// import console from "console";
+import { GeneralReq } from "./serviceRequests.tsx";
+import ModeDisplay from "../components/ModeDisplay.tsx";
+import AccordionServiceRequests from "../components/AccordionServiceRequests.tsx";
 
 type roomSched = {
   id: number;
@@ -49,7 +53,7 @@ type serviceRequestData = {
   roomSched: roomSched[];
 };
 
-function Map() {
+function MapPage() {
   const divRef = useRef<HTMLDivElement>(null);
   const transformRef = useRef<ReactZoomPanPinchRef>(null);
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
@@ -67,10 +71,14 @@ function Map() {
   const [path, setPath] = useState<string[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [schedules, setSchedules] = useState<serviceRequestData[]>([]);
-  const [mode, setMode] = useState("bookings");
   const [bookings, setBookings] = useState<JSX.Element[]>([]);
 
+  const [navigatingNodes, setNavigatingNodes] = useState({
+    start: "",
+    end: "",
+  });
   const { getAccessTokenSilently, user } = useAuth0();
+  const [records, setRecords] = useState<GeneralReq[]>([]);
 
   // Zoom in/out buttons for map viewing
   const Controls = () => {
@@ -103,26 +111,6 @@ function Map() {
       </div>
     );
   };
-
-  const [navigatingNodes, setNavigatingNodes] = useState({
-    start: "",
-    end: "",
-  });
-  // const [submitValues, setSubmitValues] = useState(["", ""]);
-
-  // Carter's function code bc idk how to do it
-  // function handleFormChanges(event: React.ChangeEvent<HTMLInputElement>) {
-  //   const { name, value } = event.target;
-  //   setNavigatingNodes({ ...navigatingNodes, [name]: value });
-  // }
-
-  // Handles changes to the start/end destination boxes
-  // function handleFormSubmit() {
-  //   const cleanStart = navigatingNodes.start.replace("\r", "");
-  //   const cleanEnd = navigatingNodes.end.replace("\r", "");
-  //   //console.log(cleanStart, cleanEnd);
-  //   setNavigatingNodes({ start: cleanStart, end: cleanEnd });
-  // }
 
   // Changes the map image
   const changeFloor = (floor: string) => {
@@ -179,6 +167,27 @@ function Map() {
         });
     }
     sendUser().then();
+
+    const fetchData = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+        const response = await axios.get("/api/fetchAll", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setRecords(response.data); // Assuming the data is an array of request data
+        // setPermRecords(response.data); // Assuming the data is an array of request data
+        // console.log(response.data);
+      } catch (error) {
+        // log(400);
+        // console.error("Error fetching requests", error);
+      }
+    };
+
+    fetchData().then().catch();
+    // log(error);
+    // console.error("Error from fetchData promise:", error);
   }, [getAccessTokenSilently, user?.email, user?.nickname, user?.sub]);
 
   // Updates the graph when it has been received from the database
@@ -239,7 +248,7 @@ function Map() {
         const yOffset =
           (divDimensions.height - (pathSize[1] - pathSize[3]) * scale) / 2;
 
-        log(xOffset);
+        // log(xOffset);
 
         transformRef.current.setTransform(
           -(pathSize[2] * scale) + xOffset,
@@ -252,9 +261,9 @@ function Map() {
     }
   }, [pathSize, divDimensions, imgState]);
 
-  function log(data: number) {
-    console.log(data);
-  }
+  // function log(data: number) {
+  //   console.log(data);
+  // }
 
   const changeAlgorithm = (event: SelectChangeEvent) => {
     setAlgorithm(event.target.value as string);
@@ -263,11 +272,17 @@ function Map() {
   // Test for showing directions
   function showDirections() {
     const output: JSX.Element[] = [];
-    directions.forEach((data: directionInfo) => {
-      output.push(
-        <AccordionDirections data={data} setImgState={changeFloor} />,
-      );
-    });
+
+    if (mode === "path") {
+      directions.forEach((data: directionInfo) => {
+        output.push(
+          <AccordionDirections data={data} setImgState={changeFloor} />,
+        );
+      });
+    } else if (mode === "info") {
+      //empty the nodes
+      setNavigatingNodes({ start: "", end: "" });
+    }
     return output;
   }
 
@@ -313,7 +328,7 @@ function Map() {
             </>,
           );
         }
-        setMode("bookings");
+        setMode("info");
       }
     });
     console.log(nodeBookings2);
@@ -450,6 +465,30 @@ function Map() {
 
   const [expanded, setExpanded] = useState(false);
   const isOpen = expanded;
+
+  const handleClearPath = () => {
+    setNavigatingNodes({ start: "", end: "" });
+  };
+
+  const [mode, setMode] = useState<string>("path");
+  const [clicked, setClicked] = useState<FloorNodeInfo | undefined>(undefined);
+  const [showInfo, setShowInfo] = useState<boolean>(false);
+
+  const handleMode = () => {
+    if (mode === "path") {
+      setMode("info");
+    } else if (mode === "info") {
+      setMode("path");
+    }
+  };
+
+  const handleNodeCallback = (node: FloorNodeInfo) => {
+    setClicked(node);
+    if (mode === "info") {
+      setShowInfo(true);
+    }
+  };
+
   const AccordionFrame = () => {
     const handleInnerClick = (e: React.MouseEvent<HTMLElement>) => {
       e.stopPropagation();
@@ -509,6 +548,7 @@ function Map() {
                     <MenuItem value="Dijkstra">Dijkstra</MenuItem>
                   </Select>
                 </FormControl>
+                <button onClick={handleClearPath}>Clear Path</button>
               </div>
             </motion.section>
           )}
@@ -555,7 +595,9 @@ function Map() {
                   pathSetter={setPath}
                   updateStartAndEnd={updateStartAndEnd}
                   updateEnd={updateEnd}
+                  reqs={records}
                   mode={mode}
+                  nodeInfoCallback={handleNodeCallback}
                   getBookings={getBookings}
                 />
               </TransformComponent>
@@ -573,7 +615,10 @@ function Map() {
         </div>
         {/*Location and Destination things*/}
         <div className=""></div>
+
         {/*boxes.*/}
+        <ModeDisplay handleMode={handleMode} mode={mode} />
+
         <div
           className="fixed top-20 left-10"
           onClick={() => setExpanded(!isOpen)}
@@ -603,7 +648,7 @@ function Map() {
             <></>
           )}
         </div>
-        {directions.length != 0 ? (
+        {directions.length != 0 && mode === "path" ? (
           <div
             className="
                     h-[250px]
@@ -621,11 +666,32 @@ function Map() {
             <div className="overflow-y-auto h-full">{showDirections()}</div>
           </div>
         ) : (
-          <></>
+          <>
+            {clicked && showInfo && (
+              <div
+                className="
+                    h-[250px]
+                    w-[300px]
+                    items-center
+                    bg-background
+                    border-primary
+                    border-2
+                    overflow-clip
+                    rounded-lg
+                    fixed
+                    bottom-7
+                    right-32"
+              >
+                {clicked.requests.map((req) => {
+                  return <AccordionServiceRequests data={req} />;
+                })}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
   );
 }
 
-export default Map;
+export default MapPage;
