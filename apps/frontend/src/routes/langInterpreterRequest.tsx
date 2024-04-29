@@ -93,7 +93,6 @@ function LangInterpreterReq() {
       formData.priority == "" ||
       formData.language == "" ||
       formData.modeOfInterp == "" ||
-      formData.specInstruct == "" ||
       formData.status == ""
     ) {
       return;
@@ -137,7 +136,7 @@ function LangInterpreterReq() {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 sx={{ bgcolor: "#eceff0" }}
-                label="Date Found *"
+                label="Date Requested *"
                 value={formData.date}
                 disablePast
                 onChange={handleDateInput}
@@ -162,7 +161,7 @@ function LangInterpreterReq() {
                 <MenuItem value={"Emergency"}>Emergency</MenuItem>
               </Select>
             </FormControl>
-            <FormControl variant="filled">
+            <FormControl variant="filled" required>
               <InputLabel id="lang">Language Requested</InputLabel>
               <Select
                 name="lang"
@@ -171,10 +170,41 @@ function LangInterpreterReq() {
                 value={formData.language}
                 onChange={handleLangInput}
               >
-                <MenuItem value={"Hindi"}>Hindi</MenuItem>
-                <MenuItem value={"Bengali"}>Bengali</MenuItem>
-                <MenuItem value={"Urdu"}>Urdu</MenuItem>
-                <MenuItem value={"Lao"}>Lao</MenuItem>
+                <MenuItem value={"Arabic"}>
+                  <span style={{ marginRight: "auto" }}>(Arabic)</span>
+                  <span style={{ marginLeft: "auto" }}> عربي</span>
+                </MenuItem>
+                <MenuItem value={"Bengali"}>বাংলা (Bengali)</MenuItem>
+                <MenuItem value={"French"}>Français (French)</MenuItem>
+                <MenuItem value={"German"}>Deutsch (German)</MenuItem>
+                <MenuItem value={"Greek"}>Ελληνικά (Greek)</MenuItem>
+                <MenuItem value={"Gujarati"}>ગુજરાતી (Gujarati)</MenuItem>
+                <MenuItem value={"Hindi"}>हिन्दी (Hindi)</MenuItem>
+                <MenuItem value={"Italian"}>Italiano (Italian)</MenuItem>
+                <MenuItem value={"Japanese"}>日本語 (Japanese)</MenuItem>
+                <MenuItem value={"Korean"}>한국인 (Korean)</MenuItem>
+                <MenuItem value={"Lao"}>ອັກສອນລາວ (Lao)</MenuItem>
+                <MenuItem value={"Marathi"}>मराठी (Marathi)</MenuItem>
+                <MenuItem value={"Polish"}>Język Polski (Polish)</MenuItem>
+                <MenuItem value={"Portuguese"}>Português (Portuguese)</MenuItem>
+                <MenuItem value={"Punjabi"}>
+                  <span style={{ marginRight: "auto" }}>ਪੰਜਾਬੀ (Punjabi)</span>
+                  <span style={{ marginLeft: "auto" }}> پنجابی</span>
+                </MenuItem>
+                <MenuItem value={"Russian"}>Pусский (Russian)</MenuItem>
+                <MenuItem value={"Spanish"}>Español (Spanish)</MenuItem>
+                <MenuItem value={"Tagalog"}>Wikang Tagalog (Filipino)</MenuItem>
+                <MenuItem value={"Tamil"}>தமிழ் (Tamil)</MenuItem>
+                <MenuItem value={"Turkish"}>Türkçe (Turkish)</MenuItem>
+                <MenuItem value={"Mandarin"}>普通话 (Mandarin)</MenuItem>
+                <MenuItem value={"Urdu"}>
+                  <span style={{ marginRight: "auto" }}>(Urdu)</span>
+                  <span style={{ marginLeft: "auto" }}> اردو</span>
+                </MenuItem>
+                <MenuItem value={"Vietnamese"}>
+                  Tiếng Việt (Vietnamese)
+                </MenuItem>
+                <MenuItem value={"Yoruba"}>Èdè Yorùbá (Yoruba)</MenuItem>
               </Select>
             </FormControl>
             <FormControl variant="filled" required>
@@ -203,7 +233,6 @@ function LangInterpreterReq() {
               variant="filled"
               label="Special Instructions"
               placeholder=""
-              required
             />
             <FormControl variant="filled" required>
               <InputLabel id="status">Status</InputLabel>

@@ -74,11 +74,11 @@ model GeneralService {
 
 // language interpreter requests are saved
 model langInterpreter {
-  id           Int    @id
+  id           Int     @id
   date         String
   language     String
   modeOfInterp String
-  specInstruct String
+  specInstruct String?
 
   // foreign key reference
   langInterpreterID GeneralService @relation("langInterpreterID", fields: [id], references: [id], onDelete: Cascade)
