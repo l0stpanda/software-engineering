@@ -133,9 +133,9 @@ function MedicineDeliveryReq() {
 
   return (
     <div className="w-full">
-      <div className="m-auto mt-6 flex flex-col px-10 h-full w-full justify-center py-4">
+      <div className="m-auto mt-3 flex flex-col px-10 h-full w-full justify-center py-1">
         <h1
-          className="font-extrabold text-3xl text-center transition-transform hover:scale-110 -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;"
+          className="font-extrabold text-3xl text-center"
           style={{
             color: "rgb(0 40 102 / 1)",
             fontFamily: "Nunito, sans-serif",
@@ -145,17 +145,6 @@ function MedicineDeliveryReq() {
         >
           Medicine Delivery Form
         </h1>
-        <p
-          className="text-2xl font-bold mb-4 text-center"
-          style={{
-            color: "black",
-            fontFamily: "PTSans, sans-serif",
-            fontSize: "20px",
-            margin: "5px",
-          }}
-        >
-          Qiushi and Vincent
-        </p>
         <div className="formDiv">
           <div className="inputDiv">
             <form className="flex flex-col gap-4 my-4" onSubmit={handleSubmit}>
@@ -258,6 +247,9 @@ function MedicineDeliveryReq() {
           </Button>
         </DialogActions>
       </Dialog>
+      <div className="text-text mt-[4.9rem] ml-2 font-header place-self-right">
+        Credits: Qiushi and Vincent
+      </div>
     </div>
   );
 }

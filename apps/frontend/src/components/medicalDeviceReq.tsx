@@ -138,25 +138,14 @@ function MedicalDeviceReq() {
   return (
     <div className="w-full">
       <div
-        className="overflow-m-auto mt-6  flex flex-col  px-10 h-full w-full justify-center py-4"
+        className="overflow-m-auto mt-3 flex flex-col  px-10 h-full w-full justify-center py-1"
         // style={{
         //     boxShadow: "1px 1px 0px #999, 2px 2px 0px #999, 3px 3px 0px #999, 4px 4px 0px #999, 5px 5px 0px #999, 6px 6px 0px #999"
         // }}>
       >
-        <h1 className="m-2 font-header text-primary font-extrabold text-3xl text-center transition-transform hover:scale-110 -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+        <h1 className="m-2 font-header text-primary font-extrabold text-3xl text-center">
           Medical Device Delivery Form
         </h1>
-        <p
-          className="text-2xl font-bold mb-4 text-center"
-          style={{
-            color: "black",
-            fontFamily: "PTSans, sans-serif",
-            fontSize: "20px",
-            margin: "5px",
-          }}
-        >
-          Najum and Sahil
-        </p>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4 my-4">
             <UserDropdown
@@ -314,6 +303,9 @@ function MedicalDeviceReq() {
           </Button>
         </DialogActions>
       </Dialog>
+      <div className="text-text ml-2 font-header place-self-right">
+        Credits: Najum and Sahil
+      </div>
     </div>
   );
 }

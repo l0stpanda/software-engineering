@@ -263,7 +263,7 @@ function FlowerReqForm() {
           </Button>
         </DialogActions>
       </Dialog>
-      <div className="text-primary font-header place-self-right">
+      <div className="text-text ml-2 font-header place-self-right">
         Credits: Whole Team
       </div>
     </div>
