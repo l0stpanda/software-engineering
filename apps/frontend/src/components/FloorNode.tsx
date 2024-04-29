@@ -26,7 +26,6 @@ interface FloorNodesProps {
   updateEnd: (endNode: string) => void;
   mode: string;
   getBookings: (longName: string) => void;
-  setBookings: (a: string[]) => void;
 }
 
 export interface FloorNodeInfo {

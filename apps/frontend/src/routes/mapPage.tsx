@@ -68,7 +68,7 @@ function Map() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [schedules, setSchedules] = useState<serviceRequestData[]>([]);
   const [mode, setMode] = useState("bookings");
-  const [bookings, setBookings] = useState<string[]>([]);
+  const [bookings, setBookings] = useState<JSX.Element[]>([]);
 
   const { getAccessTokenSilently, user } = useAuth0();
 
@@ -274,7 +274,8 @@ function Map() {
   // Gets a variety of info about bookings at a given node and checks if the booking is today
   // Still needs a useEffect to visualize changes on screen
   function getBookings(longName: string) {
-    const nodeBookings: string[] = [];
+    const nodeBookings: JSX.Element[] = [];
+    const nodeBookings2: string[] = [];
     schedules.forEach((data: serviceRequestData) => {
       const booking = data.roomSched[0];
       if (booking.room_name === longName) {
@@ -305,14 +306,22 @@ function Map() {
           if (endString.length == 1) endString = "0".concat(endString);
           // Design nodeBookings however you want,  it currently stores a string but it can store an html element maybe.
           nodeBookings.push(
-            `${startHour}:${startString} - ${endHour}:${endString}`,
+            <>
+              <div className="flex border-primary border-1 text-text font-body px-1">
+                {startHour}:{startString} - {endHour}:{endString}
+              </div>
+            </>,
           );
         }
         setMode("bookings");
       }
     });
-    console.log(nodeBookings);
+    console.log(nodeBookings2);
     setBookings(nodeBookings);
+  }
+
+  function returnBookings() {
+    return bookings;
   }
 
   //Needs to be here for navigation dropdown
@@ -438,6 +447,7 @@ function Map() {
       </div>
     );
   }
+
   const [expanded, setExpanded] = useState(false);
   const isOpen = expanded;
   const AccordionFrame = () => {
@@ -521,6 +531,7 @@ function Map() {
             <div className="">
               {/*Buttons for displaying floor images*/}
               <FloorMapButtons />
+
               <Controls />
               <TransformComponent
                 wrapperStyle={{
@@ -546,11 +557,19 @@ function Map() {
                   updateEnd={updateEnd}
                   mode={mode}
                   getBookings={getBookings}
-                  setBookings={setBookings}
                 />
               </TransformComponent>
             </div>
           </TransformWrapper>
+          <div
+            className="overflow-y-auto h-flex absolute right-32 border-primary border-2 rounded-xl
+                bottom-20 py-1 bg-background"
+          >
+            <div className="flex border-primary border-b text-text font-body px-1">
+              Scheduled Requests:
+            </div>
+            {returnBookings()}
+          </div>
         </div>
         {/*Location and Destination things*/}
         <div className=""></div>
