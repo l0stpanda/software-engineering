@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 //import LoginDialog from "./loginDialog.tsx";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 // import {
 //     Dialog,
@@ -141,6 +141,14 @@ function TODOListItem(props: toDoNow) {
     setNewSubtask(e.target.value);
   }
 
+  function displayDate(date: Dayjs | null): string {
+    if (date && date.toString() != "undefined") {
+      return dayjs(date.toString()).format("MMM D, YYYY HH:mma");
+    } else {
+      return "";
+    }
+  }
+
   return (
     <>
       <tr className="bg-background border-b-2 border-secondary">
@@ -189,11 +197,7 @@ function TODOListItem(props: toDoNow) {
           </Accordion>
         </td>
         <td className="p-3 text-sm">{props.notes}</td>
-        <td className="p-3 text-sm">
-          {props.dueDate?.toString() != "undefined"
-            ? props.dueDate?.toString()
-            : ""}
-        </td>
+        <td className="p-3 text-sm">{displayDate(props.dueDate)}</td>
         <td className="p-3 text-sm">
           <IconButton
             className="px-7 flex justify-center transform hover:scale-125"
