@@ -28,7 +28,7 @@ import SanitationReq from "../components/sanitationReq.tsx";
 import MaintenanceReq from "../components/maintenanceReq.tsx";
 import ToolIcon from "@mui/icons-material/Build";
 
-type GeneralReq = {
+export type GeneralReq = {
   id: number;
   type: string;
   location: string;
@@ -64,11 +64,11 @@ function ServiceRequests() {
             Authorization: `Bearer ${token}`,
           },
         });
-        setRecords(response.data); // Assuming the data is an array of flower request data
-        setPermRecords(response.data); // Assuming the data is an array of flower request data
+        setRecords(response.data); // Assuming the data is an array of request data
+        setPermRecords(response.data); // Assuming the data is an array of request data
         console.log(response.data);
       } catch (error) {
-        console.error("Error fetching flower requests", error);
+        console.error("Error fetching requests", error);
       }
     };
 
