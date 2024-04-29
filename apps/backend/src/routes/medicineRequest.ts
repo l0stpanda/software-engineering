@@ -12,7 +12,7 @@ router.post("/", async function (req: Request, res: Response) {
     const num = await PrismaClient.inventory.findMany({
       where: {
         name: input.medicineName,
-        type: "medicine",
+        type: "Medicine",
       },
     });
     const newQuant = num[0].quant - parseInt(input.quantity);
