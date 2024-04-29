@@ -22,7 +22,7 @@ export default function MedicineDropdown(prop: inventoryDrop) {
     // console.log(res.data.length);
     for (let i = 0; res.data.length > i; i++) {
       console.log("here");
-      if (res.data[i].type == "medicine") {
+      if (res.data[i].type == "Medicine") {
         arr.push(res.data[i].name);
       }
     }

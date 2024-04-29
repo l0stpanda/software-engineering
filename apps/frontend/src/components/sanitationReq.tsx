@@ -126,8 +126,8 @@ function SanitationReq() {
 
   return (
     <div className="w-full">
-      <div className="m-auto mt-6 flex flex-col px-10 h-full w-full justify-center py-4">
-        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center transition-transform hover:scale-110 -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+      <div className="m-auto mt-3 flex flex-col px-10 h-full w-full justify-center py-1">
+        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center">
           Sanitation Request
         </h1>
         <form onSubmit={handleSubmit}>
@@ -289,6 +289,9 @@ function SanitationReq() {
             </Button>
           </DialogActions>
         </Dialog>
+        <div className="text-text mt-[4.4rem] ml-2 font-header place-self-right">
+          Credits: Ally
+        </div>
       </React.Fragment>
     </div>
   );

@@ -122,8 +122,8 @@ function LostFound() {
 
   return (
     <div className="w-full">
-      <div className="m-auto mt-6 flex flex-col px-10 h-full w-full justify-center py-4">
-        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center transition-transform hover:scale-110 -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+      <div className="m-auto mt-3 flex flex-col px-10 h-full w-full justify-center py-1">
+        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center">
           Lost and Found Request
         </h1>
         {/*<p*/}
@@ -277,39 +277,40 @@ function LostFound() {
           </div>
         </form>
       </div>
-      <React.Fragment>
-        <Dialog
-          open={open}
-          onClose={handleSubmitClose}
-          TransitionComponent={Transition}
-          keepMounted
-          aria-describedby="alert-dialog-slide-description"
-        >
-          <DialogTitle>We received your request!</DialogTitle>
-          <DialogContent>
-            <strong>Here are your responses:</strong>
-            <br />
-            Name: {responses.name}
-            <br />
-            Date: {responses.date?.toString()}
-            <br />
-            Object Description: {responses.objectDesc}
-            <br />
-            Location: {responses.location}
-            <br />
-            Priority: {responses.priority}
-            <br />
-            Item Type: {responses.type}
-            <br />
-            Status: {responses.status}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleSubmitClose} autoFocus>
-              Okay
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </React.Fragment>
+      <Dialog
+        open={open}
+        onClose={handleSubmitClose}
+        TransitionComponent={Transition}
+        keepMounted
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>We received your request!</DialogTitle>
+        <DialogContent>
+          <strong>Here are your responses:</strong>
+          <br />
+          Name: {responses.name}
+          <br />
+          Date: {responses.date?.toString()}
+          <br />
+          Object Description: {responses.objectDesc}
+          <br />
+          Location: {responses.location}
+          <br />
+          Priority: {responses.priority}
+          <br />
+          Item Type: {responses.type}
+          <br />
+          Status: {responses.status}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSubmitClose} autoFocus>
+            Okay
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <div className="text-text ml-2 font-header place-self-right">
+        Credits: Krishna and Sam
+      </div>
     </div>
   );
 }

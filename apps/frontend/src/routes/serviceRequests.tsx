@@ -25,8 +25,10 @@ import RoomSchedulingReq from "../components/roomSchedulingReq.tsx";
 import MedicalDeviceReq from "../components/medicalDeviceReq.tsx";
 import MedicineDeliveryReq from "../components/MedicineDeliveryReq.tsx";
 import SanitationReq from "../components/sanitationReq.tsx";
+import MaintenanceReq from "../components/maintenanceReq.tsx";
+import ToolIcon from "@mui/icons-material/Build";
 
-type GeneralReq = {
+export type GeneralReq = {
   id: number;
   type: string;
   location: string;
@@ -62,16 +64,16 @@ function ServiceRequests() {
             Authorization: `Bearer ${token}`,
           },
         });
-        setRecords(response.data); // Assuming the data is an array of flower request data
-        setPermRecords(response.data); // Assuming the data is an array of flower request data
+        setRecords(response.data); // Assuming the data is an array of request data
+        setPermRecords(response.data); // Assuming the data is an array of request data
         console.log(response.data);
       } catch (error) {
-        console.error("Error fetching flower requests", error);
+        console.error("Error fetching requests", error);
       }
     };
 
-    fetchData().catch((error) => {
-      console.error("Error from fetchData promise:", error);
+    fetchData().catch(() => {
+      // console.log("Error from fetchData promise:", error);
     });
   }, [getAccessTokenSilently]);
 
@@ -125,7 +127,7 @@ function ServiceRequests() {
       <div className="flex flex-row w-full h-full px-4 gap-4 py-4">
         {/*Pending Requests*/}
         <div className="h-full w-1/2 bg-background rounded-lg flex flex-col px-4">
-          <h1 className="mt-4 mb-4 ml-2.5 font-header text-primary font-extrabold text-4xl text-center">
+          <h1 className="mt-4 mb-4 ml-2.5 font-header text-primary font-extrabold text-3xl text-center">
             Pending Requests
           </h1>
           <div className="pb-2">
@@ -317,6 +319,22 @@ function ServiceRequests() {
                   }}
                 />
               </Tooltip>
+              <Tooltip title="Maintenance Request">
+                <Tab
+                  icon={<ToolIcon />}
+                  id="tab-6"
+                  sx={{
+                    transition: "transform 0.3s ease-in-out",
+                    color: "#FFFFFF",
+                    "&:hover": {
+                      transform: "scale(1.4)",
+                      position: "relative",
+                      zIndex: 1,
+                      color: "#F6BD38",
+                    },
+                  }}
+                />
+              </Tooltip>
             </Tabs>
           </div>
 
@@ -327,6 +345,7 @@ function ServiceRequests() {
             {currentTabIndex === 3 && <MedicalDeviceReq />}
             {currentTabIndex === 4 && <MedicineDeliveryReq />}
             {currentTabIndex === 5 && <SanitationReq />}
+            {currentTabIndex === 6 && <MaintenanceReq />}
           </div>
         </div>
       </div>

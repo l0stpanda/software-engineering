@@ -19,34 +19,6 @@ model HighScore {
   score Int
 }
 
-// We left HighScore for now because of errors that it is causing
-
-// We have this but don't really need it because we are using auth0 and that handles a lot of stuff
-// Users have fields that will be added to the database on registration
-// model Staff {
-//   emp_id    Int      @id @default(autoincrement())
-//   role      String // By default the user will be an employee unless designated otherwise by an admin
-//   user_name String
-//   // email     String   @unique
-//   password  String
-//   add_date  DateTime @default(now())
-// }
-
-// Flower requests are saved
-// model Flowers {
-//   id          Int      @id @default(autoincrement())
-//   room        String
-//   name        String
-//   sent_by     String   @db.VarChar(50)
-//   sent_to     String   @db.VarChar(50)
-//   requestDate DateTime @default(now())
-//   note        String?  @db.VarChar(150)
-//   status      String // when initialized the field will be 'Pending'. When the order is ready to be delivered it will be called Ready and will display in a SELECT statement
-//
-//   // Foreign Key References
-//   sent_room Nodes @relation("flower_room", fields: [room], references: [node_id], onDelete: Cascade) // Maybe need to change reference to short_name/long_name later
-// }
-
 // Nodes are all good
 model Nodes {
   node_id    String @id
@@ -89,13 +61,14 @@ model GeneralService {
   emp_name      String
   priority      String
 
-  location_room      Nodes               @relation("location", fields: [location], references: [node_id], onDelete: Cascade)
-  medicalDeviceCheck medicalDevice[]     @relation("idCheck")
-  lost_location      LostItem[]          @relation("idCheckLost")
-  roomSched          RoomScheduler[]     @relation("roomSchedID")
-  medicineReqID      MedicineRequest[]   @relation("medicineReqID")
-  flowerID           Flowers[]           @relation("flowerID")
-  sanitationID       SanitationRequest[] @relation("sanitationReq")
+  location_room      Nodes                @relation("location", fields: [location], references: [node_id], onDelete: Cascade)
+  medicalDeviceCheck medicalDevice[]      @relation("idCheck")
+  lost_location      LostItem[]           @relation("idCheckLost")
+  roomSched          RoomScheduler[]      @relation("roomSchedID")
+  medicineReqID      MedicineRequest[]    @relation("medicineReqID")
+  flowerID           Flowers[]            @relation("flowerID")
+  sanitationID       SanitationRequest[]  @relation("sanitationReq")
+  maintainID         MaintenanceRequest[] @relation("idCheckMaintain")
 }
 
 model SanitationRequest {
@@ -105,6 +78,16 @@ model SanitationRequest {
   room_name     String
   // Foreign Key Reference
   sanitationReq GeneralService @relation("sanitationReq", fields: [id], references: [id], onDelete: Cascade)
+}
+
+// maintenance requests are saved
+model MaintenanceRequest {
+  id           Int    @id
+  date         String
+  maintainType String
+
+  // Foreign Key References
+  maintainReq GeneralService @relation("idCheckMaintain", fields: [id], references: [id], onDelete: Cascade)
 }
 
 // medical device requests are saved

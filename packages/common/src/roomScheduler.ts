@@ -1,7 +1,6 @@
-import { Dayjs } from "dayjs";
 export interface roomSchedulerFields {
   employName: string;
-  startTime: Dayjs | null;
+  startTime: string;
   lengthRes: string;
   roomNum: string;
   reqStatus: string;

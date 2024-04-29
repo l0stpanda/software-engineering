@@ -15,7 +15,7 @@ interface InventoryItemProps {
 function InventoryItem(props: InventoryItemProps) {
   const [quantity, setQuantity] = useState(props.quant.toString());
   const { getAccessTokenSilently, user } = useAuth0();
-
+  const LOW_QUANTITY_THRESHOLD = 10;
   useEffect(() => {
     // Fetch data from the API
     const fetchData = async () => {
@@ -86,6 +86,9 @@ function InventoryItem(props: InventoryItemProps) {
     }
   }
 
+  const rowStyle =
+    props.quant < LOW_QUANTITY_THRESHOLD ? { backgroundColor: "yellow" } : {};
+
   return (
     <>
       <tr className="bg-background border-b-2 border-secondary" key={props.id}>
@@ -93,13 +96,13 @@ function InventoryItem(props: InventoryItemProps) {
         <td className="p-3 text-sm">{props.type}</td>
         <td className="p-3 text-sm">
           <TextField
-            style={{ width: "250px" }}
+            style={{ width: "250px", ...rowStyle }}
             onChange={handleChange}
             value={quantity}
             variant="filled"
             fullWidth={true}
             required
-            label="Quant"
+            label="Quantity"
             name="quant"
             type="text"
           />

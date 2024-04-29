@@ -122,8 +122,8 @@ function FlowerReqForm() {
 
   return (
     <div className="w-full">
-      <div className="m-auto mt-6 flex flex-col px-10 h-full w-full justify-center py-4">
-        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center transition-transform hover:scale-110 -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+      <div className="m-auto mt-3 flex flex-col px-10 h-full w-full justify-center py-1">
+        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center">
           Flower Delivery Request
         </h1>
         <form onSubmit={handleSubmit}>
@@ -257,33 +257,34 @@ function FlowerReqForm() {
           </div>
         </form>
       </div>
-      <React.Fragment>
-        <Dialog
-          open={open}
-          onClose={handleSubmitClose}
-          TransitionComponent={Transition}
-          keepMounted
-          aria-describedby="alert-dialog-slide-description"
-        >
-          <DialogTitle>We received your request!</DialogTitle>
-          <DialogContent>
-            <strong>Here are your responses:</strong>
-            <br />
-            Room Number: {responses.roomNum}
-            <br />
-            Sent By: {responses.senderName}
-            <br />
-            Send To: {responses.sendTo}
-            <br />
-            Note for Patient: {responses.attachedNote}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleSubmitClose} autoFocus>
-              Okay
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </React.Fragment>
+      <Dialog
+        open={open}
+        onClose={handleSubmitClose}
+        TransitionComponent={Transition}
+        keepMounted
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>We received your request!</DialogTitle>
+        <DialogContent>
+          <strong>Here are your responses:</strong>
+          <br />
+          Room Number: {responses.roomNum}
+          <br />
+          Sent By: {responses.senderName}
+          <br />
+          Send To: {responses.sendTo}
+          <br />
+          Note for Patient: {responses.attachedNote}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSubmitClose} autoFocus>
+            Okay
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <div className="text-text ml-2 font-header place-self-right">
+        Credits: Whole Team
+      </div>
     </div>
   );
 }
