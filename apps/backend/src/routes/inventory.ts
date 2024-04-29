@@ -178,14 +178,17 @@ router.get("/", async (req, res) => {
 //Return the number due to the medicine name entered
 router.get("/getNum", async (req, res) => {
   try {
-    const received: inventoryType = req.body;
+    const name = req.query.name;
+    if (typeof name !== "string") {
+      return res.status(400).json({ message: "Invalid name parameter" });
+    }
     const item = await PrismaClient.inventory.findUnique({
       where: {
-        name: received.name,
+        name: name,
       },
     });
     if (item) {
-      res.sendStatus(200).send(item.quant);
+      res.status(200).json({ quant: item.quant });
     } else {
       res.status(400).send(0);
     }
