@@ -66,6 +66,7 @@ function CustomNavBar() {
   function handleRequestsClosed() {
     setAnchorEl(null);
   }
+
   // function handleAdminOpen(e: React.MouseEvent<HTMLElement>) {
   //   setAnchorElAdmin(e.currentTarget);
   // }
@@ -82,7 +83,7 @@ function CustomNavBar() {
 
   return (
     <AppBar sx={{ bgcolor: "#FBFEFF" }}>
-      <div className="w-full flex justify-between">
+      <div className="w-full flex justify-between position-fixed">
         <Toolbar disableGutters={true} sx={{ width: "100%" }}>
           <div className="h-12 flex px-2 py-2 min-w-fit">
             <a href="">
@@ -102,8 +103,11 @@ function CustomNavBar() {
                   <IconButton
                     href="map"
                     className="hover:scale-110 duration-200 transition-transform"
-                    style={{
+                    sx={{
                       marginLeft: "1rem",
+                      "&:hover, &.active": {
+                        color: "#002866",
+                      },
                     }}
                   >
                     <MapIcon className="svg_icons" />
@@ -113,8 +117,11 @@ function CustomNavBar() {
                   <IconButton
                     href="displayTables"
                     className="hover:scale-110 duration-200 transition-transform"
-                    style={{
+                    sx={{
                       marginLeft: "1rem",
+                      "&:hover, &:focus": {
+                        color: "#002866",
+                      },
                     }}
                   >
                     <StorageIcon className="svg_icons" />
@@ -126,8 +133,11 @@ function CustomNavBar() {
                     href="requests"
                     // onClick={handleRequestsOpen}
                     className="hover:scale-110 duration-200 transition-transform"
-                    style={{
+                    sx={{
                       marginLeft: "1rem",
+                      "&:hover, &:focus": {
+                        color: "#002866",
+                      },
                     }}
                   >
                     <BackupTableIcon className="svg_icons" />
@@ -153,8 +163,11 @@ function CustomNavBar() {
                   <IconButton
                     href="todo"
                     className="hover:scale-110 duration-200 transition-transform"
-                    style={{
+                    sx={{
                       marginLeft: "1rem",
+                      "&:hover, &:active": {
+                        color: "#002866",
+                      },
                     }}
                   >
                     <CheckBoxIcon className="svg_icons" />
@@ -164,8 +177,11 @@ function CustomNavBar() {
                   <IconButton
                     href="inventory"
                     className="hover:scale-110 duration-200 transition-transform"
-                    style={{
+                    sx={{
                       marginLeft: "1rem",
+                      "&:hover, &:active": {
+                        color: "#002866",
+                      },
                     }}
                   >
                     <BackpackIcon className="svg_icons" />

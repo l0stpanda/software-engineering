@@ -8,7 +8,8 @@ import { DragItem } from "../objects/DragItem.ts";
 import { useTransformContext } from "react-zoom-pan-pinch";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
-
+import { Alert, Snackbar } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
 /*
 Functionality:
 Add node
@@ -28,6 +29,21 @@ interface EditMapViewGraphProps {
 }
 
 function EditMapViewGraph(props: EditMapViewGraphProps) {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<AlertColor>("success");
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const showSnackbar = (message: string, severity: AlertColor) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
+
   const context = useTransformContext();
   const { getAccessTokenSilently } = useAuth0();
   const [imgDimensions, setImgDimensions] = useState<{
@@ -82,6 +98,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
         y: node.getY() * (divDimensions.height / imgDimensions.height),
         floor: node.getFloor(),
         type: node.getNodeType(),
+        requests: [],
       };
     });
     setScaledNodes(tempNodePosList);
@@ -111,6 +128,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
         )
         .then();
       setScaledNodes({ ...scaledNodes, [id]: oldNodePos });
+      showSnackbar(`Move the Node ${id} in map successfully`, "success");
     },
     [divDimensions, getAccessTokenSilently, imgDimensions, scaledNodes],
   );
@@ -299,6 +317,19 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
           ></div>
         )}
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

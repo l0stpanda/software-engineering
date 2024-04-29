@@ -25,7 +25,7 @@ export default function DisplayInventory() {
   const [inventoryResponse, setinventoryResponse] = useState<inventoryType>({
     id: 0,
     name: "",
-    type: "medicine",
+    type: "Medicine",
     quant: 0,
   });
   const { getAccessTokenSilently, user } = useAuth0();
@@ -106,7 +106,7 @@ export default function DisplayInventory() {
     setinventoryResponse({
       id: 0,
       name: "",
-      type: "medicine",
+      type: "Medicine",
       quant: 0,
     });
     setOpen(false);
@@ -114,7 +114,7 @@ export default function DisplayInventory() {
   const handleDelete = async (id: number) => {
     const item = records.find((record) => record.id === id);
     const itemName = item ? item.name : "Unknown Item"; // Default to "Unknown Item" if not found
-
+    const itemID = item ? item.id : -1;
     if (
       !window.confirm(
         `Are you sure you want to delete the inventory item ${itemName}?`,
@@ -125,11 +125,15 @@ export default function DisplayInventory() {
 
     try {
       const token = await getAccessTokenSilently();
-      await axios.delete(`/api/inventory/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      await axios.post(
+        `/api/inventory/delete/${id}`,
+        { id: itemID, name: itemName },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       const received = await axios.get("/api/inventory", {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -137,7 +141,7 @@ export default function DisplayInventory() {
       });
       setRecords(received.data);
       showSnackbar(
-        "Successfully deleted inventory item with ID number " + id,
+        `Successfully deleted inventory item with ID number ${itemName}`,
         "success",
       );
     } catch (e) {
@@ -236,8 +240,8 @@ export default function DisplayInventory() {
                   value={inventoryResponse.type}
                   onChange={handleDropdownChange}
                 >
-                  <MenuItem value={"medicine"}>Medicine</MenuItem>
-                  <MenuItem value={"medical device"}>Medical Device</MenuItem>
+                  <MenuItem value={"Medicine"}>Medicine</MenuItem>
+                  <MenuItem value={"Medical Device"}>Medical Device</MenuItem>
                 </Select>
               </FormControl>
 

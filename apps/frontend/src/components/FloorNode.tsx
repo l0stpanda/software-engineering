@@ -9,6 +9,7 @@ import { BFS } from "../objects/BFS.ts";
 import { Box } from "@mui/material";
 import { DFS } from "../objects/DFS.ts";
 import { Dijkstra } from "../objects/Dijkstra.ts";
+import { GeneralReq } from "../routes/serviceRequests.tsx";
 
 //import mapImg from "../assets/00_thelowerlevel1.png";
 
@@ -24,6 +25,10 @@ interface FloorNodesProps {
   pathSetter: (a: string[]) => void;
   updateStartAndEnd: (startNode: string, endNode: string) => void;
   updateEnd: (endNode: string) => void;
+  reqs: GeneralReq[];
+  mode: string;
+  nodeInfoCallback: (node: FloorNodeInfo) => void;
+  getBookings: (longName: string) => void;
 }
 
 export interface FloorNodeInfo {
@@ -32,6 +37,7 @@ export interface FloorNodeInfo {
   y: number;
   floor: string;
   type: string;
+  requests: GeneralReq[];
 }
 
 function FloorNode(props: FloorNodesProps) {
@@ -47,8 +53,8 @@ function FloorNode(props: FloorNodesProps) {
   const algo: Pathfinding = new Pathfinding(props.graph);
   const floor: string = getFloorByImage(props.imageSrc);
   const nodes: Map<string, MapNode> = Object.values(props.graph)[0];
-
   const [count, setCount] = useState(0);
+  const [clicked, setClicked] = useState<FloorNodeInfo | undefined>(undefined);
 
   useEffect(() => {
     if (divRef.current) {
@@ -77,26 +83,33 @@ function FloorNode(props: FloorNodesProps) {
     };
   }, [props.imageSrc]);
 
+  // useEffect(() => {
+  //     console.log("Mode has changed:", props.mode);
+  // }, [props.mode]);
+
   const handleNodeClick = (nodeid: string) => () => {
-    console.log(nodeid);
     const res = nodes.get(nodeid);
     if (res !== undefined) {
       const longName: string = res.getLongName();
-
-      if (props.inputLoc.start !== undefined && count === 0) {
-        //console.log("In the click: ", props.inputLoc.start);
-        //console.log("updating with: ", longName);
-        props.updateStartAndEnd(longName, "");
-        setCount(1);
-      } else if (count === 0) {
-        props.updateStartAndEnd(longName, "");
-        setCount(1);
-      } else if (count === 1) {
-        //console.log("update end");
-        props.updateEnd(longName);
-        setCount(0);
+      if (props.mode === "path") {
+        if (props.inputLoc.start !== undefined && count === 0) {
+          props.updateStartAndEnd(longName, "");
+          setCount(1);
+        } else if (count === 0) {
+          props.updateStartAndEnd(longName, "");
+          setCount(1);
+        } else if (count === 1) {
+          props.updateEnd(longName);
+          setCount(0);
+        }
       } else {
-        //console.log("OH GOD");
+        console.log("Mode is info");
+
+        setClicked(scaledNodes[nodeid]);
+        props.nodeInfoCallback(scaledNodes[nodeid]);
+        // need to log so it can be used
+        console.log(clicked);
+        props.getBookings(longName);
       }
     }
   };
@@ -106,7 +119,6 @@ function FloorNode(props: FloorNodesProps) {
     const size = [0, 0, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY];
 
     if (input.start !== undefined && input.end !== undefined) {
-      //console.log(ids.startId, ids.endId);
       if (props.algorithm == "BFS") {
         algo.setPathAlgo(new BFS(props.graph));
       } else if (props.algorithm == "AStar") {
@@ -117,12 +129,10 @@ function FloorNode(props: FloorNodesProps) {
         algo.setPathAlgo(new Dijkstra(props.graph));
       }
       const path = algo.findPath(input.start, input.end);
-      //console.log(path);
       const lines = [];
       const floorChanges = [];
 
       if (!path) {
-        //console.log("No path found");
         return [];
       }
 
@@ -156,7 +166,7 @@ function FloorNode(props: FloorNodesProps) {
                     position: "absolute",
                   }}
                 >
-                  To {startPoint.floor}
+                  To {endPoint.floor}
                 </Box>,
               );
             }
@@ -232,6 +242,16 @@ function FloorNode(props: FloorNodesProps) {
     return [];
   };
 
+  const getNodeReqs = (nodeid: string) => {
+    const ans: GeneralReq[] = [];
+    for (let i = 0; i < props.reqs.length; i++) {
+      if (props.reqs[i].location == nodeid) {
+        ans.push(props.reqs[i]);
+      }
+    }
+    return ans;
+  };
+
   const scaledNodes: { [key: string]: FloorNodeInfo } = {};
   nodes.forEach((node) => {
     const id: string = node.getNodeID();
@@ -241,6 +261,7 @@ function FloorNode(props: FloorNodesProps) {
       y: node.getY() * (divDimensions.height / imgDimensions.height),
       floor: node.getFloor(),
       type: node.getNodeType(),
+      requests: getNodeReqs(node.getNodeID()),
     };
   });
 
@@ -255,7 +276,6 @@ function FloorNode(props: FloorNodesProps) {
         let animation: string = "border border-slate-300 hover:border-red-400";
         const input = props.inputLoc;
 
-        //console.log(node.key, ids.startId, ids.endId);
         //if start node
         if (node.key == input.start) {
           nodeColor = "#39FF14";
@@ -269,6 +289,19 @@ function FloorNode(props: FloorNodesProps) {
         //neither
         else {
           nodeColor = "#009BA8";
+          // start and end node === undefined -> no invis
+          // start !== undefined and end node === undefined -> no invis
+          // start !== undefined and end !== undefined -> invis
+          // start is undefined and end is not undefined -> no invis
+
+          if (
+            input.end !== undefined &&
+            input.start !== undefined &&
+            node.type !== "STAI" &&
+            node.type !== "ELEV"
+          ) {
+            animation = animation.concat(" invisible");
+          }
         }
         return (
           <div

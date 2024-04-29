@@ -12,12 +12,14 @@ import {
   SelectChangeEvent,
   TextField,
 } from "@mui/material";
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
 import { useAuth0 } from "@auth0/auth0-react";
 import { lostAndFound } from "common/src/lostAndFoundType.ts";
 import LocationDropdown from "./locationDropdown.tsx";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import dayjs, { Dayjs } from "dayjs";
 import axios from "axios";
 import UserDropdown from "./userDropdown.tsx";
@@ -33,6 +35,17 @@ function LostFound() {
     type: "",
     location: "",
   };
+
+  const Transition = React.forwardRef(function Transition(
+    props: TransitionProps & {
+      children: React.ReactElement<string, string>;
+    },
+    ref: React.Ref<unknown>,
+  ) {
+    return (
+      <Slide direction="up" ref={ref} {...props} children={props.children} />
+    );
+  });
 
   const [responses, setResponses] =
     useState<lostAndFound>(initialFormResponses);
@@ -109,8 +122,8 @@ function LostFound() {
 
   return (
     <div className="w-full">
-      <div className="m-auto mt-6 flex flex-col px-10 h-full w-full justify-center py-4">
-        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center transition-transform hover:scale-110 -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+      <div className="m-auto mt-3 flex flex-col px-10 h-full w-full justify-center py-1">
+        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center">
           Lost and Found Request
         </h1>
         {/*<p*/}
@@ -168,11 +181,11 @@ function LostFound() {
             />
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
+              <DateTimePicker
                 sx={{ bgcolor: "#eceff0" }}
                 label="Date Found *"
                 value={responses.date}
-                disablePast
+                disableFuture
                 onChange={handleDateChange}
                 // renderInput={(params) => <TextField {...params} />}
               />
@@ -264,7 +277,13 @@ function LostFound() {
           </div>
         </form>
       </div>
-      <Dialog open={open} onClose={handleSubmitClose}>
+      <Dialog
+        open={open}
+        onClose={handleSubmitClose}
+        TransitionComponent={Transition}
+        keepMounted
+        aria-describedby="alert-dialog-slide-description"
+      >
         <DialogTitle>We received your request!</DialogTitle>
         <DialogContent>
           <strong>Here are your responses:</strong>
@@ -289,6 +308,9 @@ function LostFound() {
           </Button>
         </DialogActions>
       </Dialog>
+      <div className="text-text ml-2 font-header place-self-right">
+        Credits: Krishna and Sam
+      </div>
     </div>
   );
 }

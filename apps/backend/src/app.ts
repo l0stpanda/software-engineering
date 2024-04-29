@@ -20,6 +20,8 @@ import userAdd from "./routes/userAdd.ts";
 import fetchAll from "./routes/allFetching.ts";
 import { auth } from "express-oauth2-jwt-bearer";
 import adminAccess from "./routes/adminAccess.ts";
+import maintinence from "./routes/maintenanceReq.ts";
+import subTodo from "./routes/subTodo.ts";
 // import readRouterE from "./routes/readE.ts";
 // import readRouterN from "./routes/readN.ts";
 
@@ -51,6 +53,7 @@ app.use("/api/login", loginRequest);
 app.use("/api/userAdding", userAdd);
 app.use("/api/read", readRouter);
 app.use("/api/inventory", inventory);
+
 // Enable auth0 enforcement
 app.use(
   auth({
@@ -69,10 +72,11 @@ app.use("/api/roomSchedulingRequest", roomScheduler);
 app.use("/api/sanitationRequest", sanitationRequest);
 app.use("/api/langInterpreter", langInterpreter);
 app.use("/api/todoStuff", userStuff);
+app.use("/api/subTodo", subTodo);
 app.use("/api/adminAccess", adminAccess);
 app.use("/api/fetchAll", fetchAll);
 app.use("/api/editMap", editMap);
-
+app.use("/api/maint", maintinence);
 /**
  * Catch all 404 errors, and forward them to the error handler
  */

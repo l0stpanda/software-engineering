@@ -15,7 +15,7 @@ interface InventoryItemProps {
 function InventoryItem(props: InventoryItemProps) {
   const [quantity, setQuantity] = useState(props.quant.toString());
   const { getAccessTokenSilently, user } = useAuth0();
-
+  const LOW_QUANTITY_THRESHOLD = 10;
   useEffect(() => {
     // Fetch data from the API
     const fetchData = async () => {
@@ -57,20 +57,37 @@ function InventoryItem(props: InventoryItemProps) {
     }
   }
 
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+  async function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const input = event.target.value;
+    const token = await getAccessTokenSilently();
+    let prevNumber: number = 0;
+    let send: number;
     if (input.trim() === "") {
-      // If input is empty, set quantity to "0" and update the server with 0
-      setQuantity("0");
-      updateQuant(0);
+      setQuantity("");
     } else {
-      const newQuant = parseInt(input, 10);
-      if (!isNaN(newQuant)) {
+      send = parseInt(input, 10);
+      if (!isNaN(send)) {
         setQuantity(input);
-        updateQuant(newQuant);
+      }
+      const values = await axios.get("/api/inventory", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(values.data);
+      for (let i = 0; i < values.data.length; i++) {
+        if (values.data[i].name == props.name) {
+          prevNumber = values.data[i].quant;
+        }
+      }
+      if (prevNumber != undefined && prevNumber < send) {
+        updateQuant(send).then();
       }
     }
   }
+
+  const rowStyle =
+    props.quant < LOW_QUANTITY_THRESHOLD ? { backgroundColor: "yellow" } : {};
 
   return (
     <>
@@ -79,13 +96,13 @@ function InventoryItem(props: InventoryItemProps) {
         <td className="p-3 text-sm">{props.type}</td>
         <td className="p-3 text-sm">
           <TextField
-            style={{ width: "250px" }}
+            style={{ width: "250px", ...rowStyle }}
             onChange={handleChange}
             value={quantity}
             variant="filled"
             fullWidth={true}
             required
-            label="Quant"
+            label="Quantity"
             name="quant"
             type="text"
           />
