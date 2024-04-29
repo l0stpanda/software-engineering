@@ -327,10 +327,12 @@ function ServiceRequests() {
                   id="tab-6"
                   sx={{
                     transition: "transform 0.3s ease-in-out",
-                    "&:hover": {
+                    color: "#FFFFFF",
+                      "&:hover": {
                       transform: "scale(1.4)",
                       position: "relative",
-                      zIndex: 1, // Ensure scaling item is above others
+                      zIndex: 1,
+                      color: "#F6BD38",
                     },
                   }}
                 />
