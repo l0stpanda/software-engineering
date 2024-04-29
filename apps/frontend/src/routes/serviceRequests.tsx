@@ -127,7 +127,7 @@ function ServiceRequests() {
       <div className="flex flex-row w-full h-full px-4 gap-4 py-4">
         {/*Pending Requests*/}
         <div className="h-full w-1/2 bg-background rounded-lg flex flex-col px-4">
-          <h1 className="mt-4 mb-4 ml-2.5 font-header text-primary font-extrabold text-4xl text-center">
+          <h1 className="mt-4 mb-4 ml-2.5 font-header text-primary font-extrabold text-3xl text-center">
             Pending Requests
           </h1>
           <div className="pb-2">
