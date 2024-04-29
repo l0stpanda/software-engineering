@@ -96,6 +96,18 @@ model GeneralService {
   medicineReqID      MedicineRequest[]   @relation("medicineReqID")
   flowerID           Flowers[]           @relation("flowerID")
   sanitationID       SanitationRequest[] @relation("sanitationReq")
+  langInterpreterID  langInterpreter[]   @relation("langInterpreterID")
+}
+
+// language interpreter requests are saved
+model langInterpreter {
+  id           Int    @id
+  date         String
+  language     String
+  modeOfInterp String
+  specInstruct String
+
+  langInterpreterID GeneralService @relation("langInterpreterID", fields: [id], references: [id], onDelete: Cascade)
 }
 
 model SanitationRequest {
