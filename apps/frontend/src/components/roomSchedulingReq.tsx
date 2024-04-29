@@ -238,11 +238,10 @@ export default function RoomSchedulingReq() {
               onChange={handleResponseChanges}
               required
             >
-              <MenuItem value="">Not Selected</MenuItem>
-              <MenuItem value="Unassigned">Unassigned</MenuItem>
-              <MenuItem value="Assigned">Assigned</MenuItem>
-              <MenuItem value="In Progress">In Progress</MenuItem>
-              <MenuItem value="Closed">Closed</MenuItem>
+              <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
+              <MenuItem value={"Assigned"}>Assigned</MenuItem>
+              <MenuItem value={"InProgress"}>In Progress</MenuItem>
+              <MenuItem value={"Closed"}>Closed</MenuItem>
             </Select>
           </FormControl>
 
