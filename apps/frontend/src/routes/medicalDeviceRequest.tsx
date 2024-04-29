@@ -15,7 +15,8 @@ import { TransitionProps } from "@mui/material/transitions";
 import { useAuth0 } from "@auth0/auth0-react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { medicalDeviceDelivery } from "common/src/medicalDeviceDelivery.ts";
 import dayjs, { Dayjs } from "dayjs";
@@ -238,7 +239,11 @@ function MedicalDeviceRequest() {
             </FormControl>
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
+              <DateTimePicker label="Delivery Date" />
+            </LocalizationProvider>
+
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateTimePicker
                 sx={{ bgcolor: "#eceff0" }}
                 label="Delivery Date*"
                 value={formData.deliveryDate}

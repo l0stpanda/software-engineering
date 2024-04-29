@@ -5,6 +5,7 @@ import TurnLeftIcon from "@mui/icons-material/TurnLeft";
 import TurnRightIcon from "@mui/icons-material/TurnRight";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import Accordion from "@mui/material/Accordion";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import lowerLevel1 from "../assets/00_thelowerlevel1.png";
 import lowerLevel2 from "../assets/00_thelowerlevel2.png";
 import floor1 from "../assets/01_thefirstfloor.png";
@@ -157,12 +158,14 @@ function AccordionDirections(props: AccordionDirectionsProps) {
   }
 
   return (
-    <div>
-      <Accordion onChange={onChange}>
-        <AccordionSummary>{"Floor " + data.floor}</AccordionSummary>
+    <>
+      <Accordion onChange={onChange} disableGutters={true}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <b>Floor: {data.floor}</b>
+        </AccordionSummary>
         <AccordionDetails>{output}</AccordionDetails>
       </Accordion>
-    </div>
+    </>
   );
 }
 

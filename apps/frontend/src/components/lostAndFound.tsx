@@ -12,12 +12,14 @@ import {
   SelectChangeEvent,
   TextField,
 } from "@mui/material";
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
 import { useAuth0 } from "@auth0/auth0-react";
 import { lostAndFound } from "common/src/lostAndFoundType.ts";
 import LocationDropdown from "./locationDropdown.tsx";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import dayjs, { Dayjs } from "dayjs";
 import axios from "axios";
 import UserDropdown from "./userDropdown.tsx";
@@ -33,6 +35,17 @@ function LostFound() {
     type: "",
     location: "",
   };
+
+  const Transition = React.forwardRef(function Transition(
+    props: TransitionProps & {
+      children: React.ReactElement<string, string>;
+    },
+    ref: React.Ref<unknown>,
+  ) {
+    return (
+      <Slide direction="up" ref={ref} {...props} children={props.children} />
+    );
+  });
 
   const [responses, setResponses] =
     useState<lostAndFound>(initialFormResponses);
@@ -168,11 +181,11 @@ function LostFound() {
             />
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
+              <DateTimePicker
                 sx={{ bgcolor: "#eceff0" }}
                 label="Date Found *"
                 value={responses.date}
-                disablePast
+                disableFuture
                 onChange={handleDateChange}
                 // renderInput={(params) => <TextField {...params} />}
               />
@@ -264,31 +277,39 @@ function LostFound() {
           </div>
         </form>
       </div>
-      <Dialog open={open} onClose={handleSubmitClose}>
-        <DialogTitle>We received your request!</DialogTitle>
-        <DialogContent>
-          <strong>Here are your responses:</strong>
-          <br />
-          Name: {responses.name}
-          <br />
-          Date: {responses.date?.toString()}
-          <br />
-          Object Description: {responses.objectDesc}
-          <br />
-          Location: {responses.location}
-          <br />
-          Priority: {responses.priority}
-          <br />
-          Item Type: {responses.type}
-          <br />
-          Status: {responses.status}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleSubmitClose} autoFocus>
-            Okay
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <React.Fragment>
+        <Dialog
+          open={open}
+          onClose={handleSubmitClose}
+          TransitionComponent={Transition}
+          keepMounted
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>We received your request!</DialogTitle>
+          <DialogContent>
+            <strong>Here are your responses:</strong>
+            <br />
+            Name: {responses.name}
+            <br />
+            Date: {responses.date?.toString()}
+            <br />
+            Object Description: {responses.objectDesc}
+            <br />
+            Location: {responses.location}
+            <br />
+            Priority: {responses.priority}
+            <br />
+            Item Type: {responses.type}
+            <br />
+            Status: {responses.status}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleSubmitClose} autoFocus>
+              Okay
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </React.Fragment>
     </div>
   );
 }

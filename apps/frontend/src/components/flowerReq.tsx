@@ -14,7 +14,9 @@ import {
   //InputLabel,
   TextField,
 } from "@mui/material";
-import { FormEvent, useState } from "react";
+import React, { FormEvent, useState } from "react";
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
 import axios from "axios";
 //import BackgroundPattern from "../components/allyBackground.tsx";
 import { flowerReqFields } from "common/src/flowerRequest.ts";
@@ -35,6 +37,17 @@ function FlowerReqForm() {
     attachedNote: "",
     status: "Unassigned",
   };
+
+  const Transition = React.forwardRef(function Transition(
+    props: TransitionProps & {
+      children: React.ReactElement<string, string>;
+    },
+    ref: React.Ref<unknown>,
+  ) {
+    return (
+      <Slide direction="up" ref={ref} {...props} children={props.children} />
+    );
+  });
 
   // State for form responses
   const [responses, setResponses] =
@@ -244,25 +257,33 @@ function FlowerReqForm() {
           </div>
         </form>
       </div>
-      <Dialog open={open} onClose={handleSubmitClose}>
-        <DialogTitle>We received your request!</DialogTitle>
-        <DialogContent>
-          <strong>Here are your responses:</strong>
-          <br />
-          Room Number: {responses.roomNum}
-          <br />
-          Sent By: {responses.senderName}
-          <br />
-          Send To: {responses.sendTo}
-          <br />
-          Note for Patient: {responses.attachedNote}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleSubmitClose} autoFocus>
-            Okay
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <React.Fragment>
+        <Dialog
+          open={open}
+          onClose={handleSubmitClose}
+          TransitionComponent={Transition}
+          keepMounted
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>We received your request!</DialogTitle>
+          <DialogContent>
+            <strong>Here are your responses:</strong>
+            <br />
+            Room Number: {responses.roomNum}
+            <br />
+            Sent By: {responses.senderName}
+            <br />
+            Send To: {responses.sendTo}
+            <br />
+            Note for Patient: {responses.attachedNote}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleSubmitClose} autoFocus>
+              Okay
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </React.Fragment>
     </div>
   );
 }

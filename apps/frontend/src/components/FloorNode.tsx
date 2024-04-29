@@ -269,6 +269,19 @@ function FloorNode(props: FloorNodesProps) {
         //neither
         else {
           nodeColor = "#009BA8";
+          // start and end node === undefined -> no invis
+          // start !== undefined and end node === undefined -> no invis
+          // start !== undefined and end !== undefined -> invis
+          // start is undefined and end is not undefined -> no invis
+
+          if (
+            input.end !== undefined &&
+            input.start !== undefined &&
+            node.type !== "STAI" &&
+            node.type !== "ELEV"
+          ) {
+            animation = animation.concat(" invisible");
+          }
         }
         return (
           <div

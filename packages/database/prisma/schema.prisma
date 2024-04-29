@@ -169,14 +169,23 @@ model User {
 }
 
 model Todo {
-  id       Int      @id @default(autoincrement())
+  id       Int       @id @default(autoincrement())
   task     String
   priority String
   email    String
   complete Boolean
-  subtasks String[]
+  subtasks subTodo[] @relation("idSubtasks")
   // Foreign Key Reference
-  user     User     @relation("UserID", fields: [email], references: [email], onDelete: Cascade)
+  user     User      @relation("UserID", fields: [email], references: [email], onDelete: Cascade)
+}
+
+model subTodo {
+  id          Int     @id @default(autoincrement())
+  id_relation Int
+  task        String
+  complete    Boolean
+  // Foreign Key Reference
+  parentTask  Todo    @relation("idSubtasks", fields: [id_relation], references: [id], onDelete: Cascade)
 }
 
 model Flowers {

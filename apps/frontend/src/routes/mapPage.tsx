@@ -357,6 +357,11 @@ function Map() {
   }
   const [expanded, setExpanded] = useState(false);
   const isOpen = expanded;
+
+  const handleClearPath = () => {
+    setNavigatingNodes({ start: "", end: "" });
+  };
+
   const AccordionFrame = () => {
     const handleInnerClick = (e: React.MouseEvent<HTMLElement>) => {
       e.stopPropagation();
@@ -416,6 +421,7 @@ function Map() {
                     <MenuItem value="Dijkstra">Dijkstra</MenuItem>
                   </Select>
                 </FormControl>
+                <button onClick={handleClearPath}>Clear Path</button>
               </div>
             </motion.section>
           )}
@@ -425,8 +431,8 @@ function Map() {
   };
 
   return (
-    <div className="">
-      <div className="">
+    <div>
+      <div>
         {/*Map Image Box*/}
         <div
           ref={divRef}

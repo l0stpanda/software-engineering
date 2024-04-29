@@ -20,6 +20,7 @@ import fetchAll from "./routes/allFetching.ts";
 import { auth } from "express-oauth2-jwt-bearer";
 import adminAccess from "./routes/adminAccess.ts";
 import maintinence from "./routes/maintenanceReq.ts";
+import subTodo from "./routes/subTodo.ts";
 // import readRouterE from "./routes/readE.ts";
 // import readRouterN from "./routes/readN.ts";
 
@@ -69,6 +70,7 @@ app.use("/api/medicineRequest", medicineRequest);
 app.use("/api/roomSchedulingRequest", roomScheduler);
 app.use("/api/sanitationRequest", sanitationRequest);
 app.use("/api/todoStuff", userStuff);
+app.use("/api/subTodo", subTodo);
 app.use("/api/adminAccess", adminAccess);
 app.use("/api/fetchAll", fetchAll);
 app.use("/api/editMap", editMap);
