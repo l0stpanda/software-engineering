@@ -10,12 +10,13 @@ import {
   InputLabel,
   MenuItem,
 } from "@mui/material";
-//import Slide from "@mui/material/Slide";
-//import { TransitionProps } from "@mui/material/transitions";
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
 import { useAuth0 } from "@auth0/auth0-react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { medicalDeviceDelivery } from "common/src/medicalDeviceDelivery.ts";
 import dayjs, { Dayjs } from "dayjs";
@@ -23,7 +24,8 @@ import LocationDropdown from "../components/locationDropdown.tsx";
 import axios from "axios";
 import UserDropdown from "../components/userDropdown.tsx";
 import DeviceDropdown from "./DeviceDropdown.tsx";
-
+import { Alert, Snackbar } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
 function MedicalDeviceReq() {
   const { getAccessTokenSilently } = useAuth0();
   const [formData, setFormData] = useState<medicalDeviceDelivery>({
@@ -36,18 +38,32 @@ function MedicalDeviceReq() {
     deliveryDate: dayjs(),
   });
 
-  // const Transition = React.forwardRef(function Transition(
-  //   props: TransitionProps & {
-  //     children: React.ReactElement<string, string>;
-  //   },
-  //   ref: React.Ref<unknown>,
-  // ) {
-  //   return (
-  //     <Slide direction="up" ref={ref} {...props} children={props.children} />
-  //   );
-  // });
-
+  const Transition = React.forwardRef(function Transition(
+    props: TransitionProps & {
+      children: React.ReactElement<string, string>;
+    },
+    ref: React.Ref<unknown>,
+  ) {
+    return (
+      <Slide direction="up" ref={ref} {...props} children={props.children} />
+    );
+  });
+  const LOW_QUANTITY_THRESHOLD = 10;
   const [open, setOpen] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<AlertColor>("success");
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const showSnackbar = (message: string, severity: AlertColor) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
 
   function clear() {
     setFormData({
@@ -87,10 +103,26 @@ function MedicalDeviceReq() {
     setFormData({ ...formData, roomName: val });
   }
 
-  function updateItem(val: string) {
+  async function updateItem(val: string) {
+    const token = await getAccessTokenSilently();
     setFormData({ ...formData, medicalDeviceName: val });
+    try {
+      const item = await axios.get("/api/inventory/getNum", {
+        params: { name: val },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(item.data);
+      // Check if the quantity is below a threshold
+      if (item.data.quant <= LOW_QUANTITY_THRESHOLD) {
+        showSnackbar(`Low stock for ${val}`, "warning"); // Change severity to "warning" or another appropriate level
+      }
+    } catch (e) {
+      console.error(e);
+      showSnackbar("Can find the Medical", "error");
+    }
   }
-
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const token = await getAccessTokenSilently();
@@ -223,7 +255,7 @@ function MedicalDeviceReq() {
             </FormControl>
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
+              <DateTimePicker
                 sx={{ bgcolor: "#eceff0" }}
                 label="Delivery Date*"
                 value={formData.deliveryDate}
@@ -271,41 +303,56 @@ function MedicalDeviceReq() {
           </div>
         </form>
       </div>
-      <Dialog
-        open={open}
-        onClose={handleSubmitClose}
-        //TransitionComponent={Transition}
-        keepMounted
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle>We received your request!</DialogTitle>
-        <DialogContent>
-          <strong>Here are your responses:</strong>
-          <br />
-          Employee Name: {formData.employeeName}
-          <br />
-          Room Name: {formData.roomName}
-          <br />
-          Medical Device Name: {formData.medicalDeviceName}
-          <br />
-          Quantity: {formData.quantity}
-          <br />
-          Priority: {formData.priority}
-          <br />
-          Status: {formData.status}
-          <br />
-          Date:{formData.deliveryDate?.toString()}
-        </DialogContent>
+      <React.Fragment>
+        <Dialog
+          open={open}
+          onClose={handleSubmitClose}
+          TransitionComponent={Transition}
+          keepMounted
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>We received your request!</DialogTitle>
+          <DialogContent>
+            <strong>Here are your responses:</strong>
+            <br />
+            Employee Name: {formData.employeeName}
+            <br />
+            Room Name: {formData.roomName}
+            <br />
+            Medical Device Name: {formData.medicalDeviceName}
+            <br />
+            Quantity: {formData.quantity}
+            <br />
+            Priority: {formData.priority}
+            <br />
+            Status: {formData.status}
+            <br />
+            Date:{formData.deliveryDate?.toString()}
+          </DialogContent>
 
-        <DialogActions>
-          <Button onClick={handleSubmitClose} autoFocus>
-            Okay
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <div className="text-text ml-2 font-header place-self-right">
-        Credits: Najum and Sahil
-      </div>
+          <DialogActions>
+            <Button onClick={handleSubmitClose} autoFocus>
+              Okay
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <div className="text-text ml-2 font-header place-self-right">
+          Credits: Najum and Sahil
+        </div>
+      </React.Fragment>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={10000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

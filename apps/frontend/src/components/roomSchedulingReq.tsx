@@ -10,16 +10,33 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import UserDropdown from "../components/userDropdown.tsx";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import dayjs, { Dayjs } from "dayjs";
+
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<string, string>;
+  },
+  ref: React.Ref<unknown>,
+) {
+  return (
+    <Slide direction="up" ref={ref} {...props} children={props.children} />
+  );
+});
 
 export default function RoomSchedulingReq() {
   type roomReqFields = {
     employName: string;
-    startTime: string;
+    startTime: Dayjs | null;
     lengthRes: string;
     roomNum: string;
     reqStatus: string;
@@ -28,7 +45,7 @@ export default function RoomSchedulingReq() {
 
   const [responses, setResponses] = useState<roomReqFields>({
     employName: "",
-    startTime: "",
+    startTime: dayjs(),
     lengthRes: "",
     roomNum: "",
     reqStatus: "Unassigned",
@@ -48,10 +65,14 @@ export default function RoomSchedulingReq() {
     setResponses({ ...responses, [name]: value });
   }
 
+  function handleDateChange(date: Dayjs | null) {
+    setResponses({ ...responses, startTime: date });
+  }
+
   function clear() {
     setResponses({
       employName: "",
-      startTime: "",
+      startTime: null,
       lengthRes: "",
       roomNum: "",
       reqStatus: "",
@@ -162,33 +183,16 @@ export default function RoomSchedulingReq() {
             update={updateRoom}
             label={"Room"}
           />
-          <FormControl>
-            <InputLabel id="startTime-label" variant="filled">
-              Start Time *
-            </InputLabel>
-            <Select
-              labelId="startTime-label"
-              label="Start Time"
-              name="startTime"
-              id="startTime"
-              variant="filled"
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateTimePicker
+              sx={{ bgcolor: "#eceff0" }}
+              label="Starting Date/Time*"
               value={responses.startTime}
-              onChange={handleResponseChanges}
-              required
-            >
-              Start Time
-              <MenuItem value="">None</MenuItem>
-              <MenuItem value="9:00AM">9:00AM</MenuItem>
-              <MenuItem value="10:00AM">10:00AM</MenuItem>
-              <MenuItem value="11:00AM">11:00AM</MenuItem>
-              <MenuItem value="12:00PM">12:00PM</MenuItem>
-              <MenuItem value="1:00PM">1:00PM</MenuItem>
-              <MenuItem value="2:00PM">2:00PM</MenuItem>
-              <MenuItem value="3:00PM">3:00PM</MenuItem>
-              <MenuItem value="4:00PM">4:00PM</MenuItem>
-              <MenuItem value="5:00PM">5:00PM</MenuItem>
-            </Select>
-          </FormControl>
+              disablePast
+              onChange={handleDateChange}
+              //renderInput={(params) => <TextField {...params} required/>}
+            />
+          </LocalizationProvider>
 
           <FormControl>
             <InputLabel id="lengthRes-label" variant="filled">
@@ -276,33 +280,40 @@ export default function RoomSchedulingReq() {
           </div>
         </form>
       </div>
-
-      <Dialog open={open} onClose={handleSubmitClose}>
-        <DialogTitle>We received your request!</DialogTitle>
-        <DialogContent>
-          <strong>Here are your responses:</strong>
-          <br />
-          Employee Name: {responses.employName}
-          <br />
-          Start Time: {responses.startTime}
-          <br />
-          Length: {responses.lengthRes}
-          <br />
-          Room Number: {responses.roomNum}
-          <br />
-          Status: {responses.reqStatus}
-          <br />
-          Priority: {responses.priority}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleSubmitClose} autoFocus>
-            Okay
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <div className="text-text mt-[4.6rem] ml-2 font-header place-self-right">
-        Credits: Ally and Ben
-      </div>
+      <React.Fragment>
+        <Dialog
+          open={open}
+          onClose={handleSubmitClose}
+          TransitionComponent={Transition}
+          keepMounted
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>We received your request!</DialogTitle>
+          <DialogContent>
+            <strong>Here are your responses:</strong>
+            <br />
+            Employee Name: {responses.employName}
+            <br />
+            Start Date/Time: {responses.startTime?.toString()}
+            <br />
+            Length: {responses.lengthRes}
+            <br />
+            Room Number: {responses.roomNum}
+            <br />
+            Status: {responses.reqStatus}
+            <br />
+            Priority: {responses.priority}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleSubmitClose} autoFocus>
+              Okay
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <div className="text-text mt-[4.6rem] ml-2 font-header place-self-right">
+          Credits: Ally and Ben
+        </div>
+      </React.Fragment>
     </div>
   );
 }

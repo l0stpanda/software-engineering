@@ -25,8 +25,10 @@ import RoomSchedulingReq from "../components/roomSchedulingReq.tsx";
 import MedicalDeviceReq from "../components/medicalDeviceReq.tsx";
 import MedicineDeliveryReq from "../components/MedicineDeliveryReq.tsx";
 import SanitationReq from "../components/sanitationReq.tsx";
+import MaintenanceReq from "../components/maintenanceReq.tsx";
+import ToolIcon from "@mui/icons-material/Build";
 
-type GeneralReq = {
+export type GeneralReq = {
   id: number;
   type: string;
   location: string;
@@ -62,16 +64,16 @@ function ServiceRequests() {
             Authorization: `Bearer ${token}`,
           },
         });
-        setRecords(response.data); // Assuming the data is an array of flower request data
-        setPermRecords(response.data); // Assuming the data is an array of flower request data
+        setRecords(response.data); // Assuming the data is an array of request data
+        setPermRecords(response.data); // Assuming the data is an array of request data
         console.log(response.data);
       } catch (error) {
-        console.error("Error fetching flower requests", error);
+        console.error("Error fetching requests", error);
       }
     };
 
-    fetchData().catch((error) => {
-      console.error("Error from fetchData promise:", error);
+    fetchData().catch(() => {
+      // console.log("Error from fetchData promise:", error);
     });
   }, [getAccessTokenSilently]);
 
@@ -157,24 +159,24 @@ function ServiceRequests() {
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-secondary border-b-2 border-b-primary">
+              <thead className="bg-primary border-b-2 border-b-[#F6BD38]">
                 <tr>
-                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
                     Type
                   </th>
-                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
                     Status
                   </th>
-                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
                     Priority
                   </th>
-                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
                     Location
                   </th>
-                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
                     Employee Name
                   </th>
-                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
                     Delete
                   </th>
                   {/* Dynamically generate column headers */}
@@ -207,7 +209,7 @@ function ServiceRequests() {
               overflow: "hidden",
               width: "100%",
             }}
-            className="bg-background rounded-lg"
+            className="bg-primary rounded-lg"
           >
             {/*<h1 className="my-2 font-header text-primary font-bold text-xl text-center">*/}
             {/*    Choose a new request*/}
@@ -227,10 +229,12 @@ function ServiceRequests() {
                   id="tab-0"
                   sx={{
                     transition: "transform 0.3s ease-in-out",
-                    "&:hover": {
+                    color: "#FFFFFF",
+                    "&:hover, &:focus": {
                       transform: "scale(1.4)",
                       position: "relative",
-                      zIndex: 1, // Ensure scaling item is above others
+                      zIndex: 1,
+                      color: "#F6BD38",
                     },
                   }}
                 />
@@ -241,10 +245,12 @@ function ServiceRequests() {
                   id="tab-1"
                   sx={{
                     transition: "transform 0.3s ease-in-out",
-                    "&:hover": {
+                    color: "#FFFFFF",
+                    "&:hover, &:focus": {
                       transform: "scale(1.4)",
                       position: "relative",
-                      zIndex: 1, // Ensure scaling item is above others
+                      zIndex: 1,
+                      color: "#F6BD38",
                     },
                   }}
                 />
@@ -255,10 +261,12 @@ function ServiceRequests() {
                   id="tab-2"
                   sx={{
                     transition: "transform 0.3s ease-in-out",
-                    "&:hover": {
+                    color: "#FFFFFF",
+                    "&:hover, &:focus": {
                       transform: "scale(1.3)",
                       position: "relative",
-                      zIndex: 1, // Ensure scaling item is above others
+                      zIndex: 1,
+                      color: "#F6BD38",
                     },
                   }}
                 />
@@ -269,10 +277,12 @@ function ServiceRequests() {
                   id="tab-3"
                   sx={{
                     transition: "transform 0.3s ease-in-out",
-                    "&:hover": {
+                    color: "#FFFFFF",
+                    "&:hover, &:focus": {
                       transform: "scale(1.4)",
                       position: "relative",
-                      zIndex: 1, // Ensure scaling item is above others
+                      zIndex: 1,
+                      color: "#F6BD38",
                     },
                   }}
                 />
@@ -283,10 +293,12 @@ function ServiceRequests() {
                   id="tab-4"
                   sx={{
                     transition: "transform 0.3s ease-in-out",
-                    "&:hover": {
+                    color: "#FFFFFF",
+                    "&:hover, &:focus": {
                       transform: "scale(1.4)",
                       position: "relative",
-                      zIndex: 1, // Ensure scaling item is above others
+                      zIndex: 1,
+                      color: "#F6BD38",
                     },
                   }}
                 />
@@ -295,6 +307,22 @@ function ServiceRequests() {
                 <Tab
                   icon={<CleaningServicesIcon />}
                   id="tab-5"
+                  sx={{
+                    transition: "transform 0.3s ease-in-out",
+                    color: "#FFFFFF",
+                    "&:hover, &:focus": {
+                      transform: "scale(1.4)",
+                      position: "relative",
+                      zIndex: 1,
+                      color: "#F6BD38",
+                    },
+                  }}
+                />
+              </Tooltip>
+              <Tooltip title="Maintenance Request">
+                <Tab
+                  icon={<ToolIcon />}
+                  id="tab-6"
                   sx={{
                     transition: "transform 0.3s ease-in-out",
                     "&:hover": {
@@ -315,6 +343,7 @@ function ServiceRequests() {
             {currentTabIndex === 3 && <MedicalDeviceReq />}
             {currentTabIndex === 4 && <MedicineDeliveryReq />}
             {currentTabIndex === 5 && <SanitationReq />}
+            {currentTabIndex === 6 && <MaintenanceReq />}
           </div>
         </div>
       </div>

@@ -23,7 +23,7 @@ import floor1 from "../assets/01_thefirstfloor.png";
 import floor2 from "../assets/02_thesecondfloor.png";
 import floor3 from "../assets/03_thethirdfloor.png";
 
-import FloorNode from "../components/FloorNode.tsx";
+import FloorNode, { FloorNodeInfo } from "../components/FloorNode.tsx";
 import { SelectChangeEvent } from "@mui/material/Select";
 // import { ArrowBack } from "@mui/icons-material";
 import LocationDropdown from "../components/locationDropdown.tsx";
@@ -35,8 +35,25 @@ import { userInfo } from "common/src/userInfo.ts";
 import { directionInfo, getDirections } from "../objects/Pathfinding.ts";
 import { JSX } from "react/jsx-runtime";
 import axios from "axios";
+// import console from "console";
+import { GeneralReq } from "./serviceRequests.tsx";
+import ModeDisplay from "../components/ModeDisplay.tsx";
+import AccordionServiceRequests from "../components/AccordionServiceRequests.tsx";
 
-function Map() {
+type roomSched = {
+  id: number;
+  startTime: string;
+  lengthRes: string;
+  room_name: string;
+};
+type serviceRequestData = {
+  id: number;
+  status: string;
+  priority: string;
+  roomSched: roomSched[];
+};
+
+function MapPage() {
   const divRef = useRef<HTMLDivElement>(null);
   const transformRef = useRef<ReactZoomPanPinchRef>(null);
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
@@ -53,8 +70,15 @@ function Map() {
   const [directions, setDirections] = useState<directionInfo[]>([]);
   const [path, setPath] = useState<string[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [schedules, setSchedules] = useState<serviceRequestData[]>([]);
+  const [bookings, setBookings] = useState<JSX.Element[]>([]);
 
+  const [navigatingNodes, setNavigatingNodes] = useState({
+    start: "",
+    end: "",
+  });
   const { getAccessTokenSilently, user } = useAuth0();
+  const [records, setRecords] = useState<GeneralReq[]>([]);
 
   // Zoom in/out buttons for map viewing
   const Controls = () => {
@@ -87,26 +111,6 @@ function Map() {
       </div>
     );
   };
-
-  const [navigatingNodes, setNavigatingNodes] = useState({
-    start: "",
-    end: "",
-  });
-  // const [submitValues, setSubmitValues] = useState(["", ""]);
-
-  // Carter's function code bc idk how to do it
-  // function handleFormChanges(event: React.ChangeEvent<HTMLInputElement>) {
-  //   const { name, value } = event.target;
-  //   setNavigatingNodes({ ...navigatingNodes, [name]: value });
-  // }
-
-  // Handles changes to the start/end destination boxes
-  // function handleFormSubmit() {
-  //   const cleanStart = navigatingNodes.start.replace("\r", "");
-  //   const cleanEnd = navigatingNodes.end.replace("\r", "");
-  //   //console.log(cleanStart, cleanEnd);
-  //   setNavigatingNodes({ start: cleanStart, end: cleanEnd });
-  // }
 
   // Changes the map image
   const changeFloor = (floor: string) => {
@@ -163,6 +167,27 @@ function Map() {
         });
     }
     sendUser().then();
+
+    const fetchData = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+        const response = await axios.get("/api/fetchAll", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setRecords(response.data); // Assuming the data is an array of request data
+        // setPermRecords(response.data); // Assuming the data is an array of request data
+        // console.log(response.data);
+      } catch (error) {
+        // log(400);
+        // console.error("Error fetching requests", error);
+      }
+    };
+
+    fetchData().then().catch();
+    // log(error);
+    // console.error("Error from fetchData promise:", error);
   }, [getAccessTokenSilently, user?.email, user?.nickname, user?.sub]);
 
   // Updates the graph when it has been received from the database
@@ -174,6 +199,29 @@ function Map() {
       //console.log(update);
     });
   }, [update]);
+
+  useEffect(() => {
+    // Fetch data from the API
+    const fetchData = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+        const response = await axios.get("/api/roomSchedulingRequest", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        console.log(response.data);
+        setSchedules(response.data); // Assuming the data is an array of room booking data
+      } catch (error) {
+        console.error("Error fetching room schedules", error);
+      }
+    };
+
+    fetchData().catch((error) => {
+      console.error("Error from fetchData promise:", error);
+    });
+  }, [getAccessTokenSilently]);
 
   useEffect(() => {
     setDirections(getDirections(path, graph));
@@ -200,7 +248,7 @@ function Map() {
         const yOffset =
           (divDimensions.height - (pathSize[1] - pathSize[3]) * scale) / 2;
 
-        log(xOffset);
+        // log(xOffset);
 
         transformRef.current.setTransform(
           -(pathSize[2] * scale) + xOffset,
@@ -213,9 +261,9 @@ function Map() {
     }
   }, [pathSize, divDimensions, imgState]);
 
-  function log(data: number) {
-    console.log(data);
-  }
+  // function log(data: number) {
+  //   console.log(data);
+  // }
 
   const changeAlgorithm = (event: SelectChangeEvent) => {
     setAlgorithm(event.target.value as string);
@@ -224,12 +272,71 @@ function Map() {
   // Test for showing directions
   function showDirections() {
     const output: JSX.Element[] = [];
-    directions.forEach((data: directionInfo) => {
-      output.push(
-        <AccordionDirections data={data} setImgState={changeFloor} />,
-      );
-    });
+
+    if (mode === "path") {
+      directions.forEach((data: directionInfo) => {
+        output.push(
+          <AccordionDirections data={data} setImgState={changeFloor} />,
+        );
+      });
+    } else if (mode === "info") {
+      //empty the nodes
+      setNavigatingNodes({ start: "", end: "" });
+    }
     return output;
+  }
+
+  // Gets a variety of info about bookings at a given node and checks if the booking is today
+  // Still needs a useEffect to visualize changes on screen
+  function getBookings(longName: string) {
+    const nodeBookings: JSX.Element[] = [];
+    const nodeBookings2: string[] = [];
+    schedules.forEach((data: serviceRequestData) => {
+      const booking = data.roomSched[0];
+      if (booking.room_name === longName) {
+        const duration = parseInt(booking.lengthRes);
+        const [date, time] = booking.startTime.split("T"); // Splits date and time
+        // Gets the separate time values
+        const [startHour, startMinute] = time
+          .split(":")
+          .map((value: string) => parseInt(value));
+        const endHour = startHour + Math.floor(duration / 60);
+        const endMinute = (startMinute + duration) % 60;
+        // Gets the separate date values
+        const [year, month, day] = date
+          .split("-")
+          .map((value: string) => parseInt(value));
+        // Gets current date Object
+        const current = new Date();
+        console.log(endHour, endMinute, bookings, booking);
+
+        if (
+          current.getUTCDate() == day &&
+          current.getUTCMonth() == month - 1 &&
+          current.getUTCFullYear() == year
+        ) {
+          let startString = startMinute.toString();
+          let endString = endMinute.toString();
+          if (startString.length == 1) startString = "0".concat(startString);
+          if (endString.length == 1) endString = "0".concat(endString);
+          // Design nodeBookings however you want,  it currently stores a string but it can store an html element maybe.
+          nodeBookings.push(
+            <>
+              <div className="flex border-primary border-1 text-text font-body px-1">
+                {startHour}:{startString} - {endHour}:{endString}
+              </div>
+            </>,
+          );
+        }
+        setMode("info");
+      }
+    });
+    console.log(nodeBookings2);
+    setBookings(nodeBookings);
+  }
+
+  function returnBookings() {
+    return bookings;
   }
 
   //Needs to be here for navigation dropdown
@@ -355,8 +462,33 @@ function Map() {
       </div>
     );
   }
+
   const [expanded, setExpanded] = useState(false);
   const isOpen = expanded;
+
+  const handleClearPath = () => {
+    setNavigatingNodes({ start: "", end: "" });
+  };
+
+  const [mode, setMode] = useState<string>("path");
+  const [clicked, setClicked] = useState<FloorNodeInfo | undefined>(undefined);
+  const [showInfo, setShowInfo] = useState<boolean>(false);
+
+  const handleMode = () => {
+    if (mode === "path") {
+      setMode("info");
+    } else if (mode === "info") {
+      setMode("path");
+    }
+  };
+
+  const handleNodeCallback = (node: FloorNodeInfo) => {
+    setClicked(node);
+    if (mode === "info") {
+      setShowInfo(true);
+    }
+  };
+
   const AccordionFrame = () => {
     const handleInnerClick = (e: React.MouseEvent<HTMLElement>) => {
       e.stopPropagation();
@@ -416,6 +548,7 @@ function Map() {
                     <MenuItem value="Dijkstra">Dijkstra</MenuItem>
                   </Select>
                 </FormControl>
+                <button onClick={handleClearPath}>Clear Path</button>
               </div>
             </motion.section>
           )}
@@ -425,8 +558,8 @@ function Map() {
   };
 
   return (
-    <div className="">
-      <div className="">
+    <div>
+      <div>
         {/*Map Image Box*/}
         <div
           ref={divRef}
@@ -438,6 +571,7 @@ function Map() {
             <div className="">
               {/*Buttons for displaying floor images*/}
               <FloorMapButtons />
+
               <Controls />
               <TransformComponent
                 wrapperStyle={{
@@ -461,14 +595,30 @@ function Map() {
                   pathSetter={setPath}
                   updateStartAndEnd={updateStartAndEnd}
                   updateEnd={updateEnd}
+                  reqs={records}
+                  mode={mode}
+                  nodeInfoCallback={handleNodeCallback}
+                  getBookings={getBookings}
                 />
               </TransformComponent>
             </div>
           </TransformWrapper>
+          <div
+            className="overflow-y-auto h-flex absolute right-32 border-primary border-2 rounded-xl
+                bottom-20 py-1 bg-background"
+          >
+            <div className="flex border-primary border-b text-text font-body px-1">
+              Scheduled Requests:
+            </div>
+            {returnBookings()}
+          </div>
         </div>
         {/*Location and Destination things*/}
         <div className=""></div>
+
         {/*boxes.*/}
+        <ModeDisplay handleMode={handleMode} mode={mode} />
+
         <div
           className="fixed top-20 left-10"
           onClick={() => setExpanded(!isOpen)}
@@ -498,7 +648,7 @@ function Map() {
             <></>
           )}
         </div>
-        {directions.length != 0 ? (
+        {directions.length != 0 && mode === "path" ? (
           <div
             className="
                     h-[250px]
@@ -516,11 +666,32 @@ function Map() {
             <div className="overflow-y-auto h-full">{showDirections()}</div>
           </div>
         ) : (
-          <></>
+          <>
+            {clicked && showInfo && (
+              <div
+                className="
+                    h-[250px]
+                    w-[300px]
+                    items-center
+                    bg-background
+                    border-primary
+                    border-2
+                    overflow-clip
+                    rounded-lg
+                    fixed
+                    bottom-7
+                    right-32"
+              >
+                {clicked.requests.map((req) => {
+                  return <AccordionServiceRequests data={req} />;
+                })}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
   );
 }
 
-export default Map;
+export default MapPage;

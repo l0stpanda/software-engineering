@@ -5,6 +5,12 @@ import PrismaClient from "../bin/database-connection.ts";
 
 const router: Router = express.Router();
 
+type subTodo = {
+  id_relation: number;
+  task: string;
+  complete: boolean;
+};
+
 type toDoNow = {
   id: number;
   user_id: string;
@@ -14,7 +20,7 @@ type toDoNow = {
   username: string;
   role: string;
   complete: boolean;
-  subtasks: string[];
+  subtasks: subTodo[];
 };
 
 //Registering the login details from the front end to the backend to be stored in the database
@@ -40,14 +46,27 @@ router.post("/", async function (req: Request, res: Response) {
         });
       }
       //then no matter what create the todo element with the same email
-      await PrismaClient.todo.create({
+      const newTodo = await PrismaClient.todo.create({
         data: {
           task: input.task,
           priority: input.priority,
           email: input.email,
-          subtasks: input.subtasks,
           complete: input.complete,
         },
+      });
+
+      const findID = newTodo.id;
+
+      for (let i = 0; i < input.subtasks.length; i++) {
+        input.subtasks[i].id_relation = findID;
+        // await PrismaClient.subTodo.create({
+        //   data: input.subtasks[i],
+        // });
+      }
+      console.log(input.subtasks);
+
+      await PrismaClient.subTodo.createMany({
+        data: input.subtasks,
       });
     }
   } catch (e) {
@@ -65,6 +84,9 @@ router.get("/:email", async function (req: Request, res: Response) {
       await PrismaClient.todo.findMany({
         where: {
           email: email_identifier,
+        },
+        include: {
+          subtasks: true,
         },
       }),
     );
@@ -92,17 +114,31 @@ router.delete("/:id", async function (req: Request, res: Response) {
 
 router.post("/:id", async function (req: Request, res: Response) {
   const id = parseInt(req.params.id);
-  try {
-    await PrismaClient.todo.update({
-      where: {
-        id: id,
-      },
-      data: req.body,
-    });
-  } catch (e) {
-    console.log(e);
-    res.sendStatus(400);
+  console.log("BODY " + req.body);
+  if (req.body.id) {
+    try {
+      await PrismaClient.todo.update({
+        where: {
+          id: id,
+        },
+        data: req.body,
+      });
+    } catch (e) {
+      console.log(e);
+      res.sendStatus(400);
+      return;
+    }
+    res.sendStatus(200);
+  } else {
+    try {
+      const newSubTodo = await PrismaClient.subTodo.create({ data: req.body });
+      res.send(newSubTodo);
+      return;
+    } catch (e) {
+      console.log(e);
+      res.sendStatus(400);
+      return;
+    }
   }
-  res.sendStatus(200);
 });
 export default router;

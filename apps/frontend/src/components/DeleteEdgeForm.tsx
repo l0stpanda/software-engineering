@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
-
+import { Alert, Snackbar } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
 interface createEdgeProps {
   nodes: MapNode[];
 }
@@ -23,6 +24,20 @@ interface createEdgeProps {
 // }
 
 export default function DeleteEdgeForm(props: createEdgeProps) {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<AlertColor>("success");
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const showSnackbar = (message: string, severity: AlertColor) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
   const [edgeInfo, setEdgeInfo] = useState<MapNode[]>(props.nodes);
   const { getAccessTokenSilently } = useAuth0();
   useEffect(() => {
@@ -65,17 +80,19 @@ export default function DeleteEdgeForm(props: createEdgeProps) {
           },
         )
         .then(() => {
-          alert(
+          showSnackbar(
             "Successfully deleted edge from " +
               edgeInfo[0].getLongName() +
               " to " +
               edgeInfo[1].getLongName(),
+            "success",
           );
           window.location.reload();
         })
         .catch(() => {
-          alert(
+          showSnackbar(
             "There was a problem deleting the edge. Make sure the edge does not already exist.",
+            "error",
           );
         });
     }
@@ -134,6 +151,19 @@ export default function DeleteEdgeForm(props: createEdgeProps) {
           Submit
         </Button>
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
