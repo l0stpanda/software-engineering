@@ -78,7 +78,7 @@ function SecurityRequest() {
       return;
     }
     try {
-      await axios.post("/api/lostAndFound", responses, {
+      await axios.post("/api/securityRequest", responses, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

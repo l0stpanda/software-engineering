@@ -27,6 +27,8 @@ import MedicalDeviceReq from "../components/medicalDeviceReq.tsx";
 import MedicineDeliveryReq from "../components/MedicineDeliveryReq.tsx";
 import SanitationReq from "../components/sanitationReq.tsx";
 import SecurityRequestForm from "../components/securityRequest.tsx";
+import MaintenanceReq from "../components/maintenanceReq.tsx";
+import ToolIcon from "@mui/icons-material/Build";
 
 type GeneralReq = {
   id: number;
@@ -335,6 +337,20 @@ function ServiceRequests() {
                   }}
                 />
               </Tooltip>
+              <Tooltip title="Maintenance Request">
+                <Tab
+                  icon={<ToolIcon />}
+                  id="tab-6"
+                  sx={{
+                    transition: "transform 0.3s ease-in-out",
+                    "&:hover": {
+                      transform: "scale(1.4)",
+                      position: "relative",
+                      zIndex: 1, // Ensure scaling item is above others
+                    },
+                  }}
+                />
+              </Tooltip>
             </Tabs>
           </div>
 
@@ -346,6 +362,7 @@ function ServiceRequests() {
             {currentTabIndex === 4 && <MedicineDeliveryReq />}
             {currentTabIndex === 5 && <SanitationReq />}
             {currentTabIndex === 6 && <SecurityRequestForm />}
+            {currentTabIndex === 7 && <MaintenanceReq />}
           </div>
         </div>
       </div>
