@@ -20,11 +20,13 @@ import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import MonitorHeartIcon from "@mui/icons-material/MonitorHeart";
 import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
+import SecurityIcon from "@mui/icons-material/Security";
 import LostFound from "../components/lostAndFound.tsx";
 import RoomSchedulingReq from "../components/roomSchedulingReq.tsx";
 import MedicalDeviceReq from "../components/medicalDeviceReq.tsx";
 import MedicineDeliveryReq from "../components/MedicineDeliveryReq.tsx";
 import SanitationReq from "../components/sanitationReq.tsx";
+import SecurityRequestForm from "../components/securityRequest.tsx";
 
 type GeneralReq = {
   id: number;
@@ -317,6 +319,22 @@ function ServiceRequests() {
                   }}
                 />
               </Tooltip>
+              <Tooltip title="Security Request">
+                <Tab
+                  icon={<SecurityIcon />}
+                  id="tab-6"
+                  sx={{
+                    transition: "transform 0.3s ease-in-out",
+                    color: "#FFFFFF",
+                    "&:hover, &:focus": {
+                      transform: "scale(1.4)",
+                      position: "relative",
+                      zIndex: 1,
+                      color: "#F6BD38",
+                    },
+                  }}
+                />
+              </Tooltip>
             </Tabs>
           </div>
 
@@ -327,6 +345,7 @@ function ServiceRequests() {
             {currentTabIndex === 3 && <MedicalDeviceReq />}
             {currentTabIndex === 4 && <MedicineDeliveryReq />}
             {currentTabIndex === 5 && <SanitationReq />}
+            {currentTabIndex === 6 && <SecurityRequestForm />}
           </div>
         </div>
       </div>

@@ -1,103 +1,324 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, FormEvent } from "react";
 import axios from "axios";
-import PendingLostItem from "../components/PendingLostItem.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
+import { TransitionProps } from "@mui/material/transitions";
+import Slide from "@mui/material/Slide";
+import UserDropdown from "../components/userDropdown";
+import LocationDropdown from "../components/locationDropdown";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import TextField from "@mui/material/TextField";
+import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
+import { Dayjs } from "dayjs";
 
-// Define database json type
-type lost_location = {
-  id: number;
-  date: string;
-  description: string;
-  type: string;
-};
-type LostFoundData = {
-  id: number;
+interface securityRequest {
+  name: string;
+  location: string;
   status: string;
+  emp_name: string;
   priority: string;
-  lost_location: lost_location[];
-};
+  incidentDescription: string;
+  incidentTime: Dayjs | null;
+  actionTaken: string;
+}
 
-export default function PendingLost() {
+function SecurityRequest() {
   const { getAccessTokenSilently } = useAuth0();
+  const initialFormResponses: securityRequest = {
+    name: "",
+    location: "",
+    status: "Pending",
+    emp_name: "",
+    priority: "Medium",
+    incidentDescription: "",
+    incidentTime: null,
+    actionTaken: "",
+  };
 
-  // Use state for records being displayed
-  const [records, setRecords] = useState<LostFoundData[]>([]);
+  const Transition = React.forwardRef(function Transition(
+    props: TransitionProps & {
+      children: React.ReactElement<string, string>;
+    },
+    ref: React.Ref<unknown>,
+  ) {
+    return (
+      <Slide direction="up" ref={ref} {...props} children={props.children} />
+    );
+  });
 
-  // Get records from database, and update useState
-  useEffect(() => {
-    // Fetch data from the API
-    const fetchData = async () => {
-      try {
-        const token = await getAccessTokenSilently();
-        const response = await axios.get("/api/lostAndFound", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+  const [responses, setResponses] =
+    useState<securityRequest>(initialFormResponses);
+  const [open, setOpen] = useState(false);
 
-        console.log(response.data);
-        setRecords(response.data); // Assuming the data is an array of lost and found request data
-      } catch (error) {
-        console.error("Error fetching flower requests", error);
-      }
-    };
+  function handleResponseChanges(
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+  ) {
+    setResponses({ ...responses, [e.target.name]: e.target.value });
+  }
 
-    fetchData().catch((error) => {
-      console.error("Error from fetchData promise:", error);
-    });
-  }, [getAccessTokenSilently]);
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const token = await getAccessTokenSilently();
+    if (
+      responses.name == "" ||
+      responses.incidentTime == null ||
+      responses.incidentDescription == "" ||
+      responses.priority == "" ||
+      responses.status == "" ||
+      responses.location == ""
+    ) {
+      return;
+    }
+    try {
+      await axios.post("/api/lostAndFound", responses, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (e) {
+      alert(
+        "Error storing in the database, make sure nodes/edges are uploaded and you are logged in.",
+      );
+      console.error(e);
+      return;
+    }
 
-  //Have to do this because we store the node_id in the table
-  // async function idToName(id : string){
-  //     const name = await axios.get(`/import/idToName/${id}`);
-  //     return name.data;
-  // }
+    setOpen(true);
+  }
+
+  function handleDateChange(date: Dayjs | null) {
+    setResponses({ ...responses, incidentTime: date });
+  }
+
+  function handleSubmitClose() {
+    setOpen(false);
+    clear();
+    window.location.reload();
+  }
+
+  function clear() {
+    setResponses(initialFormResponses);
+  }
+
+  function updateLoc(val: string) {
+    setResponses({ ...responses, location: val });
+  }
+  function updateName(val: string) {
+    setResponses({ ...responses, name: val });
+  }
+
+  function handlePriorityInput(e: SelectChangeEvent) {
+    setResponses({ ...responses, priority: e.target.value });
+  }
+
+  function handleStatusUpdate(e: SelectChangeEvent) {
+    setResponses({ ...responses, status: e.target.value });
+  }
+  function handleActionTakenUpdate(e: SelectChangeEvent) {
+    setResponses({ ...responses, actionTaken: e.target.value });
+  }
 
   return (
-    <div
-      className="px-8 p5 h-screen bg-background"
-      style={{ borderRadius: "25px" }}
-    >
-      <h1 className="my-2 font-header text-primary font-bold text-3xl text-center grow-on-hover">
-        Lost and Found State
-      </h1>
-      <table className="w-full">
-        <thead className="bg-secondary border-b-2 border-b-primary">
-          <tr>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              ID
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Status
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Priority
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Date
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Object Desc
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Delete
-            </th>
-            {/* Dynamically generate column headers */}
-          </tr>
-        </thead>
-        <tbody>
-          {/* Map through the records and create a row for each record */}
-          {records.map((record) => (
-            <PendingLostItem
-              key={record.id}
-              id={record.id}
-              status={record.status}
-              priority={record.priority}
-              lost_location={record.lost_location}
+    <div className="w-full">
+      <div className="m-auto mt-6 flex flex-col px-10 h-full w-full justify-center py-4">
+        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center transition-transform hover:scale-110 -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+          Security Request
+        </h1>
+        {/*<p*/}
+        {/*  className="text-2xl font-bold mb-4 text-center"*/}
+        {/*  style={{*/}
+        {/*    color: "black",*/}
+        {/*    fontFamily: "PTSans, sans-serif",*/}
+        {/*    fontSize: "20px",*/}
+        {/*    margin: "5px",*/}
+        {/*  }}*/}
+        {/*>*/}
+        {/*  Sam and Krishna*/}
+        {/*</p>*/}
+        <form onSubmit={handleSubmit}>
+          <div className="flex flex-col gap-4 my-4">
+            <UserDropdown
+              room={responses.emp_name}
+              update={updateName}
+              label={"Username"}
             />
-          ))}
-        </tbody>
-      </table>
+
+            <LocationDropdown
+              room={responses.location}
+              update={updateLoc}
+              label={"Location"}
+            />
+
+            <FormControl variant="filled" required>
+              <InputLabel id="priority">Priority</InputLabel>
+              <Select
+                name="priority"
+                labelId="priority"
+                id="priority"
+                value={responses.priority}
+                onChange={handlePriorityInput}
+              >
+                <MenuItem value={"High"}>High</MenuItem>
+                <MenuItem value={"Medium"}>Medium</MenuItem>
+                <MenuItem value={"Low"}>Low</MenuItem>
+                <MenuItem value={"Emergency"}>Emergency</MenuItem>
+              </Select>
+            </FormControl>
+
+            <TextField
+              onChange={handleResponseChanges}
+              value={responses.incidentDescription}
+              id="incidentDescription"
+              name="incidentDescription"
+              variant="filled"
+              label="Incident Description"
+              placeholder=""
+              required
+            />
+
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateTimePicker
+                sx={{ bgcolor: "#eceff0" }}
+                label="Incident Time"
+                value={responses.incidentTime}
+                onChange={handleDateChange}
+              />
+            </LocalizationProvider>
+
+            <FormControl variant="filled" required>
+              <InputLabel id="actionTaken">Action Taken</InputLabel>
+              <Select
+                name="actionTaken"
+                labelId="actionTaken"
+                id="actionTaken"
+                value={responses.actionTaken}
+                onChange={handleActionTakenUpdate} // You need to create this function
+              >
+                <MenuItem value={"Investigated"}>Investigated</MenuItem>
+                <MenuItem value={"Resolved"}>Resolved</MenuItem>
+                <MenuItem value={"Referred to Authorities"}>
+                  Referred to Authorities
+                </MenuItem>
+              </Select>
+            </FormControl>
+
+            <FormControl variant="filled" required>
+              <InputLabel id="status">Status</InputLabel>
+              <Select
+                name="status"
+                labelId="status"
+                id="status"
+                value={responses.status}
+                onChange={handleStatusUpdate}
+              >
+                <MenuItem value={"Pending"}>Pending</MenuItem>
+                <MenuItem value={"In Progress"}>In Progress</MenuItem>
+                <MenuItem value={"Resolved"}>Resolved</MenuItem>
+              </Select>
+            </FormControl>
+
+            <FormControl variant="filled" required>
+              <InputLabel id="status">Status</InputLabel>
+              <Select
+                name="status"
+                labelId="status"
+                id="status"
+                value={responses.status}
+                onChange={handleStatusUpdate}
+              >
+                {/*<MenuItem value="">*/}
+                {/*  <em>None</em>*/}
+                {/*</MenuItem>*/}
+                <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
+                <MenuItem value={"Assigned"}>Assigned</MenuItem>
+                <MenuItem value={"InProgress"}>In Progress</MenuItem>
+                <MenuItem value={"Closed"}>Closed</MenuItem>
+              </Select>
+            </FormControl>
+
+            <div className="flex justify-center mt-3">
+              <Button
+                className="w-32 self-center pt-10"
+                id="clear"
+                onClick={clear}
+                variant="contained"
+                size="large"
+                sx={{
+                  borderRadius: "30px",
+                  marginRight: "20px",
+                  transition: "transform 0.3s ease-in-out",
+                  "&:hover": {
+                    transform: "scale(1.1)",
+                  },
+                }}
+              >
+                CLEAR
+              </Button>
+
+              <Button
+                className="w-32 self-center pt-10"
+                type="submit"
+                id="requestSubmit"
+                variant="contained"
+                size="large"
+                sx={{
+                  borderRadius: "30px",
+                  transition: "transform 0.3s ease-in-out",
+                  "&:hover": {
+                    transform: "scale(1.1)",
+                  },
+                }}
+              >
+                SUBMIT
+              </Button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <React.Fragment>
+        <Dialog
+          open={open}
+          onClose={handleSubmitClose}
+          TransitionComponent={Transition}
+          keepMounted
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>We received your request!</DialogTitle>
+          <DialogContent>
+            <strong>Here are your responses:</strong>
+            <br />
+            Username: {responses.emp_name}
+            <br />
+            Location: {responses.location}
+            <br />
+            Priority: {responses.priority}
+            <br />
+            Incident Description: {responses.incidentDescription}
+            <br />
+            Incident Time: {responses.incidentTime?.toString()}
+            <br />
+            Action Taken: {responses.actionTaken}
+            <br />
+            Status: {responses.status}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleSubmitClose} autoFocus>
+              Okay
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </React.Fragment>
     </div>
   );
 }
+
+export default SecurityRequest;
