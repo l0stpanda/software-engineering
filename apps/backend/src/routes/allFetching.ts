@@ -4,11 +4,6 @@ import PrismaClient from "../bin/database-connection.ts";
 
 const router: Router = express.Router();
 
-// type inputStuff = {
-//   id: string;
-//   type: string;
-// };
-
 router.get("/", async function (req: Request, res: Response) {
   const data = await PrismaClient.generalService.findMany({});
   try {
@@ -289,4 +284,5 @@ router.get("/data", async function (req: Request, res: Response) {
   };
   res.send(sendThis);
 });
+
 export default router;

@@ -7,6 +7,9 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Typography,
+  AccordionSummary,
+  Accordion,
 } from "@mui/material";
 import {
   TransformWrapper,
@@ -40,18 +43,18 @@ import { GeneralReq } from "./serviceRequests.tsx";
 import ModeDisplay from "../components/ModeDisplay.tsx";
 import AccordionServiceRequests from "../components/AccordionServiceRequests.tsx";
 
-type roomSched = {
-  id: number;
-  startTime: string;
-  lengthRes: string;
-  room_name: string;
-};
-type serviceRequestData = {
-  id: number;
-  status: string;
-  priority: string;
-  roomSched: roomSched[];
-};
+// type roomSched = {
+//   id: number;
+//   startTime: string;
+//   lengthRes: string;
+//   room_name: string;
+// };
+// type serviceRequestData = {
+//   id: number;
+//   status: string;
+//   priority: string;
+//   roomSched: roomSched[];
+// };
 
 function MapPage() {
   const divRef = useRef<HTMLDivElement>(null);
@@ -70,8 +73,8 @@ function MapPage() {
   const [directions, setDirections] = useState<directionInfo[]>([]);
   const [path, setPath] = useState<string[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [schedules, setSchedules] = useState<serviceRequestData[]>([]);
-  const [bookings, setBookings] = useState<JSX.Element[]>([]);
+  // const [schedules, setSchedules] = useState<serviceRequestData[]>([]);
+  // const [bookings, setBookings] = useState<JSX.Element[]>([]);
 
   const [navigatingNodes, setNavigatingNodes] = useState({
     start: "",
@@ -200,28 +203,28 @@ function MapPage() {
     });
   }, [update]);
 
-  useEffect(() => {
-    // Fetch data from the API
-    const fetchData = async () => {
-      try {
-        const token = await getAccessTokenSilently();
-        const response = await axios.get("/api/roomSchedulingRequest", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        console.log(response.data);
-        setSchedules(response.data); // Assuming the data is an array of room booking data
-      } catch (error) {
-        console.error("Error fetching room schedules", error);
-      }
-    };
-
-    fetchData().catch((error) => {
-      console.error("Error from fetchData promise:", error);
-    });
-  }, [getAccessTokenSilently]);
+  // useEffect(() => {
+  //   // Fetch data from the API
+  //   const fetchData = async () => {
+  //     try {
+  //       const token = await getAccessTokenSilently();
+  //       const response = await axios.get("/api/roomSchedulingRequest", {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+  //
+  //       console.log(response.data);
+  //       setSchedules(response.data); // Assuming the data is an array of room booking data
+  //     } catch (error) {
+  //       console.error("Error fetching room schedules", error);
+  //     }
+  //   };
+  //
+  //   fetchData().catch((error) => {
+  //     console.error("Error from fetchData promise:", error);
+  //   });
+  // }, [getAccessTokenSilently]);
 
   useEffect(() => {
     setDirections(getDirections(path, graph));
@@ -286,58 +289,11 @@ function MapPage() {
     return output;
   }
 
-  // Gets a variety of info about bookings at a given node and checks if the booking is today
-  // Still needs a useEffect to visualize changes on screen
-  function getBookings(longName: string) {
-    const nodeBookings: JSX.Element[] = [];
-    const nodeBookings2: string[] = [];
-    schedules.forEach((data: serviceRequestData) => {
-      const booking = data.roomSched[0];
-      if (booking.room_name === longName) {
-        const duration = parseInt(booking.lengthRes);
-        const [date, time] = booking.startTime.split("T"); // Splits date and time
-        // Gets the separate time values
-        const [startHour, startMinute] = time
-          .split(":")
-          .map((value: string) => parseInt(value));
-        const endHour = startHour + Math.floor(duration / 60);
-        const endMinute = (startMinute + duration) % 60;
-        // Gets the separate date values
-        const [year, month, day] = date
-          .split("-")
-          .map((value: string) => parseInt(value));
-        // Gets current date Object
-        const current = new Date();
-        console.log(endHour, endMinute, bookings, booking);
-
-        if (
-          current.getUTCDate() == day &&
-          current.getUTCMonth() == month - 1 &&
-          current.getUTCFullYear() == year
-        ) {
-          let startString = startMinute.toString();
-          let endString = endMinute.toString();
-          if (startString.length == 1) startString = "0".concat(startString);
-          if (endString.length == 1) endString = "0".concat(endString);
-          // Design nodeBookings however you want,  it currently stores a string but it can store an html element maybe.
-          nodeBookings.push(
-            <>
-              <div className="flex border-primary border-1 text-text font-body px-1">
-                {startHour}:{startString} - {endHour}:{endString}
-              </div>
-            </>,
-          );
-        }
-        setMode("info");
-      }
-    });
-    console.log(nodeBookings2);
-    setBookings(nodeBookings);
-  }
-
-  function returnBookings() {
-    return bookings;
-  }
+  //
+  // function returnBookings() {
+  //     console.log("bookings: ", bookings);
+  //   return bookings;
+  // }
 
   //Needs to be here for navigation dropdown
   function updateStartAndEnd(startNode: string, endNode: string) {
@@ -598,20 +554,11 @@ function MapPage() {
                   reqs={records}
                   mode={mode}
                   nodeInfoCallback={handleNodeCallback}
-                  getBookings={getBookings}
+                  // getBookings={getBookings}
                 />
               </TransformComponent>
             </div>
           </TransformWrapper>
-          <div
-            className="overflow-y-auto h-flex absolute right-32 border-primary border-2 rounded-xl
-                bottom-20 py-1 bg-background"
-          >
-            <div className="flex border-primary border-b text-text font-body px-1">
-              Scheduled Requests:
-            </div>
-            {returnBookings()}
-          </div>
         </div>
         {/*Location and Destination things*/}
         <div className=""></div>
@@ -648,29 +595,11 @@ function MapPage() {
             <></>
           )}
         </div>
-        {directions.length != 0 && mode === "path" ? (
-          <div
-            className="
+        {mode === "path" ? (
+          directions.length != 0 && (
+            <div
+              className="
                     max-h-[250px]
-                    w-[300px]
-                    items-center
-                    bg-background
-                    border-primary
-                    border-2
-                    overflow-y-auto
-                    rounded-lg
-                    fixed
-                    bottom-7
-                    right-32"
-          >
-            <div>{showDirections()}</div>
-          </div>
-        ) : (
-          <>
-            {clicked && showInfo && (
-              <div
-                className="
-                    h-[250px]
                     w-[300px]
                     items-center
                     bg-background
@@ -680,12 +609,63 @@ function MapPage() {
                     rounded-lg
                     fixed
                     bottom-7
-                    right-32"
+                    right-32
+                    overflow-y-auto
+                    inline-block"
+            >
+              <div className="overflow-y-auto">{showDirections()}</div>
+            </div>
+          )
+        ) : (
+          <>
+            {clicked && showInfo && clicked.requests.length > 0 ? (
+              <div
+                className="
+                    max-h-[250px]
+                    w-[300px]
+                    items-center
+                    bg-background
+                    border-primary
+                    border-2
+                    overflow-clip
+                    rounded-lg
+                    fixed
+                    bottom-7
+                    right-32
+                    overflow-y-auto
+                    inline-block"
               >
                 {clicked.requests.map((req) => {
                   return <AccordionServiceRequests data={req} />;
                 })}
               </div>
+            ) : (
+              clicked && (
+                <div
+                  className="
+                    max-h-[250px]
+                    w-[300px]
+                    items-center
+                    bg-background
+                    border-primary
+                    border-2
+                    overflow-clip
+                    rounded-lg
+                    fixed
+                    bottom-7
+                    right-32
+                    overflow-y-auto
+                    inline-block"
+                >
+                  <Accordion disableGutters={true}>
+                    <AccordionSummary>
+                      <Typography>
+                        No specific service requests available.
+                      </Typography>
+                    </AccordionSummary>
+                  </Accordion>
+                </div>
+              )
             )}
           </>
         )}

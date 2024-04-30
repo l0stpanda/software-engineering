@@ -105,7 +105,7 @@ router.post("/", async function (req: Request, res: Response) {
           id: findID[0]?.id,
           startTime: input.startTime?.toString(),
           lengthRes: input.lengthRes,
-          endTime: input.startTime?.toString(),
+          // endTime: input.startTime?.toString(),
           room_name: input.roomNum,
         },
       });

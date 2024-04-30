@@ -163,7 +163,7 @@ function PendingFlowerReq(props: GeneralReq) {
   };
 
   const deleteData = async (idVal: number) => {
-      setConfirm(false);
+    setConfirm(false);
     try {
       const token = await getAccessTokenSilently();
       await axios.delete(`api/fetchAll/${idVal}`, {
@@ -175,8 +175,8 @@ function PendingFlowerReq(props: GeneralReq) {
       console.log(e);
       return;
     }
-      alert("Successfully deleted flower request with ID number " + idVal);
-      window.location.reload();
+    alert("Successfully deleted flower request with ID number " + idVal);
+    window.location.reload();
   };
 
   const handleExpandClick = async () => {

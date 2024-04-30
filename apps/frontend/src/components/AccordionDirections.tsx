@@ -11,6 +11,7 @@ import lowerLevel2 from "../assets/00_thelowerlevel2.png";
 import floor1 from "../assets/01_thefirstfloor.png";
 import floor2 from "../assets/02_thesecondfloor.png";
 import floor3 from "../assets/03_thethirdfloor.png";
+// import EmojiFlagsIcon from '@mui/icons-material/EmojiFlags';
 
 interface AccordionDirectionsProps {
   data: directionInfo;

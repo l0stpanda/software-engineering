@@ -76,7 +76,7 @@ function TODOListItem(props: toDoNow) {
     setSnackbarOpen(true);
   };
 
-    const [confirm, setConfirm] = useState<boolean>(false);
+  const [confirm, setConfirm] = useState<boolean>(false);
 
   //takes in the id of the request to be deleted and deletes in the database
   async function deleteData(idVal: number) {
@@ -215,20 +215,20 @@ function TODOListItem(props: toDoNow) {
           </IconButton>
         </td>
 
-          <Dialog open={confirm} onClose={() => setConfirm(false)}>
-              <DialogTitle>Delete Confirmation</DialogTitle>
-              <DialogContent>
-                  <strong>Are you sure you want to delete this task?</strong>
-              </DialogContent>
-              <DialogActions>
-                  <Button onClick={() => setConfirm(false)} autoFocus>
-                      No
-                  </Button>
-                  <Button onClick={() => deleteData(props.id)} autoFocus>
-                      Yes
-                  </Button>
-              </DialogActions>
-          </Dialog>
+        <Dialog open={confirm} onClose={() => setConfirm(false)}>
+          <DialogTitle>Delete Confirmation</DialogTitle>
+          <DialogContent>
+            <strong>Are you sure you want to delete this task?</strong>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setConfirm(false)} autoFocus>
+              No
+            </Button>
+            <Button onClick={() => deleteData(props.id)} autoFocus>
+              Yes
+            </Button>
+          </DialogActions>
+        </Dialog>
       </tr>
 
       <Snackbar

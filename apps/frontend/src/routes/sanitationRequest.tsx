@@ -17,15 +17,16 @@ import LocationDropdown from "../components/locationDropdown.tsx";
 import axios from "axios";
 import UserDropdown from "../components/userDropdown.tsx";
 
+export type SanitationReq = {
+  employeeName: string;
+  roomName: string;
+  severity: string;
+  hazardous: string;
+  priority: string;
+  status: string;
+};
+
 function SanitationRequest() {
-  type SanitationReq = {
-    employeeName: string;
-    roomName: string;
-    severity: string;
-    hazardous: string;
-    priority: string;
-    status: string;
-  };
   const { getAccessTokenSilently } = useAuth0();
   const [formData, setFormData] = useState<SanitationReq>({
     employeeName: "",

@@ -25,6 +25,16 @@ import LocationDropdown from "../components/locationDropdown.tsx";
 import axios from "axios";
 import UserDropdown from "../components/userDropdown.tsx";
 
+export type MedicalDeviceReq = {
+  employeeName: string;
+  roomName: string;
+  medicalDeviceName: string;
+  quantity: number;
+  priority: string;
+  status: string;
+  deliveryDate: dayjs.Dayjs;
+};
+
 function MedicalDeviceRequest() {
   const { getAccessTokenSilently } = useAuth0();
   const [formData, setFormData] = useState<medicalDeviceDelivery>({
