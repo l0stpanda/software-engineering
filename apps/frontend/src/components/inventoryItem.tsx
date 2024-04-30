@@ -9,6 +9,7 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 interface InventoryItemProps {
   id: number;
@@ -20,8 +21,7 @@ interface InventoryItemProps {
 }
 
 function InventoryItem(props: InventoryItemProps) {
-  const lowToRed = 10;
-  const lowToYellow = 50;
+  const lowToYellow = 20;
 
   const [open, setOpen] = useState(false);
   const [quantityToAdd, setQuantityToAdd] = useState<number>(0);
@@ -35,14 +35,6 @@ function InventoryItem(props: InventoryItemProps) {
       setQuantityToAdd(0); // Reset input after submission
     }
     handleClose();
-  };
-  const quantityStyle = {
-    backgroundColor:
-      props.quant < lowToRed
-        ? "red"
-        : props.quant < lowToYellow
-          ? "yellow"
-          : "transparent",
   };
 
   // function confirmDelete(id: number) {
@@ -59,8 +51,16 @@ function InventoryItem(props: InventoryItemProps) {
       <tr className="bg-background border-b-2 border-secondary" key={props.id}>
         <td className="p-3 text-sm">{props.name}</td>
         <td className="p-3 text-sm">{props.type}</td>
-        <td className="p-3 text-sm" style={quantityStyle}>
+        <td className="p-3 text-sm flex flex-row justify-between h-full">
           {props.quant}
+          {props.quant < lowToYellow ? (
+            <div className="flex flex-row gap-2 mx-4">
+              <WarningAmberIcon className="my-auto h-full" color="error" />
+              <h1 className="my-auto">Low Stock</h1>
+            </div>
+          ) : (
+            <></>
+          )}
         </td>
         <td className="p-3 text-sm">
           <Button

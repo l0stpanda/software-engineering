@@ -51,6 +51,7 @@ type toDoNow = {
   role: string | undefined;
   complete: boolean;
   subtasks: subTodo[];
+  update: () => void;
 };
 
 function TODOListItem(props: toDoNow) {
@@ -123,15 +124,17 @@ function TODOListItem(props: toDoNow) {
     }
     try {
       const token = await getAccessTokenSilently();
-      await axios.post(
-        `/api/todoStuff/${props.id}`,
-        {
-          id_relation: props.id,
-          task: newSubtask,
-          complete: false,
-        },
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
+      await axios
+        .post(
+          `/api/todoStuff/${props.id}`,
+          {
+            id_relation: props.id,
+            task: newSubtask,
+            complete: false,
+          },
+          { headers: { Authorization: `Bearer ${token}` } },
+        )
+        .then(props.update);
 
       //call to backend
     } catch (e) {

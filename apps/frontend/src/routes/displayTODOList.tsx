@@ -220,6 +220,10 @@ export default function DisplayTODOList() {
     setToDoResponse({ ...toDoResponse, dueDate: date });
   }
 
+  function updateTodo() {
+    setChange(!change);
+  }
+
   return (
     <div className="px-8 p5 h-screen bg-background">
       <div className="flex flex-row">
@@ -280,6 +284,7 @@ export default function DisplayTODOList() {
               role={record.role}
               username={record.username}
               subtasks={record.subtasks}
+              update={updateTodo}
             />
           ))}
         </tbody>
