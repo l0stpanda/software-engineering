@@ -166,8 +166,8 @@ const credSettings = {
   dots: true,
   infinite: true,
   speed: 500,
-  slidesToShow: 1,
-  slidesToScroll: 1,
+  slidesToShow: 3,
+  slidesToScroll: 3,
   autoplay: false,
   cssEase: "linear",
 };
@@ -190,6 +190,7 @@ export default function CreditPage() {
     const label = tabs[activeTab].toLowerCase(); //Tools -> tools.
     return pngsLinksEtc.filter((item) => item.label === label);
   };
+
 
   return (
     <div

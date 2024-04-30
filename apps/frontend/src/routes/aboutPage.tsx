@@ -22,7 +22,7 @@ const teamMembers = [
     name: "Carter Moore",
     role: "Lead Software Engineer, Full Stack",
     img: carter_picture,
-    quote: "",
+    quote: '"read discord cratr"- Ben at 3:42am' ,
   },
   {
     name: "Krishna Garg",
@@ -34,8 +34,7 @@ const teamMembers = [
     name: "Alessandra Giovenco",
     role: "Assistant Lead Software Engineer, Full Stack",
     img: ally_picture,
-    quote:
-      '"Life is tough and I am not, but the least I could do is take care of myself" - Lexi aka NewlyNova',
+    quote: '"Life is tough and I am not, but the least I could do is take care of myself" - Lexi aka NewlyNova',
   },
   {
     name: "Ben Zeng",
@@ -47,14 +46,13 @@ const teamMembers = [
     name: "Samruddhi Naik",
     role: "Product Owner, Full Stack",
     img: sam_picture,
-    quote: "",
+    quote: '"You guys need to focus on your majors not your minors: focus on CS"- Sam',
   },
   {
     name: "Sean Peacock",
     role: "Scrum Master, Full Stack",
     img: sean_picture,
-    quote:
-      '"One must be sane to think clearly, but one can think deeply and be quite insane" - Nikola Tesla',
+    quote: '"One must be sane to think clearly, but one can think deeply and be quite insane" - Nikola Tesla',
   },
   {
     name: "Najum Soofi",
@@ -87,13 +85,13 @@ const teamMembers = [
     name: "Qiushi Chen",
     role: "Full-Time Software Engineer, Full Stack",
     img: quishi_picture,
-    quote: "",
+    quote: '"Hello World"',
   },
   {
     name: "Vincent Huang",
     role: "Full-Time Software Engineer, Full Stack",
     img: vincent_picture,
-    quote: "",
+    quote: '"Hello World"',
   },
 ];
 
