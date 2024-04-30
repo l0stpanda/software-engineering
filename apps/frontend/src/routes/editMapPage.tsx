@@ -1,5 +1,10 @@
 import React, { useEffect, useRef } from "react";
-import { Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import {
+  Button,
+  IconButton,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material";
 import { useState } from "react";
 import BackgroundPattern from "../components/backgroundPattern.tsx";
 import { Graph } from "../objects/Graph.ts";
@@ -15,10 +20,17 @@ import {
   TransformWrapper,
   useControls,
 } from "react-zoom-pan-pinch";
+// import { motion, AnimatePresence } from "framer-motion";
 import EditNodeForm from "../components/EditNodeForm.tsx";
 import CreateEdgeForm from "../components/CreateEdgeForm.tsx";
 import DeleteEdgeForm from "../components/DeleteEdgeForm.tsx";
 import DeleteNodeForm from "../components/DeleteNodeForm.tsx";
+// import LocationDropdown from "../components/locationDropdown.tsx";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import PanToolIcon from "@mui/icons-material/PanTool";
+import AddRoadIcon from "@mui/icons-material/AddRoad";
+import RemoveRoadIcon from "@mui/icons-material/RemoveRoad";
 
 // import {ZoomPanPinch} from "react-zoom-pan-pinch/dist/src/core/instance.core";
 // import CanvasMap from "../components/CanvasMap.tsx";
@@ -97,7 +109,7 @@ function EditMap() {
 
   function FloorMapButtons() {
     return (
-      <div className="absolute z-10 h-fit ml-3 bg-primary bottom-5 right-9 rounded-xl border-0">
+      <div className="absolute z-10 h-fit ml-3 bg-primary bottom-20 right-9 rounded-xl border-0">
         <ToggleButtonGroup
           orientation="vertical"
           value={imgState}
@@ -303,53 +315,107 @@ function EditMap() {
   if (divRef.current) {
     divPos = [divRef.current.offsetTop, divRef.current.offsetLeft];
   }
+  // const [expanded, setExpanded] = useState(false);
+  //
+  // const isExpanded = expanded;
+
+  // const AccordionFrame = () => {
+  //     const handleInnerClick = (e: React.MouseEvent<HTMLElement>) => {
+  //         e.stopPropagation();
+  //     };
+  //     return (
+  //         <>
+  //             <motion.header
+  //                 initial={false}
+  //                 // animate={{ backgroundColor: isExpanded ? "#FF0088" : "#0055FF" }}
+  //             />
+  //             <AnimatePresence initial={true}>
+  //                 {isExpanded && (
+  //                     <motion.section
+  //                         key="content"
+  //                         initial={{ opacity: 0, height: 0 }}
+  //                         animate={{ opacity: 1, height: "auto" }}
+  //                         exit={{ opacity: 0, height: 0 }}
+  //                         variants={{
+  //                             open: { opacity: 1, height: "auto" },
+  //                             collapsed: { opacity: 0, height: 0 },
+  //                         }}
+  //                         transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
+  //                         className="absolute w-full"
+  //                     >
+  //                             <div className="" onClick={handleInnerClick}>
+  //                                 <div className="mb-20 mt-20 px-10 w-full items-center">
+  //                                     <div className="">
+  //                                         <ToggleButtonGroup
+  //                                             value={mode}
+  //                                             exclusive
+  //                                             onChange={handleEditMode}
+  //                                             orientation="vertical"
+  //                                             fullWidth
+  //                                             color="primary"
+  //                                         >
+  //                                             <ToggleButton value="add_node">
+  //                                                 <IconButton>
+  //                                                     {<AddCircleOutlineIcon/>}
+  //                                             </IconButton>
+  //                                             </ToggleButton>
+  //                                             <ToggleButton value="delete_node"><IconButton>
+  //                                                 {<RemoveCircleOutlineIcon/>}
+  //                                             </IconButton>
+  //                                             </ToggleButton>
+  //                                             <ToggleButton value="move_node"><IconButton>
+  //                                                 {<PanToolIcon/>}
+  //                                             </IconButton>
+  //                                             </ToggleButton>
+  //                                         </ToggleButtonGroup>
+  //                                 </div>
+  //                                 <div className="px-10 w-full items-center">
+  //                                     <ToggleButtonGroup
+  //                                         value={mode}
+  //                                         exclusive
+  //                                         onChange={handleEditMode}
+  //                                         orientation="vertical"
+  //                                         fullWidth
+  //                                         color="primary"
+  //                                     >
+  //                                         <h1 className="text-primary font-header font-bold text-2xl pt-5 text-center">
+  //                                             Edge Editing
+  //                                         </h1>
+  //                                         <ToggleButton value="add_edge">
+  //                                         <IconButton>
+  //                                             {<AddRoadIcon/>}
+  //                                             </IconButton>
+  //                                         </ToggleButton>
+  //                                         <ToggleButton value="delete_edge">
+  //                                             <IconButton>
+  //                                                 {<RemoveRoadIcon/>}
+  //                                             </IconButton>
+  //                                         </ToggleButton>
+  //                                     </ToggleButtonGroup>
+  //                                 </div>
+  //                             </div>
+  //                         </div>
+  //                     </motion.section>
+  //                 )}
+  //             </AnimatePresence>
+  //         </>
+  //     );
+  // };
 
   return (
     <div className="">
       <BackgroundPattern />
 
       {/*Map and Edit Buttons*/}
-      <div className="flex flex-row">
-        <div className="flex flex-col items-center bg-background border-primary border-e-2 w-1/3 h-screen">
-          <div className="mb-20 mt-20 px-10 w-full items-center">
-            <h1 className="text-primary font-header font-bold text-2xl text-center">
-              Node Editing
-            </h1>
-            <div className="">
-              <ToggleButtonGroup
-                value={mode}
-                exclusive
-                onChange={handleEditMode}
-                orientation="vertical"
-                fullWidth
-                color="primary"
-              >
-                <ToggleButton value="add_node">Add Node</ToggleButton>
-                <ToggleButton value="delete_node">Delete Node</ToggleButton>
-                <ToggleButton value="move_node">Move Node</ToggleButton>
-              </ToggleButtonGroup>
-            </div>
-          </div>
-          <div className="px-10 w-full items-center">
-            <ToggleButtonGroup
-              value={mode}
-              exclusive
-              onChange={handleEditMode}
-              orientation="vertical"
-              fullWidth
-              color="primary"
-            >
-              <h1 className="text-primary font-header font-bold text-2xl pt-5 text-center">
-                Edge Editing
-              </h1>
-              <ToggleButton value="add_edge">Add Edge</ToggleButton>
-              <ToggleButton value="delete_edge">Delete Edge</ToggleButton>
-            </ToggleButtonGroup>
-          </div>
-        </div>
-        <div className="flex h-screen">
+      <div className="">
+        <div className="">
           {/*Map Image Box*/}
-          <div ref={divRef} className="object-center">
+          <div
+            ref={divRef}
+            className="fixed
+                    h-screen
+                    w-screen"
+          >
             <TransformWrapper disabled={isMoveable} disablePadding={true}>
               <div className="">
                 <FloorMapButtons />
@@ -374,7 +440,13 @@ function EditMap() {
                   {openEdgeCreation && <CreateEdgeForm nodes={edgeNodes} />}
                   {openEdgeDeletion && <DeleteEdgeForm nodes={edgeNodes} />}
                 </div>
-                <TransformComponent wrapperStyle={{ objectFit: "contain" }}>
+                <TransformComponent
+                  wrapperStyle={{
+                    width: screen.width,
+                    height: "calc(100vh)",
+                    position: "fixed",
+                  }}
+                >
                   <EditMapViewGraph
                     imageSrc={imgState}
                     graph={graph}
@@ -387,6 +459,60 @@ function EditMap() {
                 </TransformComponent>
               </div>
             </TransformWrapper>
+            {/*<div*/}
+            {/*    className="fixed top-20 left-10"*/}
+            {/*    onClick={() => setExpanded(!isExpanded)}*/}
+            {/*>*/}
+            {/*    <div*/}
+            {/*        className="mr-2 ml-0 py-1 px-16 items-center bg-primary rounded-xl border-primary border-2">*/}
+            {/*        <h2 className="text-body" style={{color: "white"}}>*/}
+            {/*            Edit Menu*/}
+            {/*        </h2>*/}
+            {/*    </div>*/}
+            {/*    <AccordionFrame/>*/}
+            {/*</div>*/}
+            <div className="flex flex-row w-50 h-50 justify-center py-3">
+              <div className="">
+                <ToggleButtonGroup
+                  value={mode}
+                  exclusive
+                  onChange={handleEditMode}
+                  orientation="horizontal"
+                  fullWidth
+                  color="primary"
+                >
+                  <ToggleButton value="add_node">
+                    <IconButton>{<AddCircleOutlineIcon />}</IconButton>
+                  </ToggleButton>
+                  <ToggleButton value="delete_node">
+                    <IconButton>{<RemoveCircleOutlineIcon />}</IconButton>
+                  </ToggleButton>
+                  <ToggleButton value="move_node">
+                    <IconButton>{<PanToolIcon />}</IconButton>
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </div>
+              <div className="">
+                <ToggleButtonGroup
+                  value={mode}
+                  exclusive
+                  onChange={handleEditMode}
+                  orientation="horizontal"
+                  fullWidth
+                  color="primary"
+                >
+                  {/*<h1 className="text-primary font-header font-bold text-2xl pt-5 text-center">*/}
+                  {/*    Edge Editing*/}
+                  {/*</h1>*/}
+                  <ToggleButton value="add_edge">
+                    <IconButton>{<AddRoadIcon />}</IconButton>
+                  </ToggleButton>
+                  <ToggleButton value="delete_edge">
+                    <IconButton>{<RemoveRoadIcon />}</IconButton>
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </div>
+            </div>
           </div>
           {/*Buttons for displaying floor images*/}
         </div>

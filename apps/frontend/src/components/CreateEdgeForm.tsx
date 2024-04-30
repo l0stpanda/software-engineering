@@ -104,7 +104,7 @@ export default function CreateEdgeForm(props: createEdgeProps) {
       className="mr-8
                     ml-5
                     py-5
-                    px-0
+                    px-4
                     flex
                     flex-col
                     items-center

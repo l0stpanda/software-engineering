@@ -284,12 +284,14 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
       style={{ position: "relative" }}
       onMouseUp={handleMouseUp}
     >
-      <div ref={drop}>
-        <img src={props.imageSrc} className="h-screen" alt="Map" />
+      <div ref={drop} style={{ position: "relative" }}>
+        <img src={props.imageSrc} className="w-screen" alt="Map" />
         <svg
           style={{
             position: "absolute",
-            // width: "100%",
+            top: 0,
+            left: 0,
+            width: "100%",
             height: "100%",
           }}
         >

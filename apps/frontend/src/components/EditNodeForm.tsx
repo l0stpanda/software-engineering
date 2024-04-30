@@ -122,7 +122,7 @@ export default function EditNodeForm(props: editNodeProps) {
       className="mr-8
                     ml-5
                     py-5
-                    px-0
+                    px-4
                     flex
                     flex-col
                     items-center
