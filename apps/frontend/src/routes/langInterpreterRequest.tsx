@@ -117,8 +117,8 @@ function LangInterpreterReq() {
 
   return (
     <div className="w-full">
-      <div className="m-auto mt-6 flex flex-col px-10 h-full w-full justify-center py-4">
-        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center transition-transform hover:scale-110 -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+      <div className="m-auto mt-3 flex flex-col px-10 h-full w-full justify-center py-1">
+        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center">
           Language Interpreter Form
         </h1>
         <form onSubmit={handleSubmit}>
@@ -128,21 +128,6 @@ function LangInterpreterReq() {
               update={updateName}
               label={"Username"}
             />
-            <LocationDropdown
-              room={formData.location}
-              update={updateLoc}
-              label={"Location"}
-            />
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                sx={{ bgcolor: "#eceff0" }}
-                label="Date Requested *"
-                value={formData.date}
-                disablePast
-                onChange={handleDateInput}
-                // renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
             <FormControl variant="filled" required>
               <InputLabel id="priority">Priority</InputLabel>
               <Select
@@ -161,6 +146,22 @@ function LangInterpreterReq() {
                 <MenuItem value={"Emergency"}>Emergency</MenuItem>
               </Select>
             </FormControl>
+
+            <LocationDropdown
+              room={formData.location}
+              update={updateLoc}
+              label={"Location"}
+            />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                sx={{ bgcolor: "#eceff0" }}
+                label="Date Requested *"
+                value={formData.date}
+                disablePast
+                onChange={handleDateInput}
+                // renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
             <FormControl variant="filled" required>
               <InputLabel id="lang">Language Requested</InputLabel>
               <Select
@@ -320,6 +321,9 @@ function LangInterpreterReq() {
           </Button>
         </DialogActions>
       </Dialog>
+      <div className="text-text ml-2 font-header place-self-right">
+        Credits: Najum
+      </div>
     </div>
   );
 }

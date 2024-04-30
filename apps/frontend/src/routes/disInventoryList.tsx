@@ -209,156 +209,155 @@ export default function DisplayInventory() {
   }
 
   const [confirm, setConfirm] = useState<boolean>(false);
-  const [id, setId] =useState<number>();
-
+  const [id, setId] = useState<number>();
 
   function confirmDelete(id: number) {
     setId(id);
     setConfirm(true);
   }
 
-  function noDelete(){
+  function noDelete() {
     window.location.reload();
   }
 
   return (
-      <React.Fragment>
-    <div className="px-8 p5 h-screen bg-background">
-      <div className="flex flex-row">
-        <h1 className="my-2 font-header text-primary font-bold text-3xl text-center mx-auto">
-          Inventory List
-        </h1>
-        <Button
-          variant="contained"
-          color="primary"
-          component="span"
-          sx={{ borderRadius: "30px", margin: "auto 0" }}
-          className="w-50 text-center self-end"
-          onClick={handleOpen}
-        >
-          New Inventory Item
-        </Button>
-      </div>
-      <table className="w-full">
-        <thead className="bg-secondary border-b-2 border-b-primary">
-          <tr>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Name
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Type
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Quantity
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Add
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Delete
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* Map through the records and create a row for each record */}
-          {records.map((record) => (
-            <InventoryItem
-              key={record.id}
-              id={record.id}
-              name={record.name}
-              type={record.type}
-              quant={record.quant}
-              onDelete={async () => confirmDelete(record.id)}
-              onAdd={onAdd}
-            />
-          ))}
-        </tbody>
-      </table>
-
-      <Dialog open={open} onClose={handleSubmitClose}>
-        <form>
-          <div className="m-auto flex flex-col bg-background rounded-xl px-6 min-w-96 h-fit justify-center py-4">
-            <h1 className="my-3 font-header text-primary font-bold text-3xl text-center">
-              New Item
-            </h1>
-            <div className="flex flex-col gap-2 my-2">
-              <TextField
-                onChange={handleFormUpdate}
-                value={inventoryResponse.name}
-                variant="filled"
-                fullWidth={true}
-                required
-                label="Name"
-                name="name"
-                type="required"
+    <React.Fragment>
+      <div className="px-8 p5 h-screen bg-background">
+        <div className="flex flex-row">
+          <h1 className="my-2 font-header text-primary font-bold text-3xl text-center mx-auto">
+            Inventory List
+          </h1>
+          <Button
+            variant="contained"
+            color="primary"
+            component="span"
+            sx={{ borderRadius: "30px", margin: "auto 0" }}
+            className="w-50 text-center self-end"
+            onClick={handleOpen}
+          >
+            New Inventory Item
+          </Button>
+        </div>
+        <table className="w-full">
+          <thead className="bg-secondary border-b-2 border-b-primary">
+            <tr>
+              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                Name
+              </th>
+              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                Type
+              </th>
+              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                Quantity
+              </th>
+              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                Add
+              </th>
+              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                Delete
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* Map through the records and create a row for each record */}
+            {records.map((record) => (
+              <InventoryItem
+                key={record.id}
+                id={record.id}
+                name={record.name}
+                type={record.type}
+                quant={record.quant}
+                onDelete={async () => confirmDelete(record.id)}
+                onAdd={onAdd}
               />
+            ))}
+          </tbody>
+        </table>
 
-              <FormControl variant="filled" required>
-                <InputLabel id="type">Type</InputLabel>
-                <Select
-                  name="type"
-                  labelId="type"
-                  id="type"
-                  value={inventoryResponse.type}
-                  onChange={handleDropdownChange}
+        <Dialog open={open} onClose={handleSubmitClose}>
+          <form>
+            <div className="m-auto flex flex-col bg-background rounded-xl px-6 min-w-96 h-fit justify-center py-4">
+              <h1 className="my-3 font-header text-primary font-bold text-3xl text-center">
+                New Item
+              </h1>
+              <div className="flex flex-col gap-2 my-2">
+                <TextField
+                  onChange={handleFormUpdate}
+                  value={inventoryResponse.name}
+                  variant="filled"
+                  fullWidth={true}
+                  required
+                  label="Name"
+                  name="name"
+                  type="required"
+                />
+
+                <FormControl variant="filled" required>
+                  <InputLabel id="type">Type</InputLabel>
+                  <Select
+                    name="type"
+                    labelId="type"
+                    id="type"
+                    value={inventoryResponse.type}
+                    onChange={handleDropdownChange}
+                  >
+                    <MenuItem value={"Medicine"}>Medicine</MenuItem>
+                    <MenuItem value={"Medical Device"}>Medical Device</MenuItem>
+                  </Select>
+                </FormControl>
+
+                <TextField
+                  onChange={handleFormUpdate}
+                  value={inventoryResponse.quant}
+                  variant="filled"
+                  fullWidth={true}
+                  required
+                  label="Quant"
+                  name="quant"
+                  type="required"
+                />
+                <Button
+                  onClick={handleSubmit}
+                  variant="contained"
+                  className="w-32 self-center"
+                  sx={{ borderRadius: "30px" }}
                 >
-                  <MenuItem value={"Medicine"}>Medicine</MenuItem>
-                  <MenuItem value={"Medical Device"}>Medical Device</MenuItem>
-                </Select>
-              </FormControl>
-
-              <TextField
-                onChange={handleFormUpdate}
-                value={inventoryResponse.quant}
-                variant="filled"
-                fullWidth={true}
-                required
-                label="Quant"
-                name="quant"
-                type="required"
-              />
-              <Button
-                onClick={handleSubmit}
-                variant="contained"
-                className="w-32 self-center"
-                sx={{ borderRadius: "30px" }}
-              >
-                Create
-              </Button>
+                  Create
+                </Button>
+              </div>
             </div>
-          </div>
-        </form>
-      </Dialog>
+          </form>
+        </Dialog>
 
-      <Dialog open={confirm} onClose={noDelete}>
+        <Dialog open={confirm} onClose={noDelete}>
           <DialogTitle>Delete Confirmation</DialogTitle>
           <DialogContent>
-              <strong>Are you sure you want to delete this request?</strong>
+            <strong>Are you sure you want to delete this request?</strong>
           </DialogContent>
           <DialogActions>
-              <Button onClick={noDelete} autoFocus>
-                  No
-              </Button>
-              <Button onClick={handleDelete} autoFocus>
-                  Yes
-              </Button>
+            <Button onClick={noDelete} autoFocus>
+              No
+            </Button>
+            <Button onClick={handleDelete} autoFocus>
+              Yes
+            </Button>
           </DialogActions>
-      </Dialog>
+        </Dialog>
 
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-      >
-        <Alert
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
           onClose={handleSnackbarClose}
-          severity={snackbarSeverity}
-          sx={{ width: "100%" }}
         >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
-    </div>
-      </React.Fragment>
+          <Alert
+            onClose={handleSnackbarClose}
+            severity={snackbarSeverity}
+            sx={{ width: "100%" }}
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+      </div>
+    </React.Fragment>
   );
 }

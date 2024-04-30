@@ -1,13 +1,13 @@
 import {
-    Select,
-    MenuItem,
-    SelectChangeEvent,
-    IconButton,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Button
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+  IconButton,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
 } from "@mui/material";
 import React, { useState } from "react";
 import axios from "axios";
@@ -35,7 +35,7 @@ function PendingFlowerReq(props: GeneralReq) {
 
   const [status, setStatus] = useState<string>(props.status);
   const [confirm, setConfirm] = useState<boolean>(false);
-  const [id, setId] =useState<number>();
+  const [id, setId] = useState<number>();
 
   async function handleStatusDropdown(e: SelectChangeEvent) {
     const token = await getAccessTokenSilently();
@@ -82,63 +82,62 @@ function PendingFlowerReq(props: GeneralReq) {
   }
 
   function confirmDelete(id: number) {
-      setId(id);
-      setConfirm(true);
+    setId(id);
+    setConfirm(true);
   }
 
-  function noDelete(){
-      window.location.reload();
+  function noDelete() {
+    window.location.reload();
   }
-
 
   return (
-      <React.Fragment >
-        <tr className="bg-background border-b-2 border-secondary" key={props.id}>
-          <td className="p-3 text-sm">{props.type}</td>
-          <td className="p-3 text-sm">
-            <Select
-              name="status"
-              required={true}
-              label="Status"
-              onChange={handleStatusDropdown}
-              value={status}
-              defaultValue={props.status}
-              size="small"
-            >
-              <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
-              <MenuItem value={"Assigned"}>Assigned</MenuItem>
-              <MenuItem value={"InProgress"}>In Progress</MenuItem>
-              <MenuItem value={"Closed"}>Closed</MenuItem>
-            </Select>
-          </td>
-          <td className="p-3 text-sm">{props.priority}</td>
-          <td className="p-3 text-sm">{props.long_name_loc}</td>
-          <td className="p-3 text-sm">{props.emp_name}</td>
-          <td className="p-3 text-sm">
-            <IconButton
-              className="px-7 flex justify-center transform hover:scale-125"
-              onClick={() => confirmDelete(props.id)}
-            >
-              <DeleteOutline color="error" />
-            </IconButton>
-          </td>
-        </tr>
+    <React.Fragment>
+      <tr className="bg-background border-b-2 border-secondary" key={props.id}>
+        <td className="p-3 text-sm">{props.type}</td>
+        <td className="p-3 text-sm">
+          <Select
+            name="status"
+            required={true}
+            label="Status"
+            onChange={handleStatusDropdown}
+            value={status}
+            defaultValue={props.status}
+            size="small"
+          >
+            <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
+            <MenuItem value={"Assigned"}>Assigned</MenuItem>
+            <MenuItem value={"InProgress"}>In Progress</MenuItem>
+            <MenuItem value={"Closed"}>Closed</MenuItem>
+          </Select>
+        </td>
+        <td className="p-3 text-sm">{props.priority}</td>
+        <td className="p-3 text-sm">{props.long_name_loc}</td>
+        <td className="p-3 text-sm">{props.emp_name}</td>
+        <td className="p-3 text-sm">
+          <IconButton
+            className="px-7 flex justify-center transform hover:scale-125"
+            onClick={() => confirmDelete(props.id)}
+          >
+            <DeleteOutline color="error" />
+          </IconButton>
+        </td>
+      </tr>
 
-          <Dialog open={confirm} onClose={noDelete}>
-              <DialogTitle>Delete Confirmation</DialogTitle>
-              <DialogContent>
-                  <strong>Are you sure you want to delete this request?</strong>
-              </DialogContent>
-              <DialogActions>
-                  <Button onClick={noDelete} autoFocus>
-                      No
-                  </Button>
-                  <Button onClick={deleteData} autoFocus>
-                      Yes
-                  </Button>
-              </DialogActions>
-          </Dialog>
-      </React.Fragment>
+      <Dialog open={confirm} onClose={noDelete}>
+        <DialogTitle>Delete Confirmation</DialogTitle>
+        <DialogContent>
+          <strong>Are you sure you want to delete this request?</strong>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={noDelete} autoFocus>
+            No
+          </Button>
+          <Button onClick={deleteData} autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </React.Fragment>
   );
 }
 
