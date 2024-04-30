@@ -118,7 +118,8 @@ function AccordionServiceRequests(props: AccordionServiceRequestsProps) {
 
   const { getAccessTokenSilently } = useAuth0();
   const data = props.data;
-  let content: React.ReactElement;
+  let content: React.ReactElement | undefined = undefined;
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -147,6 +148,7 @@ function AccordionServiceRequests(props: AccordionServiceRequestsProps) {
         } else if (data.type == "Language Interpeter") {
           setStuffLanguage(allData.data);
         }
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -156,7 +158,6 @@ function AccordionServiceRequests(props: AccordionServiceRequestsProps) {
   }, [data.id, data.type, getAccessTokenSilently]);
 
   let result = [];
-
   switch (data.type) {
     case "Language Interpreter":
       content = (
@@ -263,26 +264,29 @@ function AccordionServiceRequests(props: AccordionServiceRequestsProps) {
       );
       break;
     case "Room Scheduling":
-      result = getBooking(stuffRoomSchedule);
-      console.log(result[0]);
-      content = (
-        <Typography>
-          Employee Name: {data.emp_name}
-          <br />
-          Date: {result[4]}
-          <br />
-          Time: {result[0]}:{result[1]} to {result[2]}:{result[3]}
-          <br />
-          Reservation Length: {stuffRoomSchedule.lengthRes}
-          <br />
-          Room Name: {stuffRoomSchedule.room_name}
-          <br />
-          Priority: {data.priority}
-          <br />
-          Status: {data.status}
-          <br />
-        </Typography>
-      );
+      if (!loading) {
+        result = getBooking(stuffRoomSchedule);
+        // console.log("Room: ",stuffRoomSchedule);
+        // console.log("Result from booking: ", result);
+        content = (
+          <Typography>
+            Employee Name: {data.emp_name}
+            <br />
+            Date: {result[4]}
+            <br />
+            Time: {result[0]}:{result[1]} to {result[2]}:{result[3]}
+            <br />
+            Reservation Length: {stuffRoomSchedule.lengthRes}
+            <br />
+            Room Name: {stuffRoomSchedule.room_name}
+            <br />
+            Priority: {data.priority}
+            <br />
+            Status: {data.status}
+            <br />
+          </Typography>
+        );
+      }
       break;
     case "Sanitation Request":
       content = (
@@ -329,9 +333,9 @@ function AccordionServiceRequests(props: AccordionServiceRequestsProps) {
 
 // Gets a variety of info about bookings at a given node and checks if the booking is today
 // Still needs a useEffect to visualize changes on screen
+
 function getBooking(data: roomScheduleInfo) {
   const result = [];
-  console.log("Booking data: ", data);
   const duration = parseInt(data.lengthRes);
   const [date, time] = data.startTime.split("T"); // Splits date and time
   // Gets the separate time values
@@ -349,6 +353,8 @@ function getBooking(data: roomScheduleInfo) {
   console.log(endHour, endMinute);
   let startString = startMinute.toString();
   let endString = endMinute.toString();
+  if (startString.length == 1) startString = "0".concat(startString);
+  if (endString.length == 1) endString = "0".concat(endString);
 
   if (
     current.getUTCDate() == day &&
@@ -356,9 +362,8 @@ function getBooking(data: roomScheduleInfo) {
     current.getUTCFullYear() == year
   ) {
     startString = startMinute.toString();
+    console.log("Startstring: ", startString);
     endString = endMinute.toString();
-    if (startString.length == 1) startString = "0".concat(startString);
-    if (endString.length == 1) endString = "0".concat(endString);
   }
   result.push(startHour);
   result.push(startString);
