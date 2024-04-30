@@ -98,7 +98,7 @@ function FloorNode(props: FloorNodesProps) {
         } else if (count === 0) {
           props.updateStartAndEnd(longName, "");
           setCount(1);
-        } else if (count === 1) {
+        } else if (count === 1 && props.inputLoc.start !== nodeid) {
           props.updateEnd(longName);
           setCount(0);
         }
