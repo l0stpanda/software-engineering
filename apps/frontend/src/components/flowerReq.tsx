@@ -268,6 +268,10 @@ function FlowerReqForm() {
         <DialogContent>
           <strong>Here are your responses:</strong>
           <br />
+          Name: {responses.empName}
+          <br />
+          Priority: {responses.priority}
+          <br />
           Room Number: {responses.roomNum}
           <br />
           Sent By: {responses.senderName}
@@ -275,6 +279,8 @@ function FlowerReqForm() {
           Send To: {responses.sendTo}
           <br />
           Note for Patient: {responses.attachedNote}
+          <br />
+          Status: {responses.status}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleSubmitClose} autoFocus>

@@ -6,10 +6,18 @@ import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Alert, Snackbar } from "@mui/material";
 import { AlertColor } from "@mui/material/Alert";
+import { Graph } from "../objects/Graph.ts";
+import { FloorNodeInfo } from "./FloorNode.tsx";
 
 interface editNodeProps {
   node: MapNode;
   mode: string | null;
+  graph: Graph;
+  sizeFactor: { width: number; height: number };
+  scaledNodes: {
+    [p: string]: FloorNodeInfo | undefined;
+  };
+  setScaledNodes: (a: { [p: string]: FloorNodeInfo | undefined }) => void;
 }
 
 interface editNodeFormProps {
@@ -60,7 +68,7 @@ export default function EditNodeForm(props: editNodeProps) {
   }
 
   async function handleNodeSubmit() {
-    console.log(props.node.getX(), props.node.getY(), props.node.getBuilding());
+    console.log(props.node.getX(), props.node.getY(), props.sizeFactor);
     const token = await getAccessTokenSilently();
     if (editMode === "add_node") {
       // if we want to add a node
@@ -86,7 +94,26 @@ export default function EditNodeForm(props: editNodeProps) {
         )
         .then(() => {
           showSnackbar("Successfully added node " + nodeInfo.ID, "success");
-          window.location.reload();
+          props.graph.addNode(
+            new MapNode(
+              nodeInfo.ID,
+              props.node.getX(),
+              props.node.getY(),
+              nodeInfo.floor,
+              props.node.getBuilding(),
+              nodeInfo.nodeType,
+              nodeInfo.longName,
+              nodeInfo.shortName,
+            ),
+          );
+          props.scaledNodes[nodeInfo.ID] = {
+            x: props.node.getX() * props.sizeFactor.width,
+            y: props.node.getY() * props.sizeFactor.height,
+            key: nodeInfo.ID,
+            floor: nodeInfo.floor,
+            type: nodeInfo.nodeType,
+            requests: [],
+          };
         })
         .catch(() => {
           showSnackbar(
@@ -113,7 +140,16 @@ export default function EditNodeForm(props: editNodeProps) {
             },
           },
         )
-        .then();
+        .then(() => {
+          const node = props.graph.getNode(nodeInfo.ID);
+          if (node)
+            node.setInfo(
+              nodeInfo.floor,
+              nodeInfo.nodeType,
+              nodeInfo.longName,
+              nodeInfo.shortName,
+            );
+        });
     }
   }
 

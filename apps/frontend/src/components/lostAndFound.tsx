@@ -277,40 +277,42 @@ function LostFound() {
           </div>
         </form>
       </div>
-      <Dialog
-        open={open}
-        onClose={handleSubmitClose}
-        TransitionComponent={Transition}
-        keepMounted
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle>We received your request!</DialogTitle>
-        <DialogContent>
-          <strong>Here are your responses:</strong>
-          <br />
-          Name: {responses.name}
-          <br />
-          Date: {responses.date?.toString()}
-          <br />
-          Object Description: {responses.objectDesc}
-          <br />
-          Location: {responses.location}
-          <br />
-          Priority: {responses.priority}
-          <br />
-          Item Type: {responses.type}
-          <br />
-          Status: {responses.status}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleSubmitClose} autoFocus>
-            Okay
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <div className="text-text ml-2 font-header place-self-right">
-        Credits: Krishna and Sam
-      </div>
+      <React.Fragment>
+        <Dialog
+          open={open}
+          onClose={handleSubmitClose}
+          TransitionComponent={Transition}
+          keepMounted
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>We received your request!</DialogTitle>
+          <DialogContent>
+            <strong>Here are your responses:</strong>
+            <br />
+            Name: {responses.name}
+            <br />
+            Date: {responses.date?.toString()}
+            <br />
+            Object Description: {responses.objectDesc}
+            <br />
+            Location: {responses.location}
+            <br />
+            Priority: {responses.priority}
+            <br />
+            Item Type: {responses.type}
+            <br />
+            Status: {responses.status}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleSubmitClose} autoFocus>
+              Okay
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <div className="text-text ml-2 font-header place-self-right">
+          Credits: Krishna and Sam
+        </div>
+      </React.Fragment>
     </div>
   );
 }

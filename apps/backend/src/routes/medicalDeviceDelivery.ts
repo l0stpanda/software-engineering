@@ -10,11 +10,11 @@ router.post("/", async function (req: Request, res: Response) {
     const num = await PrismaClient.inventory.findMany({
       where: {
         name: input.medicalDeviceName,
-        type: "medical device",
+        type: "Medical Device",
       },
     });
-    // console.log(input);
-    // console.log(num);
+    console.log(input);
+    console.log(num);
     const newQuant = num[0].quant - input.quantity;
 
     if (newQuant < 0) {
@@ -122,7 +122,6 @@ router.get("/", async function (req: Request, res: Response) {
     res.sendStatus(400);
     return;
   }
-  res.sendStatus(200);
 });
 
 router.delete("/:id", async function (req: Request, res: Response) {

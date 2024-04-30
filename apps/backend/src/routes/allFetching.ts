@@ -4,6 +4,11 @@ import PrismaClient from "../bin/database-connection.ts";
 
 const router: Router = express.Router();
 
+// type inputStuff = {
+//   id: string;
+//   type: string;
+// };
+
 router.get("/", async function (req: Request, res: Response) {
   const data = await PrismaClient.generalService.findMany({});
   try {
@@ -107,71 +112,6 @@ router.post("/update", async function (req: Request, res: Response) {
         status: status,
       },
     });
-
-    //Medicine and Medical Device Request Things
-    //
-    // const findType = await PrismaClient.generalService.findMany({
-    //   where: {
-    //     id: id,
-    //   },
-    // });
-
-    // if (findType[0].type == "Medicine Request") {
-    //   const findServiceStuff = await PrismaClient.medicineRequest.findMany({
-    //     where: {
-    //       id: id,
-    //     },
-    //   });
-    //   const num = await PrismaClient.inventory.findMany({
-    //     where: {
-    //       name: findServiceStuff[0].medicine_name,
-    //       type: "medicine",
-    //     },
-    //   });
-    //   const newQuant = num[0].quant - findServiceStuff[0].quantity;
-    //   if (newQuant >= 0) {
-    //     await PrismaClient.inventory.update({
-    //       where: {
-    //         name: findServiceStuff[0].medicine_name,
-    //       },
-    //       data: {
-    //         quant: newQuant,
-    //       },
-    //     });
-    //   }
-    //
-    //   if (newQuant < 0) {
-    //     console.log("Asking for too much");
-    //     res.sendStatus(700);
-    //   }
-    // } else if (findType[0].type == "Medical Device Delivery") {
-    //   const findServiceStuff = await PrismaClient.medicalDevice.findMany({
-    //     where: {
-    //       id: id,
-    //     },
-    //   });
-    //   const num = await PrismaClient.inventory.findMany({
-    //     where: {
-    //       name: findServiceStuff[0].device,
-    //       type: "medical device",
-    //     },
-    //   });
-    //   const newQuant = num[0].quant - findServiceStuff[0].quantity;
-    //   if (newQuant >= 0) {
-    //     await PrismaClient.inventory.update({
-    //       where: {
-    //         name: findServiceStuff[0].device,
-    //       },
-    //       data: {
-    //         quant: newQuant,
-    //       },
-    //     });
-    //   }
-    //   if (newQuant < 0) {
-    //     console.log("Asking for too much");
-    //     res.sendStatus(700);
-    //   }
-    // }
   } catch (e) {
     console.log(e);
     res.sendStatus(400);
@@ -180,4 +120,107 @@ router.post("/update", async function (req: Request, res: Response) {
   res.sendStatus(200);
 });
 
+router.get("/specific/:id", async function (req: Request, res: Response) {
+  const id: number = parseInt(req.params.id);
+
+  //All the tables are
+  /*
+
+
+
+     */
+
+  //Look through every single table to find the id
+  //If the length of any of the tables is 1 then that is the table with the request
+  //Get the information and res.send(info) back
+
+  try {
+    const flowerRequestLength = await PrismaClient.flowers.findMany({
+      where: {
+        id: id,
+      },
+    });
+
+    const maintenanceRequestLength =
+      await PrismaClient.maintenanceRequest.findMany({
+        where: {
+          id: id,
+        },
+      });
+
+    const medicalDeviceLength = await PrismaClient.medicalDevice.findMany({
+      where: {
+        id: id,
+      },
+    });
+
+    const lostItemLength = await PrismaClient.lostItem.findMany({
+      where: {
+        id: id,
+      },
+    });
+
+    const medicineRequestLength = await PrismaClient.medicineRequest.findMany({
+      where: {
+        id: id,
+      },
+    });
+
+    const langInterpreterLength = await PrismaClient.langInterpreter.findMany({
+      where: {
+        id: id,
+      },
+    });
+
+    const sanRequest = await PrismaClient.sanitationRequest.findMany({
+      where: {
+        id: id,
+      },
+    });
+
+    const roomRequest = await PrismaClient.roomScheduler.findMany({
+      where: {
+        id: id,
+      },
+    });
+
+    //if one or the other then send the request info with the length of 1
+    if (flowerRequestLength.length == 1) {
+      res.send(flowerRequestLength[0]);
+    }
+
+    if (maintenanceRequestLength.length == 1) {
+      res.send(maintenanceRequestLength[0]);
+    }
+
+    if (medicalDeviceLength.length == 1) {
+      res.send(medicalDeviceLength[0]);
+    }
+
+    if (langInterpreterLength.length == 1) {
+      res.send(langInterpreterLength[0]);
+    }
+
+    if (sanRequest.length == 1) {
+      res.send(sanRequest[0]);
+    }
+
+    if (lostItemLength.length == 1) {
+      res.send(lostItemLength[0]);
+    }
+
+    if (roomRequest.length == 1) {
+      res.send(roomRequest[0]);
+    }
+
+    if (medicineRequestLength.length == 1) {
+      res.send(medicineRequestLength[0]);
+    }
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(400);
+    return;
+  }
+  res.sendStatus(200);
+});
 export default router;

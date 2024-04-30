@@ -6,8 +6,11 @@ import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Alert, Snackbar } from "@mui/material";
 import { AlertColor } from "@mui/material/Alert";
+import { MapEdge } from "../objects/MapEdge.ts";
 interface createEdgeProps {
   nodes: MapNode[];
+  update: boolean;
+  setUpdate: (a: boolean) => void;
 }
 
 // interface editNodeProps {
@@ -87,7 +90,24 @@ export default function DeleteEdgeForm(props: createEdgeProps) {
               edgeInfo[1].getLongName(),
             "success",
           );
-          window.location.reload();
+          let edge: MapEdge | undefined = undefined;
+          edgeInfo[0].getEdgeList().forEach((e: MapEdge) => {
+            if (
+              e.getOther(edgeInfo[0]).getNodeID() === edgeInfo[1].getNodeID()
+            ) {
+              edge = e;
+            }
+          });
+
+          if (edge) {
+            edgeInfo[0]
+              .getEdgeList()
+              .splice(edgeInfo[0].getEdgeList().indexOf(edge), 1);
+            edgeInfo[1]
+              .getEdgeList()
+              .splice(edgeInfo[0].getEdgeList().indexOf(edge), 1);
+          }
+          props.setUpdate(!props.update);
         })
         .catch(() => {
           showSnackbar(

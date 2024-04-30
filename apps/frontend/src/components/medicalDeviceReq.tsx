@@ -19,7 +19,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { medicalDeviceDelivery } from "common/src/medicalDeviceDelivery.ts";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import axios from "axios";
 import UserDropdown from "../components/userDropdown.tsx";
@@ -35,7 +35,7 @@ function MedicalDeviceReq() {
     quantity: 1,
     priority: "Medium",
     status: "Unassigned",
-    deliveryDate: dayjs(),
+    deliveryDate: null,
   });
 
   const Transition = React.forwardRef(function Transition(
@@ -135,6 +135,7 @@ function MedicalDeviceReq() {
       formData.status == "" ||
       formData.deliveryDate == null
     ) {
+      alert("All fields need to be filled");
       return;
     }
     if (
@@ -209,6 +210,18 @@ function MedicalDeviceReq() {
               update={updateRoom}
               label={"Room"}
             />
+
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateTimePicker
+                sx={{ bgcolor: "#eceff0" }}
+                label="Delivery Date*"
+                value={formData.deliveryDate}
+                disablePast
+                onChange={handleDateChange}
+                //renderInput={(params) => <TextField {...params} required/>}
+              />
+            </LocalizationProvider>
+
             {/*<TextField*/}
             {/*  onChange={handleFormInput}*/}
             {/*  value={formData.medicalDeviceName}*/}
@@ -254,16 +267,6 @@ function MedicalDeviceReq() {
               </Select>
             </FormControl>
 
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker
-                sx={{ bgcolor: "#eceff0" }}
-                label="Delivery Date*"
-                value={formData.deliveryDate}
-                disablePast
-                onChange={handleDateChange}
-                //renderInput={(params) => <TextField {...params} required/>}
-              />
-            </LocalizationProvider>
             <div className="flex justify-center mt-3">
               <Button
                 className="w-32 self-center pt-10"

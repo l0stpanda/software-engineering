@@ -217,17 +217,18 @@ function MedicineDeliveryReq() {
                 </Select>
               </FormControl>
 
+              <LocationDropdown
+                room={delivery.location}
+                update={handleLocationInput}
+                label={"Room"}
+              />
+
               <MedicineDropdown
                 room={delivery.medicineName}
                 update={handleMedicineInput}
                 label={"Medicine Name"}
               />
 
-              <LocationDropdown
-                room={delivery.location}
-                update={handleLocationInput}
-                label={"Room"}
-              />
               <TextField
                 onChange={handleQuantityInput}
                 value={delivery.quantity}
@@ -250,11 +251,10 @@ function MedicineDeliveryReq() {
                   name="status"
                   required
                 >
-                  <MenuItem value="">None</MenuItem>
-                  <MenuItem value="Unassigned">Unassigned</MenuItem>
-                  <MenuItem value="Assigned">Assigned</MenuItem>
-                  <MenuItem value="InProgress">InProgress</MenuItem>
-                  <MenuItem value="Closed">Closed</MenuItem>
+                  <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
+                  <MenuItem value={"Assigned"}>Assigned</MenuItem>
+                  <MenuItem value={"InProgress"}>In Progress</MenuItem>
+                  <MenuItem value={"Closed"}>Closed</MenuItem>
                 </Select>
               </FormControl>
             </form>

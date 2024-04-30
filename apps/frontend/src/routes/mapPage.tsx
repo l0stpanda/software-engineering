@@ -558,8 +558,8 @@ function MapPage() {
   };
 
   return (
-    <div>
-      <div>
+    <div className="">
+      <div className="">
         {/*Map Image Box*/}
         <div
           ref={divRef}
@@ -651,19 +651,19 @@ function MapPage() {
         {directions.length != 0 && mode === "path" ? (
           <div
             className="
-                    h-[250px]
+                    max-h-[250px]
                     w-[300px]
                     items-center
                     bg-background
                     border-primary
                     border-2
-                    overflow-clip
+                    overflow-y-auto
                     rounded-lg
                     fixed
                     bottom-7
                     right-32"
           >
-            <div className="overflow-y-auto h-full">{showDirections()}</div>
+            <div>{showDirections()}</div>
           </div>
         ) : (
           <>
