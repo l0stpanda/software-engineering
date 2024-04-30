@@ -6,9 +6,12 @@ import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Alert, Snackbar } from "@mui/material";
 import { AlertColor } from "@mui/material/Alert";
+import { MapEdge } from "../objects/MapEdge.ts";
 
 interface createEdgeProps {
   nodes: MapNode[];
+  update: boolean;
+  setUpdate: (a: boolean) => void;
 }
 
 // interface editNodeProps {
@@ -63,7 +66,11 @@ export default function CreateEdgeForm(props: createEdgeProps) {
   // }, [props]);
 
   async function handleEdgeSubmit() {
-    if (edgeInfo[0].getLongName() != "" && edgeInfo[1].getLongName() != "") {
+    if (
+      edgeInfo[0].getLongName() != "" &&
+      edgeInfo[1].getLongName() != "" &&
+      edgeInfo[0].getNodeID() !== edgeInfo[1].getNodeID()
+    ) {
       const token = await getAccessTokenSilently();
       axios
         .post(
@@ -88,7 +95,10 @@ export default function CreateEdgeForm(props: createEdgeProps) {
               edgeInfo[1].getLongName(),
             "success",
           );
-          window.location.reload();
+          const edge = new MapEdge(edgeInfo[0], edgeInfo[1]);
+          edgeInfo[0].addAdjacency(edge);
+          edgeInfo[1].addAdjacency(edge);
+          props.setUpdate(!props.update);
         })
         .catch(() => {
           showSnackbar(

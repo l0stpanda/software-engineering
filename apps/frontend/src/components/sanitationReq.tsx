@@ -147,6 +147,23 @@ function SanitationReq() {
               label={"Username"}
             />
 
+            {/*Priority Field*/}
+            <FormControl variant="filled" required>
+              <InputLabel id="priority">Priority</InputLabel>
+              <Select
+                name="priority"
+                labelId="priority"
+                id="priority"
+                value={formData.priority}
+                onChange={handlePriorityInput}
+              >
+                <MenuItem value={"High"}>High</MenuItem>
+                <MenuItem value={"Medium"}>Medium</MenuItem>
+                <MenuItem value={"Low"}>Low</MenuItem>
+                <MenuItem value={"Emergency"}>Emergency</MenuItem>
+              </Select>
+            </FormControl>
+
             {/*Room Field*/}
             <LocationDropdown
               room={formData.roomName}
@@ -183,23 +200,6 @@ function SanitationReq() {
               >
                 <MenuItem value={"Yes"}>Yes</MenuItem>
                 <MenuItem value={"No"}>No</MenuItem>
-              </Select>
-            </FormControl>
-
-            {/*Priority Field*/}
-            <FormControl variant="filled" required>
-              <InputLabel id="priority">Priority</InputLabel>
-              <Select
-                name="priority"
-                labelId="priority"
-                id="priority"
-                value={formData.priority}
-                onChange={handlePriorityInput}
-              >
-                <MenuItem value={"High"}>High</MenuItem>
-                <MenuItem value={"Medium"}>Medium</MenuItem>
-                <MenuItem value={"Low"}>Low</MenuItem>
-                <MenuItem value={"Emergency"}>Emergency</MenuItem>
               </Select>
             </FormControl>
 

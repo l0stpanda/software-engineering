@@ -217,17 +217,18 @@ function MedicineDeliveryReq() {
                 </Select>
               </FormControl>
 
+              <LocationDropdown
+                room={delivery.location}
+                update={handleLocationInput}
+                label={"Room"}
+              />
+
               <MedicineDropdown
                 room={delivery.medicineName}
                 update={handleMedicineInput}
                 label={"Medicine Name"}
               />
 
-              <LocationDropdown
-                room={delivery.location}
-                update={handleLocationInput}
-                label={"Room"}
-              />
               <TextField
                 onChange={handleQuantityInput}
                 value={delivery.quantity}
