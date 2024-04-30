@@ -154,6 +154,8 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
           )
           .then();
         props.setScaledNodes({ ...props.scaledNodes, [id]: oldNodePos });
+        const node = props.graph.getNode(id);
+        if (node) node.setPosition(newPosX, newPosY);
         showSnackbar(`Move the Node ${id} in map successfully`, "success");
       }
     },
