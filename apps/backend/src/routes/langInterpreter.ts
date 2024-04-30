@@ -51,6 +51,23 @@ router.post("/", async function (req: Request, res: Response) {
       },
     });
 
+    const findEmail = await PrismaClient.user.findMany({
+      where: {
+        username: input.name,
+      },
+    });
+
+    await PrismaClient.todo.create({
+      data: {
+        task: "Complete language interpreter request #" + findID[0].id,
+        dueDate: "",
+        priority: input.priority,
+        notes: "",
+        complete: false,
+        email: findEmail[0].email,
+      },
+    });
+
     if (input.date != undefined) {
       await PrismaClient.langInterpreter.create({
         data: {

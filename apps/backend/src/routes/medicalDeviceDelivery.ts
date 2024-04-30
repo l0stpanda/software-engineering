@@ -71,6 +71,29 @@ router.post("/", async function (req: Request, res: Response) {
       return;
     }
 
+    const findEmail = await PrismaClient.user.findMany({
+      where: {
+        username: input.employeeName,
+      },
+    });
+
+    let dueDate = "";
+
+    if (input.deliveryDate != undefined) {
+      dueDate = input.deliveryDate.toString();
+    }
+
+    await PrismaClient.todo.create({
+      data: {
+        task: "Complete medical device delivery request #" + id[0].id,
+        dueDate: dueDate,
+        priority: input.priority,
+        notes: "",
+        complete: false,
+        email: findEmail[0].email,
+      },
+    });
+
     if (input.deliveryDate != undefined) {
       //This willa always be the case so don't worry about it being here.
       console.log("ID I AM FINDING IS " + id[0].id);

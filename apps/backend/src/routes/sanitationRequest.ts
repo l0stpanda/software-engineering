@@ -49,6 +49,23 @@ router.post("/", async function (req: Request, res: Response) {
       },
     });
 
+    const findEmail = await PrismaClient.user.findMany({
+      where: {
+        username: input.employeeName,
+      },
+    });
+
+    await PrismaClient.todo.create({
+      data: {
+        task: "Complete sanitation request #" + id[0].id,
+        dueDate: "",
+        priority: input.priority,
+        notes: "",
+        complete: false,
+        email: findEmail[0].email,
+      },
+    });
+
     await PrismaClient.sanitationRequest.create({
       data: {
         id: id[0].id,
