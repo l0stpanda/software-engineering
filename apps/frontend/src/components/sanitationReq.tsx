@@ -10,11 +10,24 @@ import {
   InputLabel,
   MenuItem,
 } from "@mui/material";
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
 import { useAuth0 } from "@auth0/auth0-react";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import axios from "axios";
 import UserDropdown from "../components/userDropdown.tsx";
+
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<string, string>;
+  },
+  ref: React.Ref<unknown>,
+) {
+  return (
+    <Slide direction="up" ref={ref} {...props} children={props.children} />
+  );
+});
 
 function SanitationReq() {
   type SanitationReq = {
@@ -113,8 +126,8 @@ function SanitationReq() {
 
   return (
     <div className="w-full">
-      <div className="m-auto mt-6 flex flex-col px-10 h-full w-full justify-center py-4">
-        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center transition-transform hover:scale-110 -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+      <div className="m-auto mt-3 flex flex-col px-10 h-full w-full justify-center py-1">
+        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center">
           Sanitation Request
         </h1>
         <form onSubmit={handleSubmit}>
@@ -133,6 +146,23 @@ function SanitationReq() {
               update={updateName}
               label={"Username"}
             />
+
+            {/*Priority Field*/}
+            <FormControl variant="filled" required>
+              <InputLabel id="priority">Priority</InputLabel>
+              <Select
+                name="priority"
+                labelId="priority"
+                id="priority"
+                value={formData.priority}
+                onChange={handlePriorityInput}
+              >
+                <MenuItem value={"High"}>High</MenuItem>
+                <MenuItem value={"Medium"}>Medium</MenuItem>
+                <MenuItem value={"Low"}>Low</MenuItem>
+                <MenuItem value={"Emergency"}>Emergency</MenuItem>
+              </Select>
+            </FormControl>
 
             {/*Room Field*/}
             <LocationDropdown
@@ -170,23 +200,6 @@ function SanitationReq() {
               >
                 <MenuItem value={"Yes"}>Yes</MenuItem>
                 <MenuItem value={"No"}>No</MenuItem>
-              </Select>
-            </FormControl>
-
-            {/*Priority Field*/}
-            <FormControl variant="filled" required>
-              <InputLabel id="priority">Priority</InputLabel>
-              <Select
-                name="priority"
-                labelId="priority"
-                id="priority"
-                value={formData.priority}
-                onChange={handlePriorityInput}
-              >
-                <MenuItem value={"High"}>High</MenuItem>
-                <MenuItem value={"Medium"}>Medium</MenuItem>
-                <MenuItem value={"Low"}>Low</MenuItem>
-                <MenuItem value={"Emergency"}>Emergency</MenuItem>
               </Select>
             </FormControl>
 
@@ -245,30 +258,41 @@ function SanitationReq() {
           </div>
         </form>
       </div>
-      <Dialog open={open} onClose={handleSubmitClose}>
-        <DialogTitle>We received your request!</DialogTitle>
-        <DialogContent>
-          <strong>Here are your responses:</strong>
-          <br />
-          Employee Name: {formData.employeeName}
-          <br />
-          Room Name: {formData.roomName}
-          <br />
-          Severity: {formData.severity}
-          <br />
-          Hazardous?: {formData.hazardous}
-          <br />
-          Priority: {formData.priority}
-          <br />
-          Status: {formData.status}
-        </DialogContent>
+      <React.Fragment>
+        <Dialog
+          open={open}
+          onClose={handleSubmitClose}
+          TransitionComponent={Transition}
+          keepMounted
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>We received your request!</DialogTitle>
+          <DialogContent>
+            <strong>Here are your responses:</strong>
+            <br />
+            Employee Name: {formData.employeeName}
+            <br />
+            Room Name: {formData.roomName}
+            <br />
+            Severity: {formData.severity}
+            <br />
+            Hazardous?: {formData.hazardous}
+            <br />
+            Priority: {formData.priority}
+            <br />
+            Status: {formData.status}
+          </DialogContent>
 
-        <DialogActions>
-          <Button onClick={handleSubmitClose} autoFocus>
-            Okay
-          </Button>
-        </DialogActions>
-      </Dialog>
+          <DialogActions>
+            <Button onClick={handleSubmitClose} autoFocus>
+              Okay
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <div className="text-text mt-[4.4rem] ml-2 font-header place-self-right">
+          Credits: Ally
+        </div>
+      </React.Fragment>
     </div>
   );
 }

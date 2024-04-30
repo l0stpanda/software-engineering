@@ -23,7 +23,8 @@ router.post("/", async (req: Request, res: Response) => {
 });
 
 //Delete a medicine (Don't know if we'll need this)
-router.delete("/:id", async (req: Request, res: Response) => {
+router.post("/delete/:id", async (req: Request, res: Response) => {
+  const inputs: { itemId: number; name: string } = req.body;
   try {
     const received: number = parseInt(req.params.id);
     await PrismaClient.inventory.delete({
@@ -31,6 +32,50 @@ router.delete("/:id", async (req: Request, res: Response) => {
         id: received,
       },
     });
+
+    const idCheckMedReq = await PrismaClient.medicineRequest.findMany({
+      where: {
+        medicine_name: inputs.name,
+      },
+    });
+
+    const idCheckMedDev = await PrismaClient.medicalDevice.findMany({
+      where: {
+        device: inputs.name,
+      },
+    });
+
+    //Delete the General Service Requests
+    for (let i = 0; i < idCheckMedReq.length; i++) {
+      await PrismaClient.generalService.deleteMany({
+        where: {
+          id: idCheckMedReq[i].id,
+        },
+      });
+    }
+
+    for (let i = 0; i < idCheckMedDev.length; i++) {
+      await PrismaClient.generalService.deleteMany({
+        where: {
+          id: idCheckMedDev[i].id,
+        },
+      });
+    }
+
+    // //Delete all the instances of medicine Request that have the name
+    // await PrismaClient.medicineRequest.deleteMany({
+    //   where: {
+    //     medicine_name: inputs.name,
+    //   },
+    // });
+    // //Delete all the instances of medical device Request that have the name
+    // await PrismaClient.medicalDevice.deleteMany({
+    //   where: {
+    //     device: inputs.name,
+    //   },
+    // });
+
+    //Get the id
   } catch (error) {
     console.log(error);
     res.sendStatus(400);
@@ -133,14 +178,17 @@ router.get("/", async (req, res) => {
 //Return the number due to the medicine name entered
 router.get("/getNum", async (req, res) => {
   try {
-    const received: inventoryType = req.body;
+    const name = req.query.name;
+    if (typeof name !== "string") {
+      return res.status(400).json({ message: "Invalid name parameter" });
+    }
     const item = await PrismaClient.inventory.findUnique({
       where: {
-        name: received.name,
+        name: name,
       },
     });
     if (item) {
-      res.sendStatus(200).send(item.quant);
+      res.status(200).json({ quant: item.quant });
     } else {
       res.status(400).send(0);
     }

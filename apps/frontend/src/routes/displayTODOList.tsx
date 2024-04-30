@@ -15,19 +15,40 @@ import {
 } from "@mui/material";
 import { Alert, Snackbar } from "@mui/material";
 import { AlertColor } from "@mui/material/Alert";
+// import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
-//import LoginDialog from "../components/loginDialog.tsx";
+type subTodo = {
+  id_relation: number;
+  task: string;
+  complete: boolean;
+};
+
+type subTodoWithID = {
+  id: number;
+  id_relation: number;
+  task: string;
+  complete: boolean;
+};
+
 type toDoNow = {
   id: number;
   user_id: string | undefined;
   task: string;
+  notes: string;
+  // dueDate: Dayjs | null | string;
+  dueDate: Dayjs | null;
   priority: string;
   email: string | undefined;
   username: string | undefined;
   role: string | undefined;
   complete: boolean;
-  subtasks: string[];
+  subtasks: subTodoWithID[];
 };
+
 import { styled } from "@mui/material/styles";
 
 const CustomTextField = styled(TextField)({
@@ -44,6 +65,9 @@ export default function DisplayTODOList() {
     id: 0,
     user_id: user?.sub,
     task: "",
+    notes: "",
+    dueDate: null,
+    //dueDate: "",
     priority: "",
     email: user?.email,
     username: user?.preferred_username,
@@ -52,12 +76,13 @@ export default function DisplayTODOList() {
     subtasks: [], // Initialize subtasks with an empty array
   });
 
+  const [change, setChange] = useState<boolean>(true);
   // Use state for records being displayed
   const [records, setRecords] = useState<toDoNow[]>([]);
 
   const [open, setOpen] = useState<boolean>(false);
 
-  const [subtasks, setSubtasks] = useState<string[]>([]);
+  const [subtasks, setSubtasks] = useState<subTodo[]>([]);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -85,7 +110,8 @@ export default function DisplayTODOList() {
               Authorization: `Bearer ${token}`,
             },
           });
-          console.log(response.data);
+          const dataStuff: toDoNow = response.data;
+          console.log(dataStuff);
           setRecords(response.data); // Assuming the data is an array of lost and found request data
         } else {
           alert("You need to login");
@@ -99,11 +125,18 @@ export default function DisplayTODOList() {
     fetchData().catch((error) => {
       console.error("Error from fetchData promise:", error);
     });
-  }, [getAccessTokenSilently, user]);
+  }, [getAccessTokenSilently, user, change]);
 
   const handleSubtaskInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && e.currentTarget.value.trim() !== "") {
-      setSubtasks([...subtasks, e.currentTarget.value.trim()]);
+      setSubtasks([
+        ...subtasks,
+        {
+          task: e.currentTarget.value.trim(),
+          id_relation: 0,
+          complete: false,
+        },
+      ]);
       e.currentTarget.value = "";
     }
   };
@@ -141,6 +174,7 @@ export default function DisplayTODOList() {
           Authorization: `Bearer ${token}`,
         },
       });
+      setChange(!change);
     } catch (e) {
       console.log(e);
       showSnackbar("Problems have occured", "error");
@@ -152,6 +186,9 @@ export default function DisplayTODOList() {
       id: 0,
       user_id: user?.sub,
       task: "",
+      notes: "",
+      // dueDate: "",
+      dueDate: null,
       priority: "",
       email: user?.email,
       username: user?.preferred_username,
@@ -177,6 +214,14 @@ export default function DisplayTODOList() {
 
   function handleDropdownChange(e: SelectChangeEvent) {
     setToDoResponse({ ...toDoResponse, priority: e.target.value });
+  }
+
+  function handleDateChange(date: Dayjs | null) {
+    setToDoResponse({ ...toDoResponse, dueDate: date });
+  }
+
+  function updateTodo() {
+    setChange(!change);
   }
 
   return (
@@ -212,7 +257,10 @@ export default function DisplayTODOList() {
               Task
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Subtasks
+              Notes
+            </th>
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              Due Date
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Delete
@@ -230,10 +278,13 @@ export default function DisplayTODOList() {
               email={record.email}
               priority={record.priority}
               task={record.task}
+              notes={record.notes}
+              dueDate={record.dueDate}
               complete={record.complete}
               role={record.role}
               username={record.username}
               subtasks={record.subtasks}
+              update={updateTodo}
             />
           ))}
         </tbody>
@@ -254,10 +305,20 @@ export default function DisplayTODOList() {
                 label="Task"
                 name="task"
               />
+              <CustomTextField
+                onChange={handleFormUpdate}
+                value={toDoResponse.notes}
+                variant="filled"
+                fullWidth={true}
+                label="Notes"
+                name="notes"
+              />
               <div className="flex flex-col gap-2">
                 {subtasks.map((subtask, index) => (
                   <div key={index} className="flex gap-2 items-center">
-                    <span className="font-inherit text-inherit">{subtask}</span>
+                    <span className="font-inherit text-inherit">
+                      {subtask.task}
+                    </span>
                   </div>
                 ))}
                 <CustomInput
@@ -267,6 +328,16 @@ export default function DisplayTODOList() {
                   onKeyDown={handleSubtaskInput}
                 />
               </div>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateTimePicker
+                  sx={{ bgcolor: "#eceff0" }}
+                  label="Due Date"
+                  value={toDoResponse.dueDate}
+                  // value={dayjs(toDoResponse.dueDate)}
+                  disablePast
+                  onChange={handleDateChange}
+                />
+              </LocalizationProvider>
 
               <FormControl variant="filled" required={true}>
                 <InputLabel id="priority">Priority</InputLabel>
@@ -285,7 +356,7 @@ export default function DisplayTODOList() {
               </FormControl>
 
               <Button
-                //onClick={handleSubmit}
+                // onClick={handleSubmit}
                 type="submit"
                 variant="contained"
                 className="w-32 self-center"

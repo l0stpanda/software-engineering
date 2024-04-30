@@ -7,6 +7,9 @@ import {
   Tab,
   Tabs,
   Tooltip,
+  IconButton,
+  createTheme,
+  ThemeProvider,
 } from "@mui/material";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
@@ -20,13 +23,18 @@ import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import MonitorHeartIcon from "@mui/icons-material/MonitorHeart";
 import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
+import TranslateIcon from "@mui/icons-material/Translate";
 import LostFound from "../components/lostAndFound.tsx";
 import RoomSchedulingReq from "../components/roomSchedulingReq.tsx";
 import MedicalDeviceReq from "../components/medicalDeviceReq.tsx";
 import MedicineDeliveryReq from "../components/MedicineDeliveryReq.tsx";
 import SanitationReq from "../components/sanitationReq.tsx";
+import MaintenanceReq from "../components/maintenanceReq.tsx";
+import LangInterpreterReq from "./langInterpreterRequest.tsx";
+import ToolIcon from "@mui/icons-material/Build";
+import BarChartIcon from "@mui/icons-material/BarChart";
 
-type GeneralReq = {
+export type GeneralReq = {
   id: number;
   type: string;
   location: string;
@@ -46,6 +54,17 @@ function ServiceRequests() {
     setCurrentTabIndex(tabIndex);
   };
 
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#F6BD38",
+      },
+      secondary: {
+        main: "#F6BD38",
+      },
+    },
+  });
+
   // Use state for records being displayed
   const [records, setRecords] = useState<GeneralReq[]>([]);
   const [permRecords, setPermRecords] = useState<GeneralReq[]>([]);
@@ -62,16 +81,16 @@ function ServiceRequests() {
             Authorization: `Bearer ${token}`,
           },
         });
-        setRecords(response.data); // Assuming the data is an array of flower request data
-        setPermRecords(response.data); // Assuming the data is an array of flower request data
+        setRecords(response.data); // Assuming the data is an array of request data
+        setPermRecords(response.data); // Assuming the data is an array of request data
         console.log(response.data);
       } catch (error) {
-        console.error("Error fetching flower requests", error);
+        console.error("Error fetching requests", error);
       }
     };
 
-    fetchData().catch((error) => {
-      console.error("Error from fetchData promise:", error);
+    fetchData().catch(() => {
+      // console.log("Error from fetchData promise:", error);
     });
   }, [getAccessTokenSilently]);
 
@@ -125,56 +144,78 @@ function ServiceRequests() {
       <div className="flex flex-row w-full h-full px-4 gap-4 py-4">
         {/*Pending Requests*/}
         <div className="h-full w-1/2 bg-background rounded-lg flex flex-col px-4">
-          <h1 className="mt-4 mb-4 ml-2.5 font-header text-primary font-extrabold text-4xl text-center transition-transform hover:translate-y-1 duration-500 antialiased;">
+          <h1 className="mt-4 mb-4 ml-2.5 font-header text-primary font-extrabold text-3xl text-center">
             Pending Requests
           </h1>
           <div className="pb-2">
-            <div className="w-20 flex flex-row gap-2 w-full">
-              <UserDropdown
-                room={reqType}
-                update={updateName}
-                label={"Username"}
-              />
+            <div className="w-20 flex flex-row gap-2 w-full justify-between pr-10">
+              <div className="gap-2 flex">
+                <UserDropdown
+                  room={reqType}
+                  update={updateName}
+                  label={"Username"}
+                />
 
-              <Select
-                name="Status Type"
-                required={true}
-                onChange={handleStatusTypeDropdown}
-                value={statusType}
-                defaultValue={"No Status"}
-                size="small"
-                sx={{
-                  borderRadius: "10px",
-                }}
-              >
-                <MenuItem value={"All"}>Select Status Type</MenuItem>
-                <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
-                <MenuItem value={"Assigned"}>Assigned</MenuItem>
-                <MenuItem value={"InProgress"}>In Progress</MenuItem>
-                <MenuItem value={"Closed"}>Closed</MenuItem>
-              </Select>
+                <Select
+                  name="Status Type"
+                  required={true}
+                  onChange={handleStatusTypeDropdown}
+                  value={statusType}
+                  defaultValue={"No Status"}
+                  size="small"
+                  sx={{
+                    borderRadius: "10px",
+                  }}
+                >
+                  <MenuItem value={"All"}>Select Status Type</MenuItem>
+                  <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
+                  <MenuItem value={"Assigned"}>Assigned</MenuItem>
+                  <MenuItem value={"InProgress"}>In Progress</MenuItem>
+                  <MenuItem value={"Closed"}>Closed</MenuItem>
+                </Select>
+              </div>
+
+              <Tooltip title={"Statistics"}>
+                <IconButton
+                  href="graphs"
+                  sx={{
+                    marginLeft: "1rem",
+                    color: "#002866",
+                    "&:hover": {
+                      position: "relative",
+                      zIndex: 1,
+                      color: "#F6BD38",
+                    },
+                  }}
+                >
+                  <BarChartIcon className="svg_icons" />
+                </IconButton>
+              </Tooltip>
             </div>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-secondary border-b-2 border-b-primary">
+              <thead className="bg-primary border-b-2 border-b-[#F6BD38]">
                 <tr>
-                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
                     Type
                   </th>
-                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
                     Status
                   </th>
-                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
                     Priority
                   </th>
-                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
                     Location
                   </th>
-                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
                     Employee Name
                   </th>
-                  <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
+                    Details
+                  </th>
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
                     Delete
                   </th>
                   {/* Dynamically generate column headers */}
@@ -207,105 +248,145 @@ function ServiceRequests() {
               overflow: "hidden",
               width: "100%",
             }}
-            className="bg-background rounded-lg"
+            className="bg-primary rounded-lg"
           >
             {/*<h1 className="my-2 font-header text-primary font-bold text-xl text-center">*/}
             {/*    Choose a new request*/}
             {/*</h1>*/}
-            <Tabs
-              variant="scrollable"
-              scrollButtons="auto"
-              value={currentTabIndex}
-              onChange={handleTabChange}
-              sx={{
-                overflow: "hidden", // Hiding overflow here
-              }}
-            >
-              <Tooltip title="Flower Delivery">
-                <Tab
-                  icon={<LocalFloristIcon />}
-                  id="tab-0"
-                  sx={{
-                    transition: "transform 0.3s ease-in-out",
-                    "&:hover": {
-                      transform: "scale(1.4)",
-                      position: "relative",
-                      zIndex: 1, // Ensure scaling item is above others
-                    },
-                  }}
-                />
-              </Tooltip>
-              <Tooltip title="Lost Item Request">
-                <Tab
-                  icon={<WalletIcon />}
-                  id="tab-1"
-                  sx={{
-                    transition: "transform 0.3s ease-in-out",
-                    "&:hover": {
-                      transform: "scale(1.4)",
-                      position: "relative",
-                      zIndex: 1, // Ensure scaling item is above others
-                    },
-                  }}
-                />
-              </Tooltip>
-              <Tooltip title="Room Scheduling">
-                <Tab
-                  icon={<MeetingRoomIcon />}
-                  id="tab-2"
-                  sx={{
-                    transition: "transform 0.3s ease-in-out",
-                    "&:hover": {
-                      transform: "scale(1.3)",
-                      position: "relative",
-                      zIndex: 1, // Ensure scaling item is above others
-                    },
-                  }}
-                />
-              </Tooltip>
-              <Tooltip title="Medical Device Delivery">
-                <Tab
-                  icon={<MonitorHeartIcon />}
-                  id="tab-3"
-                  sx={{
-                    transition: "transform 0.3s ease-in-out",
-                    "&:hover": {
-                      transform: "scale(1.4)",
-                      position: "relative",
-                      zIndex: 1, // Ensure scaling item is above others
-                    },
-                  }}
-                />
-              </Tooltip>
-              <Tooltip title="Medicine Delivery">
-                <Tab
-                  icon={<LocalPharmacyIcon />}
-                  id="tab-4"
-                  sx={{
-                    transition: "transform 0.3s ease-in-out",
-                    "&:hover": {
-                      transform: "scale(1.4)",
-                      position: "relative",
-                      zIndex: 1, // Ensure scaling item is above others
-                    },
-                  }}
-                />
-              </Tooltip>
-              <Tooltip title="Sanitation Request">
-                <Tab
-                  icon={<CleaningServicesIcon />}
-                  id="tab-5"
-                  sx={{
-                    transition: "transform 0.3s ease-in-out",
-                    "&:hover": {
-                      transform: "scale(1.4)",
-                      position: "relative",
-                      zIndex: 1, // Ensure scaling item is above others
-                    },
-                  }}
-                />
-              </Tooltip>
-            </Tabs>
+            <ThemeProvider theme={theme}>
+              <Tabs
+                variant="scrollable"
+                scrollButtons="auto"
+                color="main"
+                value={currentTabIndex}
+                onChange={handleTabChange}
+                sx={{
+                  overflow: "hidden", // Hiding overflow here
+                  color: "#FFFFFF",
+                }}
+              >
+                <Tooltip title="Flower Delivery">
+                  <Tab
+                    icon={<LocalFloristIcon />}
+                    id="tab-0"
+                    sx={{
+                      transition: "transform 0.3s ease-in-out",
+                      color: "#FFFFFF",
+                      "&:hover": {
+                        position: "relative",
+                        zIndex: 1,
+                        color: "#F6BD38",
+                      },
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title="Lost Item Request">
+                  <Tab
+                    icon={<WalletIcon />}
+                    id="tab-1"
+                    sx={{
+                      transition: "transform 0.3s ease-in-out",
+                      color: "#FFFFFF",
+                      "&:hover": {
+                        position: "relative",
+                        zIndex: 1,
+                        color: "#F6BD38",
+                      },
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title="Room Scheduling">
+                  <Tab
+                    icon={<MeetingRoomIcon />}
+                    id="tab-2"
+                    sx={{
+                      transition: "transform 0.3s ease-in-out",
+                      color: "#FFFFFF",
+                      "&:hover": {
+                        position: "relative",
+                        zIndex: 1,
+                        color: "#F6BD38",
+                      },
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title="Medical Device Delivery">
+                  <Tab
+                    icon={<MonitorHeartIcon />}
+                    id="tab-3"
+                    sx={{
+                      transition: "transform 0.3s ease-in-out",
+                      color: "#FFFFFF",
+                      "&:hover": {
+                        position: "relative",
+                        zIndex: 1,
+                        color: "#F6BD38",
+                      },
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title="Medicine Delivery">
+                  <Tab
+                    icon={<LocalPharmacyIcon />}
+                    id="tab-4"
+                    sx={{
+                      transition: "transform 0.3s ease-in-out",
+                      color: "#FFFFFF",
+                      "&:hover": {
+                        position: "relative",
+                        zIndex: 1,
+                        color: "#F6BD38",
+                      },
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title="Sanitation Request">
+                  <Tab
+                    icon={<CleaningServicesIcon />}
+                    id="tab-5"
+                    sx={{
+                      transition: "transform 0.3s ease-in-out",
+                      color: "#FFFFFF",
+                      "&:hover": {
+                        position: "relative",
+                        zIndex: 1,
+                        color: "#F6BD38",
+                      },
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title="Maintenance Request">
+                  <Tab
+                    icon={<ToolIcon />}
+                    id="tab-6"
+                    sx={{
+                      transition: "transform 0.3s ease-in-out",
+                      color: "#FFFFFF",
+                      "&:hover": {
+                        position: "relative",
+                        zIndex: 1,
+                        color: "#F6BD38",
+                      },
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title="Language Interpreter">
+                  <Tab
+                    icon={<TranslateIcon />}
+                    id="tab-7"
+                    sx={{
+                      transition: "transform 0.3s ease-in-out",
+                      color: "#FFFFFF",
+                      "&:hover": {
+                        position: "relative",
+                        zIndex: 1,
+                        color: "#F6BD38",
+                      },
+                    }}
+                  />
+                </Tooltip>
+              </Tabs>
+            </ThemeProvider>
           </div>
 
           <div className="bg-background rounded-lg overflow-y-auto h-full">
@@ -315,6 +396,8 @@ function ServiceRequests() {
             {currentTabIndex === 3 && <MedicalDeviceReq />}
             {currentTabIndex === 4 && <MedicineDeliveryReq />}
             {currentTabIndex === 5 && <SanitationReq />}
+            {currentTabIndex === 6 && <MaintenanceReq />}
+            {currentTabIndex === 7 && <LangInterpreterReq />}
           </div>
         </div>
       </div>

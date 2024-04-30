@@ -23,6 +23,16 @@ import LocationDropdown from "../components/locationDropdown.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import UserDropdown from "../components/userDropdown.tsx";
 
+export type FlowerReq = {
+  empName: string;
+  roomNum: string;
+  senderName: string;
+  priority: string;
+  sendTo: string;
+  attachedNote: string;
+  status: string;
+};
+
 function FlowerRequest() {
   const { getAccessTokenSilently } = useAuth0();
 
@@ -111,7 +121,7 @@ function FlowerRequest() {
       <BackgroundPattern />
       <div className="m-auto shadow-2xl flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-10 mt-[100px]">
         <h1
-          className="my-2 font-header text-primary font-bold text-3xl text-center transition-transform hover:scale-105"
+          className="my-2 font-header text-primary font-bold text-3xl text-center"
           style={{ marginBottom: "20px" }}
         >
           Flower Delivery Request

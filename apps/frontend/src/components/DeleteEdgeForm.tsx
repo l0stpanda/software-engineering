@@ -4,9 +4,13 @@ import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
-
+import { Alert, Snackbar } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
+import { MapEdge } from "../objects/MapEdge.ts";
 interface createEdgeProps {
   nodes: MapNode[];
+  update: boolean;
+  setUpdate: (a: boolean) => void;
 }
 
 // interface editNodeProps {
@@ -23,6 +27,20 @@ interface createEdgeProps {
 // }
 
 export default function DeleteEdgeForm(props: createEdgeProps) {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<AlertColor>("success");
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const showSnackbar = (message: string, severity: AlertColor) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
   const [edgeInfo, setEdgeInfo] = useState<MapNode[]>(props.nodes);
   const { getAccessTokenSilently } = useAuth0();
   useEffect(() => {
@@ -65,17 +83,36 @@ export default function DeleteEdgeForm(props: createEdgeProps) {
           },
         )
         .then(() => {
-          alert(
+          showSnackbar(
             "Successfully deleted edge from " +
               edgeInfo[0].getLongName() +
               " to " +
               edgeInfo[1].getLongName(),
+            "success",
           );
-          window.location.reload();
+          let edge: MapEdge | undefined = undefined;
+          edgeInfo[0].getEdgeList().forEach((e: MapEdge) => {
+            if (
+              e.getOther(edgeInfo[0]).getNodeID() === edgeInfo[1].getNodeID()
+            ) {
+              edge = e;
+            }
+          });
+
+          if (edge) {
+            edgeInfo[0]
+              .getEdgeList()
+              .splice(edgeInfo[0].getEdgeList().indexOf(edge), 1);
+            edgeInfo[1]
+              .getEdgeList()
+              .splice(edgeInfo[0].getEdgeList().indexOf(edge), 1);
+          }
+          props.setUpdate(!props.update);
         })
         .catch(() => {
-          alert(
+          showSnackbar(
             "There was a problem deleting the edge. Make sure the edge does not already exist.",
+            "error",
           );
         });
     }
@@ -86,7 +123,7 @@ export default function DeleteEdgeForm(props: createEdgeProps) {
       className="mr-8
                     ml-5
                     py-5
-                    px-0
+                    px-4
                     flex
                     flex-col
                     items-center
@@ -134,6 +171,19 @@ export default function DeleteEdgeForm(props: createEdgeProps) {
           Submit
         </Button>
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

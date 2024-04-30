@@ -103,13 +103,36 @@ export function getDirections(path: string[], graph: Graph) {
       }
     }
     if (i == path.length - 2) {
+      const beforeGoal = graph.getNode(path[i]);
       const goal = graph.getNode(path[i + 1]);
       if (!goal) throw new Error("You ain't getting here");
-      directions.push({
-        floor: goal.getFloor(),
-        directions: currDir,
-        nodes: currNodes,
-      });
+      if (!beforeGoal) throw new Error("You ain't getting to goal for sure");
+
+      if (beforeGoal.getFloor() != goal.getFloor()) {
+        currDir.push(
+          `Take ${beforeGoal.getLongName()} to floor ${goal.getFloor()}`,
+        );
+        directions.push({
+          floor: beforeGoal.getFloor(),
+          directions: currDir,
+          nodes: currNodes,
+        });
+        currDir = [`You have reached`];
+        currNodes = [goal.getLongName()];
+        directions.push({
+          floor: goal.getFloor(),
+          directions: currDir,
+          nodes: currNodes,
+        });
+      } else {
+        currDir.push(`You have reached`);
+        currNodes.push(goal.getLongName());
+        directions.push({
+          floor: goal.getFloor(),
+          directions: currDir,
+          nodes: currNodes,
+        });
+      }
     }
   }
   console.log(graph);

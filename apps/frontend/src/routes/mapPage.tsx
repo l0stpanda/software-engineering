@@ -7,6 +7,9 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Typography,
+  AccordionSummary,
+  Accordion,
 } from "@mui/material";
 import {
   TransformWrapper,
@@ -23,23 +26,37 @@ import floor1 from "../assets/01_thefirstfloor.png";
 import floor2 from "../assets/02_thesecondfloor.png";
 import floor3 from "../assets/03_thethirdfloor.png";
 
-import FloorNode from "../components/FloorNode.tsx";
+import FloorNode, { FloorNodeInfo } from "../components/FloorNode.tsx";
 import { SelectChangeEvent } from "@mui/material/Select";
 // import { ArrowBack } from "@mui/icons-material";
 import LocationDropdown from "../components/locationDropdown.tsx";
+import AccordionDirections from "../components/AccordionDirections.tsx";
 import ModeIcon from "@mui/icons-material/Mode";
-import StraightIcon from "@mui/icons-material/Straight";
-import TurnLeftIcon from "@mui/icons-material/TurnLeft";
-import TurnRightIcon from "@mui/icons-material/TurnRight";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useAuth0 } from "@auth0/auth0-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { userInfo } from "common/src/userInfo.ts";
 import { directionInfo, getDirections } from "../objects/Pathfinding.ts";
 import { JSX } from "react/jsx-runtime";
 import axios from "axios";
+// import console from "console";
+import { GeneralReq } from "./serviceRequests.tsx";
+import ModeDisplay from "../components/ModeDisplay.tsx";
+import AccordionServiceRequests from "../components/AccordionServiceRequests.tsx";
 
-function Map() {
+// type roomSched = {
+//   id: number;
+//   startTime: string;
+//   lengthRes: string;
+//   room_name: string;
+// };
+// type serviceRequestData = {
+//   id: number;
+//   status: string;
+//   priority: string;
+//   roomSched: roomSched[];
+// };
+
+function MapPage() {
   const divRef = useRef<HTMLDivElement>(null);
   const transformRef = useRef<ReactZoomPanPinchRef>(null);
   const [divDimensions, setDivDimensions] = useState({ width: 0, height: 0 });
@@ -56,8 +73,15 @@ function Map() {
   const [directions, setDirections] = useState<directionInfo[]>([]);
   const [path, setPath] = useState<string[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
+  // const [schedules, setSchedules] = useState<serviceRequestData[]>([]);
+  // const [bookings, setBookings] = useState<JSX.Element[]>([]);
 
+  const [navigatingNodes, setNavigatingNodes] = useState({
+    start: "",
+    end: "",
+  });
   const { getAccessTokenSilently, user } = useAuth0();
+  const [records, setRecords] = useState<GeneralReq[]>([]);
 
   // Zoom in/out buttons for map viewing
   const Controls = () => {
@@ -90,26 +114,6 @@ function Map() {
       </div>
     );
   };
-
-  const [navigatingNodes, setNavigatingNodes] = useState({
-    start: "",
-    end: "",
-  });
-  // const [submitValues, setSubmitValues] = useState(["", ""]);
-
-  // Carter's function code bc idk how to do it
-  // function handleFormChanges(event: React.ChangeEvent<HTMLInputElement>) {
-  //   const { name, value } = event.target;
-  //   setNavigatingNodes({ ...navigatingNodes, [name]: value });
-  // }
-
-  // Handles changes to the start/end destination boxes
-  // function handleFormSubmit() {
-  //   const cleanStart = navigatingNodes.start.replace("\r", "");
-  //   const cleanEnd = navigatingNodes.end.replace("\r", "");
-  //   //console.log(cleanStart, cleanEnd);
-  //   setNavigatingNodes({ start: cleanStart, end: cleanEnd });
-  // }
 
   // Changes the map image
   const changeFloor = (floor: string) => {
@@ -166,6 +170,27 @@ function Map() {
         });
     }
     sendUser().then();
+
+    const fetchData = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+        const response = await axios.get("/api/fetchAll", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setRecords(response.data); // Assuming the data is an array of request data
+        // setPermRecords(response.data); // Assuming the data is an array of request data
+        // console.log(response.data);
+      } catch (error) {
+        // log(400);
+        // console.error("Error fetching requests", error);
+      }
+    };
+
+    fetchData().then().catch();
+    // log(error);
+    // console.error("Error from fetchData promise:", error);
   }, [getAccessTokenSilently, user?.email, user?.nickname, user?.sub]);
 
   // Updates the graph when it has been received from the database
@@ -177,6 +202,29 @@ function Map() {
       //console.log(update);
     });
   }, [update]);
+
+  // useEffect(() => {
+  //   // Fetch data from the API
+  //   const fetchData = async () => {
+  //     try {
+  //       const token = await getAccessTokenSilently();
+  //       const response = await axios.get("/api/roomSchedulingRequest", {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+  //
+  //       console.log(response.data);
+  //       setSchedules(response.data); // Assuming the data is an array of room booking data
+  //     } catch (error) {
+  //       console.error("Error fetching room schedules", error);
+  //     }
+  //   };
+  //
+  //   fetchData().catch((error) => {
+  //     console.error("Error from fetchData promise:", error);
+  //   });
+  // }, [getAccessTokenSilently]);
 
   useEffect(() => {
     setDirections(getDirections(path, graph));
@@ -203,7 +251,7 @@ function Map() {
         const yOffset =
           (divDimensions.height - (pathSize[1] - pathSize[3]) * scale) / 2;
 
-        log(xOffset);
+        // log(xOffset);
 
         transformRef.current.setTransform(
           -(pathSize[2] * scale) + xOffset,
@@ -216,9 +264,9 @@ function Map() {
     }
   }, [pathSize, divDimensions, imgState]);
 
-  function log(data: number) {
-    console.log(data);
-  }
+  // function log(data: number) {
+  //   console.log(data);
+  // }
 
   const changeAlgorithm = (event: SelectChangeEvent) => {
     setAlgorithm(event.target.value as string);
@@ -227,131 +275,25 @@ function Map() {
   // Test for showing directions
   function showDirections() {
     const output: JSX.Element[] = [];
-    directions.forEach((data: directionInfo) => {
-      output.push(
-        <div className="border-primary border-t border-b text-text font-header px-1 py-1">
-          <b>Floor {data.floor}: </b>
-        </div>,
-      );
-      for (let i = 0; i < data.directions.length; i++) {
-        if (data.directions[i] == "Continue straight at ") {
-          if (i + 1 == data.directions.length) {
-            output.push(
-              <>
-                <div className="flex text-text font-body px-1 py-2">
-                  <div className="float-left content-center">
-                    <StraightIcon sx={{ fontSize: 40 }}></StraightIcon>
-                  </div>
-                  <div className="flex text-center self-center">
-                    {data.directions[i]} {data.nodes[i]}
-                  </div>
-                </div>
-              </>,
-            );
-          } else {
-            output.push(
-              <>
-                <div className="flex border-primary border-b text-text font-body px-1 py-2">
-                  <div className="float-left content-center">
-                    <StraightIcon sx={{ fontSize: 40 }}></StraightIcon>
-                  </div>
-                  <div className="flex text-center self-center">
-                    {data.directions[i]} {data.nodes[i]}
-                  </div>
-                </div>
-              </>,
-            );
-          }
-        } else if (data.directions[i] == "Turn left at ") {
-          if (i + 1 == data.directions.length) {
-            output.push(
-              <>
-                <div className="flex text-text font-body px-1 py-2">
-                  <div className="float-left content-center">
-                    <TurnLeftIcon sx={{ fontSize: 40 }}></TurnLeftIcon>
-                  </div>
-                  <div className="flex text-center self-center">
-                    {data.directions[i]} {data.nodes[i]}
-                  </div>
-                </div>
-              </>,
-            );
-          } else {
-            output.push(
-              <>
-                <div className="flex border-primary border-b text-text font-body px-1 py-2">
-                  <div className="float-left content-center">
-                    <TurnLeftIcon sx={{ fontSize: 40 }}></TurnLeftIcon>
-                  </div>
-                  <div className="flex text-center self-center">
-                    {data.directions[i]} {data.nodes[i]}
-                  </div>
-                </div>
-              </>,
-            );
-          }
-        } else if (data.directions[i] == "Turn right at ") {
-          if (i + 1 == data.directions.length) {
-            output.push(
-              <>
-                <div className="flex text-text font-body px-1 py-2">
-                  <div className="float-left content-center">
-                    <TurnRightIcon sx={{ fontSize: 40 }}></TurnRightIcon>
-                  </div>
-                  <div className="flex text-center self-center">
-                    {data.directions[i]} {data.nodes[i]}
-                  </div>
-                </div>
-              </>,
-            );
-          } else {
-            output.push(
-              <>
-                <div className="flex border-primary border-b text-text font-body px-1 py-2">
-                  <div className="float-left content-center">
-                    <TurnRightIcon sx={{ fontSize: 40 }}></TurnRightIcon>
-                  </div>
-                  <div className="flex text-center self-center">
-                    {data.directions[i]} {data.nodes[i]}
-                  </div>
-                </div>
-              </>,
-            );
-          }
-        } else {
-          if (i + 1 == data.directions.length) {
-            output.push(
-              <>
-                <div className="flex text-text font-body px-1 py-2">
-                  <div className="float-left content-center">
-                    <TrendingUpIcon sx={{ fontSize: 40 }}></TrendingUpIcon>
-                  </div>
-                  <div className="flex text-center self-center">
-                    {data.directions[i]} {data.nodes[i]}
-                  </div>
-                </div>
-              </>,
-            );
-          } else {
-            output.push(
-              <>
-                <div className="flex border-primary border-b text-text font-body px-1 py-2">
-                  <div className="float-left content-center">
-                    <TrendingUpIcon sx={{ fontSize: 40 }}></TrendingUpIcon>
-                  </div>
-                  <div className="flex text-center self-center">
-                    {data.directions[i]} {data.nodes[i]}
-                  </div>
-                </div>
-              </>,
-            );
-          }
-        }
-      }
-      return data;
-    });
+
+    if (mode === "path") {
+      directions.forEach((data: directionInfo) => {
+        output.push(
+          <AccordionDirections data={data} setImgState={changeFloor} />,
+        );
+      });
+    } else if (mode === "info") {
+      //empty the nodes
+      setNavigatingNodes({ start: "", end: "" });
+    }
     return output;
   }
+
+  //
+  // function returnBookings() {
+  //     console.log("bookings: ", bookings);
+  //   return bookings;
+  // }
 
   //Needs to be here for navigation dropdown
   function updateStartAndEnd(startNode: string, endNode: string) {
@@ -476,9 +418,34 @@ function Map() {
       </div>
     );
   }
+
   const [expanded, setExpanded] = useState(false);
   const isOpen = expanded;
-  const Accordion = () => {
+
+  const handleClearPath = () => {
+    setNavigatingNodes({ start: "", end: "" });
+  };
+
+  const [mode, setMode] = useState<string>("path");
+  const [clicked, setClicked] = useState<FloorNodeInfo | undefined>(undefined);
+  const [showInfo, setShowInfo] = useState<boolean>(false);
+
+  const handleMode = () => {
+    if (mode === "path") {
+      setMode("info");
+    } else if (mode === "info") {
+      setMode("path");
+    }
+  };
+
+  const handleNodeCallback = (node: FloorNodeInfo) => {
+    setClicked(node);
+    if (mode === "info") {
+      setShowInfo(true);
+    }
+  };
+
+  const AccordionFrame = () => {
     const handleInnerClick = (e: React.MouseEvent<HTMLElement>) => {
       e.stopPropagation();
     };
@@ -537,6 +504,7 @@ function Map() {
                     <MenuItem value="Dijkstra">Dijkstra</MenuItem>
                   </Select>
                 </FormControl>
+                <button onClick={handleClearPath}>Clear Path</button>
               </div>
             </motion.section>
           )}
@@ -559,6 +527,7 @@ function Map() {
             <div className="">
               {/*Buttons for displaying floor images*/}
               <FloorMapButtons />
+
               <Controls />
               <TransformComponent
                 wrapperStyle={{
@@ -582,6 +551,10 @@ function Map() {
                   pathSetter={setPath}
                   updateStartAndEnd={updateStartAndEnd}
                   updateEnd={updateEnd}
+                  reqs={records}
+                  mode={mode}
+                  nodeInfoCallback={handleNodeCallback}
+                  // getBookings={getBookings}
                 />
               </TransformComponent>
             </div>
@@ -589,7 +562,10 @@ function Map() {
         </div>
         {/*Location and Destination things*/}
         <div className=""></div>
+
         {/*boxes.*/}
+        <ModeDisplay handleMode={handleMode} mode={mode} />
+
         <div
           className="fixed top-20 left-10"
           onClick={() => setExpanded(!isOpen)}
@@ -599,7 +575,7 @@ function Map() {
               Navigation
             </h2>
           </div>
-          <Accordion />
+          <AccordionFrame />
         </div>
         <div className="fixed bottom-7 left-10">
           {isAdmin ? (
@@ -619,10 +595,11 @@ function Map() {
             <></>
           )}
         </div>
-        {directions.length != 0 ? (
-          <div
-            className="
-                    h-[250px]
+        {mode === "path" ? (
+          directions.length != 0 && (
+            <div
+              className="
+                    max-h-[250px]
                     w-[300px]
                     items-center
                     bg-background
@@ -632,16 +609,69 @@ function Map() {
                     rounded-lg
                     fixed
                     bottom-7
-                    right-32"
-          >
-            <div className="overflow-y-auto h-full">{showDirections()}</div>
-          </div>
+                    right-32
+                    overflow-y-auto
+                    inline-block"
+            >
+              <div className="overflow-y-auto">{showDirections()}</div>
+            </div>
+          )
         ) : (
-          <></>
+          <>
+            {clicked && showInfo && clicked.requests.length > 0 ? (
+              <div
+                className="
+                    max-h-[250px]
+                    w-[300px]
+                    items-center
+                    bg-background
+                    border-primary
+                    border-2
+                    overflow-clip
+                    rounded-lg
+                    fixed
+                    bottom-7
+                    right-32
+                    overflow-y-auto
+                    inline-block"
+              >
+                {clicked.requests.map((req) => {
+                  return <AccordionServiceRequests data={req} />;
+                })}
+              </div>
+            ) : (
+              clicked && (
+                <div
+                  className="
+                    max-h-[250px]
+                    w-[300px]
+                    items-center
+                    bg-background
+                    border-primary
+                    border-2
+                    overflow-clip
+                    rounded-lg
+                    fixed
+                    bottom-7
+                    right-32
+                    overflow-y-auto
+                    inline-block"
+                >
+                  <Accordion disableGutters={true}>
+                    <AccordionSummary>
+                      <Typography>
+                        No specific service requests available.
+                      </Typography>
+                    </AccordionSummary>
+                  </Accordion>
+                </div>
+              )
+            )}
+          </>
         )}
       </div>
     </div>
   );
 }
 
-export default Map;
+export default MapPage;

@@ -6,7 +6,7 @@ const theme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         root: {
-          position: "sticky",
+          position: "static",
         },
       },
     },
@@ -27,6 +27,9 @@ const theme = createTheme({
     },
     text: {
       primary: "#050315",
+    },
+    action: {
+      active: "#888888",
     },
   },
 });

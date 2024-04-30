@@ -6,6 +6,23 @@ import { medicalDeviceDelivery } from "common/src/medicalDeviceDelivery.ts";
 router.post("/", async function (req: Request, res: Response) {
   const input: medicalDeviceDelivery = req.body;
   try {
+    //Subtraction set value
+    const num = await PrismaClient.inventory.findMany({
+      where: {
+        name: input.medicalDeviceName,
+        type: "Medical Device",
+      },
+    });
+    console.log(input);
+    console.log(num);
+    const newQuant = num[0].quant - input.quantity;
+
+    if (newQuant < 0) {
+      console.log("Asking for too much");
+      res.sendStatus(416);
+      return;
+    }
+
     const roomStuff = await PrismaClient.nodes.findMany({
       where: {
         long_name: input.roomName,
@@ -64,6 +81,17 @@ router.post("/", async function (req: Request, res: Response) {
           quantity: Number(input.quantity),
           date: input.deliveryDate?.toString(),
           room_name: input.roomName,
+        },
+      });
+    }
+
+    if (newQuant >= 0) {
+      await PrismaClient.inventory.update({
+        where: {
+          name: input.medicalDeviceName,
+        },
+        data: {
+          quant: newQuant,
         },
       });
     }

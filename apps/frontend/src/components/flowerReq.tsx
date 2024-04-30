@@ -14,7 +14,9 @@ import {
   //InputLabel,
   TextField,
 } from "@mui/material";
-import { FormEvent, useState } from "react";
+import React, { FormEvent, useState } from "react";
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
 import axios from "axios";
 //import BackgroundPattern from "../components/allyBackground.tsx";
 import { flowerReqFields } from "common/src/flowerRequest.ts";
@@ -35,6 +37,17 @@ function FlowerReqForm() {
     attachedNote: "",
     status: "Unassigned",
   };
+
+  const Transition = React.forwardRef(function Transition(
+    props: TransitionProps & {
+      children: React.ReactElement<string, string>;
+    },
+    ref: React.Ref<unknown>,
+  ) {
+    return (
+      <Slide direction="up" ref={ref} {...props} children={props.children} />
+    );
+  });
 
   // State for form responses
   const [responses, setResponses] =
@@ -109,8 +122,8 @@ function FlowerReqForm() {
 
   return (
     <div className="w-full">
-      <div className="m-auto mt-6 flex flex-col px-10 h-full w-full justify-center py-4">
-        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center transition-transform hover:scale-110 -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+      <div className="m-auto mt-3 flex flex-col px-10 h-full w-full justify-center py-1">
+        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center">
           Flower Delivery Request
         </h1>
         <form onSubmit={handleSubmit}>
@@ -244,10 +257,20 @@ function FlowerReqForm() {
           </div>
         </form>
       </div>
-      <Dialog open={open} onClose={handleSubmitClose}>
+      <Dialog
+        open={open}
+        onClose={handleSubmitClose}
+        TransitionComponent={Transition}
+        keepMounted
+        aria-describedby="alert-dialog-slide-description"
+      >
         <DialogTitle>We received your request!</DialogTitle>
         <DialogContent>
           <strong>Here are your responses:</strong>
+          <br />
+          Name: {responses.empName}
+          <br />
+          Priority: {responses.priority}
           <br />
           Room Number: {responses.roomNum}
           <br />
@@ -256,6 +279,8 @@ function FlowerReqForm() {
           Send To: {responses.sendTo}
           <br />
           Note for Patient: {responses.attachedNote}
+          <br />
+          Status: {responses.status}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleSubmitClose} autoFocus>
@@ -263,6 +288,9 @@ function FlowerReqForm() {
           </Button>
         </DialogActions>
       </Dialog>
+      <div className="text-text ml-2 font-header place-self-right">
+        Credits: Whole Team
+      </div>
     </div>
   );
 }

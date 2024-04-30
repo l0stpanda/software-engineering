@@ -34,9 +34,11 @@
   },
   "packageManager": "yarn@4.0.2",
   "devDependencies": {
+    "@types/d3": "^7",
     "@types/json-stringify-safe": "^5",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
+    "@types/react-slick": "^0",
     "@vitest/ui": "^0.33.0",
     "eslint": "^8.56.0",
     "eslint-config-custom": "workspace:*",
@@ -52,6 +54,7 @@
   "dependencies": {
     "@material-ui/core": "^4.12.4",
     "@yarnpkg/pnpify": "^4.0.0-rc.45",
+    "d3": "^7.9.0",
     "dotenv": "^16.4.5",
     "dotenv-cli": "^7.4.0",
     "framer-motion": "^11.1.7",
@@ -60,6 +63,7 @@
     "react-bootstrap": "^2.10.0",
     "react-dom": "^18.2.0",
     "react-draggable": "^4.4.6",
+    "react-slick": "^0.30.2",
     "react-zoom-pan-pinch": "^3.4.4"
   }
 }

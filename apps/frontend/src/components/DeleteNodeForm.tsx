@@ -4,12 +4,33 @@ import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
-
+import { Alert, Snackbar } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
+import { Graph } from "../objects/Graph.ts";
+import { FloorNodeInfo } from "./FloorNode.tsx";
 interface deleteNodeProps {
   node: MapNode | undefined;
+  graph: Graph;
+  scaledNodes: { [a: string]: FloorNodeInfo | undefined };
+  update: boolean;
+  setUpdate: (a: boolean) => void;
 }
 
 export default function DeleteNodeForm(props: deleteNodeProps) {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<AlertColor>("success");
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const showSnackbar = (message: string, severity: AlertColor) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
   const [nodeInfo, setNodeInfo] = useState(props.node);
   const { getAccessTokenSilently } = useAuth0();
   useEffect(() => {
@@ -39,12 +60,20 @@ export default function DeleteNodeForm(props: deleteNodeProps) {
         },
       )
       .then(() => {
-        alert("Successfully deleted node " + nodeInfo?.getNodeID());
-        window.location.reload();
+        showSnackbar(
+          "Successfully deleted node " + nodeInfo?.getNodeID(),
+          "success",
+        );
+        if (nodeInfo) {
+          props.scaledNodes[nodeInfo?.getNodeID()] = undefined;
+          props.graph.removeNode(nodeInfo);
+          props.setUpdate(!props.update);
+        }
       })
       .catch(() => {
-        alert(
+        showSnackbar(
           "There was a problem deleting the node. Make sure the node already exist.",
+          "error",
         );
       });
   }
@@ -54,7 +83,7 @@ export default function DeleteNodeForm(props: deleteNodeProps) {
       className="mr-8
                     ml-5
                     py-5
-                    px-0
+                    px-4
                     flex
                     flex-col
                     items-center
@@ -93,6 +122,19 @@ export default function DeleteNodeForm(props: deleteNodeProps) {
           Submit
         </Button>
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

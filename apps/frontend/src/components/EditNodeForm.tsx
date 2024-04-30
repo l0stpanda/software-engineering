@@ -4,10 +4,20 @@ import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Alert, Snackbar } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
+import { Graph } from "../objects/Graph.ts";
+import { FloorNodeInfo } from "./FloorNode.tsx";
 
 interface editNodeProps {
   node: MapNode;
   mode: string | null;
+  graph: Graph;
+  sizeFactor: { width: number; height: number };
+  scaledNodes: {
+    [p: string]: FloorNodeInfo | undefined;
+  };
+  setScaledNodes: (a: { [p: string]: FloorNodeInfo | undefined }) => void;
 }
 
 interface editNodeFormProps {
@@ -28,6 +38,20 @@ export default function EditNodeForm(props: editNodeProps) {
   });
   const { getAccessTokenSilently } = useAuth0();
   const [editMode, setEditMode] = useState<string | null>(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<AlertColor>("success");
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const showSnackbar = (message: string, severity: AlertColor) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
   useEffect(() => {
     setEditMode(props.mode);
     setNodeInfo({
@@ -44,7 +68,7 @@ export default function EditNodeForm(props: editNodeProps) {
   }
 
   async function handleNodeSubmit() {
-    console.log(props.node.getX(), props.node.getY(), props.node.getBuilding());
+    console.log(props.node.getX(), props.node.getY(), props.sizeFactor);
     const token = await getAccessTokenSilently();
     if (editMode === "add_node") {
       // if we want to add a node
@@ -69,12 +93,32 @@ export default function EditNodeForm(props: editNodeProps) {
           },
         )
         .then(() => {
-          alert("Successfully added node " + nodeInfo.ID);
-          window.location.reload();
+          showSnackbar("Successfully added node " + nodeInfo.ID, "success");
+          props.graph.addNode(
+            new MapNode(
+              nodeInfo.ID,
+              props.node.getX(),
+              props.node.getY(),
+              nodeInfo.floor,
+              props.node.getBuilding(),
+              nodeInfo.nodeType,
+              nodeInfo.longName,
+              nodeInfo.shortName,
+            ),
+          );
+          props.scaledNodes[nodeInfo.ID] = {
+            x: props.node.getX() * props.sizeFactor.width,
+            y: props.node.getY() * props.sizeFactor.height,
+            key: nodeInfo.ID,
+            floor: nodeInfo.floor,
+            type: nodeInfo.nodeType,
+            requests: [],
+          };
         })
         .catch(() => {
-          alert(
+          showSnackbar(
             "There was a problem creating the node. Make sure the node does not already exist.",
+            "error",
           );
         });
     } else {
@@ -96,7 +140,16 @@ export default function EditNodeForm(props: editNodeProps) {
             },
           },
         )
-        .then();
+        .then(() => {
+          const node = props.graph.getNode(nodeInfo.ID);
+          if (node)
+            node.setInfo(
+              nodeInfo.floor,
+              nodeInfo.nodeType,
+              nodeInfo.longName,
+              nodeInfo.shortName,
+            );
+        });
     }
   }
 
@@ -105,7 +158,7 @@ export default function EditNodeForm(props: editNodeProps) {
       className="mr-8
                     ml-5
                     py-5
-                    px-0
+                    px-4
                     flex
                     flex-col
                     items-center
@@ -175,6 +228,19 @@ export default function EditNodeForm(props: editNodeProps) {
           Submit
         </Button>
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

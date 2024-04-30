@@ -64,6 +64,15 @@ CREATE TABLE "SanitationRequest" (
 );
 
 -- CreateTable
+CREATE TABLE "MaintenanceRequest" (
+    "id" INTEGER NOT NULL,
+    "date" TEXT NOT NULL,
+    "maintainType" TEXT NOT NULL,
+
+    CONSTRAINT "MaintenanceRequest_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "medicalDevice" (
     "id" INTEGER NOT NULL,
     "device" TEXT NOT NULL,
@@ -121,9 +130,18 @@ CREATE TABLE "Todo" (
     "priority" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "complete" BOOLEAN NOT NULL,
-    "subtasks" TEXT[],
 
     CONSTRAINT "Todo_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "subTodo" (
+    "id" SERIAL NOT NULL,
+    "id_relation" INTEGER NOT NULL,
+    "task" TEXT NOT NULL,
+    "complete" BOOLEAN NOT NULL,
+
+    CONSTRAINT "subTodo_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -154,6 +172,9 @@ ALTER TABLE "GeneralService" ADD CONSTRAINT "GeneralService_location_fkey" FOREI
 ALTER TABLE "SanitationRequest" ADD CONSTRAINT "SanitationRequest_id_fkey" FOREIGN KEY ("id") REFERENCES "GeneralService"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "MaintenanceRequest" ADD CONSTRAINT "MaintenanceRequest_id_fkey" FOREIGN KEY ("id") REFERENCES "GeneralService"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "medicalDevice" ADD CONSTRAINT "medicalDevice_id_fkey" FOREIGN KEY ("id") REFERENCES "GeneralService"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -167,6 +188,9 @@ ALTER TABLE "MedicineRequest" ADD CONSTRAINT "MedicineRequest_id_fkey" FOREIGN K
 
 -- AddForeignKey
 ALTER TABLE "Todo" ADD CONSTRAINT "Todo_email_fkey" FOREIGN KEY ("email") REFERENCES "User"("email") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "subTodo" ADD CONSTRAINT "subTodo_id_relation_fkey" FOREIGN KEY ("id_relation") REFERENCES "Todo"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Flowers" ADD CONSTRAINT "Flowers_id_fkey" FOREIGN KEY ("id") REFERENCES "GeneralService"("id") ON DELETE CASCADE ON UPDATE CASCADE;
