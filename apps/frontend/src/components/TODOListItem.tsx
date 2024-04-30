@@ -151,7 +151,7 @@ function TODOListItem(props: toDoNow) {
 
   function displayDate(date: Dayjs | null): string {
     if (date && date.toString() != "undefined") {
-      return dayjs(date.toString()).format("MMM D, YYYY HH:mma");
+      return dayjs(date.toString()).format("MMM D, YYYY hh:mma");
     } else {
       return "";
     }

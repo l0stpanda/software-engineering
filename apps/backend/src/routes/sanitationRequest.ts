@@ -49,6 +49,24 @@ router.post("/", async function (req: Request, res: Response) {
       },
     });
 
+    const findEmail = await PrismaClient.user.findMany({
+      where: {
+        username: input.employeeName,
+      },
+    });
+
+    await PrismaClient.todo.create({
+      data: {
+        task: "Complete sanitation request #" + id[0].id,
+        dueDate: "",
+        serv_req_id: id[0].id,
+        priority: input.priority,
+        notes: "",
+        complete: false,
+        email: findEmail[0].email,
+      },
+    });
+
     await PrismaClient.sanitationRequest.create({
       data: {
         id: id[0].id,
@@ -92,6 +110,11 @@ router.delete("/:id", async function (req: Request, res: Response) {
     await PrismaClient.generalService.delete({
       where: {
         id: id,
+      },
+    });
+    await PrismaClient.todo.deleteMany({
+      where: {
+        serv_req_id: id,
       },
     });
   } catch (e) {

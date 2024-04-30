@@ -48,6 +48,25 @@ router.post("/", async function (req: Request, res: Response) {
         priority: input.priority,
       },
     });
+
+    const findEmail = await PrismaClient.user.findMany({
+      where: {
+        username: input.name,
+      },
+    });
+
+    await PrismaClient.todo.create({
+      data: {
+        task: "Complete maintenance request #" + id[0].id,
+        dueDate: "",
+        serv_req_id: id[0].id,
+        priority: input.priority,
+        notes: input.maintainType + " needed at " + input.location,
+        complete: false,
+        email: findEmail[0].email,
+      },
+    });
+
     console.log(input);
     if (input.date != undefined) {
       await PrismaClient.maintenanceRequest.create({
@@ -91,6 +110,11 @@ router.delete("/:id", async function (req: Request, res: Response) {
     await PrismaClient.generalService.delete({
       where: {
         id: id,
+      },
+    });
+    await PrismaClient.todo.deleteMany({
+      where: {
+        serv_req_id: id,
       },
     });
   } catch (e) {
