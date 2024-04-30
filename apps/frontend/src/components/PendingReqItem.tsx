@@ -77,8 +77,7 @@ function PendingFlowerReq(props: GeneralReq) {
       console.log(e);
       return;
     }
-    alert("Successfully deleted flower request with ID number " + id);
-    //window must be reloaded on delete to show updated results
+
     window.location.reload();
   }
 
