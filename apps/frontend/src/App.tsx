@@ -31,6 +31,8 @@ import PendingSanitationRequest from "./routes/displaySanitationReqs.tsx";
 import AboutPage from "./routes/aboutPage.tsx";
 import ServiceRequests from "./routes/serviceRequests.tsx";
 import CreditPage from "./routes/creditPage.tsx";
+import BarChartReqs from "./components/graphsRecharts.tsx";
+import BarChartPieChart from "./components/graphsRecharts.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -139,6 +141,10 @@ function App() {
             <LoadingPage component={ServiceRequests} adminOnly={false} />
           ),
         },
+          {
+              path: "graphs",
+              element: <LoadingPage component={BarChartReqs} adminOnly={false} />,
+          },
         {
           path: "credit",
           element: <LoadingPage component={CreditPage} adminOnly={false} />,
@@ -149,6 +155,12 @@ function App() {
             <LoadingPage component={LangInterpreterReq} adminOnly={false} />
           ),
         },
+          {
+              path: "graphs",
+                element: (
+                    <LoadingPage component={BarChartPieChart} adminOnly={true} />
+                ),
+          },
       ],
     },
   ]);
