@@ -250,11 +250,10 @@ function MedicineDeliveryReq() {
                   name="status"
                   required
                 >
-                  <MenuItem value="">None</MenuItem>
-                  <MenuItem value="Unassigned">Unassigned</MenuItem>
-                  <MenuItem value="Assigned">Assigned</MenuItem>
-                  <MenuItem value="InProgress">InProgress</MenuItem>
-                  <MenuItem value="Closed">Closed</MenuItem>
+                  <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
+                  <MenuItem value={"Assigned"}>Assigned</MenuItem>
+                  <MenuItem value={"InProgress"}>In Progress</MenuItem>
+                  <MenuItem value={"Closed"}>Closed</MenuItem>
                 </Select>
               </FormControl>
             </form>

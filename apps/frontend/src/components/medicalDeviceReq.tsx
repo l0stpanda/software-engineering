@@ -19,7 +19,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { medicalDeviceDelivery } from "common/src/medicalDeviceDelivery.ts";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import axios from "axios";
 import UserDropdown from "../components/userDropdown.tsx";
@@ -35,7 +35,7 @@ function MedicalDeviceReq() {
     quantity: 1,
     priority: "Medium",
     status: "Unassigned",
-    deliveryDate: dayjs(),
+    deliveryDate: null,
   });
 
   const Transition = React.forwardRef(function Transition(
@@ -135,6 +135,7 @@ function MedicalDeviceReq() {
       formData.status == "" ||
       formData.deliveryDate == null
     ) {
+      alert("All fields need to be filled");
       return;
     }
     if (

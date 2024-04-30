@@ -20,7 +20,7 @@ import UserDropdown from "../components/userDropdown.tsx";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -45,7 +45,7 @@ export default function RoomSchedulingReq() {
 
   const [responses, setResponses] = useState<roomReqFields>({
     employName: "",
-    startTime: dayjs(),
+    startTime: null,
     lengthRes: "",
     roomNum: "",
     reqStatus: "Unassigned",
@@ -238,11 +238,10 @@ export default function RoomSchedulingReq() {
               onChange={handleResponseChanges}
               required
             >
-              <MenuItem value="">Not Selected</MenuItem>
-              <MenuItem value="Unassigned">Unassigned</MenuItem>
-              <MenuItem value="Assigned">Assigned</MenuItem>
-              <MenuItem value="In Progress">In Progress</MenuItem>
-              <MenuItem value="Closed">Closed</MenuItem>
+              <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
+              <MenuItem value={"Assigned"}>Assigned</MenuItem>
+              <MenuItem value={"InProgress"}>In Progress</MenuItem>
+              <MenuItem value={"Closed"}>Closed</MenuItem>
             </Select>
           </FormControl>
 

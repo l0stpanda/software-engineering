@@ -1,7 +1,7 @@
 // import React from 'react';
 // // import axios from "axios";
 // // import { useAuth0 } from "@auth0/auth0-react";
-// // import * as d3 from 'd3';
+// import recharts from "recharts";
 //  //WORK IN PROGRESS
 // const barWidth = 60;
 //

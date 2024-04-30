@@ -558,8 +558,8 @@ function MapPage() {
   };
 
   return (
-    <div>
-      <div>
+    <div className="">
+      <div className="">
         {/*Map Image Box*/}
         <div
           ref={divRef}
