@@ -524,13 +524,40 @@ function EditMap() {
                   color="primary"
                 >
                   <ToggleButton value="add_node">
-                    <IconButton>{<AddCircleOutlineIcon />}</IconButton>
+                    <IconButton
+                      className="hover:scale-110 duration-200 transition-transform"
+                      sx={{
+                        "&:hover, &:active": {
+                          color: "#002866",
+                        },
+                      }}
+                    >
+                      {<AddCircleOutlineIcon color="primary" />}
+                    </IconButton>
                   </ToggleButton>
                   <ToggleButton value="delete_node">
-                    <IconButton>{<RemoveCircleOutlineIcon />}</IconButton>
+                    <IconButton
+                      className="hover:scale-110 duration-200 transition-transform"
+                      sx={{
+                        "&:hover, &:active": {
+                          color: "#002866",
+                        },
+                      }}
+                    >
+                      {<RemoveCircleOutlineIcon color="primary" />}
+                    </IconButton>
                   </ToggleButton>
                   <ToggleButton value="move_node">
-                    <IconButton>{<PanToolIcon />}</IconButton>
+                    <IconButton
+                      className="hover:scale-110 duration-200 transition-transform"
+                      sx={{
+                        "&:hover, &:active": {
+                          color: "#002866",
+                        },
+                      }}
+                    >
+                      {<PanToolIcon color="primary" />}
+                    </IconButton>
                   </ToggleButton>
                 </ToggleButtonGroup>
               </div>
@@ -547,10 +574,28 @@ function EditMap() {
                   {/*    Edge Editing*/}
                   {/*</h1>*/}
                   <ToggleButton value="add_edge">
-                    <IconButton>{<AddRoadIcon />}</IconButton>
+                    <IconButton
+                      className="hover:scale-110 duration-200 transition-transform"
+                      sx={{
+                        "&:hover, &:active": {
+                          color: "#002866",
+                        },
+                      }}
+                    >
+                      {<AddRoadIcon color="primary" />}
+                    </IconButton>
                   </ToggleButton>
                   <ToggleButton value="delete_edge">
-                    <IconButton>{<RemoveRoadIcon />}</IconButton>
+                    <IconButton
+                      className="hover:scale-110 duration-200 transition-transform"
+                      sx={{
+                        "&:hover, &:active": {
+                          color: "#002866",
+                        },
+                      }}
+                    >
+                      {<RemoveRoadIcon color="primary" />}
+                    </IconButton>
                   </ToggleButton>
                 </ToggleButtonGroup>
               </div>
