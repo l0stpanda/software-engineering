@@ -87,10 +87,6 @@ export class Graph {
     return this.nameMap.get(name);
   }
 
-  nameFromId(id: string) {
-    return this.adjMap.get(id)?.getLongName();
-  }
-
   getNodesByFloor(floor: string): MapNode[] {
     const nodes = this.adjMap.values();
     const result: MapNode[] = [];
@@ -102,5 +98,14 @@ export class Graph {
     }
 
     return result;
+  }
+
+  removeNode(node: MapNode) {
+    this.adjMap.delete(node.getNodeID());
+    this.nameMap.delete(node.getLongName());
+    node.getEdgeList().forEach((edge: MapEdge) => {
+      const other = edge.getOther(node);
+      other.getEdgeList().splice(other.getEdgeList().indexOf(edge), 1);
+    });
   }
 }

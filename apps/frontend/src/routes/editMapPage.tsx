@@ -19,6 +19,7 @@ import EditNodeForm from "../components/EditNodeForm.tsx";
 import CreateEdgeForm from "../components/CreateEdgeForm.tsx";
 import DeleteEdgeForm from "../components/DeleteEdgeForm.tsx";
 import DeleteNodeForm from "../components/DeleteNodeForm.tsx";
+import { FloorNodeInfo } from "../components/FloorNode.tsx";
 
 // import {ZoomPanPinch} from "react-zoom-pan-pinch/dist/src/core/instance.core";
 // import CanvasMap from "../components/CanvasMap.tsx";
@@ -40,6 +41,14 @@ function EditMap() {
     new MapNode("", 0, 0, "", "", "", "", ""),
   ]);
   const [isMoveable, setIsMoveable] = useState(false);
+  const [sizeFactor, setSizeFactor] = useState<{
+    width: number;
+    height: number;
+  }>({ width: Number.NaN, height: Number.NaN });
+  const [scaledNodes, setScaledNodes] = useState<{
+    [key: string]: FloorNodeInfo | undefined;
+  }>({});
+  const [update, setUpdate] = useState(false);
 
   // Zoom in/out buttons for map viewing
   const Controls = () => {
@@ -267,6 +276,10 @@ function EditMap() {
                     nodeInfoCallback={handleNodeCallback}
                     mouseCallback={handlePopup}
                     mode={mode}
+                    scaledNodes={scaledNodes}
+                    setScaledNodes={setScaledNodes}
+                    setSizeFactor={setSizeFactor}
+                    sizeFactor={sizeFactor}
                   />
                 </TransformComponent>
               </div>
@@ -285,13 +298,30 @@ function EditMap() {
             <EditNodeForm
               node={new MapNode("", world.x, world.y, "", "", "", "", "")}
               mode={mode}
+              graph={graph}
+              sizeFactor={sizeFactor}
+              scaledNodes={scaledNodes}
+              setScaledNodes={setScaledNodes}
             />
           )}
           {clicked && mode !== "add_node" && mode !== "delete_node" && (
-            <EditNodeForm node={clicked} mode={mode} />
+            <EditNodeForm
+              node={clicked}
+              mode={mode}
+              graph={graph}
+              sizeFactor={sizeFactor}
+              scaledNodes={scaledNodes}
+              setScaledNodes={setScaledNodes}
+            />
           )}
           {mode === "delete_node" && openDeleteNode && (
-            <DeleteNodeForm node={clicked} />
+            <DeleteNodeForm
+              node={clicked}
+              graph={graph}
+              scaledNodes={scaledNodes}
+              update={update}
+              setUpdate={setUpdate}
+            />
           )}
           {/*Form for creating edge*/}
           {openEdgeCreation && <CreateEdgeForm nodes={edgeNodes} />}
