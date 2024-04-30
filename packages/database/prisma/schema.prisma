@@ -156,6 +156,8 @@ model User {
 model Todo {
   id       Int       @id @default(autoincrement())
   task     String
+  notes    String
+  dueDate  String
   priority String
   email    String
   complete Boolean

@@ -328,7 +328,7 @@ function ServiceRequests() {
                   sx={{
                     transition: "transform 0.3s ease-in-out",
                     color: "#FFFFFF",
-                      "&:hover": {
+                    "&:hover": {
                       transform: "scale(1.4)",
                       position: "relative",
                       zIndex: 1,
