@@ -1,111 +1,68 @@
-import React, { useEffect, useState } from "react";
-import { IconButton, TextField } from "@mui/material";
-import axios from "axios";
-import { useAuth0 } from "@auth0/auth0-react";
 import { DeleteOutline } from "@mui/icons-material";
-
+import React, { useState } from "react";
+import {
+  Button,
+  IconButton,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+} from "@mui/material";
 interface InventoryItemProps {
   id: number;
   name: string;
   type: string;
   quant: number;
   onDelete: (id: number) => Promise<void>;
+  onAdd: (id: number, quantToAdd: number) => Promise<void>;
 }
 
 function InventoryItem(props: InventoryItemProps) {
-  const [quantity, setQuantity] = useState(props.quant.toString());
-  const { getAccessTokenSilently, user } = useAuth0();
-  const LOW_QUANTITY_THRESHOLD = 10;
-  useEffect(() => {
-    // Fetch data from the API
-    const fetchData = async () => {
-      try {
-        const token = await getAccessTokenSilently();
-        await axios.get("/api/inventory", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      } catch (error) {
-        console.error("Error fetching inventory list", error);
-      }
-    };
-    fetchData().catch((error) => {
-      console.error("Error from fetchData promise:", error);
-    });
-  }, [getAccessTokenSilently, user]);
+  const lowToRed = 10;
+  const lowToYellow = 50;
 
-  async function updateQuant(newQuant: number) {
-    try {
-      const token = await getAccessTokenSilently();
-      const response = await axios.post(
-        `/api/inventory/update`,
-        {
-          name: props.name,
-          quant: newQuant,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-      console.log("Update successful:", response.data);
-    } catch (e) {
-      console.error(e);
-      alert("Problem updating quantity");
+  const [open, setOpen] = useState(false);
+  const [quantityToAdd, setQuantityToAdd] = useState<number>(0);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const handleAddQuantity = async () => {
+    if (quantityToAdd > 0) {
+      await props.onAdd(props.id, quantityToAdd);
+      setQuantityToAdd(0); // Reset input after submission
     }
-  }
-
-  async function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const input = event.target.value;
-    const token = await getAccessTokenSilently();
-    let prevNumber: number = 0;
-    let send: number;
-    if (input.trim() === "") {
-      setQuantity("");
-    } else {
-      send = parseInt(input, 10);
-      if (!isNaN(send)) {
-        setQuantity(input);
-      }
-      const values = await axios.get("/api/inventory", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(values.data);
-      for (let i = 0; i < values.data.length; i++) {
-        if (values.data[i].name == props.name) {
-          prevNumber = values.data[i].quant;
-        }
-      }
-      if (prevNumber != undefined && prevNumber < send) {
-        updateQuant(send).then();
-      }
-    }
-  }
-
-  const rowStyle =
-    props.quant < LOW_QUANTITY_THRESHOLD ? { backgroundColor: "yellow" } : {};
+    handleClose();
+  };
+  const quantityStyle = {
+    backgroundColor:
+      props.quant < lowToRed
+        ? "red"
+        : props.quant < lowToYellow
+          ? "yellow"
+          : "transparent",
+  };
 
   return (
     <>
       <tr className="bg-background border-b-2 border-secondary" key={props.id}>
         <td className="p-3 text-sm">{props.name}</td>
         <td className="p-3 text-sm">{props.type}</td>
+        <td className="p-3 text-sm" style={quantityStyle}>
+          {props.quant}
+        </td>
         <td className="p-3 text-sm">
-          <TextField
-            style={{ width: "250px", ...rowStyle }}
-            onChange={handleChange}
-            value={quantity}
-            variant="filled"
-            fullWidth={true}
-            required
-            label="Quantity"
-            name="quant"
-            type="text"
-          />
+          <Button
+            variant="contained"
+            color="primary"
+            component="span"
+            sx={{ borderRadius: "30px", margin: "auto 0" }}
+            className="w-50 text-center self-end"
+            onClick={handleOpen}
+          >
+            Add
+          </Button>
         </td>
         <td className="p-3 text-sm">
           <IconButton
@@ -116,6 +73,26 @@ function InventoryItem(props: InventoryItemProps) {
           </IconButton>
         </td>
       </tr>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Add Quantity</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="quantityToAdd"
+            label="Additional Quantity"
+            type="number"
+            fullWidth
+            value={quantityToAdd}
+            onChange={(e) => setQuantityToAdd(parseInt(e.target.value, 10))}
+            inputProps={{ min: "0" }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleAddQuantity}>Submit</Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

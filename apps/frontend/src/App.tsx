@@ -9,6 +9,7 @@ import HeroPage from "./routes/heroPage.tsx";
 import MapPage from "./routes/mapPage.tsx";
 import FlowerRequest from "./routes/flowerRequest.tsx";
 import PendingFlowerRequests from "./routes/displayFlowerRequests.tsx";
+import LangInterpreterReq from "./routes/langInterpreterRequest.tsx";
 //import ImportRouteE from "./routes/importRouteE.tsx";
 import CustomNavBar from "./components/navBar.tsx";
 import ExportRouteE from "./routes/exportRouteE.tsx";
@@ -141,6 +142,12 @@ function App() {
         {
           path: "credit",
           element: <LoadingPage component={CreditPage} adminOnly={false} />,
+        },
+        {
+          path: "lang",
+          element: (
+            <LoadingPage component={LangInterpreterReq} adminOnly={false} />
+          ),
         },
       ],
     },

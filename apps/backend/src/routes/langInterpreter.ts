@@ -1,27 +1,13 @@
+import { langInterpreterType } from "common/src/langInterpreterType.ts";
 import express, { Router, Request, Response } from "express";
 import PrismaClient from "../bin/database-connection.ts";
-import { MedicineDelivery } from "../../../frontend/src/common/MedicineDelivery.ts";
 
 const router: Router = express.Router();
 
 router.post("/", async function (req: Request, res: Response) {
-  const input: MedicineDelivery = req.body;
+  const input: langInterpreterType = req.body;
 
   try {
-    //Subtraction set value
-    const num = await PrismaClient.inventory.findMany({
-      where: {
-        name: input.medicineName,
-        type: "Medicine",
-      },
-    });
-    const newQuant = num[0].quant - parseInt(input.quantity);
-
-    if (newQuant < 0) {
-      console.log("Asking for too much");
-      res.sendStatus(416);
-    }
-
     const roomStuff = await PrismaClient.nodes.findMany({
       where: {
         long_name: input.location,
@@ -30,10 +16,10 @@ router.post("/", async function (req: Request, res: Response) {
 
     const id1 = await PrismaClient.generalService.findMany({
       where: {
-        type: "Medicine Request",
+        type: "Language Interpreter",
         location: roomStuff[0].node_id,
         status: input.status,
-        emp_name: input.employeeName,
+        emp_name: input.name,
         priority: input.priority,
       },
     });
@@ -46,41 +32,33 @@ router.post("/", async function (req: Request, res: Response) {
 
     await PrismaClient.generalService.create({
       data: {
-        type: "Medicine Request",
+        type: "Language Interpreter",
         location: roomStuff[0].node_id,
-        status: input.status,
         long_name_loc: input.location,
-        emp_name: input.employeeName,
+        emp_name: input.name,
+        status: input.status,
         priority: input.priority,
       },
     });
 
     const findID = await PrismaClient.generalService.findMany({
       where: {
-        type: "Medicine Request",
+        type: "Language Interpreter",
         location: roomStuff[0].node_id,
         status: input.status,
-        emp_name: input.employeeName,
+        emp_name: input.name,
         priority: input.priority,
       },
     });
 
-    await PrismaClient.medicineRequest.create({
-      data: {
-        id: findID[0].id,
-        medicine_name: input.medicineName,
-        quantity: parseInt(input.quantity),
-        room_name: input.location,
-      },
-    });
-
-    if (newQuant >= 0) {
-      await PrismaClient.inventory.update({
-        where: {
-          name: input.medicineName,
-        },
+    if (input.date != undefined) {
+      await PrismaClient.langInterpreter.create({
         data: {
-          quant: newQuant,
+          id: findID[0].id,
+          date: input.date.toString(),
+          language: input.language,
+          modeOfInterp: input.modeOfInterp,
+          specInstruct: input.specInstruct,
         },
       });
     }
@@ -95,10 +73,10 @@ router.post("/", async function (req: Request, res: Response) {
 router.get("/", async function (req: Request, res: Response) {
   const data = await PrismaClient.generalService.findMany({
     where: {
-      type: "Medicine Request",
+      type: "Language Interpreter",
     },
     include: {
-      medicineReqID: true,
+      langInterpreterID: true,
     },
   });
   try {
