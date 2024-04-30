@@ -1,8 +1,18 @@
 import trashIcon from "../assets/trashicon.png";
-import { Select, MenuItem, SelectChangeEvent } from "@mui/material";
+import {
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+} from "@mui/material";
 import React, { useState } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
+// import {flowerReqFields} from "common/src/flowerRequest.ts";
 
 type FlowerArray = {
   sent_by: string;
@@ -30,6 +40,8 @@ function PendingFlowerReq(props: FlowerReqData) {
   }
 
   const [status, setStatus] = useState<string>(props.status);
+  const [open, setOpen] = useState(false);
+  const [inData, setInData] = useState<FlowerReqData>(props);
 
   async function handleStatusDropdown(e: SelectChangeEvent) {
     const token = await getAccessTokenSilently();
@@ -75,8 +87,23 @@ function PendingFlowerReq(props: FlowerReqData) {
     window.location.reload();
   }
 
+  function handleClick() {
+    console.log("please work on god");
+    setOpen(true);
+    setInData(props);
+  }
+
+  function handleSubmitClose() {
+    setOpen(false);
+  }
+
   return (
-    <tr className="bg-background border-b-2 border-secondary" key={props.id}>
+    // <a href="#" onClick={handleClick} style={{ textDecoration: 'none', color: 'inherit' }}>
+    <tr
+      className="bg-background border-b-2 border-secondary"
+      key={props.id}
+      onClick={handleClick}
+    >
       <td className="p-3 text-sm">{props.id}</td>
       <td className="p-3 text-sm">
         <Select
@@ -110,6 +137,31 @@ function PendingFlowerReq(props: FlowerReqData) {
           />
         </button>
       </td>
+
+      <Dialog
+        open={open}
+        onClose={handleSubmitClose}
+        keepMounted
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>We received your request!</DialogTitle>
+        <DialogContent>
+          <strong>Here are your responses:</strong>
+          <br />
+          Room Number: {inData.flowerID[0].room_name}
+          <br />
+          Sent By: {inData.flowerID[0].sent_by}
+          <br />
+          Send To: {inData.flowerID[0].sent_to}
+          <br />
+          Note for Patient: {inData.flowerID[0].note}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSubmitClose} autoFocus>
+            Okay
+          </Button>
+        </DialogActions>
+      </Dialog>
     </tr>
   );
 }
