@@ -103,8 +103,11 @@ export function getDirections(path: string[], graph: Graph) {
       }
     }
     if (i == path.length - 2) {
+      const beforeGoal = graph.getNode(path[i]);
       const goal = graph.getNode(path[i + 1]);
       if (!goal) throw new Error("You ain't getting here");
+      if (!beforeGoal) throw new Error("You ain't getting to goal for sure");
+
       directions.push({
         floor: goal.getFloor(),
         directions: currDir,

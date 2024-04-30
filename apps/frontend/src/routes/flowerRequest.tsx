@@ -23,6 +23,16 @@ import LocationDropdown from "../components/locationDropdown.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import UserDropdown from "../components/userDropdown.tsx";
 
+export type FlowerReq = {
+  empName: string;
+  roomNum: string;
+  senderName: string;
+  priority: string;
+  sendTo: string;
+  attachedNote: string;
+  status: string;
+};
+
 function FlowerRequest() {
   const { getAccessTokenSilently } = useAuth0();
 

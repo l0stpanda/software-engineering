@@ -28,7 +28,7 @@ interface FloorNodesProps {
   reqs: GeneralReq[];
   mode: string;
   nodeInfoCallback: (node: FloorNodeInfo) => void;
-  getBookings: (longName: string) => void;
+  // getBookings: (longName: string) => void;
 }
 
 export interface FloorNodeInfo {
@@ -109,7 +109,7 @@ function FloorNode(props: FloorNodesProps) {
         props.nodeInfoCallback(scaledNodes[nodeid]);
         // need to log so it can be used
         console.log(clicked);
-        props.getBookings(longName);
+        // props.getBookings(longName);
       }
     }
   };
