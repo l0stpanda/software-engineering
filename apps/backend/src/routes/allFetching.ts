@@ -91,6 +91,11 @@ router.delete("/:id", async function (req: Request, res: Response) {
         id: id,
       },
     });
+    await PrismaClient.todo.deleteMany({
+      where: {
+        serv_req_id: id,
+      },
+    });
   } catch (e) {
     console.log(e);
     res.sendStatus(400);

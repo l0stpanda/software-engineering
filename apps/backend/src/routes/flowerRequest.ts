@@ -62,6 +62,7 @@ router.post("/", async function (req: Request, res: Response) {
       data: {
         task: "Complete flower delivery request #" + findID[0].id,
         dueDate: "",
+        serv_req_id: findID[0].id,
         priority: input.priority,
         notes: "Deliver flowers to " + input.sendTo + " in " + input.roomNum,
         complete: false,
@@ -110,6 +111,12 @@ router.delete("/:id", async function (req: Request, res: Response) {
     await PrismaClient.generalService.delete({
       where: {
         id: id,
+      },
+    });
+
+    await PrismaClient.todo.deleteMany({
+      where: {
+        serv_req_id: id,
       },
     });
   } catch (e) {
