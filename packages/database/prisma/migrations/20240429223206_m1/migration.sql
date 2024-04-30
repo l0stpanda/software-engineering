@@ -98,6 +98,7 @@ CREATE TABLE "RoomScheduler" (
     "id" INTEGER NOT NULL,
     "startTime" TEXT NOT NULL,
     "lengthRes" TEXT NOT NULL,
+    "endTime" TEXT NOT NULL,
     "room_name" TEXT NOT NULL,
 
     CONSTRAINT "RoomScheduler_pkey" PRIMARY KEY ("id")
