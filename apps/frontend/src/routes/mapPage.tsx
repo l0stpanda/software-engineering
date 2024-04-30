@@ -424,7 +424,6 @@ function MapPage() {
 
   const handleClearPath = () => {
     setNavigatingNodes({ start: "", end: "" });
-    setDirections([]);
   };
 
   const [mode, setMode] = useState<string>("path");
@@ -433,11 +432,8 @@ function MapPage() {
 
   const handleMode = () => {
     if (mode === "path") {
-      handleClearPath();
       setMode("info");
-      setDirections([]);
     } else if (mode === "info") {
-      setDirections([]);
       setMode("path");
     }
   };

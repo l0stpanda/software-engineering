@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { ReactElement, useCallback, useEffect, useRef, useState } from "react";
 import { Graph } from "../objects/Graph.ts";
 import { FloorNodeInfo } from "./FloorNode.tsx";
 import { MapEdge } from "../objects/MapEdge.ts";
@@ -26,6 +26,12 @@ interface EditMapViewGraphProps {
   nodeInfoCallback: (childData: string) => void;
   mouseCallback: (x: number, y: number) => void;
   mode: string | null;
+  scaledNodes: {
+    [p: string]: FloorNodeInfo | undefined;
+  };
+  setScaledNodes: (a: { [p: string]: FloorNodeInfo | undefined }) => void;
+  setSizeFactor: (a: { width: number; height: number }) => void;
+  sizeFactor: { width: number; height: number };
 }
 
 function EditMapViewGraph(props: EditMapViewGraphProps) {
@@ -67,6 +73,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     if (divRef.current) {
       const resizeObserver = new ResizeObserver(() => {
         if (divRef.current) {
+          console.log("oops");
           const { clientWidth, clientHeight } = divRef.current;
           setDivDimensions({ width: clientWidth, height: clientHeight });
         }
@@ -80,18 +87,34 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     const img = new Image();
     img.src = props.imageSrc;
     img.onload = () => {
-      setImgDimensions({ width: img.width, height: img.height });
+      if (imgDimensions.width == 0) {
+        setImgDimensions({ width: img.width, height: img.height });
+      }
     };
-  }, [props.imageSrc]);
-
-  const [scaledNodes, setScaledNodes] = useState<{
-    [key: string]: FloorNodeInfo;
-  }>({});
+  }, [imgDimensions, props.imageSrc]);
 
   useEffect(() => {
+    let repeat = false;
     const tempNodePosList: { [key: string]: FloorNodeInfo } = {};
+    if (
+      props.sizeFactor.height !=
+      divDimensions.height / imgDimensions.height
+    ) {
+      props.setSizeFactor({
+        width: divDimensions.width / imgDimensions.width,
+        height: divDimensions.height / imgDimensions.height,
+      });
+    }
     nodes.forEach((node) => {
       const id: string = node.getNodeID();
+
+      if (
+        !props.scaledNodes[id] ||
+        // @ts-expect-error It thinks that props.scaledNodes[id] is not being checked for undefined
+        props.scaledNodes[id].x !=
+          node.getX() * (divDimensions.width / imgDimensions.width)
+      )
+        repeat = true;
       tempNodePosList[id] = {
         key: node.getNodeID(),
         x: node.getX() * (divDimensions.width / imgDimensions.width),
@@ -101,36 +124,49 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
         requests: [],
       };
     });
-    setScaledNodes(tempNodePosList);
-  }, [divDimensions, nodes, imgDimensions]);
+    if (repeat) {
+      props.setScaledNodes(tempNodePosList);
+    }
+  }, [divDimensions, nodes, imgDimensions, props]);
 
   const moveBox = useCallback(
     async (id: string, left: number, top: number) => {
       console.log("time to move a box!");
-      const oldNodePos = scaledNodes[id];
-      oldNodePos.x = left;
-      oldNodePos.y = top;
-      const newPosX = left * (imgDimensions.width / divDimensions.width);
-      const newPosY = top * (imgDimensions.height / divDimensions.height);
-      console.log(newPosX, newPosY);
-      // Axios call here
-      const token = await getAccessTokenSilently();
-      axios
-        .post(
-          "/api/editMap/editNode",
-          { node_id: id, x: newPosX, y: newPosY },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
+      const oldNodePos = props.scaledNodes[id];
+      if (oldNodePos) {
+        oldNodePos.x = left;
+        oldNodePos.y = top;
+        const newPosX = left * (imgDimensions.width / divDimensions.width);
+        const newPosY = top * (imgDimensions.height / divDimensions.height);
+        console.log(newPosX, newPosY);
+        // Axios call here
+        const token = await getAccessTokenSilently();
+        axios
+          .post(
+            "/api/editMap/editNode",
+            { node_id: id, x: newPosX, y: newPosY },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
             },
-          },
-        )
-        .then();
-      setScaledNodes({ ...scaledNodes, [id]: oldNodePos });
-      showSnackbar(`Move the Node ${id} in map successfully`, "success");
+          )
+          .then();
+        props.setScaledNodes({ ...props.scaledNodes, [id]: oldNodePos });
+        const node = props.graph.getNode(id);
+        if (node) node.setPosition(newPosX, newPosY);
+        showSnackbar(`Move the Node ${id} in map successfully`, "success");
+      }
     },
-    [divDimensions, getAccessTokenSilently, imgDimensions, scaledNodes],
+    [
+      divDimensions.height,
+      divDimensions.width,
+      getAccessTokenSilently,
+      imgDimensions.height,
+      imgDimensions.width,
+      props,
+    ],
   );
 
   const [, drop] = useDrop(
@@ -177,8 +213,8 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     for (let i = 0; i < edgeList.length - 1; i++) {
       const startNode = edgeList[i].getNodes()[0].getNodeID();
       const endNode = edgeList[i].getNodes()[1].getNodeID();
-      const startPoint = scaledNodes[startNode];
-      const endPoint = scaledNodes[endNode];
+      const startPoint = props.scaledNodes[startNode];
+      const endPoint = props.scaledNodes[endNode];
       if (
         startPoint &&
         endPoint &&
@@ -202,13 +238,18 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
     return lines;
   };
 
-  function EditableNode(props: { nodeKey: string }) {
+  function EditableNode(prop: { nodeKey: string }) {
     const nodeColor: string = "#009BA8";
     const animation: string = "border border-slate-300";
     // const input = calculateInput();
 
-    const id = props.nodeKey;
-    const { x, y } = scaledNodes[id];
+    const id = prop.nodeKey;
+    const scaledNode = props.scaledNodes[id];
+    let [x, y] = [-1, -1];
+    if (scaledNode) {
+      x = scaledNode.x;
+      y = scaledNode.y;
+    }
 
     const [{ isDragging }, drag] = useDrag(
       () => ({
@@ -228,7 +269,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
 
     return (
       <div
-        key={props.nodeKey}
+        key={prop.nodeKey}
         id={id}
         style={{
           position: "absolute",
@@ -242,16 +283,22 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
           cursor: "pointer",
         }}
         className={animation}
-        onClick={handleNodeClick(props.nodeKey)}
+        onClick={handleNodeClick(prop.nodeKey)}
         ref={drag}
       ></div>
     );
   }
 
   const renderNodes = () => {
-    return Object.values(scaledNodes)
-      .filter((node) => node.floor == floor)
-      .map((node) => <EditableNode nodeKey={node.key} />);
+    const values: ReactElement[] = [];
+    Object.values(props.scaledNodes).forEach(
+      (node: FloorNodeInfo | undefined) => {
+        if (node != undefined && node.floor == floor) {
+          values.push(<EditableNode nodeKey={node.key} />);
+        }
+      },
+    );
+    return values;
   };
 
   const handleMouseUp = (e: { clientX: number; clientY: number }) => {
@@ -284,12 +331,8 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
       style={{ position: "relative" }}
       onMouseUp={handleMouseUp}
     >
-      <div ref={drop}>
-        <img
-          src={props.imageSrc}
-          className="object-contain h-full border-2 border-primary rounded-xl"
-          alt="Map"
-        />
+      <div ref={drop} style={{ position: "relative" }}>
+        <img src={props.imageSrc} className="w-screen" alt="Map" />
         <svg
           style={{
             position: "absolute",

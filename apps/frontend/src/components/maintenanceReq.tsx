@@ -126,8 +126,8 @@ function MaintenanceReq() {
 
   return (
     <div className="w-full">
-      <div className="m-auto mt-6 flex flex-col px-10 h-full w-full justify-center py-4">
-        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center transition-transform hover:scale-110 -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+      <div className="m-auto mt-3 flex flex-col px-10 h-full w-full justify-center py-1">
+        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center">
           Maintenance Request
         </h1>
         <form onSubmit={handleSubmit}>
@@ -137,6 +137,23 @@ function MaintenanceReq() {
               update={updateName}
               label={"Username"}
             />
+
+            <FormControl variant="filled" required>
+              <InputLabel id="priority">Priority</InputLabel>
+              <Select
+                name="priority"
+                labelId="priority"
+                id="priority"
+                value={formData.priority}
+                onChange={handlePriorityInput}
+              >
+                <MenuItem value={"High"}>High</MenuItem>
+                <MenuItem value={"Medium"}>Medium</MenuItem>
+                <MenuItem value={"Low"}>Low</MenuItem>
+                <MenuItem value={"Emergency"}>Emergency</MenuItem>
+              </Select>
+            </FormControl>
+
             <LocationDropdown
               room={formData.location}
               update={updateLocation}
@@ -157,22 +174,6 @@ function MaintenanceReq() {
                 // }}
               />
             </LocalizationProvider>
-
-            <FormControl variant="filled" required>
-              <InputLabel id="priority">Priority</InputLabel>
-              <Select
-                name="priority"
-                labelId="priority"
-                id="priority"
-                value={formData.priority}
-                onChange={handlePriorityInput}
-              >
-                <MenuItem value={"High"}>High</MenuItem>
-                <MenuItem value={"Medium"}>Medium</MenuItem>
-                <MenuItem value={"Low"}>Low</MenuItem>
-                <MenuItem value={"Emergency"}>Emergency</MenuItem>
-              </Select>
-            </FormControl>
 
             <FormControl variant="filled" required>
               <InputLabel id="type">Type</InputLabel>

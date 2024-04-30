@@ -1,5 +1,11 @@
 import React, { useEffect, useRef } from "react";
-import { Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import {
+  Button,
+  IconButton,
+  ToggleButton,
+  ToggleButtonGroup,
+  Tooltip,
+} from "@mui/material";
 import { useState } from "react";
 import BackgroundPattern from "../components/backgroundPattern.tsx";
 import { Graph } from "../objects/Graph.ts";
@@ -15,10 +21,18 @@ import {
   TransformWrapper,
   useControls,
 } from "react-zoom-pan-pinch";
+// import { motion, AnimatePresence } from "framer-motion";
 import EditNodeForm from "../components/EditNodeForm.tsx";
 import CreateEdgeForm from "../components/CreateEdgeForm.tsx";
 import DeleteEdgeForm from "../components/DeleteEdgeForm.tsx";
 import DeleteNodeForm from "../components/DeleteNodeForm.tsx";
+import { FloorNodeInfo } from "../components/FloorNode.tsx";
+// import LocationDropdown from "../components/locationDropdown.tsx";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import PanToolIcon from "@mui/icons-material/PanTool";
+import AddRoadIcon from "@mui/icons-material/AddRoad";
+import RemoveRoadIcon from "@mui/icons-material/RemoveRoad";
 
 // import {ZoomPanPinch} from "react-zoom-pan-pinch/dist/src/core/instance.core";
 // import CanvasMap from "../components/CanvasMap.tsx";
@@ -40,12 +54,20 @@ function EditMap() {
     new MapNode("", 0, 0, "", "", "", "", ""),
   ]);
   const [isMoveable, setIsMoveable] = useState(false);
+  const [sizeFactor, setSizeFactor] = useState<{
+    width: number;
+    height: number;
+  }>({ width: Number.NaN, height: Number.NaN });
+  const [scaledNodes, setScaledNodes] = useState<{
+    [key: string]: FloorNodeInfo | undefined;
+  }>({});
+  const [update, setUpdate] = useState(false);
 
   // Zoom in/out buttons for map viewing
   const Controls = () => {
     const { zoomIn, zoomOut } = useControls();
     return (
-      <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2">
+      <div className="absolute pt-10 px-3 z-10 flex flex-col gap-2 right-4">
         <Button
           onClick={() => zoomIn()}
           type="button"
@@ -97,7 +119,7 @@ function EditMap() {
 
   function FloorMapButtons() {
     return (
-      <div className="h-fit my-auto ml-3 bg-secondary">
+      <div className="absolute z-10 h-fit ml-3 bg-primary bottom-20 right-9 rounded-xl border-0">
         <ToggleButtonGroup
           orientation="vertical"
           value={imgState}
@@ -111,22 +133,92 @@ function EditMap() {
             }
           }}
           size="large"
-          color="secondary"
+          color="standard"
           fullWidth
         >
-          <ToggleButton value={floor3}>
+          <ToggleButton
+            value={floor3}
+            style={{ color: "white" }}
+            sx={{
+              borderRadius: "0.75rem",
+              "&.Mui-selected": {
+                backgroundColor: "#4497b3",
+              },
+              "&:hover": {
+                backgroundColor: "#4497b3",
+                transition: "background-color 0.3s ease-in-out",
+              },
+            }}
+            disabled={imgState === floor3}
+          >
             <strong>3</strong>
           </ToggleButton>
-          <ToggleButton value={floor2}>
+          <ToggleButton
+            value={floor2}
+            style={{ color: "white" }}
+            sx={{
+              borderRadius: "0.75rem",
+              "&.Mui-selected": {
+                backgroundColor: "#4497b3",
+              },
+              "&:hover": {
+                backgroundColor: "#4497b3",
+                transition: "background-color 0.3s ease-in-out",
+              },
+            }}
+            disabled={imgState === floor2}
+          >
             <strong>2</strong>
           </ToggleButton>
-          <ToggleButton value={floor1}>
+          <ToggleButton
+            value={floor1}
+            style={{ color: "white" }}
+            sx={{
+              borderRadius: "0.75rem",
+              "&.Mui-selected": {
+                backgroundColor: "#4497b3",
+              },
+              "&:hover": {
+                backgroundColor: "#4497b3",
+                transition: "background-color 0.3s ease-in-out",
+              },
+            }}
+            disabled={imgState === floor1}
+          >
             <strong>1</strong>
           </ToggleButton>
-          <ToggleButton value={lowerLevel1}>
+          <ToggleButton
+            value={lowerLevel1}
+            style={{ color: "white" }}
+            sx={{
+              borderRadius: "0.75rem",
+              "&.Mui-selected": {
+                backgroundColor: "#4497b3",
+              },
+              "&:hover": {
+                backgroundColor: "#4497b3",
+                transition: "background-color 0.3s ease-in-out",
+              },
+            }}
+            disabled={imgState === lowerLevel1}
+          >
             <strong>L1</strong>
           </ToggleButton>
-          <ToggleButton value={lowerLevel2}>
+          <ToggleButton
+            value={lowerLevel2}
+            style={{ color: "white" }}
+            sx={{
+              borderRadius: "0.75rem",
+              "&.Mui-selected": {
+                backgroundColor: "#4497b3",
+              },
+              "&:hover": {
+                backgroundColor: "#4497b3",
+                transition: "background-color 0.3s ease-in-out",
+              },
+            }}
+            disabled={imgState === lowerLevel2}
+          >
             <strong>L2</strong>
           </ToggleButton>
         </ToggleButtonGroup>
@@ -233,32 +325,167 @@ function EditMap() {
   if (divRef.current) {
     divPos = [divRef.current.offsetTop, divRef.current.offsetLeft];
   }
+  // const [expanded, setExpanded] = useState(false);
+  //
+  // const isExpanded = expanded;
+
+  // const AccordionFrame = () => {
+  //     const handleInnerClick = (e: React.MouseEvent<HTMLElement>) => {
+  //         e.stopPropagation();
+  //     };
+  //     return (
+  //         <>
+  //             <motion.header
+  //                 initial={false}
+  //                 // animate={{ backgroundColor: isExpanded ? "#FF0088" : "#0055FF" }}
+  //             />
+  //             <AnimatePresence initial={true}>
+  //                 {isExpanded && (
+  //                     <motion.section
+  //                         key="content"
+  //                         initial={{ opacity: 0, height: 0 }}
+  //                         animate={{ opacity: 1, height: "auto" }}
+  //                         exit={{ opacity: 0, height: 0 }}
+  //                         variants={{
+  //                             open: { opacity: 1, height: "auto" },
+  //                             collapsed: { opacity: 0, height: 0 },
+  //                         }}
+  //                         transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
+  //                         className="absolute w-full"
+  //                     >
+  //                             <div className="" onClick={handleInnerClick}>
+  //                                 <div className="mb-20 mt-20 px-10 w-full items-center">
+  //                                     <div className="">
+  //                                         <ToggleButtonGroup
+  //                                             value={mode}
+  //                                             exclusive
+  //                                             onChange={handleEditMode}
+  //                                             orientation="vertical"
+  //                                             fullWidth
+  //                                             color="primary"
+  //                                         >
+  //                                             <ToggleButton value="add_node">
+  //                                                 <IconButton>
+  //                                                     {<AddCircleOutlineIcon/>}
+  //                                             </IconButton>
+  //                                             </ToggleButton>
+  //                                             <ToggleButton value="delete_node"><IconButton>
+  //                                                 {<RemoveCircleOutlineIcon/>}
+  //                                             </IconButton>
+  //                                             </ToggleButton>
+  //                                             <ToggleButton value="move_node"><IconButton>
+  //                                                 {<PanToolIcon/>}
+  //                                             </IconButton>
+  //                                             </ToggleButton>
+  //                                         </ToggleButtonGroup>
+  //                                 </div>
+  //                                 <div className="px-10 w-full items-center">
+  //                                     <ToggleButtonGroup
+  //                                         value={mode}
+  //                                         exclusive
+  //                                         onChange={handleEditMode}
+  //                                         orientation="vertical"
+  //                                         fullWidth
+  //                                         color="primary"
+  //                                     >
+  //                                         <h1 className="text-primary font-header font-bold text-2xl pt-5 text-center">
+  //                                             Edge Editing
+  //                                         </h1>
+  //                                         <ToggleButton value="add_edge">
+  //                                         <IconButton>
+  //                                             {<AddRoadIcon/>}
+  //                                             </IconButton>
+  //                                         </ToggleButton>
+  //                                         <ToggleButton value="delete_edge">
+  //                                             <IconButton>
+  //                                                 {<RemoveRoadIcon/>}
+  //                                             </IconButton>
+  //                                         </ToggleButton>
+  //                                     </ToggleButtonGroup>
+  //                                 </div>
+  //                             </div>
+  //                         </div>
+  //                     </motion.section>
+  //                 )}
+  //             </AnimatePresence>
+  //         </>
+  //     );
+  // };
 
   return (
-    <div className="flex justify-center">
+    <div className="">
       <BackgroundPattern />
 
       {/*Map and Edit Buttons*/}
-      <div
-        className="my-8
-                   justify-center
-                   flex
-                   flex-row-reverse
-                   max-w-screen-2xl"
-      >
-        <div className="flex flex-row w-2/3">
+      <div className="">
+        <div className="">
           {/*Map Image Box*/}
           <div
             ref={divRef}
-            className="
-        h-full
-        flex-grow
-        ml-1"
+            className="fixed
+                    h-screen
+                    w-screen"
           >
-            <TransformWrapper disabled={isMoveable}>
-              <div className="border-2 border-primary rounded-xl overflow-clip">
+            <TransformWrapper disabled={isMoveable} disablePadding={true}>
+              <div className="">
+                <FloorMapButtons />
                 <Controls />
-                <TransformComponent>
+                <div className="absolute z-10 top-4">
+                  {/*Form for adding a new node*/}
+                  {isOpen && (
+                    <EditNodeForm
+                      node={
+                        new MapNode("", world.x, world.y, "", "", "", "", "")
+                      }
+                      mode={mode}
+                      graph={graph}
+                      sizeFactor={sizeFactor}
+                      scaledNodes={scaledNodes}
+                      setScaledNodes={setScaledNodes}
+                    />
+                  )}
+                  {clicked && mode !== "add_node" && mode !== "delete_node" && (
+                    <EditNodeForm
+                      node={clicked}
+                      mode={mode}
+                      graph={graph}
+                      sizeFactor={sizeFactor}
+                      scaledNodes={scaledNodes}
+                      setScaledNodes={setScaledNodes}
+                    />
+                  )}
+                  {mode === "delete_node" && openDeleteNode && (
+                    <DeleteNodeForm
+                      node={clicked}
+                      graph={graph}
+                      scaledNodes={scaledNodes}
+                      update={update}
+                      setUpdate={setUpdate}
+                    />
+                  )}
+                  {/*Form for creating edge*/}
+                  {openEdgeCreation && (
+                    <CreateEdgeForm
+                      nodes={edgeNodes}
+                      update={update}
+                      setUpdate={setUpdate}
+                    />
+                  )}
+                  {openEdgeDeletion && (
+                    <DeleteEdgeForm
+                      nodes={edgeNodes}
+                      update={update}
+                      setUpdate={setUpdate}
+                    />
+                  )}
+                </div>
+                <TransformComponent
+                  wrapperStyle={{
+                    width: screen.width,
+                    height: "calc(100vh)",
+                    position: "fixed",
+                  }}
+                >
                   <EditMapViewGraph
                     imageSrc={imgState}
                     graph={graph}
@@ -267,84 +494,116 @@ function EditMap() {
                     nodeInfoCallback={handleNodeCallback}
                     mouseCallback={handlePopup}
                     mode={mode}
+                    scaledNodes={scaledNodes}
+                    setScaledNodes={setScaledNodes}
+                    setSizeFactor={setSizeFactor}
+                    sizeFactor={sizeFactor}
                   />
                 </TransformComponent>
               </div>
             </TransformWrapper>
-          </div>
-          {/*Buttons for displaying floor images*/}
-          <FloorMapButtons />
-        </div>
-        {/*boxes.*/}
-        <div
-          className="flex flex-col
-                w-1/4"
-        >
-          {/*Form for adding a new node*/}
-          {isOpen && (
-            <EditNodeForm
-              node={new MapNode("", world.x, world.y, "", "", "", "", "")}
-              mode={mode}
-            />
-          )}
-          {clicked && mode !== "add_node" && mode !== "delete_node" && (
-            <EditNodeForm node={clicked} mode={mode} />
-          )}
-          {mode === "delete_node" && openDeleteNode && (
-            <DeleteNodeForm node={clicked} />
-          )}
-          {/*Form for creating edge*/}
-          {openEdgeCreation && <CreateEdgeForm nodes={edgeNodes} />}
-          {openEdgeDeletion && <DeleteEdgeForm nodes={edgeNodes} />}
-
-          <div
-            className="mr-8
-                    ml-5
-                    py-5
-                    px-0
-                    flex
-                    flex-col
-                    items-center
-                    bg-background
-                    rounded-xl
-                    border-primary
-                    border-2"
-          >
-            <h1
-              className="text-primary
-              font-header
-              font-bold
-              text-2xl"
-            >
-              Node Editing
-            </h1>
-            <div className="px-10 w-full">
-              <ToggleButtonGroup
-                value={mode}
-                exclusive
-                onChange={handleEditMode}
-                orientation="vertical"
-                fullWidth
-                color="primary"
-              >
-                <ToggleButton value="add_node">Add Node</ToggleButton>
-                <ToggleButton value="delete_node">Delete Node</ToggleButton>
-                <ToggleButton value="move_node">Move Node</ToggleButton>
-                <h1
-                  className="text-primary
-              font-header
-              font-bold
-              text-2xl
-              pt-5"
+            {/*<div*/}
+            {/*    className="fixed top-20 left-10"*/}
+            {/*    onClick={() => setExpanded(!isExpanded)}*/}
+            {/*>*/}
+            {/*    <div*/}
+            {/*        className="mr-2 ml-0 py-1 px-16 items-center bg-primary rounded-xl border-primary border-2">*/}
+            {/*        <h2 className="text-body" style={{color: "white"}}>*/}
+            {/*            Edit Menu*/}
+            {/*        </h2>*/}
+            {/*    </div>*/}
+            {/*    <AccordionFrame/>*/}
+            {/*</div>*/}
+            <div className="flex flex-row w-50 h-50 justify-center py-3">
+              <div className="">
+                <ToggleButtonGroup
+                  value={mode}
+                  exclusive
+                  onChange={handleEditMode}
+                  orientation="horizontal"
+                  fullWidth
+                  color="primary"
                 >
-                  Edge Editing
-                </h1>
-                <ToggleButton value="add_edge">Add Edge</ToggleButton>
-                <ToggleButton value="delete_edge">Delete Edge</ToggleButton>
-              </ToggleButtonGroup>
+                  <Tooltip title="Add Node">
+                    <ToggleButton value="add_node">
+                      <IconButton
+                        className="hover:scale-110 duration-200 transition-transform"
+                        sx={{
+                          "&:hover, &:active": {
+                            color: "#002866",
+                          },
+                        }}
+                      >
+                        {<AddCircleOutlineIcon color="primary" />}
+                      </IconButton>
+                    </ToggleButton>
+                  </Tooltip>
+                  <Tooltip title="Delete Node">
+                    <ToggleButton value="delete_node">
+                      <IconButton
+                        className="hover:scale-110 duration-200 transition-transform"
+                        sx={{
+                          "&:hover, &:active": {
+                            color: "#002866",
+                          },
+                        }}
+                      >
+                        {<RemoveCircleOutlineIcon color="primary" />}
+                      </IconButton>
+                    </ToggleButton>
+                  </Tooltip>
+                  <Tooltip title="Move Node">
+                    <ToggleButton value="move_node">
+                      <IconButton
+                        className="hover:scale-110 duration-200 transition-transform"
+                        sx={{
+                          "&:hover, &:active": {
+                            color: "#002866",
+                          },
+                        }}
+                      >
+                        {<PanToolIcon color="primary" />}
+                      </IconButton>
+                    </ToggleButton>
+                  </Tooltip>
+                  {/*<h1 className="text-primary font-header font-bold text-2xl pt-5 text-center">*/}
+                  {/*    Edge Editing*/}
+                  {/*</h1>*/}
+                  <Tooltip title="Add Edge">
+                    <ToggleButton value="add_edge">
+                      <IconButton
+                        className="hover:scale-110 duration-200 transition-transform"
+                        sx={{
+                          "&:hover, &:active": {
+                            color: "#002866",
+                          },
+                        }}
+                      >
+                        {<AddRoadIcon color="primary" />}
+                      </IconButton>
+                    </ToggleButton>
+                  </Tooltip>
+                  <Tooltip title="Delete Edge">
+                    <ToggleButton value="delete_edge">
+                      <IconButton
+                        className="hover:scale-110 duration-200 transition-transform"
+                        sx={{
+                          "&:hover, &:active": {
+                            color: "#002866",
+                          },
+                        }}
+                      >
+                        {<RemoveRoadIcon color="primary" />}
+                      </IconButton>
+                    </ToggleButton>
+                  </Tooltip>
+                </ToggleButtonGroup>
+              </div>
             </div>
           </div>
+          {/*Buttons for displaying floor images*/}
         </div>
+        {/*boxes.*/}
       </div>
     </div>
   );

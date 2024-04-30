@@ -11,6 +11,11 @@ import {
   TextField,
   Divider,
   IconButton,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 //import LoginDialog from "./loginDialog.tsx";
@@ -46,6 +51,7 @@ type toDoNow = {
   role: string | undefined;
   complete: boolean;
   subtasks: subTodo[];
+  update: () => void;
 };
 
 function TODOListItem(props: toDoNow) {
@@ -70,9 +76,12 @@ function TODOListItem(props: toDoNow) {
     setSnackbarOpen(true);
   };
 
+  const [confirm, setConfirm] = useState<boolean>(false);
+
   //takes in the id of the request to be deleted and deletes in the database
   async function deleteData(idVal: number) {
     console.log(idVal);
+    setConfirm(false);
     try {
       const token = await getAccessTokenSilently();
       //call to backend
@@ -86,10 +95,7 @@ function TODOListItem(props: toDoNow) {
       showSnackbar("Problem Deleting", "error");
       return;
     }
-    showSnackbar(
-      "Successfully deleted TODO item with ID number " + idVal,
-      "success",
-    );
+    alert("Successfully deleted TODO item with ID number " + idVal);
     //window must be reloaded on delete to show updated results
     window.location.reload();
   }
@@ -118,15 +124,17 @@ function TODOListItem(props: toDoNow) {
     }
     try {
       const token = await getAccessTokenSilently();
-      await axios.post(
-        `/api/todoStuff/${props.id}`,
-        {
-          id_relation: props.id,
-          task: newSubtask,
-          complete: false,
-        },
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
+      await axios
+        .post(
+          `/api/todoStuff/${props.id}`,
+          {
+            id_relation: props.id,
+            task: newSubtask,
+            complete: false,
+          },
+          { headers: { Authorization: `Bearer ${token}` } },
+        )
+        .then(props.update);
 
       //call to backend
     } catch (e) {
@@ -201,11 +209,26 @@ function TODOListItem(props: toDoNow) {
         <td className="p-3 text-sm">
           <IconButton
             className="px-7 flex justify-center transform hover:scale-125"
-            onClick={() => deleteData(props.id)}
+            onClick={() => setConfirm(true)}
           >
             <DeleteOutline color="error" />
           </IconButton>
         </td>
+
+        <Dialog open={confirm} onClose={() => setConfirm(false)}>
+          <DialogTitle>Delete Confirmation</DialogTitle>
+          <DialogContent>
+            <strong>Are you sure you want to delete this task?</strong>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setConfirm(false)} autoFocus>
+              No
+            </Button>
+            <Button onClick={() => deleteData(props.id)} autoFocus>
+              Yes
+            </Button>
+          </DialogActions>
+        </Dialog>
       </tr>
 
       <Snackbar

@@ -4,11 +4,6 @@ import PrismaClient from "../bin/database-connection.ts";
 
 const router: Router = express.Router();
 
-// type inputStuff = {
-//   id: string;
-//   type: string;
-// };
-
 router.get("/", async function (req: Request, res: Response) {
   const data = await PrismaClient.generalService.findMany({});
   try {
@@ -128,7 +123,7 @@ router.get("/specific/:id", async function (req: Request, res: Response) {
 
 
 
-       */
+     */
 
   //Look through every single table to find the id
   //If the length of any of the tables is 1 then that is the table with the request
@@ -223,4 +218,5 @@ router.get("/specific/:id", async function (req: Request, res: Response) {
   }
   res.sendStatus(200);
 });
+
 export default router;

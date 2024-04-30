@@ -13,7 +13,8 @@ import {
   SelectChangeEvent,
   TextField,
 } from "@mui/material";
-
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
 import { langInterpreterType } from "common/src/langInterpreterType.ts";
 import dayjs, { Dayjs } from "dayjs";
 import axios from "axios";
@@ -24,6 +25,17 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 function LangInterpreterReq() {
+  const Transition = React.forwardRef(function Transition(
+    props: TransitionProps & {
+      children: React.ReactElement<string, string>;
+    },
+    ref: React.Ref<unknown>,
+  ) {
+    return (
+      <Slide direction="up" ref={ref} {...props} children={props.children} />
+    );
+  });
+
   const { getAccessTokenSilently } = useAuth0();
   const initialFormData: langInterpreterType = {
     name: "",
@@ -117,8 +129,8 @@ function LangInterpreterReq() {
 
   return (
     <div className="w-full">
-      <div className="m-auto mt-6 flex flex-col px-10 h-full w-full justify-center py-4">
-        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center transition-transform hover:scale-110 -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+      <div className="m-auto mt-3 flex flex-col px-10 h-full w-full justify-center py-1">
+        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center">
           Language Interpreter Form
         </h1>
         <form onSubmit={handleSubmit}>
@@ -128,21 +140,6 @@ function LangInterpreterReq() {
               update={updateName}
               label={"Username"}
             />
-            <LocationDropdown
-              room={formData.location}
-              update={updateLoc}
-              label={"Location"}
-            />
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                sx={{ bgcolor: "#eceff0" }}
-                label="Date Requested *"
-                value={formData.date}
-                disablePast
-                onChange={handleDateInput}
-                // renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
             <FormControl variant="filled" required>
               <InputLabel id="priority">Priority</InputLabel>
               <Select
@@ -161,6 +158,22 @@ function LangInterpreterReq() {
                 <MenuItem value={"Emergency"}>Emergency</MenuItem>
               </Select>
             </FormControl>
+
+            <LocationDropdown
+              room={formData.location}
+              update={updateLoc}
+              label={"Location"}
+            />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                sx={{ bgcolor: "#eceff0" }}
+                label="Date Requested *"
+                value={formData.date}
+                disablePast
+                onChange={handleDateInput}
+                // renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
             <FormControl variant="filled" required>
               <InputLabel id="lang">Language Requested</InputLabel>
               <Select
@@ -293,33 +306,44 @@ function LangInterpreterReq() {
         </form>
       </div>
 
-      <Dialog open={open} onClose={handleSubmitClose}>
-        <DialogTitle>We received your request!</DialogTitle>
-        <DialogContent>
-          <strong>Here are your responses:</strong>
-          <br />
-          Name: {formData.name}
-          <br />
-          Location: {formData.location}
-          <br />
-          Date: {formData.date?.toString()}
-          <br />
-          Priority: {formData.priority}
-          <br />
-          Language Requested: {formData.language}
-          <br />
-          Mode of Interpretation: {formData.modeOfInterp}
-          <br />
-          Special Instructions: {formData.specInstruct}
-          <br />
-          Status: {formData.status}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleSubmitClose} autoFocus>
-            Okay
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <React.Fragment>
+        <Dialog
+          open={open}
+          onClose={handleSubmitClose}
+          TransitionComponent={Transition}
+          keepMounted
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>We received your request!</DialogTitle>
+          <DialogContent>
+            <strong>Here are your responses:</strong>
+            <br />
+            Name: {formData.name}
+            <br />
+            Location: {formData.location}
+            <br />
+            Date: {formData.date?.toString()}
+            <br />
+            Priority: {formData.priority}
+            <br />
+            Language Requested: {formData.language}
+            <br />
+            Mode of Interpretation: {formData.modeOfInterp}
+            <br />
+            Special Instructions: {formData.specInstruct}
+            <br />
+            Status: {formData.status}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleSubmitClose} autoFocus>
+              Okay
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <div className="text-text ml-2 font-header place-self-right">
+          Credits: Najum
+        </div>
+      </React.Fragment>
     </div>
   );
 }
