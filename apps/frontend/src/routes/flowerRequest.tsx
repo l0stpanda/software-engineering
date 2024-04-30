@@ -111,7 +111,7 @@ function FlowerRequest() {
       <BackgroundPattern />
       <div className="m-auto shadow-2xl flex flex-col bg-background rounded-xl px-10 h-fit w-[700px] justify-center py-10 mt-[100px]">
         <h1
-          className="my-2 font-header text-primary font-bold text-3xl text-center transition-transform hover:scale-105"
+          className="my-2 font-header text-primary font-bold text-3xl text-center"
           style={{ marginBottom: "20px" }}
         >
           Flower Delivery Request

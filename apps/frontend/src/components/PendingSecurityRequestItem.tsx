@@ -4,26 +4,25 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 
-type securityRequestDetails = {
+type securityRequestLocation = {
   id: number;
-  incidentDescription: string;
-  incidentTime: string;
-  actionTaken: string;
+  date: string;
+  description: string;
+  type: string;
 };
-
-type SecurityRequestData = {
+type securityRequest = {
   id: number;
   status: string;
   priority: string;
-  emp_name: string;
-  long_name_loc: string;
-  securityRequestDetails: securityRequestDetails[];
+  date: string;
+  description: string;
+  securityRequestLocation: securityRequestLocation[];
 };
 
-function PendingSecurityRequestItem(props: SecurityRequestData) {
+function PendingSecurityRequest(props: securityRequest) {
   const { getAccessTokenSilently } = useAuth0();
 
-  // Formats date string to date format
+  //Formats date string to date format
   function formatDate(requestDate: string) {
     const dateToFormat: Date = new Date(requestDate);
     return dateToFormat.toLocaleDateString();
@@ -49,12 +48,12 @@ function PendingSecurityRequestItem(props: SecurityRequestData) {
     return;
   }
 
-  // Takes in the id of the request to be deleted and deletes it from the database
+  //takes in the id of the request to be deleted and deletes in the database
   async function deleteData(idVal: number) {
     console.log(idVal);
     try {
       const token = await getAccessTokenSilently();
-      // Call to backend
+      //call to backend
       await axios.delete(`/api/securityRequest/${idVal}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -65,7 +64,7 @@ function PendingSecurityRequestItem(props: SecurityRequestData) {
       return;
     }
     alert("Successfully deleted Security Request with ID number " + idVal);
-    // Window must be reloaded on delete to show updated results
+    //window must be reloaded on delete to show updated results
     window.location.reload();
   }
 
@@ -81,16 +80,18 @@ function PendingSecurityRequestItem(props: SecurityRequestData) {
           value={status}
           defaultValue={props.status}
         >
-          <MenuItem value={"Pending"}>Pending</MenuItem>
-          <MenuItem value={"In Progress"}>In Progress</MenuItem>
-          <MenuItem value={"Resolved"}>Resolved</MenuItem>
+          <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
+          <MenuItem value={"Assigned"}>Assigned</MenuItem>
+          <MenuItem value={"InProgress"}>In Progress</MenuItem>
+          <MenuItem value={"Closed"}>Closed</MenuItem>
         </Select>
       </td>
       <td className="p-3 text-sm">{props.priority}</td>
-      <td className="p-3 text-sm">{props.emp_name}</td>
-      <td className="p-3 text-sm">{props.long_name_loc}</td>
       <td className="p-3 text-sm">
-        {formatDate(props.securityRequestDetails[0].incidentTime)}
+        {formatDate(props.securityRequestLocation[0].date)}
+      </td>
+      <td className="p-3 text-sm">
+        {props.securityRequestLocation[0].description}
       </td>
       <td className="p-3 text-sm">
         <button>
@@ -106,4 +107,4 @@ function PendingSecurityRequestItem(props: SecurityRequestData) {
   );
 }
 
-export default PendingSecurityRequestItem;
+export default PendingSecurityRequest;

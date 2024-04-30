@@ -19,12 +19,13 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { medicalDeviceDelivery } from "common/src/medicalDeviceDelivery.ts";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import axios from "axios";
 import UserDropdown from "../components/userDropdown.tsx";
 import DeviceDropdown from "./DeviceDropdown.tsx";
-
+import { Alert, Snackbar } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
 function MedicalDeviceReq() {
   const { getAccessTokenSilently } = useAuth0();
   const [formData, setFormData] = useState<medicalDeviceDelivery>({
@@ -34,7 +35,7 @@ function MedicalDeviceReq() {
     quantity: 1,
     priority: "Medium",
     status: "Unassigned",
-    deliveryDate: dayjs(),
+    deliveryDate: null,
   });
 
   const Transition = React.forwardRef(function Transition(
@@ -47,8 +48,22 @@ function MedicalDeviceReq() {
       <Slide direction="up" ref={ref} {...props} children={props.children} />
     );
   });
-
+  const LOW_QUANTITY_THRESHOLD = 10;
   const [open, setOpen] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<AlertColor>("success");
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const showSnackbar = (message: string, severity: AlertColor) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
 
   function clear() {
     setFormData({
@@ -88,10 +103,26 @@ function MedicalDeviceReq() {
     setFormData({ ...formData, roomName: val });
   }
 
-  function updateItem(val: string) {
+  async function updateItem(val: string) {
+    const token = await getAccessTokenSilently();
     setFormData({ ...formData, medicalDeviceName: val });
+    try {
+      const item = await axios.get("/api/inventory/getNum", {
+        params: { name: val },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(item.data);
+      // Check if the quantity is below a threshold
+      if (item.data.quant <= LOW_QUANTITY_THRESHOLD) {
+        showSnackbar(`Low stock for ${val}`, "warning"); // Change severity to "warning" or another appropriate level
+      }
+    } catch (e) {
+      console.error(e);
+      showSnackbar("Can find the Medical", "error");
+    }
   }
-
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const token = await getAccessTokenSilently();
@@ -104,6 +135,7 @@ function MedicalDeviceReq() {
       formData.status == "" ||
       formData.deliveryDate == null
     ) {
+      alert("All fields need to be filled");
       return;
     }
     if (
@@ -139,25 +171,14 @@ function MedicalDeviceReq() {
   return (
     <div className="w-full">
       <div
-        className="overflow-m-auto mt-6  flex flex-col  px-10 h-full w-full justify-center py-4"
+        className="overflow-m-auto mt-3 flex flex-col  px-10 h-full w-full justify-center py-1"
         // style={{
         //     boxShadow: "1px 1px 0px #999, 2px 2px 0px #999, 3px 3px 0px #999, 4px 4px 0px #999, 5px 5px 0px #999, 6px 6px 0px #999"
         // }}>
       >
-        <h1 className="m-2 font-header text-primary font-extrabold text-3xl text-center transition-transform hover:scale-110 -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+        <h1 className="m-2 font-header text-primary font-extrabold text-3xl text-center">
           Medical Device Delivery Form
         </h1>
-        <p
-          className="text-2xl font-bold mb-4 text-center"
-          style={{
-            color: "black",
-            fontFamily: "PTSans, sans-serif",
-            fontSize: "20px",
-            margin: "5px",
-          }}
-        >
-          Najum and Sahil
-        </p>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4 my-4">
             <UserDropdown
@@ -316,7 +337,23 @@ function MedicalDeviceReq() {
             </Button>
           </DialogActions>
         </Dialog>
+        <div className="text-text ml-2 font-header place-self-right">
+          Credits: Najum and Sahil
+        </div>
       </React.Fragment>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={10000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

@@ -1,12 +1,11 @@
 import { Dayjs } from "dayjs";
 
 export interface securityRequest {
-  username: string;
-  location: string;
-  status: string;
-  emp_name: string;
+  name: string;
+  date: Dayjs | null;
   priority: string;
-  incidentDescription: string;
-  incidentTime: Dayjs | null;
-  actionTaken: string;
+  status: string;
+  type: string;
+  objectDesc: string;
+  location: string;
 }

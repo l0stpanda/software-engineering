@@ -1,5 +1,5 @@
 import express, { Router, Request, Response } from "express";
-//import { Prisma } from "database";
+//import { Prisma } from "database"; helo sean :3
 import PrismaClient from "../bin/database-connection.ts";
 import { roomSchedulerFields } from "common/src/roomScheduler.ts";
 
@@ -50,31 +50,20 @@ router.post("/", async function (req: Request, res: Response) {
       },
     });
 
-    if (findID.length > 1) {
-      res.sendStatus(400);
-      return;
-    }
-
-    if (input.startTime != undefined) {
-      //This willa always be the case so don't worry about it being here.
-      console.log("ID I AM FINDING IS " + findID[0].id);
-      await PrismaClient.roomScheduler.create({
-        data: {
-          id: findID[0].id,
-          startTime: input.startTime?.toString(),
-          lengthRes: input.lengthRes,
-          room_name: input.roomNum,
-        },
-      });
-    }
+    await PrismaClient.roomScheduler.create({
+      data: {
+        id: findID[0].id,
+        startTime: input.startTime,
+        lengthRes: input.lengthRes,
+        room_name: input.roomNum,
+      },
+    });
   } catch (e) {
-    //Console log error if the data can't be stored
     console.log(e);
     res.sendStatus(400);
     return;
   }
-  //Console log "Ok" if the database successfully collects the data
-  res.sendStatus(200);
+  return res.sendStatus(200);
 });
 
 router.get("/", async function (req: Request, res: Response) {

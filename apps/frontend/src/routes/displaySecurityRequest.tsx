@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import PendingSecurityRequestItem from "../components/PendingSecurityRequestItem.tsx";
+import PendingSecurityRequest from "../components/PendingSecurityRequestItem.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 
 // Define database json type
-type securityRequestDetails = {
+type securityRequestLocation = {
   id: number;
-  incidentDescription: string;
-  incidentTime: string;
-  actionTaken: string;
+  date: string;
+  description: string;
+  type: string;
 };
 type SecurityRequestData = {
   id: number;
   status: string;
   priority: string;
-  emp_name: string;
-  long_name_loc: string;
-  securityRequestDetails: securityRequestDetails[];
+  securityRequestLocation: securityRequestLocation[];
 };
 
-export default function PendingSecurityRequest() {
+export default function DisplaySecurityRequests() {
   const { getAccessTokenSilently } = useAuth0();
 
   // Use state for records being displayed
@@ -55,7 +53,7 @@ export default function PendingSecurityRequest() {
       style={{ borderRadius: "25px" }}
     >
       <h1 className="my-2 font-header text-primary font-bold text-3xl text-center grow-on-hover">
-        Pending Security Requests
+        Security Requests State
       </h1>
       <table className="w-full">
         <thead className="bg-secondary border-b-2 border-b-primary">
@@ -70,31 +68,27 @@ export default function PendingSecurityRequest() {
               Priority
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Employee Name
+              Incident Date
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Location
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Incident Time
+              Incident Description
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Delete
             </th>
-            {/* Dynamically generate column headers */}
           </tr>
         </thead>
         <tbody>
           {/* Map through the records and create a row for each record */}
           {records.map((record) => (
-            <PendingSecurityRequestItem
+            <PendingSecurityRequest
               key={record.id}
               id={record.id}
               status={record.status}
               priority={record.priority}
-              emp_name={record.emp_name}
-              long_name_loc={record.long_name_loc}
-              securityRequestDetails={record.securityRequestDetails}
+              date={record.securityRequestLocation[0].date}
+              description={record.securityRequestLocation[0].description}
+              securityRequestLocation={record.securityRequestLocation}
             />
           ))}
         </tbody>

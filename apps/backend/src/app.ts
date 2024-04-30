@@ -21,6 +21,7 @@ import { auth } from "express-oauth2-jwt-bearer";
 import adminAccess from "./routes/adminAccess.ts";
 import maintinence from "./routes/maintenanceReq.ts";
 import subTodo from "./routes/subTodo.ts";
+import securityRequest from "./routes/securityRequest.ts";
 // import readRouterE from "./routes/readE.ts";
 // import readRouterN from "./routes/readN.ts";
 
@@ -75,6 +76,7 @@ app.use("/api/adminAccess", adminAccess);
 app.use("/api/fetchAll", fetchAll);
 app.use("/api/editMap", editMap);
 app.use("/api/maint", maintinence);
+app.use("/api/securityRequest", securityRequest);
 /**
  * Catch all 404 errors, and forward them to the error handler
  */

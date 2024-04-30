@@ -49,7 +49,6 @@ const SmoothSlideshow = () => {
       }
     };
   }, []);
-
   return (
     <div
       className="fadeIn w-full h-screen flex items-center justify-center"

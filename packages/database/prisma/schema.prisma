@@ -81,12 +81,12 @@ model Inventory {
 
 // General Service Request Table
 model GeneralService {
-  id            Int    @id @default(autoincrement())
+  id            Int     @id @default(autoincrement())
   type          String
   location      String
   long_name_loc String
   status        String
-  emp_name      String
+  emp_name      String?
   priority      String
 
   location_room      Nodes                @relation("location", fields: [location], references: [node_id], onDelete: Cascade)
@@ -97,7 +97,7 @@ model GeneralService {
   flowerID           Flowers[]            @relation("flowerID")
   sanitationID       SanitationRequest[]  @relation("sanitationReq")
   maintainID         MaintenanceRequest[] @relation("idCheckMaintain")
-  securityRequest    SecurityRequest[]    @relation("securityRequest")
+  securityRequests   SecurityRequest[]    @relation("generalServiceRelation")
 }
 
 model SanitationRequest {
@@ -201,9 +201,12 @@ model Flowers {
 }
 
 model SecurityRequest {
-  id                  Int            @id
-  incidentDescription String
-  incidentTime        String?
-  actionTaken         String?
-  generalService      GeneralService @relation("securityRequest", fields: [id], references: [id], onDelete: Cascade)
+  id          Int    @id
+  date        String
+  description String
+  type        String
+
+  // Foreign Key References
+  generalServiceId        Int
+  securityRequestLocation GeneralService @relation("generalServiceRelation", fields: [generalServiceId], references: [id], onDelete: Cascade)
 }

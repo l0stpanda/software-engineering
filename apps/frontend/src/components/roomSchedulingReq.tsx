@@ -20,7 +20,7 @@ import UserDropdown from "../components/userDropdown.tsx";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -45,7 +45,7 @@ export default function RoomSchedulingReq() {
 
   const [responses, setResponses] = useState<roomReqFields>({
     employName: "",
-    startTime: dayjs(),
+    startTime: null,
     lengthRes: "",
     roomNum: "",
     reqStatus: "Unassigned",
@@ -138,23 +138,10 @@ export default function RoomSchedulingReq() {
 
   return (
     <div className="w-full">
-      <div className="m-auto mt-6 flex flex-col px-10 h-full w-full justify-center py-4">
-        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center transition-transform hover:scale-110 -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+      <div className="m-auto mt-3 flex flex-col px-10 h-full w-full justify-center py-1">
+        <h1 className="my-2 font-header text-primary font-extrabold text-3xl text-center">
           Room Scheduling Request
         </h1>
-
-        <p
-          className="text-2xl font-bold mb-4 text-center"
-          style={{
-            color: "black",
-            fontFamily: "PTSans, sans-serif",
-            fontSize: "20px",
-            margin: "5px",
-          }}
-        >
-          Ally and Ben
-        </p>
-
         <form className="flex flex-col gap-4 my-4" onSubmit={handleSubmit}>
           {/*<TextField*/}
           {/*  label="Employee Name"*/}
@@ -251,11 +238,10 @@ export default function RoomSchedulingReq() {
               onChange={handleResponseChanges}
               required
             >
-              <MenuItem value="">Not Selected</MenuItem>
-              <MenuItem value="Unassigned">Unassigned</MenuItem>
-              <MenuItem value="Assigned">Assigned</MenuItem>
-              <MenuItem value="In Progress">In Progress</MenuItem>
-              <MenuItem value="Closed">Closed</MenuItem>
+              <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
+              <MenuItem value={"Assigned"}>Assigned</MenuItem>
+              <MenuItem value={"InProgress"}>In Progress</MenuItem>
+              <MenuItem value={"Closed"}>Closed</MenuItem>
             </Select>
           </FormControl>
 
@@ -323,6 +309,9 @@ export default function RoomSchedulingReq() {
             </Button>
           </DialogActions>
         </Dialog>
+        <div className="text-text mt-[4.6rem] ml-2 font-header place-self-right">
+          Credits: Ally and Ben
+        </div>
       </React.Fragment>
     </div>
   );

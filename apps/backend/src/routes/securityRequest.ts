@@ -1,64 +1,66 @@
 import express, { Router, Request, Response } from "express";
-import prisma from "../bin/database-connection.ts";
-import { securityRequest as SecurityRequestType } from "common/src/securityRequestType.ts";
+import PrismaClient from "../bin/database-connection.ts";
+import { securityRequest } from "common/src/securityRequestType.ts";
 
 const router: Router = express.Router();
 
 router.post("/", async function (req: Request, res: Response) {
-  const input: SecurityRequestType = req.body;
+  const securityRequestInput: securityRequest = req.body;
 
   try {
-    const roomStuff = await prisma.nodes.findMany({
+    const roomStuff = await PrismaClient.nodes.findMany({
       where: {
-        long_name: input.location,
+        long_name: securityRequestInput.location,
       },
     });
 
-    const id1 = await prisma.generalService.findMany({
+    const existingRequest = await PrismaClient.generalService.findMany({
       where: {
         type: "Security Request",
         location: roomStuff[0].node_id,
-        status: input.status,
-        emp_name: input.emp_name,
-        priority: input.priority,
+        status: securityRequestInput.status,
+        emp_name: securityRequestInput.name,
+        priority: securityRequestInput.priority,
       },
     });
 
-    if (id1.length >= 1) {
-      console.log("Duplicate security request found!");
+    if (existingRequest.length >= 1) {
+      console.log("SOMETHING BAD!!!!!!");
       res.sendStatus(400);
       return;
     }
 
-    await prisma.generalService.create({
+    await PrismaClient.generalService.create({
       data: {
         type: "Security Request",
         location: roomStuff[0].node_id,
-        status: input.status,
-        long_name_loc: input.location,
-        emp_name: input.emp_name,
-        priority: input.priority,
+        status: securityRequestInput.status,
+        long_name_loc: securityRequestInput.location,
+        emp_name: securityRequestInput.name,
+        priority: securityRequestInput.priority,
       },
     });
 
-    const findID = await prisma.generalService.findMany({
+    const findID = await PrismaClient.generalService.findMany({
       where: {
         type: "Security Request",
         location: roomStuff[0].node_id,
-        status: input.status,
-        emp_name: input.emp_name,
-        priority: input.priority,
+        status: securityRequestInput.status,
+        emp_name: securityRequestInput.name,
+        priority: securityRequestInput.priority,
       },
     });
 
-    await prisma.securityRequest.create({
-      data: {
-        id: findID[0].id,
-        incidentDescription: input.incidentDescription,
-        incidentTime: input.incidentTime?.toString(),
-        actionTaken: input.actionTaken,
-      },
-    });
+    if (securityRequestInput.date != undefined) {
+      await PrismaClient.lostItem.create({
+        data: {
+          id: findID[0].id,
+          date: securityRequestInput.date.toString(),
+          description: securityRequestInput.objectDesc,
+          type: securityRequestInput.type,
+        },
+      });
+    }
   } catch (e) {
     console.log(e);
     res.sendStatus(400);
@@ -68,12 +70,12 @@ router.post("/", async function (req: Request, res: Response) {
 });
 
 router.get("/", async function (req: Request, res: Response) {
-  const data = await prisma.generalService.findMany({
+  const data = await PrismaClient.generalService.findMany({
     where: {
       type: "Security Request",
     },
     include: {
-      securityRequest: true,
+      lost_location: true,
     },
   });
   try {
@@ -82,12 +84,13 @@ router.get("/", async function (req: Request, res: Response) {
     res.sendStatus(400);
     return;
   }
+  res.sendStatus(200);
 });
 
 router.delete("/:id", async function (req: Request, res: Response) {
   const id: number = parseInt(req.params.id);
   try {
-    await prisma.generalService.delete({
+    await PrismaClient.generalService.delete({
       where: {
         id: id,
       },
@@ -105,7 +108,7 @@ router.post("/update", async function (req: Request, res: Response) {
   const status = req.body.status;
 
   try {
-    await prisma.generalService.update({
+    await PrismaClient.generalService.update({
       where: {
         id: id,
       },
@@ -120,5 +123,4 @@ router.post("/update", async function (req: Request, res: Response) {
   }
   res.sendStatus(200);
 });
-
 export default router;

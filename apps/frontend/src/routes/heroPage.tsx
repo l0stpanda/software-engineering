@@ -7,6 +7,7 @@ import React, { useState, useEffect } from "react";
 import SmoothSlideshow from "../components/SmoothSlideshow";
 //import loginIcon from '../assets/loginIcon.png';
 import LoginButton from "../components/LoginButton";
+import MapIcon from "../components/mapIcon";
 
 function HeroPage() {
   // Import login from Auth0
@@ -120,6 +121,15 @@ function HeroPage() {
           <div
             className="flex flex-row w-full animate-fadeInLeft"
             style={{
+              animationDelay: "2.5s",
+              animationDuration: "2s",
+            }}
+          >
+            <MapIcon />
+          </div>
+          <div
+            className="flex flex-row w-full animate-fadeInLeft"
+            style={{
               marginTop: "200px",
               animationDelay: "2.5s",
               animationDuration: "2s",
@@ -127,7 +137,6 @@ function HeroPage() {
           >
             <LoginButton />
           </div>
-
           <div
             className="justify-end mb-2 ml-2 w-full"
             style={{ marginTop: "100px" }}
