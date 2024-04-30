@@ -8,6 +8,9 @@ import { inventoryType } from "common/src/inventoryType.ts";
 import {
   Button,
   Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControl,
   InputLabel,
   MenuItem,
@@ -153,20 +156,21 @@ export default function DisplayInventory() {
     });
     setOpen(false);
   }
-  const handleDelete = async (id: number) => {
+  const handleDelete = async () => {
     const item = records.find((record) => record.id === id);
     const itemName = item ? item.name : "Unknown Item"; // Default to "Unknown Item" if not found
     const itemID = item ? item.id : -1;
-    if (
-      !window.confirm(
-        `Are you sure you want to delete the inventory item ${itemName}?`,
-      )
-    ) {
-      return;
-    }
+    // if (
+    //   !window.confirm(
+    //     `Are you sure you want to delete the inventory item ${itemName}?`,
+    //   )
+    // ) {
+    //   return;
+    // }
 
     try {
       const token = await getAccessTokenSilently();
+      setConfirm(false);
       await axios.post(
         `/api/inventory/delete/${id}`,
         { id: itemID, name: itemName },
@@ -182,14 +186,12 @@ export default function DisplayInventory() {
         },
       });
       setRecords(received.data);
-      showSnackbar(
-        `Successfully deleted inventory item with ID number ${itemName}`,
-        "success",
-      );
     } catch (e) {
       console.error(e);
-      showSnackbar("Problem Deleting", "error");
+      return;
     }
+
+    window.location.reload();
   };
 
   function handleOpen() {
@@ -206,7 +208,21 @@ export default function DisplayInventory() {
     setinventoryResponse({ ...inventoryResponse, type: e.target.value });
   }
 
+  const [confirm, setConfirm] = useState<boolean>(false);
+  const [id, setId] =useState<number>();
+
+
+  function confirmDelete(id: number) {
+    setId(id);
+    setConfirm(true);
+  }
+
+  function noDelete(){
+    window.location.reload();
+  }
+
   return (
+      <React.Fragment>
     <div className="px-8 p5 h-screen bg-background">
       <div className="flex flex-row">
         <h1 className="my-2 font-header text-primary font-bold text-3xl text-center mx-auto">
@@ -252,7 +268,7 @@ export default function DisplayInventory() {
               name={record.name}
               type={record.type}
               quant={record.quant}
-              onDelete={handleDelete}
+              onDelete={async () => confirmDelete(record.id)}
               onAdd={onAdd}
             />
           ))}
@@ -314,6 +330,21 @@ export default function DisplayInventory() {
         </form>
       </Dialog>
 
+      <Dialog open={confirm} onClose={noDelete}>
+          <DialogTitle>Delete Confirmation</DialogTitle>
+          <DialogContent>
+              <strong>Are you sure you want to delete this request?</strong>
+          </DialogContent>
+          <DialogActions>
+              <Button onClick={noDelete} autoFocus>
+                  No
+              </Button>
+              <Button onClick={handleDelete} autoFocus>
+                  Yes
+              </Button>
+          </DialogActions>
+      </Dialog>
+
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
@@ -328,5 +359,6 @@ export default function DisplayInventory() {
         </Alert>
       </Snackbar>
     </div>
+      </React.Fragment>
   );
 }
