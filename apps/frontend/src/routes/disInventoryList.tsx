@@ -66,6 +66,44 @@ export default function DisplayInventory() {
     });
   }, [getAccessTokenSilently, user]);
 
+  const onAdd = async (id: number, quantToAdd: number) => {
+    const item = records.find((item) => item.id === id);
+    if (!item) {
+      console.error("Item not found in the state.");
+      alert("Item not found");
+      return;
+    }
+
+    const newQuant = item.quant + quantToAdd; // Calculate the new quantity
+
+    try {
+      const token = await getAccessTokenSilently();
+      await axios.post(
+        `/api/inventory/update`,
+        {
+          name: item.name, // API uses name to identify the item
+          quant: newQuant, // Send the total new quantity
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      // Update the state to reflect the new quantity locally
+      const updatedRecords = records.map((record) => {
+        if (record.id === id) {
+          return { ...record, quant: newQuant };
+        }
+        return record;
+      });
+      setRecords(updatedRecords);
+    } catch (error) {
+      console.error("Failed to update the quantity on the server.", error);
+      alert("Failed to update quantity");
+    }
+  };
   function handleFormUpdate(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     setinventoryResponse({
@@ -194,6 +232,9 @@ export default function DisplayInventory() {
               Quantity
             </th>
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              Add
+            </th>
+            <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Delete
             </th>
           </tr>
@@ -208,6 +249,7 @@ export default function DisplayInventory() {
               type={record.type}
               quant={record.quant}
               onDelete={handleDelete}
+              onAdd={onAdd}
             />
           ))}
         </tbody>
