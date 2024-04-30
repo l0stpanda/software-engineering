@@ -624,7 +624,9 @@ function MapPage() {
                     rounded-lg
                     fixed
                     bottom-7
-                    right-32"
+                    right-32
+                    overflow-y-auto
+                    inline-block"
               >
                 {clicked.requests.map((req) => {
                   return <AccordionServiceRequests data={req} />;
