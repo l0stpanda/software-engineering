@@ -40,6 +40,7 @@ interface roomScheduleInfo {
   startTime: string;
   lengthRes: string;
   room_name: string;
+  endTime: string;
 }
 interface lostItemInfo {
   date: string;
@@ -87,6 +88,7 @@ function AccordionServiceRequests(props: AccordionServiceRequestsProps) {
     startTime: "",
     lengthRes: "",
     room_name: "",
+    endTime: "",
   });
 
   const [stuffLost, setStuffLost] = useState<lostItemInfo>({
