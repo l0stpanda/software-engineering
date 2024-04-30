@@ -213,6 +213,9 @@ function ServiceRequests() {
                     Employee Name
                   </th>
                   <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
+                    Details
+                  </th>
+                  <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
                     Delete
                   </th>
                   {/* Dynamically generate column headers */}

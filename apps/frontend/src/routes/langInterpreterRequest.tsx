@@ -13,7 +13,8 @@ import {
   SelectChangeEvent,
   TextField,
 } from "@mui/material";
-
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
 import { langInterpreterType } from "common/src/langInterpreterType.ts";
 import dayjs, { Dayjs } from "dayjs";
 import axios from "axios";
@@ -24,6 +25,17 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 function LangInterpreterReq() {
+  const Transition = React.forwardRef(function Transition(
+    props: TransitionProps & {
+      children: React.ReactElement<string, string>;
+    },
+    ref: React.Ref<unknown>,
+  ) {
+    return (
+      <Slide direction="up" ref={ref} {...props} children={props.children} />
+    );
+  });
+
   const { getAccessTokenSilently } = useAuth0();
   const initialFormData: langInterpreterType = {
     name: "",
@@ -294,36 +306,44 @@ function LangInterpreterReq() {
         </form>
       </div>
 
-      <Dialog open={open} onClose={handleSubmitClose}>
-        <DialogTitle>We received your request!</DialogTitle>
-        <DialogContent>
-          <strong>Here are your responses:</strong>
-          <br />
-          Name: {formData.name}
-          <br />
-          Location: {formData.location}
-          <br />
-          Date: {formData.date?.toString()}
-          <br />
-          Priority: {formData.priority}
-          <br />
-          Language Requested: {formData.language}
-          <br />
-          Mode of Interpretation: {formData.modeOfInterp}
-          <br />
-          Special Instructions: {formData.specInstruct}
-          <br />
-          Status: {formData.status}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleSubmitClose} autoFocus>
-            Okay
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <div className="text-text ml-2 font-header place-self-right">
-        Credits: Najum
-      </div>
+      <React.Fragment>
+        <Dialog
+          open={open}
+          onClose={handleSubmitClose}
+          TransitionComponent={Transition}
+          keepMounted
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>We received your request!</DialogTitle>
+          <DialogContent>
+            <strong>Here are your responses:</strong>
+            <br />
+            Name: {formData.name}
+            <br />
+            Location: {formData.location}
+            <br />
+            Date: {formData.date?.toString()}
+            <br />
+            Priority: {formData.priority}
+            <br />
+            Language Requested: {formData.language}
+            <br />
+            Mode of Interpretation: {formData.modeOfInterp}
+            <br />
+            Special Instructions: {formData.specInstruct}
+            <br />
+            Status: {formData.status}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleSubmitClose} autoFocus>
+              Okay
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <div className="text-text ml-2 font-header place-self-right">
+          Credits: Najum
+        </div>
+      </React.Fragment>
     </div>
   );
 }
