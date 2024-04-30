@@ -324,8 +324,20 @@ function EditMap() {
             />
           )}
           {/*Form for creating edge*/}
-          {openEdgeCreation && <CreateEdgeForm nodes={edgeNodes} />}
-          {openEdgeDeletion && <DeleteEdgeForm nodes={edgeNodes} />}
+          {openEdgeCreation && (
+            <CreateEdgeForm
+              nodes={edgeNodes}
+              update={update}
+              setUpdate={setUpdate}
+            />
+          )}
+          {openEdgeDeletion && (
+            <DeleteEdgeForm
+              nodes={edgeNodes}
+              update={update}
+              setUpdate={setUpdate}
+            />
+          )}
 
           <div
             className="mr-8
