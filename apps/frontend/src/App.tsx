@@ -141,10 +141,10 @@ function App() {
             <LoadingPage component={ServiceRequests} adminOnly={false} />
           ),
         },
-          {
-              path: "graphs",
-              element: <LoadingPage component={BarChartReqs} adminOnly={false} />,
-          },
+        {
+          path: "graphs",
+          element: <LoadingPage component={BarChartReqs} adminOnly={false} />,
+        },
         {
           path: "credit",
           element: <LoadingPage component={CreditPage} adminOnly={false} />,
@@ -155,12 +155,12 @@ function App() {
             <LoadingPage component={LangInterpreterReq} adminOnly={false} />
           ),
         },
-          {
-              path: "graphs",
-                element: (
-                    <LoadingPage component={BarChartPieChart} adminOnly={true} />
-                ),
-          },
+        {
+          path: "graphs",
+          element: (
+            <LoadingPage component={BarChartPieChart} adminOnly={true} />
+          ),
+        },
       ],
     },
   ]);

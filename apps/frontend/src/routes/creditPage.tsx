@@ -191,7 +191,6 @@ export default function CreditPage() {
     return pngsLinksEtc.filter((item) => item.label === label);
   };
 
-
   return (
     <div
       className="h-full
