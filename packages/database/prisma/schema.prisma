@@ -69,6 +69,19 @@ model GeneralService {
   flowerID           Flowers[]            @relation("flowerID")
   sanitationID       SanitationRequest[]  @relation("sanitationReq")
   maintainID         MaintenanceRequest[] @relation("idCheckMaintain")
+  langInterpreterID  langInterpreter[]    @relation("langInterpreterID")
+}
+
+// language interpreter requests are saved
+model langInterpreter {
+  id           Int     @id
+  date         String
+  language     String
+  modeOfInterp String
+  specInstruct String?
+
+  // foreign key reference
+  langInterpreterID GeneralService @relation("langInterpreterID", fields: [id], references: [id], onDelete: Cascade)
 }
 
 model SanitationRequest {
@@ -144,6 +157,8 @@ model User {
 model Todo {
   id       Int       @id @default(autoincrement())
   task     String
+  notes    String
+  dueDate  String
   priority String
   email    String
   complete Boolean

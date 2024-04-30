@@ -20,7 +20,7 @@ import UserDropdown from "../components/userDropdown.tsx";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -45,7 +45,7 @@ export default function RoomSchedulingReq() {
 
   const [responses, setResponses] = useState<roomReqFields>({
     employName: "",
-    startTime: dayjs(),
+    startTime: null,
     lengthRes: "",
     roomNum: "",
     reqStatus: "Unassigned",

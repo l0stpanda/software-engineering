@@ -128,6 +128,8 @@ CREATE TABLE "User" (
 CREATE TABLE "Todo" (
     "id" SERIAL NOT NULL,
     "task" TEXT NOT NULL,
+    "notes" TEXT NOT NULL,
+    "dueDate" TEXT NOT NULL,
     "priority" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "complete" BOOLEAN NOT NULL,

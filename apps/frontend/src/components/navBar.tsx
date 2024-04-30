@@ -83,7 +83,7 @@ function CustomNavBar() {
 
   return (
     <AppBar sx={{ bgcolor: "#FBFEFF" }}>
-      <div className="w-full flex justify-between">
+      <div className="w-full flex justify-between position-fixed">
         <Toolbar disableGutters={true} sx={{ width: "100%" }}>
           <div className="h-12 flex px-2 py-2 min-w-fit">
             <a href="">
