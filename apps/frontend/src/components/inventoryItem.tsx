@@ -1,7 +1,7 @@
-import axios from "axios";
-import { useAuth0 } from "@auth0/auth0-react";
+// import axios from "axios";
+// import { useAuth0 } from "@auth0/auth0-react";
 import { DeleteOutline } from "@mui/icons-material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   IconButton,
@@ -85,21 +85,21 @@ function InventoryItem(props: InventoryItemProps) {
           </IconButton>
         </td>
       </tr>
-        {/*<Dialog open={confirm} onClose={noDelete}>*/}
-        {/*    <DialogTitle>Delete Confirmation</DialogTitle>*/}
-        {/*    <DialogContent>*/}
-        {/*        <strong>Are you sure you want to delete this request?</strong>*/}
-        {/*    </DialogContent>*/}
-        {/*    <DialogActions>*/}
-        {/*        <Button onClick={noDelete} autoFocus>*/}
-        {/*            No*/}
-        {/*        </Button>*/}
-        {/*        <Button onClick={deleteData} autoFocus>*/}
-        {/*            Yes*/}
-        {/*        </Button>*/}
-        {/*    </DialogActions>*/}
-        {/*</Dialog>*/}
-        <Dialog open={open} onClose={handleClose}>
+      {/*<Dialog open={confirm} onClose={noDelete}>*/}
+      {/*    <DialogTitle>Delete Confirmation</DialogTitle>*/}
+      {/*    <DialogContent>*/}
+      {/*        <strong>Are you sure you want to delete this request?</strong>*/}
+      {/*    </DialogContent>*/}
+      {/*    <DialogActions>*/}
+      {/*        <Button onClick={noDelete} autoFocus>*/}
+      {/*            No*/}
+      {/*        </Button>*/}
+      {/*        <Button onClick={deleteData} autoFocus>*/}
+      {/*            Yes*/}
+      {/*        </Button>*/}
+      {/*    </DialogActions>*/}
+      {/*</Dialog>*/}
+      <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add Quantity</DialogTitle>
         <DialogContent>
           <TextField
