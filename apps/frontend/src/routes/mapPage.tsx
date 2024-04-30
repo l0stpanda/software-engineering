@@ -7,6 +7,9 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Typography,
+  AccordionSummary,
+  Accordion,
 } from "@mui/material";
 import {
   TransformWrapper,
@@ -421,6 +424,7 @@ function MapPage() {
 
   const handleClearPath = () => {
     setNavigatingNodes({ start: "", end: "" });
+    setDirections([]);
   };
 
   const [mode, setMode] = useState<string>("path");
@@ -429,8 +433,11 @@ function MapPage() {
 
   const handleMode = () => {
     if (mode === "path") {
+      handleClearPath();
       setMode("info");
+      setDirections([]);
     } else if (mode === "info") {
+      setDirections([]);
       setMode("path");
     }
   };
@@ -592,10 +599,11 @@ function MapPage() {
             <></>
           )}
         </div>
-        {directions.length != 0 && mode === "path" ? (
-          <div
-            className="
-                    h-[250px]
+        {mode === "path" ? (
+          directions.length != 0 && (
+            <div
+              className="
+                    max-h-[250px]
                     w-[300px]
                     items-center
                     bg-background
@@ -605,16 +613,19 @@ function MapPage() {
                     rounded-lg
                     fixed
                     bottom-7
-                    right-32"
-          >
-            <div className="overflow-y-auto h-full">{showDirections()}</div>
-          </div>
+                    right-32
+                    overflow-y-auto
+                    inline-block"
+            >
+              <div className="overflow-y-auto">{showDirections()}</div>
+            </div>
+          )
         ) : (
           <>
-            {clicked && showInfo && (
+            {clicked && showInfo && clicked.requests.length > 0 ? (
               <div
                 className="
-                    h-[250px]
+                    max-h-[250px]
                     w-[300px]
                     items-center
                     bg-background
@@ -632,6 +643,33 @@ function MapPage() {
                   return <AccordionServiceRequests data={req} />;
                 })}
               </div>
+            ) : (
+              clicked && (
+                <div
+                  className="
+                    max-h-[250px]
+                    w-[300px]
+                    items-center
+                    bg-background
+                    border-primary
+                    border-2
+                    overflow-clip
+                    rounded-lg
+                    fixed
+                    bottom-7
+                    right-32
+                    overflow-y-auto
+                    inline-block"
+                >
+                  <Accordion disableGutters={true}>
+                    <AccordionSummary>
+                      <Typography>
+                        No specific service requests available.
+                      </Typography>
+                    </AccordionSummary>
+                  </Accordion>
+                </div>
+              )
             )}
           </>
         )}

@@ -83,9 +83,9 @@ function FloorNode(props: FloorNodesProps) {
     };
   }, [props.imageSrc]);
 
-  // useEffect(() => {
-  //     console.log("Mode has changed:", props.mode);
-  // }, [props.mode]);
+  useEffect(() => {
+    setCount(0);
+  }, [props.mode]);
 
   const handleNodeClick = (nodeid: string) => () => {
     const res = nodes.get(nodeid);
@@ -103,6 +103,7 @@ function FloorNode(props: FloorNodesProps) {
           setCount(0);
         }
       } else {
+        setCount(0);
         console.log("Mode is info");
 
         setClicked(scaledNodes[nodeid]);

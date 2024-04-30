@@ -155,6 +155,8 @@ function AccordionServiceRequests(props: AccordionServiceRequestsProps) {
     fetchDetails().then().catch();
   }, [data.id, data.type, getAccessTokenSilently]);
 
+  let result = [];
+
   switch (data.type) {
     case "Language Interpreter":
       content = (
@@ -261,13 +263,15 @@ function AccordionServiceRequests(props: AccordionServiceRequestsProps) {
       );
       break;
     case "Room Scheduling":
-      // // eslint-disable-next-line no-case-declarations
-      // const [startHour, startString, endHour, endString] = getBooking(stuffRoomSchedule);
+      result = getBooking(stuffRoomSchedule);
+      console.log(result[0]);
       content = (
         <Typography>
           Employee Name: {data.emp_name}
           <br />
-          Time: {stuffRoomSchedule.startTime}
+          Date: {result[4]}
+          <br />
+          Time: {result[0]}:{result[1]} to {result[2]}:{result[3]}
           <br />
           Reservation Length: {stuffRoomSchedule.lengthRes}
           <br />
@@ -300,7 +304,7 @@ function AccordionServiceRequests(props: AccordionServiceRequestsProps) {
       break;
     default:
       content = (
-        <Typography>No specific details available for this type.</Typography>
+        <Typography>No specific service requests available.</Typography>
       );
       break;
   }
@@ -325,37 +329,43 @@ function AccordionServiceRequests(props: AccordionServiceRequestsProps) {
 
 // Gets a variety of info about bookings at a given node and checks if the booking is today
 // Still needs a useEffect to visualize changes on screen
-// function getBooking(data: roomScheduleInfo) {
-//     console.log("Booking data: ", data);
-//         const duration = parseInt(data.lengthRes);
-//         const [date, time] = data.startTime.split("T"); // Splits date and time
-//         // Gets the separate time values
-//         const [startHour, startMinute] = time
-//             .split(":")
-//             .map((value: string) => parseInt(value));
-//         const endHour = startHour + Math.floor(duration / 60);
-//         const endMinute = (startMinute + duration) % 60;
-//         // Gets the separate date values
-//         const [year, month, day] = date
-//             .split("-")
-//             .map((value: string) => parseInt(value));
-//         // Gets current date Object
-//         const current = new Date();
-//         console.log(endHour, endMinute);
-//         let startString = startMinute.toString();
-//         let endString = endMinute.toString();
-//
-//         if (
-//             current.getUTCDate() == day &&
-//             current.getUTCMonth() == month - 1 &&
-//             current.getUTCFullYear() == year
-//         ) {
-//             startString = startMinute.toString();
-//             endString = endMinute.toString();
-//             if (startString.length == 1) startString = "0".concat(startString);
-//             if (endString.length == 1) endString = "0".concat(endString);
-//         }
-//     return [startHour, startString, endHour, endString];
-// }
+function getBooking(data: roomScheduleInfo) {
+  const result = [];
+  console.log("Booking data: ", data);
+  const duration = parseInt(data.lengthRes);
+  const [date, time] = data.startTime.split("T"); // Splits date and time
+  // Gets the separate time values
+  const [startHour, startMinute] = time
+    .split(":")
+    .map((value: string) => parseInt(value));
+  const endHour = startHour + Math.floor(duration / 60);
+  const endMinute = (startMinute + duration) % 60;
+  // Gets the separate date values
+  const [year, month, day] = date
+    .split("-")
+    .map((value: string) => parseInt(value));
+  // Gets current date Object
+  const current = new Date();
+  console.log(endHour, endMinute);
+  let startString = startMinute.toString();
+  let endString = endMinute.toString();
+
+  if (
+    current.getUTCDate() == day &&
+    current.getUTCMonth() == month - 1 &&
+    current.getUTCFullYear() == year
+  ) {
+    startString = startMinute.toString();
+    endString = endMinute.toString();
+    if (startString.length == 1) startString = "0".concat(startString);
+    if (endString.length == 1) endString = "0".concat(endString);
+  }
+  result.push(startHour);
+  result.push(startString);
+  result.push(endHour);
+  result.push(endString);
+  result.push(date);
+  return result;
+}
 
 export default AccordionServiceRequests;
