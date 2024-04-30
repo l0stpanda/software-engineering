@@ -43,6 +43,7 @@ function InventoryItem(props: InventoryItemProps) {
           ? "yellow"
           : "transparent",
   };
+
   return (
     <>
       <tr className="bg-background border-b-2 border-secondary" key={props.id}>
@@ -84,6 +85,7 @@ function InventoryItem(props: InventoryItemProps) {
             fullWidth
             value={quantityToAdd}
             onChange={(e) => setQuantityToAdd(parseInt(e.target.value, 10))}
+            inputProps={{ min: "0" }}
           />
         </DialogContent>
         <DialogActions>

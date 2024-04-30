@@ -99,6 +99,10 @@ export default function DisplayInventory() {
         return record;
       });
       setRecords(updatedRecords);
+      showSnackbar(
+        ` Add ${quantToAdd} to ${item.name} successfully`,
+        "success",
+      );
     } catch (error) {
       console.error("Failed to update the quantity on the server.", error);
       alert("Failed to update quantity");
