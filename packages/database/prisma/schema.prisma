@@ -116,6 +116,7 @@ model RoomScheduler {
   id        Int    @id
   startTime String
   lengthRes String
+  endTime   String
   room_name String
 
   roomSchedID GeneralService @relation("roomSchedID", fields: [id], references: [id], onDelete: Cascade)

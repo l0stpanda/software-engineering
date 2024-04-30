@@ -64,6 +64,15 @@ CREATE TABLE "SanitationRequest" (
 );
 
 -- CreateTable
+CREATE TABLE "MaintenanceRequest" (
+    "id" INTEGER NOT NULL,
+    "date" TEXT NOT NULL,
+    "maintainType" TEXT NOT NULL,
+
+    CONSTRAINT "MaintenanceRequest_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "medicalDevice" (
     "id" INTEGER NOT NULL,
     "device" TEXT NOT NULL,
@@ -89,6 +98,7 @@ CREATE TABLE "RoomScheduler" (
     "id" INTEGER NOT NULL,
     "startTime" TEXT NOT NULL,
     "lengthRes" TEXT NOT NULL,
+    "endTime" TEXT NOT NULL,
     "room_name" TEXT NOT NULL,
 
     CONSTRAINT "RoomScheduler_pkey" PRIMARY KEY ("id")
@@ -108,7 +118,7 @@ CREATE TABLE "MedicineRequest" (
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "username" TEXT,
+    "username" TEXT NOT NULL,
     "role" TEXT NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
@@ -121,9 +131,18 @@ CREATE TABLE "Todo" (
     "priority" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "complete" BOOLEAN NOT NULL,
-    "subtasks" TEXT[],
 
     CONSTRAINT "Todo_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "subTodo" (
+    "id" SERIAL NOT NULL,
+    "id_relation" INTEGER NOT NULL,
+    "task" TEXT NOT NULL,
+    "complete" BOOLEAN NOT NULL,
+
+    CONSTRAINT "subTodo_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -144,11 +163,17 @@ CREATE UNIQUE INDEX "Inventory_name_key" ON "Inventory"("name");
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
+
 -- AddForeignKey
 ALTER TABLE "GeneralService" ADD CONSTRAINT "GeneralService_location_fkey" FOREIGN KEY ("location") REFERENCES "Nodes"("node_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "SanitationRequest" ADD CONSTRAINT "SanitationRequest_id_fkey" FOREIGN KEY ("id") REFERENCES "GeneralService"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MaintenanceRequest" ADD CONSTRAINT "MaintenanceRequest_id_fkey" FOREIGN KEY ("id") REFERENCES "GeneralService"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "medicalDevice" ADD CONSTRAINT "medicalDevice_id_fkey" FOREIGN KEY ("id") REFERENCES "GeneralService"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -164,6 +189,9 @@ ALTER TABLE "MedicineRequest" ADD CONSTRAINT "MedicineRequest_id_fkey" FOREIGN K
 
 -- AddForeignKey
 ALTER TABLE "Todo" ADD CONSTRAINT "Todo_email_fkey" FOREIGN KEY ("email") REFERENCES "User"("email") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "subTodo" ADD CONSTRAINT "subTodo_id_relation_fkey" FOREIGN KEY ("id_relation") REFERENCES "Todo"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Flowers" ADD CONSTRAINT "Flowers_id_fkey" FOREIGN KEY ("id") REFERENCES "GeneralService"("id") ON DELETE CASCADE ON UPDATE CASCADE;
