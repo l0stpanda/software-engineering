@@ -4,6 +4,7 @@ import {
   IconButton,
   ToggleButton,
   ToggleButtonGroup,
+  Tooltip,
 } from "@mui/material";
 import { useState } from "react";
 import BackgroundPattern from "../components/backgroundPattern.tsx";
@@ -429,7 +430,7 @@ function EditMap() {
               <div className="">
                 <FloorMapButtons />
                 <Controls />
-                <div className="absolute z-10">
+                <div className="absolute z-10 top-4">
                   {/*Form for adding a new node*/}
                   {isOpen && (
                     <EditNodeForm
@@ -523,80 +524,79 @@ function EditMap() {
                   fullWidth
                   color="primary"
                 >
-                  <ToggleButton value="add_node">
-                    <IconButton
-                      className="hover:scale-110 duration-200 transition-transform"
-                      sx={{
-                        "&:hover, &:active": {
-                          color: "#002866",
-                        },
-                      }}
-                    >
-                      {<AddCircleOutlineIcon color="primary" />}
-                    </IconButton>
-                  </ToggleButton>
-                  <ToggleButton value="delete_node">
-                    <IconButton
-                      className="hover:scale-110 duration-200 transition-transform"
-                      sx={{
-                        "&:hover, &:active": {
-                          color: "#002866",
-                        },
-                      }}
-                    >
-                      {<RemoveCircleOutlineIcon color="primary" />}
-                    </IconButton>
-                  </ToggleButton>
-                  <ToggleButton value="move_node">
-                    <IconButton
-                      className="hover:scale-110 duration-200 transition-transform"
-                      sx={{
-                        "&:hover, &:active": {
-                          color: "#002866",
-                        },
-                      }}
-                    >
-                      {<PanToolIcon color="primary" />}
-                    </IconButton>
-                  </ToggleButton>
-                </ToggleButtonGroup>
-              </div>
-              <div className="">
-                <ToggleButtonGroup
-                  value={mode}
-                  exclusive
-                  onChange={handleEditMode}
-                  orientation="horizontal"
-                  fullWidth
-                  color="primary"
-                >
+                  <Tooltip title="Add Node">
+                    <ToggleButton value="add_node">
+                      <IconButton
+                        className="hover:scale-110 duration-200 transition-transform"
+                        sx={{
+                          "&:hover, &:active": {
+                            color: "#002866",
+                          },
+                        }}
+                      >
+                        {<AddCircleOutlineIcon color="primary" />}
+                      </IconButton>
+                    </ToggleButton>
+                  </Tooltip>
+                  <Tooltip title="Delete Node">
+                    <ToggleButton value="delete_node">
+                      <IconButton
+                        className="hover:scale-110 duration-200 transition-transform"
+                        sx={{
+                          "&:hover, &:active": {
+                            color: "#002866",
+                          },
+                        }}
+                      >
+                        {<RemoveCircleOutlineIcon color="primary" />}
+                      </IconButton>
+                    </ToggleButton>
+                  </Tooltip>
+                  <Tooltip title="Move Node">
+                    <ToggleButton value="move_node">
+                      <IconButton
+                        className="hover:scale-110 duration-200 transition-transform"
+                        sx={{
+                          "&:hover, &:active": {
+                            color: "#002866",
+                          },
+                        }}
+                      >
+                        {<PanToolIcon color="primary" />}
+                      </IconButton>
+                    </ToggleButton>
+                  </Tooltip>
                   {/*<h1 className="text-primary font-header font-bold text-2xl pt-5 text-center">*/}
                   {/*    Edge Editing*/}
                   {/*</h1>*/}
-                  <ToggleButton value="add_edge">
-                    <IconButton
-                      className="hover:scale-110 duration-200 transition-transform"
-                      sx={{
-                        "&:hover, &:active": {
-                          color: "#002866",
-                        },
-                      }}
-                    >
-                      {<AddRoadIcon color="primary" />}
-                    </IconButton>
-                  </ToggleButton>
-                  <ToggleButton value="delete_edge">
-                    <IconButton
-                      className="hover:scale-110 duration-200 transition-transform"
-                      sx={{
-                        "&:hover, &:active": {
-                          color: "#002866",
-                        },
-                      }}
-                    >
-                      {<RemoveRoadIcon color="primary" />}
-                    </IconButton>
-                  </ToggleButton>
+                  <Tooltip title="Add Edge">
+                    <ToggleButton value="add_edge">
+                      <IconButton
+                        className="hover:scale-110 duration-200 transition-transform"
+                        sx={{
+                          "&:hover, &:active": {
+                            color: "#002866",
+                          },
+                        }}
+                      >
+                        {<AddRoadIcon color="primary" />}
+                      </IconButton>
+                    </ToggleButton>
+                  </Tooltip>
+                  <Tooltip title="Delete Edge">
+                    <ToggleButton value="delete_edge">
+                      <IconButton
+                        className="hover:scale-110 duration-200 transition-transform"
+                        sx={{
+                          "&:hover, &:active": {
+                            color: "#002866",
+                          },
+                        }}
+                      >
+                        {<RemoveRoadIcon color="primary" />}
+                      </IconButton>
+                    </ToggleButton>
+                  </Tooltip>
                 </ToggleButtonGroup>
               </div>
             </div>
