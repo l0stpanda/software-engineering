@@ -7,6 +7,8 @@ import {
   Tab,
   Tabs,
   Tooltip,
+  createTheme,
+  ThemeProvider,
 } from "@mui/material";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
@@ -20,12 +22,14 @@ import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import MonitorHeartIcon from "@mui/icons-material/MonitorHeart";
 import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
+import TranslateIcon from "@mui/icons-material/Translate";
 import LostFound from "../components/lostAndFound.tsx";
 import RoomSchedulingReq from "../components/roomSchedulingReq.tsx";
 import MedicalDeviceReq from "../components/medicalDeviceReq.tsx";
 import MedicineDeliveryReq from "../components/MedicineDeliveryReq.tsx";
 import SanitationReq from "../components/sanitationReq.tsx";
 import MaintenanceReq from "../components/maintenanceReq.tsx";
+import LangInterpreterReq from "./langInterpreterRequest.tsx";
 import ToolIcon from "@mui/icons-material/Build";
 
 export type GeneralReq = {
@@ -47,6 +51,17 @@ function ServiceRequests() {
     //console.log(tabIndex);
     setCurrentTabIndex(tabIndex);
   };
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#F6BD38",
+      },
+      secondary: {
+        main: "#F6BD38",
+      },
+    },
+  });
 
   // Use state for records being displayed
   const [records, setRecords] = useState<GeneralReq[]>([]);
@@ -214,128 +229,140 @@ function ServiceRequests() {
             {/*<h1 className="my-2 font-header text-primary font-bold text-xl text-center">*/}
             {/*    Choose a new request*/}
             {/*</h1>*/}
-            <Tabs
-              variant="scrollable"
-              scrollButtons="auto"
-              value={currentTabIndex}
-              onChange={handleTabChange}
-              sx={{
-                overflow: "hidden", // Hiding overflow here
-              }}
-            >
-              <Tooltip title="Flower Delivery">
-                <Tab
-                  icon={<LocalFloristIcon />}
-                  id="tab-0"
-                  sx={{
-                    transition: "transform 0.3s ease-in-out",
-                    color: "#FFFFFF",
-                    "&:hover, &:focus": {
-                      transform: "scale(1.4)",
-                      position: "relative",
-                      zIndex: 1,
-                      color: "#F6BD38",
-                    },
-                  }}
-                />
-              </Tooltip>
-              <Tooltip title="Lost Item Request">
-                <Tab
-                  icon={<WalletIcon />}
-                  id="tab-1"
-                  sx={{
-                    transition: "transform 0.3s ease-in-out",
-                    color: "#FFFFFF",
-                    "&:hover, &:focus": {
-                      transform: "scale(1.4)",
-                      position: "relative",
-                      zIndex: 1,
-                      color: "#F6BD38",
-                    },
-                  }}
-                />
-              </Tooltip>
-              <Tooltip title="Room Scheduling">
-                <Tab
-                  icon={<MeetingRoomIcon />}
-                  id="tab-2"
-                  sx={{
-                    transition: "transform 0.3s ease-in-out",
-                    color: "#FFFFFF",
-                    "&:hover, &:focus": {
-                      transform: "scale(1.3)",
-                      position: "relative",
-                      zIndex: 1,
-                      color: "#F6BD38",
-                    },
-                  }}
-                />
-              </Tooltip>
-              <Tooltip title="Medical Device Delivery">
-                <Tab
-                  icon={<MonitorHeartIcon />}
-                  id="tab-3"
-                  sx={{
-                    transition: "transform 0.3s ease-in-out",
-                    color: "#FFFFFF",
-                    "&:hover, &:focus": {
-                      transform: "scale(1.4)",
-                      position: "relative",
-                      zIndex: 1,
-                      color: "#F6BD38",
-                    },
-                  }}
-                />
-              </Tooltip>
-              <Tooltip title="Medicine Delivery">
-                <Tab
-                  icon={<LocalPharmacyIcon />}
-                  id="tab-4"
-                  sx={{
-                    transition: "transform 0.3s ease-in-out",
-                    color: "#FFFFFF",
-                    "&:hover, &:focus": {
-                      transform: "scale(1.4)",
-                      position: "relative",
-                      zIndex: 1,
-                      color: "#F6BD38",
-                    },
-                  }}
-                />
-              </Tooltip>
-              <Tooltip title="Sanitation Request">
-                <Tab
-                  icon={<CleaningServicesIcon />}
-                  id="tab-5"
-                  sx={{
-                    transition: "transform 0.3s ease-in-out",
-                    color: "#FFFFFF",
-                    "&:hover, &:focus": {
-                      transform: "scale(1.4)",
-                      position: "relative",
-                      zIndex: 1,
-                      color: "#F6BD38",
-                    },
-                  }}
-                />
-              </Tooltip>
-              <Tooltip title="Maintenance Request">
-                <Tab
-                  icon={<ToolIcon />}
-                  id="tab-6"
-                  sx={{
-                    transition: "transform 0.3s ease-in-out",
-                    color: "#FFFFFF",
+            <ThemeProvider theme={theme}>
+              <Tabs
+                variant="scrollable"
+                scrollButtons="auto"
+                color="main"
+                value={currentTabIndex}
+                onChange={handleTabChange}
+                sx={{
+                  overflow: "hidden", // Hiding overflow here
+                  color: "#FFFFFF",
+                }}
+              >
+                <Tooltip title="Flower Delivery">
+                  <Tab
+                    icon={<LocalFloristIcon />}
+                    id="tab-0"
+                    sx={{
+                      transition: "transform 0.3s ease-in-out",
+                      color: "#FFFFFF",
                       "&:hover": {
-                      transform: "scale(1.4)",
-                      position: "relative",
-                      zIndex: 1,
-                      color: "#F6BD38",
-                    },
-                  }}
-                />
-              </Tooltip>
-            </Tabs>
+                        position: "relative",
+                        zIndex: 1,
+                        color: "#F6BD38",
+                      },
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title="Lost Item Request">
+                  <Tab
+                    icon={<WalletIcon />}
+                    id="tab-1"
+                    sx={{
+                      transition: "transform 0.3s ease-in-out",
+                      color: "#FFFFFF",
+                      "&:hover": {
+                        position: "relative",
+                        zIndex: 1,
+                        color: "#F6BD38",
+                      },
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title="Room Scheduling">
+                  <Tab
+                    icon={<MeetingRoomIcon />}
+                    id="tab-2"
+                    sx={{
+                      transition: "transform 0.3s ease-in-out",
+                      color: "#FFFFFF",
+                      "&:hover": {
+                        position: "relative",
+                        zIndex: 1,
+                        color: "#F6BD38",
+                      },
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title="Medical Device Delivery">
+                  <Tab
+                    icon={<MonitorHeartIcon />}
+                    id="tab-3"
+                    sx={{
+                      transition: "transform 0.3s ease-in-out",
+                      color: "#FFFFFF",
+                      "&:hover": {
+                        position: "relative",
+                        zIndex: 1,
+                        color: "#F6BD38",
+                      },
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title="Medicine Delivery">
+                  <Tab
+                    icon={<LocalPharmacyIcon />}
+                    id="tab-4"
+                    sx={{
+                      transition: "transform 0.3s ease-in-out",
+                      color: "#FFFFFF",
+                      "&:hover": {
+                        position: "relative",
+                        zIndex: 1,
+                        color: "#F6BD38",
+                      },
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title="Sanitation Request">
+                  <Tab
+                    icon={<CleaningServicesIcon />}
+                    id="tab-5"
+                    sx={{
+                      transition: "transform 0.3s ease-in-out",
+                      color: "#FFFFFF",
+                      "&:hover": {
+                        position: "relative",
+                        zIndex: 1,
+                        color: "#F6BD38",
+                      },
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title="Maintenance Request">
+                  <Tab
+                    icon={<ToolIcon />}
+                    id="tab-6"
+                    sx={{
+                      transition: "transform 0.3s ease-in-out",
+                      color: "#FFFFFF",
+                      "&:hover": {
+                        position: "relative",
+                        zIndex: 1,
+                        color: "#F6BD38",
+                      },
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title="Language Interpreter">
+                  <Tab
+                    icon={<TranslateIcon />}
+                    id="tab-7"
+                    sx={{
+                      transition: "transform 0.3s ease-in-out",
+                      color: "#FFFFFF",
+                      "&:hover": {
+                        position: "relative",
+                        zIndex: 1,
+                        color: "#F6BD38",
+                      },
+                    }}
+                  />
+                </Tooltip>
+              </Tabs>
+            </ThemeProvider>
           </div>
 
           <div className="bg-background rounded-lg overflow-y-auto h-full">
@@ -346,6 +373,7 @@ function ServiceRequests() {
             {currentTabIndex === 4 && <MedicineDeliveryReq />}
             {currentTabIndex === 5 && <SanitationReq />}
             {currentTabIndex === 6 && <MaintenanceReq />}
+            {currentTabIndex === 7 && <LangInterpreterReq />}
           </div>
         </div>
       </div>
