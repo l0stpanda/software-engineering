@@ -150,7 +150,7 @@ const BarChartPieChart = () => {
                     backgroundPosition: "center",
                 }}
             >
-                <div className="mt-[10rem] flex-row">
+                <div className="mt-[10rem] flex flex-row">
                     <div className="rounded-xl bg-background bg-opacity-65 flex-row max-w-3xl p-0.5 m-8 pt-2">
                     <h2 className="font-header text-lr mb-1.5 text-primary font-bold ml-1.5">Requests by Category</h2>
                     <ResponsiveContainer width={850} height={400}>
@@ -180,8 +180,8 @@ const BarChartPieChart = () => {
                         </BarChart>
                     </ResponsiveContainer>
                     </div>
-                    <div className=" p-4 pl-0">
-                        <h2 className="font-header text-lg text-primary font-bold">Statuses</h2>
+                    <div className="rounded-xl bg-background bg-opacity-65 flex-row max-w-2xl p-4 mt-8 mb-8">
+                        <h2 className="font-header text-lr mb-1.5 text-primary font-bold ml-1.5">Statuses</h2>
                     <ResponsiveContainer width={850} height={400}>
                         <PieChart>
                             <Tooltip content={<CustomTooltipPie active={false} payload={[]} label={""}/>}/>
