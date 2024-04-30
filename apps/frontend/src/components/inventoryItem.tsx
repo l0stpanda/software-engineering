@@ -3,6 +3,7 @@ import { IconButton, TextField } from "@mui/material";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { DeleteOutline } from "@mui/icons-material";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 interface InventoryItemProps {
   id: number;
@@ -86,17 +87,14 @@ function InventoryItem(props: InventoryItemProps) {
     }
   }
 
-  const rowStyle =
-    props.quant < LOW_QUANTITY_THRESHOLD ? { backgroundColor: "yellow" } : {};
-
   return (
     <>
       <tr className="bg-background border-b-2 border-secondary" key={props.id}>
         <td className="p-3 text-sm">{props.name}</td>
         <td className="p-3 text-sm">{props.type}</td>
-        <td className="p-3 text-sm">
+        <td className="p-3 text-sm flex flex-row">
           <TextField
-            style={{ width: "250px", ...rowStyle }}
+            style={{ width: "250px" }}
             onChange={handleChange}
             value={quantity}
             variant="filled"
@@ -106,6 +104,14 @@ function InventoryItem(props: InventoryItemProps) {
             name="quant"
             type="text"
           />
+          {props.quant < LOW_QUANTITY_THRESHOLD ? (
+            <div className="flex flex-row gap-2">
+              <WarningAmberIcon className="my-auto ml-4" color="error" />
+              <h1 className="my-auto">Low Stock</h1>
+            </div>
+          ) : (
+            <></>
+          )}
         </td>
         <td className="p-3 text-sm">
           <IconButton
