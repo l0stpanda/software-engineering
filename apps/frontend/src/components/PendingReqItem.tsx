@@ -4,11 +4,11 @@ import {
   MenuItem,
   SelectChangeEvent,
   IconButton,
-  Button,
   Dialog,
-  DialogTitle,
-  DialogContent,
   DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
 } from "@mui/material";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -143,6 +143,7 @@ function PendingFlowerReq(props: GeneralReq) {
   console.log(stuffMedicine);
 
   const [status, setStatus] = useState<string>(props.status);
+  const [confirm, setConfirm] = useState<boolean>(false);
 
   const handleStatusDropdown = async (e: SelectChangeEvent) => {
     const token = await getAccessTokenSilently();
@@ -528,11 +529,25 @@ function PendingFlowerReq(props: GeneralReq) {
       <td className="p-3 text-sm">
         <IconButton
           className="px-7 flex justify-center transform hover:scale-125"
-          onClick={() => deleteData(props.id)}
+          onClick={() => setConfirm(true)}
         >
           <DeleteOutline color="error" />
         </IconButton>
       </td>
+      <Dialog open={confirm} onClose={() => setConfirm(false)}>
+        <DialogTitle>Delete Confirmation</DialogTitle>
+        <DialogContent>
+          <strong>Are you sure you want to delete this request?</strong>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirm(false)} autoFocus>
+            No
+          </Button>
+          <Button onClick={() => deleteData(props.id)} autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
     </tr>
   );
 }
