@@ -1,3 +1,5 @@
+// import axios from "axios";
+// import { useAuth0 } from "@auth0/auth0-react";
 import { DeleteOutline } from "@mui/icons-material";
 import React, { useState } from "react";
 import {
@@ -9,6 +11,7 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
+
 interface InventoryItemProps {
   id: number;
   name: string;
@@ -44,8 +47,17 @@ function InventoryItem(props: InventoryItemProps) {
           : "transparent",
   };
 
+  // function confirmDelete(id: number) {
+  //   setId(id);
+  //   setConfirm(true);
+  // }
+  //
+  // function noDelete(){
+  //   window.location.reload();
+  // }
+
   return (
-    <>
+    <React.Fragment>
       <tr className="bg-background border-b-2 border-secondary" key={props.id}>
         <td className="p-3 text-sm">{props.name}</td>
         <td className="p-3 text-sm">{props.type}</td>
@@ -73,6 +85,20 @@ function InventoryItem(props: InventoryItemProps) {
           </IconButton>
         </td>
       </tr>
+      {/*<Dialog open={confirm} onClose={noDelete}>*/}
+      {/*    <DialogTitle>Delete Confirmation</DialogTitle>*/}
+      {/*    <DialogContent>*/}
+      {/*        <strong>Are you sure you want to delete this request?</strong>*/}
+      {/*    </DialogContent>*/}
+      {/*    <DialogActions>*/}
+      {/*        <Button onClick={noDelete} autoFocus>*/}
+      {/*            No*/}
+      {/*        </Button>*/}
+      {/*        <Button onClick={deleteData} autoFocus>*/}
+      {/*            Yes*/}
+      {/*        </Button>*/}
+      {/*    </DialogActions>*/}
+      {/*</Dialog>*/}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add Quantity</DialogTitle>
         <DialogContent>
@@ -93,7 +119,7 @@ function InventoryItem(props: InventoryItemProps) {
           <Button onClick={handleAddQuantity}>Submit</Button>
         </DialogActions>
       </Dialog>
-    </>
+    </React.Fragment>
   );
 }
 

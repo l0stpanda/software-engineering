@@ -7,6 +7,7 @@ import {
   Tab,
   Tabs,
   Tooltip,
+  IconButton,
   createTheme,
   ThemeProvider,
 } from "@mui/material";
@@ -31,6 +32,7 @@ import SanitationReq from "../components/sanitationReq.tsx";
 import MaintenanceReq from "../components/maintenanceReq.tsx";
 import LangInterpreterReq from "./langInterpreterRequest.tsx";
 import ToolIcon from "@mui/icons-material/Build";
+import BarChartIcon from "@mui/icons-material/BarChart";
 
 export type GeneralReq = {
   id: number;
@@ -146,30 +148,49 @@ function ServiceRequests() {
             Pending Requests
           </h1>
           <div className="pb-2">
-            <div className="w-20 flex flex-row gap-2 w-full">
-              <UserDropdown
-                room={reqType}
-                update={updateName}
-                label={"Username"}
-              />
+            <div className="w-20 flex flex-row gap-2 w-full justify-between pr-10">
+              <div className="gap-2 flex">
+                <UserDropdown
+                  room={reqType}
+                  update={updateName}
+                  label={"Username"}
+                />
 
-              <Select
-                name="Status Type"
-                required={true}
-                onChange={handleStatusTypeDropdown}
-                value={statusType}
-                defaultValue={"No Status"}
-                size="small"
-                sx={{
-                  borderRadius: "10px",
-                }}
-              >
-                <MenuItem value={"All"}>Select Status Type</MenuItem>
-                <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
-                <MenuItem value={"Assigned"}>Assigned</MenuItem>
-                <MenuItem value={"InProgress"}>In Progress</MenuItem>
-                <MenuItem value={"Closed"}>Closed</MenuItem>
-              </Select>
+                <Select
+                  name="Status Type"
+                  required={true}
+                  onChange={handleStatusTypeDropdown}
+                  value={statusType}
+                  defaultValue={"No Status"}
+                  size="small"
+                  sx={{
+                    borderRadius: "10px",
+                  }}
+                >
+                  <MenuItem value={"All"}>Select Status Type</MenuItem>
+                  <MenuItem value={"Unassigned"}>Unassigned</MenuItem>
+                  <MenuItem value={"Assigned"}>Assigned</MenuItem>
+                  <MenuItem value={"InProgress"}>In Progress</MenuItem>
+                  <MenuItem value={"Closed"}>Closed</MenuItem>
+                </Select>
+              </div>
+
+              <Tooltip title={"Statistics"}>
+                <IconButton
+                  href="graphs"
+                  sx={{
+                    marginLeft: "1rem",
+                    color: "#002866",
+                    "&:hover": {
+                      position: "relative",
+                      zIndex: 1,
+                      color: "#F6BD38",
+                    },
+                  }}
+                >
+                  <BarChartIcon className="svg_icons" />
+                </IconButton>
+              </Tooltip>
             </div>
           </div>
           <div className="overflow-x-auto">

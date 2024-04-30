@@ -72,4 +72,16 @@ export class MapNode {
   getNodeType() {
     return this.nodeType;
   }
+
+  setInfo(
+    floor: string,
+    nodeType: string,
+    longName: string,
+    shortName: string,
+  ) {
+    this.floor = floor;
+    this.nodeType = nodeType;
+    this.longName = longName;
+    this.shortName = shortName;
+  }
 }
