@@ -84,4 +84,9 @@ export class MapNode {
     this.longName = longName;
     this.shortName = shortName;
   }
+
+  setPosition(x: number, y: number) {
+    this.xcoord = x;
+    this.ycoord = y;
+  }
 }
