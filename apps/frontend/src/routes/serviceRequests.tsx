@@ -213,7 +213,7 @@ function ServiceRequests() {
                     Employee Name
                   </th>
                   <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
-                    Expand
+                    Details
                   </th>
                   <th className="p-3 text-sm font-semibold tracking-wide text-left text-background">
                     Delete

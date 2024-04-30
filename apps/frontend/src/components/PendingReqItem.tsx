@@ -238,7 +238,7 @@ function PendingFlowerReq(props: GeneralReq) {
       <td className="p-3 text-sm">{props.long_name_loc}</td>
       <td className="p-3 text-sm">{props.emp_name}</td>
       <td className="p-3 text-sm">
-        <Button onClick={handleExpandClick}>Expand</Button>
+        <Button onClick={handleExpandClick}>More</Button>
       </td>
 
       {/*Flower Request*/}
@@ -248,7 +248,7 @@ function PendingFlowerReq(props: GeneralReq) {
         keepMounted
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>Flower Request</DialogTitle>
+        <DialogTitle>Flower Request - {props.id}</DialogTitle>
         <DialogContent>
           {stuff && (
             <>
@@ -284,7 +284,7 @@ function PendingFlowerReq(props: GeneralReq) {
         keepMounted
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>Maintenance Request</DialogTitle>
+        <DialogTitle>Maintenance Request - {props.id}</DialogTitle>
         <DialogContent>
           {stuffMaintenance && (
             <>
@@ -320,7 +320,7 @@ function PendingFlowerReq(props: GeneralReq) {
         keepMounted
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>We received your request!</DialogTitle>
+        <DialogTitle>Sanitation Request - {props.id}</DialogTitle>
         <DialogContent>
           {stuffSanitation && (
             <>
@@ -356,7 +356,7 @@ function PendingFlowerReq(props: GeneralReq) {
         keepMounted
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>We received your request!</DialogTitle>
+        <DialogTitle>Language Request - {props.id}</DialogTitle>
         <DialogContent>
           {stuffLanguage && (
             <>
@@ -393,7 +393,7 @@ function PendingFlowerReq(props: GeneralReq) {
         keepMounted
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>We received your request!</DialogTitle>
+        <DialogTitle>Medical Device Request - {props.id}</DialogTitle>
         <DialogContent>
           <>
             <strong>Here are your responses:</strong>
@@ -426,7 +426,7 @@ function PendingFlowerReq(props: GeneralReq) {
         keepMounted
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>We received your request!</DialogTitle>
+        <DialogTitle>Medicine Delivery Request - {props.id}</DialogTitle>
         <DialogContent>
           {stuffMedicine && (
             <>
@@ -462,7 +462,7 @@ function PendingFlowerReq(props: GeneralReq) {
         keepMounted
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>We received your request!</DialogTitle>
+        <DialogTitle>Room Scheduling Request - {props.id}</DialogTitle>
         <DialogContent>
           <>
             <strong>Here are your responses:</strong>
@@ -496,7 +496,7 @@ function PendingFlowerReq(props: GeneralReq) {
         keepMounted
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>We received your request!</DialogTitle>
+        <DialogTitle>Lost and Found Request - {props.id}</DialogTitle>
         <DialogContent>
           {stuffLost && (
             <>
