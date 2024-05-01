@@ -184,6 +184,12 @@ router.get("/specific/:id", async function (req: Request, res: Response) {
       },
     });
 
+    const securityRequestLength = await PrismaClient.securityRequest.findMany({
+      where: {
+        id: id,
+      },
+    });
+
     //if one or the other then send the request info with the length of 1
     if (flowerRequestLength.length == 1) {
       res.send(flowerRequestLength[0]);
@@ -216,6 +222,10 @@ router.get("/specific/:id", async function (req: Request, res: Response) {
     if (medicineRequestLength.length == 1) {
       res.send(medicineRequestLength[0]);
     }
+
+    if (securityRequestLength.length == 1) {
+      res.send(securityRequestLength[0]);
+    }
   } catch (e) {
     console.log(e);
     res.sendStatus(400);
@@ -233,6 +243,7 @@ router.get("/data", async function (req: Request, res: Response) {
   const med_count: number = await PrismaClient.medicineRequest.count();
   const sanit_count: number = await PrismaClient.sanitationRequest.count();
   const room_sched: number = await PrismaClient.roomScheduler.count();
+  const secur_count: number = await PrismaClient.securityRequest.count();
 
   const unassigned_count: number = await PrismaClient.generalService.count({
     where: {
@@ -267,6 +278,7 @@ router.get("/data", async function (req: Request, res: Response) {
     med_count: number;
     sanit_count: number;
     room_sched: number;
+    secur_count: number;
     unassigned_count: number;
     assigned_count: number;
     inProg_count: number;
@@ -282,6 +294,7 @@ router.get("/data", async function (req: Request, res: Response) {
     med_count: med_count,
     sanit_count: sanit_count,
     room_sched: room_sched,
+    secur_count: secur_count,
     unassigned_count: unassigned_count,
     assigned_count: assigned_count,
     inProg_count: inProg_count,
