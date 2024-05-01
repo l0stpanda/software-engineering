@@ -117,7 +117,7 @@ export function getDirections(path: string[], graph: Graph) {
           directions: currDir,
           nodes: currNodes,
         });
-        currDir = [`You have reached`];
+        currDir = [`You have reached `];
         currNodes = [goal.getLongName()];
         directions.push({
           floor: goal.getFloor(),
@@ -125,7 +125,7 @@ export function getDirections(path: string[], graph: Graph) {
           nodes: currNodes,
         });
       } else {
-        currDir.push(`You have reached`);
+        currDir.push(`You have reached `);
         currNodes.push(goal.getLongName());
         directions.push({
           floor: goal.getFloor(),

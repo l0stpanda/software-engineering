@@ -70,6 +70,12 @@ interface medicineRequestInfo {
   room_name: string;
 }
 
+interface securityRequestInfo {
+  date: string;
+  description: string;
+  type: string;
+}
+
 function PendingFlowerReq(props: GeneralReq) {
   const { getAccessTokenSilently } = useAuth0();
   const [openFlower, setOpenFlower] = useState(false);
@@ -80,6 +86,7 @@ function PendingFlowerReq(props: GeneralReq) {
   const [openDevice, setOpenDevice] = useState(false);
   const [openMedicine, setOpenMedicine] = useState(false);
   const [openLost, setOpenLost] = useState(false);
+  const [openSec, setOpenSec] = useState(false);
 
   const [stuff, setStuff] = useState<flowerRequestInfo>({
     note: "",
@@ -139,6 +146,13 @@ function PendingFlowerReq(props: GeneralReq) {
     medicine_name: "",
     quantity: 0,
     room_name: "",
+  });
+  console.log(stuffMedicine);
+
+  const [stuffSecurity, setStuffSecurity] = useState<securityRequestInfo>({
+    date: "",
+    description: "",
+    type: "",
   });
   console.log(stuffMedicine);
 
@@ -211,6 +225,9 @@ function PendingFlowerReq(props: GeneralReq) {
       } else if (props.type == "Sanitation Request") {
         setStuffSanitation(allData.data);
         setOpenSan(true);
+      } else if (props.type == "Security Request") {
+        setStuffSecurity(allData.data);
+        setOpenSec(true);
       }
       console.log("After axios: ", allData.data);
     } catch (error) {
@@ -523,6 +540,42 @@ function PendingFlowerReq(props: GeneralReq) {
 
         <DialogActions>
           <Button onClick={() => setOpenLost(false)} autoFocus>
+            Okay
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/*Security Request*/}
+      <Dialog
+        open={openSec}
+        onClose={() => setOpenSec(false)}
+        keepMounted
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>Security Request - {props.id}</DialogTitle>
+        <DialogContent>
+          {stuffLost && (
+            <>
+              <strong>Here are your responses:</strong>
+              <br />
+              Employee Name: {props.emp_name}
+              <br />
+              Date: {stuffSecurity.date}
+              <br />
+              Description: {stuffSecurity.description}
+              <br />
+              Type: {stuffSecurity.type}
+              <br />
+              Priority: {props.priority}
+              <br />
+              Status: {props.status}
+              <br />
+            </>
+          )}
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={() => setOpenSec(false)} autoFocus>
             Okay
           </Button>
         </DialogActions>

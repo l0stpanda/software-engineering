@@ -47,7 +47,7 @@ CREATE TABLE "GeneralService" (
     "location" TEXT NOT NULL,
     "long_name_loc" TEXT NOT NULL,
     "status" TEXT NOT NULL,
-    "emp_name" TEXT NOT NULL,
+    "emp_name" TEXT,
     "priority" TEXT NOT NULL,
 
     CONSTRAINT "GeneralService_pkey" PRIMARY KEY ("id")
@@ -171,6 +171,17 @@ CREATE TABLE "Flowers" (
     CONSTRAINT "Flowers_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "SecurityRequest" (
+    "id" INTEGER NOT NULL,
+    "date" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "generalServiceId" INTEGER NOT NULL,
+
+    CONSTRAINT "SecurityRequest_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Inventory_name_key" ON "Inventory"("name");
 
@@ -212,3 +223,6 @@ ALTER TABLE "subTodo" ADD CONSTRAINT "subTodo_id_relation_fkey" FOREIGN KEY ("id
 
 -- AddForeignKey
 ALTER TABLE "Flowers" ADD CONSTRAINT "Flowers_id_fkey" FOREIGN KEY ("id") REFERENCES "GeneralService"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SecurityRequest" ADD CONSTRAINT "SecurityRequest_generalServiceId_fkey" FOREIGN KEY ("generalServiceId") REFERENCES "GeneralService"("id") ON DELETE CASCADE ON UPDATE CASCADE;

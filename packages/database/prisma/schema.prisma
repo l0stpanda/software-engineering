@@ -70,6 +70,7 @@ model GeneralService {
   sanitationID       SanitationRequest[]  @relation("sanitationReq")
   maintainID         MaintenanceRequest[] @relation("idCheckMaintain")
   langInterpreterID  langInterpreter[]    @relation("langInterpreterID")
+  securityRequests   SecurityRequest[]    @relation("generalServiceRelation")
 }
 
 // language interpreter requests are saved
@@ -186,4 +187,14 @@ model Flowers {
   room_name   String
   // Foreign Key References
   flowerID    GeneralService @relation("flowerID", fields: [id], references: [id], onDelete: Cascade) // Maybe need to change reference to short_name/long_name later
+}
+
+model SecurityRequest {
+  id          Int    @id
+  date        String
+  description String
+  type        String
+
+  // Foreign Key References
+  generalServiceId GeneralService @relation("generalServiceRelation", fields: [id], references: [id], onDelete: Cascade)
 }
