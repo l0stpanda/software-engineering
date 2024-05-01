@@ -184,7 +184,9 @@ function AccordionServiceRequests(props: AccordionServiceRequestsProps) {
       content = (
         <Typography>
           Date: {stuffLost.date}
+          <br />
           Description: {stuffLost.description}
+          <br />
           Type: {stuffLost.type}
         </Typography>
       );

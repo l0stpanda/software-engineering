@@ -113,6 +113,7 @@ export default function EditNodeForm(props: editNodeProps) {
             floor: nodeInfo.floor,
             type: nodeInfo.nodeType,
             requests: [],
+            longName: nodeInfo.longName,
           };
         })
         .catch(() => {

@@ -122,6 +122,7 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
         floor: node.getFloor(),
         type: node.getNodeType(),
         requests: [],
+        longName: node.getLongName(),
       };
     });
     if (repeat) {
