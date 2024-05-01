@@ -23,12 +23,14 @@ import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import MonitorHeartIcon from "@mui/icons-material/MonitorHeart";
 import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
+import SecurityIcon from "@mui/icons-material/Security";
 import TranslateIcon from "@mui/icons-material/Translate";
 import LostFound from "../components/lostAndFound.tsx";
 import RoomSchedulingReq from "../components/roomSchedulingReq.tsx";
 import MedicalDeviceReq from "../components/medicalDeviceReq.tsx";
 import MedicineDeliveryReq from "../components/MedicineDeliveryReq.tsx";
 import SanitationReq from "../components/sanitationReq.tsx";
+import SecurityRequestForm from "../components/securityRequest.tsx";
 import MaintenanceReq from "../components/maintenanceReq.tsx";
 import LangInterpreterReq from "./langInterpreterRequest.tsx";
 import ToolIcon from "@mui/icons-material/Build";
@@ -385,6 +387,21 @@ function ServiceRequests() {
                     }}
                   />
                 </Tooltip>
+                <Tooltip title="Security Request">
+                  <Tab
+                    icon={<SecurityIcon />}
+                    id="tab-8"
+                    sx={{
+                      transition: "transform 0.3s ease-in-out",
+                      color: "#FFFFFF",
+                      "&:hover": {
+                        position: "relative",
+                        zIndex: 1,
+                        color: "#F6BD38",
+                      },
+                    }}
+                  />
+                </Tooltip>
               </Tabs>
             </ThemeProvider>
           </div>
@@ -398,6 +415,7 @@ function ServiceRequests() {
             {currentTabIndex === 5 && <SanitationReq />}
             {currentTabIndex === 6 && <MaintenanceReq />}
             {currentTabIndex === 7 && <LangInterpreterReq />}
+            {currentTabIndex === 8 && <SecurityRequestForm />}
           </div>
         </div>
       </div>

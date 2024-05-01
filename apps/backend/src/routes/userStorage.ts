@@ -53,6 +53,7 @@ router.post("/", async function (req: Request, res: Response) {
         data: {
           task: input.task,
           notes: input.notes,
+          serv_req_id: -1,
           dueDate: String(input.dueDate?.toString()),
           priority: input.priority,
           email: input.email,

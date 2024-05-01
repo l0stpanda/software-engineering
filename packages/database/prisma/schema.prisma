@@ -70,6 +70,7 @@ model GeneralService {
   sanitationID       SanitationRequest[]  @relation("sanitationReq")
   maintainID         MaintenanceRequest[] @relation("idCheckMaintain")
   langInterpreterID  langInterpreter[]    @relation("langInterpreterID")
+  securityRequests   SecurityRequest[]    @relation("generalServiceRelation")
 }
 
 // language interpreter requests are saved
@@ -155,16 +156,17 @@ model User {
 }
 
 model Todo {
-  id       Int       @id @default(autoincrement())
-  task     String
-  notes    String
-  dueDate  String
-  priority String
-  email    String
-  complete Boolean
-  subtasks subTodo[] @relation("idSubtasks")
+  id          Int       @id @default(autoincrement())
+  serv_req_id Int
+  task        String
+  notes       String
+  dueDate     String
+  priority    String
+  email       String
+  complete    Boolean
+  subtasks    subTodo[] @relation("idSubtasks")
   // Foreign Key Reference
-  user     User      @relation("UserID", fields: [email], references: [email], onDelete: Cascade)
+  user        User      @relation("UserID", fields: [email], references: [email], onDelete: Cascade)
 }
 
 model subTodo {
@@ -185,4 +187,14 @@ model Flowers {
   room_name   String
   // Foreign Key References
   flowerID    GeneralService @relation("flowerID", fields: [id], references: [id], onDelete: Cascade) // Maybe need to change reference to short_name/long_name later
+}
+
+model SecurityRequest {
+  id          Int    @id
+  date        String
+  description String
+  type        String
+
+  // Foreign Key References
+  generalServiceId GeneralService @relation("generalServiceRelation", fields: [id], references: [id], onDelete: Cascade)
 }

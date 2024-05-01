@@ -126,6 +126,7 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Todo" (
     "id" SERIAL NOT NULL,
+    "serv_req_id" INTEGER NOT NULL,
     "task" TEXT NOT NULL,
     "priority" TEXT NOT NULL,
     "email" TEXT NOT NULL,

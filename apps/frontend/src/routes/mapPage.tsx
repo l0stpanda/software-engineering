@@ -423,6 +423,7 @@ function MapPage() {
   const isOpen = expanded;
 
   const handleClearPath = () => {
+    setDirections([]);
     setNavigatingNodes({ start: "", end: "" });
   };
 
@@ -432,8 +433,12 @@ function MapPage() {
 
   const handleMode = () => {
     if (mode === "path") {
+      setDirections([]);
+      handleClearPath();
       setMode("info");
     } else if (mode === "info") {
+      setDirections([]);
+      setClicked(undefined);
       setMode("path");
     }
   };
@@ -442,6 +447,8 @@ function MapPage() {
     setClicked(node);
     if (mode === "info") {
       setShowInfo(true);
+    } else {
+      setShowInfo(false);
     }
   };
 
@@ -644,7 +651,7 @@ function MapPage() {
                 <div
                   className="
                     max-h-[250px]
-                    w-[300px]
+                    w-[350px]
                     items-center
                     bg-background
                     border-primary
@@ -660,6 +667,8 @@ function MapPage() {
                   <Accordion disableGutters={true}>
                     <AccordionSummary>
                       <Typography>
+                        Node: {clicked.longName}
+                        <br />
                         No specific service requests available.
                       </Typography>
                     </AccordionSummary>

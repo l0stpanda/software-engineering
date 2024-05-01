@@ -71,6 +71,44 @@ router.post("/", async function (req: Request, res: Response) {
       return;
     }
 
+    const findEmail = await PrismaClient.user.findMany({
+      where: {
+        username: input.employeeName,
+      },
+    });
+
+    let dueDate = "";
+
+    if (input.deliveryDate != undefined) {
+      dueDate = input.deliveryDate.toString();
+    }
+    if (input.status == "Closed") {
+      await PrismaClient.todo.create({
+        data: {
+          task: "Complete medical device delivery request #" + id[0].id,
+          dueDate: dueDate,
+          serv_req_id: id[0].id,
+          priority: input.priority,
+          notes: "",
+          complete: true,
+          email: findEmail[0].email,
+        },
+      });
+    }
+    if (input.status != "Closed") {
+      await PrismaClient.todo.create({
+        data: {
+          task: "Complete medical device delivery request #" + id[0].id,
+          dueDate: dueDate,
+          serv_req_id: id[0].id,
+          priority: input.priority,
+          notes: "",
+          complete: false,
+          email: findEmail[0].email,
+        },
+      });
+    }
+
     if (input.deliveryDate != undefined) {
       //This willa always be the case so don't worry about it being here.
       console.log("ID I AM FINDING IS " + id[0].id);
@@ -132,6 +170,11 @@ router.delete("/:id", async function (req: Request, res: Response) {
         id: id,
       },
     });
+    await PrismaClient.todo.deleteMany({
+      where: {
+        serv_req_id: id,
+      },
+    });
   } catch (e) {
     console.log(e);
     res.sendStatus(400);
@@ -153,6 +196,26 @@ router.post("/update", async function (req: Request, res: Response) {
         status: status,
       },
     });
+
+    if (status == "Closed") {
+      await PrismaClient.todo.updateMany({
+        where: {
+          serv_req_id: id,
+        },
+        data: {
+          complete: true,
+        },
+      });
+    } else {
+      await PrismaClient.todo.updateMany({
+        where: {
+          serv_req_id: id,
+        },
+        data: {
+          complete: false,
+        },
+      });
+    }
   } catch (e) {
     console.log(e);
     res.sendStatus(400);

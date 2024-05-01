@@ -9,8 +9,16 @@ import { BFS } from "../objects/BFS.ts";
 import { Box } from "@mui/material";
 import { DFS } from "../objects/DFS.ts";
 import { Dijkstra } from "../objects/Dijkstra.ts";
-import { GeneralReq } from "../routes/serviceRequests.tsx";
 
+type GeneralReq = {
+  id: number;
+  type: string;
+  location: string;
+  long_name_loc: string;
+  status: string;
+  emp_name: string;
+  priority: string;
+};
 //import mapImg from "../assets/00_thelowerlevel1.png";
 
 interface FloorNodesProps {
@@ -38,6 +46,7 @@ export interface FloorNodeInfo {
   floor: string;
   type: string;
   requests: GeneralReq[];
+  longName: string;
 }
 
 function FloorNode(props: FloorNodesProps) {
@@ -263,6 +272,7 @@ function FloorNode(props: FloorNodesProps) {
       floor: node.getFloor(),
       type: node.getNodeType(),
       requests: getNodeReqs(node.getNodeID()),
+      longName: node.getLongName(),
     };
   });
 
@@ -278,7 +288,10 @@ function FloorNode(props: FloorNodesProps) {
         const input = props.inputLoc;
 
         //if start node
-        if (node.key == input.start) {
+        if (
+          (node.key == input.start && props.mode === "path") ||
+          (props.mode === "info" && clicked?.key === node.key)
+        ) {
           nodeColor = "#39FF14";
           animation = animation.concat(" animate-bounce -m-[2.8px]");
         }

@@ -78,7 +78,7 @@ export default function EditNodeForm(props: editNodeProps) {
           {
             node_id: nodeInfo.ID,
             longName: nodeInfo.longName,
-            floor: nodeInfo.floor,
+            floor: props.node.getFloor(),
             nodeType: nodeInfo.nodeType,
             shortName: nodeInfo.shortName,
             x_c: props.node.getX().toString(),
@@ -113,6 +113,7 @@ export default function EditNodeForm(props: editNodeProps) {
             floor: nodeInfo.floor,
             type: nodeInfo.nodeType,
             requests: [],
+            longName: nodeInfo.longName,
           };
         })
         .catch(() => {
@@ -193,13 +194,6 @@ export default function EditNodeForm(props: editNodeProps) {
           onChange={handleNodeEdits}
           variant="filled"
           label="Long Name"
-        />
-        <TextField
-          value={nodeInfo.floor}
-          name="floor"
-          onChange={handleNodeEdits}
-          variant="filled"
-          label="Floor"
         />
         <TextField
           value={nodeInfo.nodeType}
