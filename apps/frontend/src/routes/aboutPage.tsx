@@ -103,6 +103,7 @@ function AboutPage() {
 
   //settings for the carousel. 4 slides at a time, responsive to screen size, goes continuously (infinite)
   const sliderSettings = {
+    className: "h-full",
     dots: false,
     infinite: true,
     speed: 500,
@@ -141,6 +142,9 @@ function AboutPage() {
     //container!!
     <div
       className="h-full
+                 flex
+                 flex-col
+                 justify-between
                  w-screen
                  bg-cover"
       style={{
@@ -159,7 +163,8 @@ function AboutPage() {
         font-header
         items-center
         bg-background
-        bg-opacity-65 bg-position-center bg-cover"
+        bg-opacity-65 bg-position-center bg-cover
+        "
       >
         {/*words. we love words*/}
         <h2 className="teamHeader font-bold">Meet the Team!</h2>
@@ -189,7 +194,7 @@ function AboutPage() {
           {teamMembers.map((member, index) => (
             <div key={index} className="teamMemImgCont">
               <div
-                className="text-center"
+                className="text-center h-full"
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
               >
