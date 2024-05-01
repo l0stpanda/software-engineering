@@ -54,6 +54,17 @@ CREATE TABLE "GeneralService" (
 );
 
 -- CreateTable
+CREATE TABLE "langInterpreter" (
+    "id" INTEGER NOT NULL,
+    "date" TEXT NOT NULL,
+    "language" TEXT NOT NULL,
+    "modeOfInterp" TEXT NOT NULL,
+    "specInstruct" TEXT,
+
+    CONSTRAINT "langInterpreter_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "SanitationRequest" (
     "id" INTEGER NOT NULL,
     "severity" TEXT NOT NULL,
@@ -98,6 +109,7 @@ CREATE TABLE "RoomScheduler" (
     "id" INTEGER NOT NULL,
     "startTime" TEXT NOT NULL,
     "lengthRes" TEXT NOT NULL,
+    "endTime" TEXT NOT NULL,
     "room_name" TEXT NOT NULL,
 
     CONSTRAINT "RoomScheduler_pkey" PRIMARY KEY ("id")
@@ -126,7 +138,10 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Todo" (
     "id" SERIAL NOT NULL,
+    "serv_req_id" INTEGER NOT NULL,
     "task" TEXT NOT NULL,
+    "notes" TEXT NOT NULL,
+    "dueDate" TEXT NOT NULL,
     "priority" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "complete" BOOLEAN NOT NULL,
@@ -178,6 +193,9 @@ CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- AddForeignKey
 ALTER TABLE "GeneralService" ADD CONSTRAINT "GeneralService_location_fkey" FOREIGN KEY ("location") REFERENCES "Nodes"("node_id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "langInterpreter" ADD CONSTRAINT "langInterpreter_id_fkey" FOREIGN KEY ("id") REFERENCES "GeneralService"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "SanitationRequest" ADD CONSTRAINT "SanitationRequest_id_fkey" FOREIGN KEY ("id") REFERENCES "GeneralService"("id") ON DELETE CASCADE ON UPDATE CASCADE;

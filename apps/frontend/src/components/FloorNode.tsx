@@ -46,6 +46,7 @@ export interface FloorNodeInfo {
   floor: string;
   type: string;
   requests: GeneralReq[];
+  longName: string;
 }
 
 function FloorNode(props: FloorNodesProps) {
@@ -271,6 +272,7 @@ function FloorNode(props: FloorNodesProps) {
       floor: node.getFloor(),
       type: node.getNodeType(),
       requests: getNodeReqs(node.getNodeID()),
+      longName: node.getLongName(),
     };
   });
 
@@ -286,7 +288,10 @@ function FloorNode(props: FloorNodesProps) {
         const input = props.inputLoc;
 
         //if start node
-        if (node.key == input.start) {
+        if (
+          (node.key == input.start && props.mode === "path") ||
+          (props.mode === "info" && clicked?.key === node.key)
+        ) {
           nodeColor = "#39FF14";
           animation = animation.concat(" animate-bounce -m-[2.8px]");
         }
