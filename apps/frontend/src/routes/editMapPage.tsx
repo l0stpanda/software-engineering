@@ -33,6 +33,7 @@ import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import PanToolIcon from "@mui/icons-material/PanTool";
 import AddRoadIcon from "@mui/icons-material/AddRoad";
 import RemoveRoadIcon from "@mui/icons-material/RemoveRoad";
+import { getFloorByImage } from "../objects/getFloorByImage.ts";
 
 // import {ZoomPanPinch} from "react-zoom-pan-pinch/dist/src/core/instance.core";
 // import CanvasMap from "../components/CanvasMap.tsx";
@@ -325,92 +326,6 @@ function EditMap() {
   if (divRef.current) {
     divPos = [divRef.current.offsetTop, divRef.current.offsetLeft];
   }
-  // const [expanded, setExpanded] = useState(false);
-  //
-  // const isExpanded = expanded;
-
-  // const AccordionFrame = () => {
-  //     const handleInnerClick = (e: React.MouseEvent<HTMLElement>) => {
-  //         e.stopPropagation();
-  //     };
-  //     return (
-  //         <>
-  //             <motion.header
-  //                 initial={false}
-  //                 // animate={{ backgroundColor: isExpanded ? "#FF0088" : "#0055FF" }}
-  //             />
-  //             <AnimatePresence initial={true}>
-  //                 {isExpanded && (
-  //                     <motion.section
-  //                         key="content"
-  //                         initial={{ opacity: 0, height: 0 }}
-  //                         animate={{ opacity: 1, height: "auto" }}
-  //                         exit={{ opacity: 0, height: 0 }}
-  //                         variants={{
-  //                             open: { opacity: 1, height: "auto" },
-  //                             collapsed: { opacity: 0, height: 0 },
-  //                         }}
-  //                         transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
-  //                         className="absolute w-full"
-  //                     >
-  //                             <div className="" onClick={handleInnerClick}>
-  //                                 <div className="mb-20 mt-20 px-10 w-full items-center">
-  //                                     <div className="">
-  //                                         <ToggleButtonGroup
-  //                                             value={mode}
-  //                                             exclusive
-  //                                             onChange={handleEditMode}
-  //                                             orientation="vertical"
-  //                                             fullWidth
-  //                                             color="primary"
-  //                                         >
-  //                                             <ToggleButton value="add_node">
-  //                                                 <IconButton>
-  //                                                     {<AddCircleOutlineIcon/>}
-  //                                             </IconButton>
-  //                                             </ToggleButton>
-  //                                             <ToggleButton value="delete_node"><IconButton>
-  //                                                 {<RemoveCircleOutlineIcon/>}
-  //                                             </IconButton>
-  //                                             </ToggleButton>
-  //                                             <ToggleButton value="move_node"><IconButton>
-  //                                                 {<PanToolIcon/>}
-  //                                             </IconButton>
-  //                                             </ToggleButton>
-  //                                         </ToggleButtonGroup>
-  //                                 </div>
-  //                                 <div className="px-10 w-full items-center">
-  //                                     <ToggleButtonGroup
-  //                                         value={mode}
-  //                                         exclusive
-  //                                         onChange={handleEditMode}
-  //                                         orientation="vertical"
-  //                                         fullWidth
-  //                                         color="primary"
-  //                                     >
-  //                                         <h1 className="text-primary font-header font-bold text-2xl pt-5 text-center">
-  //                                             Edge Editing
-  //                                         </h1>
-  //                                         <ToggleButton value="add_edge">
-  //                                         <IconButton>
-  //                                             {<AddRoadIcon/>}
-  //                                             </IconButton>
-  //                                         </ToggleButton>
-  //                                         <ToggleButton value="delete_edge">
-  //                                             <IconButton>
-  //                                                 {<RemoveRoadIcon/>}
-  //                                             </IconButton>
-  //                                         </ToggleButton>
-  //                                     </ToggleButtonGroup>
-  //                                 </div>
-  //                             </div>
-  //                         </div>
-  //                     </motion.section>
-  //                 )}
-  //             </AnimatePresence>
-  //         </>
-  //     );
-  // };
 
   return (
     <div className="">
@@ -435,7 +350,16 @@ function EditMap() {
                   {isOpen && (
                     <EditNodeForm
                       node={
-                        new MapNode("", world.x, world.y, "", "", "", "", "")
+                        new MapNode(
+                          "",
+                          world.x,
+                          world.y,
+                          getFloorByImage(imgState),
+                          "",
+                          "",
+                          "",
+                          "",
+                        )
                       }
                       mode={mode}
                       graph={graph}

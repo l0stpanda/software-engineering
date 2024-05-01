@@ -10,6 +10,7 @@ import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Alert, Snackbar } from "@mui/material";
 import { AlertColor } from "@mui/material/Alert";
+import { getFloorByImage } from "../objects/getFloorByImage.ts";
 /*
 Functionality:
 Add node
@@ -376,32 +377,6 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
       </Snackbar>
     </div>
   );
-}
-
-function getFloorByImage(imgName: string): string {
-  // split the image path name by /
-  const parts = imgName.split("/");
-  // obtain the last part (e.g., 00_thelowerlevel1.png)
-  const lastpart = parts[parts.length - 1];
-  // split based on underscore
-  const splits = lastpart.split("_");
-  //take the number
-  const numbers = splits[0][1];
-
-  if (numbers == "0") {
-    // get only the name without the .png
-    const onlyName = splits[1].slice(0, -4);
-    if (
-      onlyName.includes("thegroundfloor") ||
-      onlyName.includes("thelowerlevel1")
-    ) {
-      return "L1";
-    } else {
-      return "L2";
-    }
-  } else {
-    return numbers as unknown as string;
-  }
 }
 
 export default EditMapViewGraph;
