@@ -15,12 +15,12 @@ const ModeDisplay = (props: ModeDisplayProps) => {
   };
 
   return (
-    <div className="fixed top-20 left-[50%] transform -translate-x-1/2">
+    <div
+      className="fixed top-20 left-[50%] transform -translate-x-1/2 cursor-pointer"
+      onClick={handleModeToggle}
+    >
       <div className="flex flex-col items-center justify-center px-4 py-2 bg-background bg-opacity-75 text-white rounded-lg shadow-md border border-gray-200">
-        <h2
-          className="text-lg font-medium cursor-pointer transition-opacity duration-300 hover:opacity-75"
-          onClick={handleModeToggle}
-        >
+        <h2 className="text-lg font-medium transition-opacity duration-300 hover:opacity-75">
           {mode === "info" ? "Info Mode" : "Path Mode"}
         </h2>
         <p className="text-xs text-gray-300">Click to toggle</p>
