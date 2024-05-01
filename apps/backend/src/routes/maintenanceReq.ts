@@ -54,18 +54,32 @@ router.post("/", async function (req: Request, res: Response) {
         username: input.name,
       },
     });
-
-    await PrismaClient.todo.create({
-      data: {
-        task: "Complete maintenance request #" + id[0].id,
-        dueDate: "",
-        serv_req_id: id[0].id,
-        priority: input.priority,
-        notes: input.maintainType + " needed at " + input.location,
-        complete: false,
-        email: findEmail[0].email,
-      },
-    });
+    if (input.status == "Closed") {
+      await PrismaClient.todo.create({
+        data: {
+          task: "Complete maintenance request #" + id[0].id,
+          dueDate: "",
+          serv_req_id: id[0].id,
+          priority: input.priority,
+          notes: input.maintainType + " needed at " + input.location,
+          complete: true,
+          email: findEmail[0].email,
+        },
+      });
+    }
+    if (input.status != "Closed") {
+      await PrismaClient.todo.create({
+        data: {
+          task: "Complete maintenance request #" + id[0].id,
+          dueDate: "",
+          serv_req_id: id[0].id,
+          priority: input.priority,
+          notes: input.maintainType + " needed at " + input.location,
+          complete: false,
+          email: findEmail[0].email,
+        },
+      });
+    }
 
     console.log(input);
     if (input.date != undefined) {
@@ -139,6 +153,26 @@ router.post("/update", async function (req: Request, res: Response) {
         status: status,
       },
     });
+
+    if (status == "Closed") {
+      await PrismaClient.todo.updateMany({
+        where: {
+          serv_req_id: id,
+        },
+        data: {
+          complete: true,
+        },
+      });
+    } else {
+      await PrismaClient.todo.updateMany({
+        where: {
+          serv_req_id: id,
+        },
+        data: {
+          complete: false,
+        },
+      });
+    }
   } catch (e) {
     console.log(e);
     res.sendStatus(400);

@@ -112,6 +112,26 @@ router.post("/update", async function (req: Request, res: Response) {
         status: status,
       },
     });
+
+    if (status == "Closed") {
+      await PrismaClient.todo.updateMany({
+        where: {
+          serv_req_id: id,
+        },
+        data: {
+          complete: true,
+        },
+      });
+    } else {
+      await PrismaClient.todo.updateMany({
+        where: {
+          serv_req_id: id,
+        },
+        data: {
+          complete: false,
+        },
+      });
+    }
   } catch (e) {
     console.log(e);
     res.sendStatus(400);
