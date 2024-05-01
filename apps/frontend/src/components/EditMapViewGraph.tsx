@@ -154,6 +154,8 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
           )
           .then();
         props.setScaledNodes({ ...props.scaledNodes, [id]: oldNodePos });
+        const node = props.graph.getNode(id);
+        if (node) node.setPosition(newPosX, newPosY);
         showSnackbar(`Move the Node ${id} in map successfully`, "success");
       }
     },
@@ -329,12 +331,8 @@ function EditMapViewGraph(props: EditMapViewGraphProps) {
       style={{ position: "relative" }}
       onMouseUp={handleMouseUp}
     >
-      <div ref={drop}>
-        <img
-          src={props.imageSrc}
-          className="object-contain h-full border-2 border-primary rounded-xl"
-          alt="Map"
-        />
+      <div ref={drop} style={{ position: "relative" }}>
+        <img src={props.imageSrc} className="w-screen" alt="Map" />
         <svg
           style={{
             position: "absolute",

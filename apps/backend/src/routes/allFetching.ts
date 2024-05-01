@@ -4,11 +4,6 @@ import PrismaClient from "../bin/database-connection.ts";
 
 const router: Router = express.Router();
 
-// type inputStuff = {
-//   id: string;
-//   type: string;
-// };
-
 router.get("/", async function (req: Request, res: Response) {
   const data = await PrismaClient.generalService.findMany({});
   try {
@@ -248,4 +243,71 @@ router.get("/specific/:id", async function (req: Request, res: Response) {
   }
   res.sendStatus(200);
 });
+
+router.get("/data", async function (req: Request, res: Response) {
+  const total_count: number = await PrismaClient.generalService.count();
+  const flower_count: number = await PrismaClient.flowers.count();
+  const lost_count: number = await PrismaClient.lostItem.count();
+  const maint_count: number = await PrismaClient.maintenanceRequest.count();
+  const medDev_count: number = await PrismaClient.medicalDevice.count();
+  const med_count: number = await PrismaClient.medicineRequest.count();
+  const sanit_count: number = await PrismaClient.sanitationRequest.count();
+  const room_sched: number = await PrismaClient.roomScheduler.count();
+
+  const unassigned_count: number = await PrismaClient.generalService.count({
+    where: {
+      status: "Unassigned",
+    },
+  });
+
+  const assigned_count: number = await PrismaClient.generalService.count({
+    where: {
+      status: "Assigned",
+    },
+  });
+
+  const inProg_count: number = await PrismaClient.generalService.count({
+    where: {
+      status: "InProgress",
+    },
+  });
+
+  const closed_count: number = await PrismaClient.generalService.count({
+    where: {
+      status: "Closed",
+    },
+  });
+
+  type totals = {
+    total_count: number;
+    flower_count: number;
+    lost_count: number;
+    maint_count: number;
+    medDev_count: number;
+    med_count: number;
+    sanit_count: number;
+    room_sched: number;
+    unassigned_count: number;
+    assigned_count: number;
+    inProg_count: number;
+    closed_count: number;
+  };
+
+  const sendThis: totals = {
+    total_count: total_count,
+    flower_count: flower_count,
+    lost_count: lost_count,
+    maint_count: maint_count,
+    medDev_count: medDev_count,
+    med_count: med_count,
+    sanit_count: sanit_count,
+    room_sched: room_sched,
+    unassigned_count: unassigned_count,
+    assigned_count: assigned_count,
+    inProg_count: inProg_count,
+    closed_count: closed_count,
+  };
+  res.send(sendThis);
+});
+
 export default router;

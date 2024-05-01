@@ -22,7 +22,7 @@ const teamMembers = [
     name: "Carter Moore",
     role: "Lead Software Engineer, Full Stack",
     img: carter_picture,
-    quote: "",
+    quote: '"read discord cratr"- Ben at 3:42am',
   },
   {
     name: "Krishna Garg",
@@ -47,7 +47,8 @@ const teamMembers = [
     name: "Samruddhi Naik",
     role: "Product Owner, Full Stack",
     img: sam_picture,
-    quote: "",
+    quote:
+      '"You guys need to focus on your majors not your minors: focus on CS"- Sam',
   },
   {
     name: "Sean Peacock",
@@ -87,13 +88,13 @@ const teamMembers = [
     name: "Qiushi Chen",
     role: "Full-Time Software Engineer, Full Stack",
     img: quishi_picture,
-    quote: "",
+    quote: '"Hello World"',
   },
   {
     name: "Vincent Huang",
     role: "Full-Time Software Engineer, Full Stack",
     img: vincent_picture,
-    quote: "",
+    quote: '"Hello World"',
   },
 ];
 
