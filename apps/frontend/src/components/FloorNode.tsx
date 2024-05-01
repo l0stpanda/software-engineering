@@ -9,8 +9,16 @@ import { BFS } from "../objects/BFS.ts";
 import { Box } from "@mui/material";
 import { DFS } from "../objects/DFS.ts";
 import { Dijkstra } from "../objects/Dijkstra.ts";
-import { GeneralReq } from "../routes/serviceRequests.tsx";
 
+type GeneralReq = {
+  id: number;
+  type: string;
+  location: string;
+  long_name_loc: string;
+  status: string;
+  emp_name: string;
+  priority: string;
+};
 //import mapImg from "../assets/00_thelowerlevel1.png";
 
 interface FloorNodesProps {

@@ -6,6 +6,7 @@ import TurnRightIcon from "@mui/icons-material/TurnRight";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import Accordion from "@mui/material/Accordion";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import lowerLevel1 from "../assets/00_thelowerlevel1.png";
 import lowerLevel2 from "../assets/00_thelowerlevel2.png";
 import floor1 from "../assets/01_thefirstfloor.png";
@@ -45,7 +46,7 @@ function AccordionDirections(props: AccordionDirectionsProps) {
   const data = props.data;
 
   for (let i = 0; i < data.directions.length; i++) {
-    if (data.directions[i] == "Continue straight at ") {
+    if (data.directions[i] === "Continue straight at ") {
       if (i + 1 == data.directions.length) {
         output.push(
           <div className="flex text-text font-body px-1 py-2">
@@ -71,7 +72,7 @@ function AccordionDirections(props: AccordionDirectionsProps) {
           </>,
         );
       }
-    } else if (data.directions[i] == "Turn left at ") {
+    } else if (data.directions[i] === "Turn left at ") {
       if (i + 1 == data.directions.length) {
         output.push(
           <>
@@ -99,7 +100,7 @@ function AccordionDirections(props: AccordionDirectionsProps) {
           </>,
         );
       }
-    } else if (data.directions[i] == "Turn right at ") {
+    } else if (data.directions[i] === "Turn right at ") {
       if (i + 1 == data.directions.length) {
         output.push(
           <>
@@ -127,8 +128,21 @@ function AccordionDirections(props: AccordionDirectionsProps) {
           </>,
         );
       }
+    } else if (data.directions[i] === "You have reached ") {
+      output.push(
+        <>
+          <div className="flex text-text font-body px-1 py-2">
+            <div className="float-left content-center">
+              <LocationOnIcon sx={{ fontSize: 40 }}></LocationOnIcon>
+            </div>
+            <div className="flex text-center self-center">
+              {data.directions[i]} {data.nodes[i]}
+            </div>
+          </div>
+        </>,
+      );
     } else {
-      if (i + 1 == data.directions.length) {
+      if (i + 1 === data.directions.length) {
         output.push(
           <>
             <div className="flex text-text font-body px-1 py-2">
