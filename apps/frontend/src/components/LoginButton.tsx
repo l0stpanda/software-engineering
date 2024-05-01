@@ -16,7 +16,7 @@ const LoginButton = () => {
 
   return (
     <button
-      className={`bg-primary text-background font-body p-7 rounded-full transition-all duration-500 ease-in-out flex items-center justify-center relative ${isHovered ? "w-full p-10" : "w-12 h-12"}`}
+      className={`bg-primary text-background font-body p-7 rounded-full transition-all duration-500 ease-in-out flex items-center justify-center relative ${isHovered ? "w-40 h-40 p-10" : "w-20 h-20"}`}
       onClick={setLoginOpen}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
