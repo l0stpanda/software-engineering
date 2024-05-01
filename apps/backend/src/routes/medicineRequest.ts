@@ -71,22 +71,42 @@ router.post("/", async function (req: Request, res: Response) {
       },
     });
 
-    await PrismaClient.todo.create({
-      data: {
-        task: "Complete medicine delivery request #" + findID[0].id,
-        dueDate: "",
-        serv_req_id: findID[0].id,
-        priority: input.priority,
-        notes:
-          input.quantity +
-          " " +
-          input.medicineName +
-          " requested at " +
-          input.location,
-        complete: false,
-        email: findEmail[0].email,
-      },
-    });
+    if (input.status == "Closed") {
+      await PrismaClient.todo.create({
+        data: {
+          task: "Complete medicine delivery request #" + findID[0].id,
+          dueDate: "",
+          serv_req_id: findID[0].id,
+          priority: input.priority,
+          notes:
+            input.quantity +
+            " " +
+            input.medicineName +
+            " requested at " +
+            input.location,
+          complete: true,
+          email: findEmail[0].email,
+        },
+      });
+    }
+    if (input.status != "Closed") {
+      await PrismaClient.todo.create({
+        data: {
+          task: "Complete medicine delivery request #" + findID[0].id,
+          dueDate: "",
+          serv_req_id: findID[0].id,
+          priority: input.priority,
+          notes:
+            input.quantity +
+            " " +
+            input.medicineName +
+            " requested at " +
+            input.location,
+          complete: false,
+          email: findEmail[0].email,
+        },
+      });
+    }
 
     await PrismaClient.medicineRequest.create({
       data: {
@@ -167,6 +187,26 @@ router.post("/update", async function (req: Request, res: Response) {
         status: status,
       },
     });
+
+    if (status == "Closed") {
+      await PrismaClient.todo.updateMany({
+        where: {
+          serv_req_id: id,
+        },
+        data: {
+          complete: true,
+        },
+      });
+    } else {
+      await PrismaClient.todo.updateMany({
+        where: {
+          serv_req_id: id,
+        },
+        data: {
+          complete: false,
+        },
+      });
+    }
   } catch (e) {
     console.log(e);
     res.sendStatus(400);
