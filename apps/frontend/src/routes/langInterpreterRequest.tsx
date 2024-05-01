@@ -16,13 +16,13 @@ import {
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import { langInterpreterType } from "common/src/langInterpreterType.ts";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 import axios from "axios";
 import UserDropdown from "../components/userDropdown.tsx";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 function LangInterpreterReq() {
   const Transition = React.forwardRef(function Transition(
@@ -40,7 +40,7 @@ function LangInterpreterReq() {
   const initialFormData: langInterpreterType = {
     name: "",
     location: "",
-    date: dayjs(),
+    date: null,
     priority: "Medium",
     language: "",
     modeOfInterp: "",
@@ -107,6 +107,7 @@ function LangInterpreterReq() {
       formData.modeOfInterp == "" ||
       formData.status == ""
     ) {
+      alert("All fields need to be filled");
       return;
     }
     try {
@@ -165,13 +166,13 @@ function LangInterpreterReq() {
               label={"Location"}
             />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
+              <DateTimePicker
                 sx={{ bgcolor: "#eceff0" }}
                 label="Date Requested *"
                 value={formData.date}
                 disablePast
                 onChange={handleDateInput}
-                // renderInput={(params) => <TextField {...params} />}
+                //renderInput={(params) => <TextField {...params} required/>}
               />
             </LocalizationProvider>
             <FormControl variant="filled" required>
