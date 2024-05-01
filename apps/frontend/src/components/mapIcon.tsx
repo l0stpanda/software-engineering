@@ -32,7 +32,7 @@ const MapIcon = () => {
           <div
             ref={circleRef}
             className={`relative rounded-full overflow-hidden transition-all duration-500 ease-in-out ${
-              isHovered ? "w-64 h-12 translate-x-4" : "w-12 h-12"
+              isHovered ? "w-40 h-40 translate-x-4" : "w-20 h-20 "
             }`}
             style={{ transitionTimingFunction: "ease-in-out" }}
           >
