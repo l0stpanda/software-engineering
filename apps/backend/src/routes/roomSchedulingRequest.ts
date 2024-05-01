@@ -73,7 +73,7 @@ router.post("/", async function (req: Request, res: Response) {
 
     if (!false_true) {
       console.log("BAD STUFF FIRST!!!!!");
-      res.sendStatus(400);
+      res.sendStatus(699);
       return;
     }
 

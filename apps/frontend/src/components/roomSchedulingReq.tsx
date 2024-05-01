@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertColor,
   Button,
   Dialog,
   DialogActions,
@@ -9,6 +11,7 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Snackbar,
 } from "@mui/material";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
@@ -53,7 +56,10 @@ export default function RoomSchedulingReq() {
   });
 
   const { getAccessTokenSilently } = useAuth0();
-
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<AlertColor>("success");
   const [open, setOpen] = useState(false);
   function handleResponseChanges(
     e:
@@ -68,6 +74,16 @@ export default function RoomSchedulingReq() {
   function handleDateChange(date: Dayjs | null) {
     setResponses({ ...responses, startTime: date });
   }
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const showSnackbar = (message: string, severity: AlertColor) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
 
   function clear() {
     setResponses({
@@ -95,21 +111,31 @@ export default function RoomSchedulingReq() {
     }
     try {
       const token = await getAccessTokenSilently();
-      await axios.post("/api/roomSchedulingRequest", responses, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios
+        .post("/api/roomSchedulingRequest", responses, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(() => {
+          setOpen(true);
+        })
+        .catch((err) => {
+          if (err == "AxiosError: Request failed with status code 699") {
+            showSnackbar("Scheduling Conflict", "error");
+            return;
+          } else {
+            showSnackbar(
+              "Error storing in database, possible duplicates",
+              "error",
+            );
+            return;
+          }
+        });
     } catch (e) {
-      alert(
-        "Error storing in the database, make sure nodes/edges are uploaded and you are logged in.",
-      );
-      console.error(e);
       return;
     }
-
-    setOpen(true);
   }
 
   useEffect(() => {
@@ -279,6 +305,21 @@ export default function RoomSchedulingReq() {
           </div>
         </form>
       </div>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+
       <React.Fragment>
         <Dialog
           open={open}
