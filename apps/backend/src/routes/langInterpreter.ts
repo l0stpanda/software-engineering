@@ -1,26 +1,25 @@
+import { langInterpreterType } from "common/src/langInterpreterType.ts";
 import express, { Router, Request, Response } from "express";
 import PrismaClient from "../bin/database-connection.ts";
-import { flowerReqFields } from "common/src/flowerRequest.ts";
 
 const router: Router = express.Router();
 
 router.post("/", async function (req: Request, res: Response) {
-  const input: flowerReqFields = req.body;
+  const input: langInterpreterType = req.body;
 
   try {
     const roomStuff = await PrismaClient.nodes.findMany({
       where: {
-        long_name: input.roomNum,
+        long_name: input.location,
       },
     });
 
     const id1 = await PrismaClient.generalService.findMany({
       where: {
-        type: "Flower Request",
+        type: "Language Interpreter",
         location: roomStuff[0].node_id,
         status: input.status,
-        long_name_loc: input.roomNum,
-        emp_name: input.empName,
+        emp_name: input.name,
         priority: input.priority,
       },
     });
@@ -33,52 +32,54 @@ router.post("/", async function (req: Request, res: Response) {
 
     await PrismaClient.generalService.create({
       data: {
-        type: "Flower Request",
+        type: "Language Interpreter",
         location: roomStuff[0].node_id,
+        long_name_loc: input.location,
+        emp_name: input.name,
         status: input.status,
-        long_name_loc: input.roomNum,
-        emp_name: input.empName,
         priority: input.priority,
       },
     });
 
     const findID = await PrismaClient.generalService.findMany({
       where: {
-        type: "Flower Request",
+        type: "Language Interpreter",
         location: roomStuff[0].node_id,
         status: input.status,
-        emp_name: input.empName,
+        emp_name: input.name,
         priority: input.priority,
       },
     });
 
     const findEmail = await PrismaClient.user.findMany({
       where: {
-        username: input.empName,
+        username: input.name,
       },
     });
 
     await PrismaClient.todo.create({
       data: {
-        task: "Complete flower delivery request #" + findID[0].id,
+        task: "Complete language interpreter request #" + findID[0].id,
         dueDate: "",
         serv_req_id: findID[0].id,
         priority: input.priority,
-        notes: "Deliver flowers to " + input.sendTo + " in " + input.roomNum,
+        notes: "",
         complete: false,
         email: findEmail[0].email,
       },
     });
 
-    await PrismaClient.flowers.create({
-      data: {
-        id: findID[0].id,
-        sent_by: input.senderName,
-        sent_to: input.sendTo,
-        note: input.attachedNote,
-        room_name: input.roomNum,
-      },
-    });
+    if (input.date != undefined) {
+      await PrismaClient.langInterpreter.create({
+        data: {
+          id: findID[0].id,
+          date: input.date.toString(),
+          language: input.language,
+          modeOfInterp: input.modeOfInterp,
+          specInstruct: input.specInstruct,
+        },
+      });
+    }
   } catch (e) {
     console.log(e);
     res.sendStatus(400);
@@ -90,10 +91,10 @@ router.post("/", async function (req: Request, res: Response) {
 router.get("/", async function (req: Request, res: Response) {
   const data = await PrismaClient.generalService.findMany({
     where: {
-      type: "Flower Request",
+      type: "Language Interpreter",
     },
     include: {
-      flowerID: true,
+      langInterpreterID: true,
     },
   });
   try {
@@ -147,4 +148,5 @@ router.post("/update", async function (req: Request, res: Response) {
   }
   res.sendStatus(200);
 });
+
 export default router;

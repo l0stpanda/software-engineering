@@ -19,6 +19,16 @@ import BackgroundPattern from "../components/allyBackground.tsx";
 import LocationDropdown from "../components/locationDropdown.tsx";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
+
+export type MedicineDeliveryReq = {
+  employeeName: string;
+  priority: string;
+  location: string;
+  medicineName: string;
+  quantity: number;
+  status: string;
+};
+
 function MedicineDeliveryRequest() {
   const { getAccessTokenSilently } = useAuth0();
   const [delivery, setDelivery] = useState<MedicineDelivery>({

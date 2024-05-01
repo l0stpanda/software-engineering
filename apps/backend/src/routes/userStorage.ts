@@ -52,8 +52,9 @@ router.post("/", async function (req: Request, res: Response) {
       const newTodo = await PrismaClient.todo.create({
         data: {
           task: input.task,
-          //notes: input.notes,
-          //dueDate: String(input.dueDate?.toString()),
+          notes: input.notes,
+          serv_req_id: -1,
+          dueDate: String(input.dueDate?.toString()),
           priority: input.priority,
           email: input.email,
           complete: input.complete,

@@ -19,34 +19,6 @@ model HighScore {
   score Int
 }
 
-// We left HighScore for now because of errors that it is causing
-
-// We have this but don't really need it because we are using auth0 and that handles a lot of stuff
-// Users have fields that will be added to the database on registration
-// model Staff {
-//   emp_id    Int      @id @default(autoincrement())
-//   role      String // By default the user will be an employee unless designated otherwise by an admin
-//   user_name String
-//   // email     String   @unique
-//   password  String
-//   add_date  DateTime @default(now())
-// }
-
-// Flower requests are saved
-// model Flowers {
-//   id          Int      @id @default(autoincrement())
-//   room        String
-//   name        String
-//   sent_by     String   @db.VarChar(50)
-//   sent_to     String   @db.VarChar(50)
-//   requestDate DateTime @default(now())
-//   note        String?  @db.VarChar(150)
-//   status      String // when initialized the field will be 'Pending'. When the order is ready to be delivered it will be called Ready and will display in a SELECT statement
-//
-//   // Foreign Key References
-//   sent_room Nodes @relation("flower_room", fields: [room], references: [node_id], onDelete: Cascade) // Maybe need to change reference to short_name/long_name later
-// }
-
 // Nodes are all good
 model Nodes {
   node_id    String @id
@@ -81,12 +53,12 @@ model Inventory {
 
 // General Service Request Table
 model GeneralService {
-  id            Int     @id @default(autoincrement())
+  id            Int    @id @default(autoincrement())
   type          String
   location      String
   long_name_loc String
   status        String
-  emp_name      String?
+  emp_name      String
   priority      String
 
   location_room      Nodes                @relation("location", fields: [location], references: [node_id], onDelete: Cascade)
@@ -97,7 +69,20 @@ model GeneralService {
   flowerID           Flowers[]            @relation("flowerID")
   sanitationID       SanitationRequest[]  @relation("sanitationReq")
   maintainID         MaintenanceRequest[] @relation("idCheckMaintain")
+  langInterpreterID  langInterpreter[]    @relation("langInterpreterID")
   securityRequests   SecurityRequest[]    @relation("generalServiceRelation")
+}
+
+// language interpreter requests are saved
+model langInterpreter {
+  id           Int     @id
+  date         String
+  language     String
+  modeOfInterp String
+  specInstruct String?
+
+  // foreign key reference
+  langInterpreterID GeneralService @relation("langInterpreterID", fields: [id], references: [id], onDelete: Cascade)
 }
 
 model SanitationRequest {
@@ -145,6 +130,7 @@ model RoomScheduler {
   id        Int    @id
   startTime String
   lengthRes String
+  endTime   String
   room_name String
 
   roomSchedID GeneralService @relation("roomSchedID", fields: [id], references: [id], onDelete: Cascade)
@@ -170,14 +156,17 @@ model User {
 }
 
 model Todo {
-  id       Int       @id @default(autoincrement())
-  task     String
-  priority String
-  email    String
-  complete Boolean
-  subtasks subTodo[] @relation("idSubtasks")
+  id          Int       @id @default(autoincrement())
+  serv_req_id Int
+  task        String
+  notes       String
+  dueDate     String
+  priority    String
+  email       String
+  complete    Boolean
+  subtasks    subTodo[] @relation("idSubtasks")
   // Foreign Key Reference
-  user     User      @relation("UserID", fields: [email], references: [email], onDelete: Cascade)
+  user        User      @relation("UserID", fields: [email], references: [email], onDelete: Cascade)
 }
 
 model subTodo {

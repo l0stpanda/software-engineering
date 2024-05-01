@@ -210,6 +210,18 @@ function MedicalDeviceReq() {
               update={updateRoom}
               label={"Room"}
             />
+
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateTimePicker
+                sx={{ bgcolor: "#eceff0" }}
+                label="Delivery Date*"
+                value={formData.deliveryDate}
+                disablePast
+                onChange={handleDateChange}
+                //renderInput={(params) => <TextField {...params} required/>}
+              />
+            </LocalizationProvider>
+
             {/*<TextField*/}
             {/*  onChange={handleFormInput}*/}
             {/*  value={formData.medicalDeviceName}*/}
@@ -255,16 +267,6 @@ function MedicalDeviceReq() {
               </Select>
             </FormControl>
 
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker
-                sx={{ bgcolor: "#eceff0" }}
-                label="Delivery Date*"
-                value={formData.deliveryDate}
-                disablePast
-                onChange={handleDateChange}
-                //renderInput={(params) => <TextField {...params} required/>}
-              />
-            </LocalizationProvider>
             <div className="flex justify-center mt-3">
               <Button
                 className="w-32 self-center pt-10"

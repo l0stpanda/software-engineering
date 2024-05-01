@@ -17,17 +17,17 @@ import LocationDropdown from "../components/locationDropdown.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import UserDropdown from "../components/userDropdown.tsx";
 
-export default function RoomSchedulingRequest() {
-  type roomReqFields = {
-    employName: string;
-    startTime: string;
-    lengthRes: string;
-    roomNum: string;
-    reqStatus: string;
-    priority: string;
-  };
+export type RoomSchedulingReq = {
+  employName: string;
+  startTime: string;
+  lengthRes: string;
+  roomNum: string;
+  reqStatus: string;
+  priority: string;
+};
 
-  const [responses, setResponses] = useState<roomReqFields>({
+export default function RoomSchedulingRequest() {
+  const [responses, setResponses] = useState<RoomSchedulingReq>({
     employName: "",
     startTime: "",
     lengthRes: "",

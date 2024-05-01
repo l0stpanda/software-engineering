@@ -268,6 +268,8 @@ function FlowerReqForm() {
         <DialogContent>
           <strong>Here are your responses:</strong>
           <br />
+          Name: {responses.empName}
+          <br />
           Priority: {responses.priority}
           <br />
           Room Number: {responses.roomNum}
