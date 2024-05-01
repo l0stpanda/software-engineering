@@ -196,6 +196,5 @@ model SecurityRequest {
   type        String
 
   // Foreign Key References
-  generalServiceId        Int
-  securityRequestLocation GeneralService @relation("generalServiceRelation", fields: [generalServiceId], references: [id], onDelete: Cascade)
+  generalServiceId GeneralService @relation("generalServiceRelation", fields: [id], references: [id], onDelete: Cascade)
 }

@@ -27,6 +27,7 @@ type totals = {
   med_count: number;
   sanit_count: number;
   room_sched: number;
+  secur_count: number;
   unassigned_count: number;
   assigned_count: number;
   inProg_count: number;
@@ -45,6 +46,7 @@ const BarChartPieChart = () => {
     med_count: 0,
     sanit_count: 0,
     room_sched: 0,
+    secur_count: 0,
     unassigned_count: 0,
     assigned_count: 0,
     inProg_count: 0,
@@ -108,6 +110,11 @@ const BarChartPieChart = () => {
       name: "Room Scheduling",
       count: totalStuff.room_sched,
       fill: "#37114e",
+    },
+    {
+      name: "Security",
+      count: totalStuff.secur_count,
+      fill: "#33104A",
     },
   ];
 

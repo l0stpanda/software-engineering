@@ -51,8 +51,29 @@ router.post("/", async function (req: Request, res: Response) {
       },
     });
 
+    const findEmail = await PrismaClient.user.findMany({
+      where: {
+        username: securityRequestInput.name,
+      },
+    });
+
+    await PrismaClient.todo.create({
+      data: {
+        task: "Complete security request #" + findID[0].id,
+        dueDate: "",
+        serv_req_id: findID[0].id,
+        priority: securityRequestInput.priority,
+        notes:
+          securityRequestInput.type +
+          " needed at " +
+          securityRequestInput.location,
+        complete: false,
+        email: findEmail[0].email,
+      },
+    });
+
     if (securityRequestInput.date != undefined) {
-      await PrismaClient.lostItem.create({
+      await PrismaClient.securityRequest.create({
         data: {
           id: findID[0].id,
           date: securityRequestInput.date.toString(),
