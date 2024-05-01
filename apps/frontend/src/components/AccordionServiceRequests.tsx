@@ -60,6 +60,12 @@ interface medicineRequestInfo {
   room_name: string;
 }
 
+interface securityRequestInfo {
+  date: string;
+  type: string;
+  description: string;
+}
+
 // Displays the accordion for one single request
 function AccordionServiceRequests(props: AccordionServiceRequestsProps) {
   const [stuffFlower, setStuffFlower] = useState<flowerRequestInfo>({
@@ -118,6 +124,12 @@ function AccordionServiceRequests(props: AccordionServiceRequestsProps) {
     specInstruct: "",
   });
 
+  const [stuffSecurity, setStuffSecurity] = useState<securityRequestInfo>({
+    date: "",
+    description: "",
+    type: "",
+  });
+
   const { getAccessTokenSilently } = useAuth0();
   const data = props.data;
   let content: React.ReactElement | undefined = undefined;
@@ -149,6 +161,8 @@ function AccordionServiceRequests(props: AccordionServiceRequestsProps) {
           setStuffSanitation(allData.data);
         } else if (data.type == "Language Interpeter") {
           setStuffLanguage(allData.data);
+        } else if (data.type == "Security Request") {
+          setStuffSecurity(allData.data);
         }
         setLoading(false);
       } catch (error) {
@@ -249,7 +263,7 @@ function AccordionServiceRequests(props: AccordionServiceRequestsProps) {
         </Typography>
       );
       break;
-    case "Medicine":
+    case "Medicine Request":
       content = (
         <Typography>
           Employee Name: {data.emp_name}
@@ -302,6 +316,24 @@ function AccordionServiceRequests(props: AccordionServiceRequestsProps) {
           Severity: {stuffSanitation.severity}
           <br />
           Hazardous?: {stuffSanitation.hazardous}
+          <br />
+          Priority: {data.priority}
+          <br />
+          Status: {data.status}
+          <br />
+        </Typography>
+      );
+      break;
+    case "Security Request":
+      content = (
+        <Typography>
+          Employee Name: {data.emp_name}
+          <br />
+          Date: {stuffSecurity.date}
+          <br />
+          Type: {stuffSecurity.type}
+          <br />
+          Description: {stuffSecurity.description}
           <br />
           Priority: {data.priority}
           <br />

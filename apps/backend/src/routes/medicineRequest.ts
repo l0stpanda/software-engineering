@@ -20,6 +20,7 @@ router.post("/", async function (req: Request, res: Response) {
     if (newQuant < 0) {
       console.log("Asking for too much");
       res.sendStatus(416);
+      return;
     }
 
     const roomStuff = await PrismaClient.nodes.findMany({
