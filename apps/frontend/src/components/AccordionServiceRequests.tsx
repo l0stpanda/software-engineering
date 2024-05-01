@@ -132,7 +132,7 @@ function AccordionServiceRequests(props: AccordionServiceRequestsProps) {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(allData.data);
+        console.log("data: ", allData.data);
         if (data.type == "Flower Request") {
           setStuffFlower(allData.data);
         } else if (data.type == "Lost and Found") {
@@ -320,14 +320,12 @@ function AccordionServiceRequests(props: AccordionServiceRequestsProps) {
   return (
     <div>
       <Accordion disableGutters={true}>
-        <AccordionSummary>
+        <AccordionSummary expandIcon={<KeyboardArrowDownIcon />}>
           <b>
             {" "}
             {data.type}: {data.id}{" "}
           </b>
-          <div className="right-align">
-            <KeyboardArrowDownIcon />
-          </div>
+          <div className="right-align">{/*<KeyboardArrowDownIcon />*/}</div>
         </AccordionSummary>
         <AccordionDetails>{content}</AccordionDetails>
       </Accordion>
