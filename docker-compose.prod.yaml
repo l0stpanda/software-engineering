@@ -1,4 +1,3 @@
-#auth token -> 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
 # Production arguments passed to both containers
 x-prod-args: &prod-args
   # Port that both servers will run production on
